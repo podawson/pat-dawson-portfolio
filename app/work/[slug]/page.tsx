@@ -22,6 +22,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <p className="project-hero__question">{project.question}</p>
             <p className="project-hero__headline">{project.headline}</p>
             <p className="project-hero__summary">{project.summary}</p>
+            <div className="tag-row project-hero__tags" aria-label="Project lenses">
+              {project.categories.map((category) => <span key={category}>{category}</span>)}
+            </div>
           </div>
           <div className="project-hero__image"><img src={project.image} alt="" /></div>
         </header>
@@ -29,7 +32,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <section className="project-facts">
           <div><p className="micro">Role</p><p>{project.role}</p></div>
           <div><p className="micro">Outcome</p><p>{project.outcome}</p></div>
-          <div><p className="micro">Lenses</p><p>{project.categories.join(" · ")}</p></div>
         </section>
 
         <section className="project-narrative">

@@ -13,9 +13,6 @@ export function SiteHeader({ inverse = false }: { inverse?: boolean }) {
         <Link href="/playground">Playground</Link>
         <Link href="/about">About</Link>
       </nav>
-      <a className="header-contact" href="mailto:patrickdawsono@gmail.com">
-        Say hello ↗
-      </a>
     </header>
   );
 }

@@ -12,6 +12,7 @@ const vertexShader = `
   uniform float uCurrent;
   uniform float uSkew;
   uniform float uCloud;
+  uniform vec2 uPointer;
   attribute vec3 aBarycentric;
   attribute vec3 aCenter;
   attribute float aTip;
@@ -35,6 +36,9 @@ const vertexShader = `
     float elevation = (alongX + alongZ) * uWaveHeight * 0.075;
     elevation += crossWave * uStorm * uWaveHeight * 0.055;
     elevation += aTip * sin(aCenter.x * 1.7 - slow * 2.4) * uWaveHeight * 0.018;
+    vec2 pointerCenter = vec2(uPointer.x * 5.8, -uPointer.y * 3.6);
+    float pointerFalloff = exp(-distance(aCenter.xz, pointerCenter) * 0.62);
+    elevation += pointerFalloff * sin(slow * 6.0 + distance(aCenter.xz, pointerCenter) * 2.1) * (0.55 + uWaveHeight * 0.018);
     p.y += elevation;
 
     float curl = (aCenter.z / 9.0) * uCurrent * 0.006;
@@ -147,7 +151,13 @@ export function ProteanField() {
     camera.position.set(0, 5.6, 8.8);
     camera.lookAt(0, -0.35, 0);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+    } catch {
+      mount.dataset.fallback = "true";
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     mount.appendChild(renderer.domElement);
@@ -159,6 +169,7 @@ export function ProteanField() {
       uCurrent: { value: 24 },
       uSkew: { value: 12 },
       uCloud: { value: 0 },
+      uPointer: { value: new THREE.Vector2(0, 0) },
     };
     uniformsRef.current = uniforms;
 
@@ -180,7 +191,9 @@ export function ProteanField() {
       const rect = mount.getBoundingClientRect();
       pointer.x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
       pointer.y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      mount.classList.add("is-engaged");
     };
+    const onPointerLeave = () => mount.classList.remove("is-engaged");
 
     const resize = () => {
       const width = mount.clientWidth;
@@ -191,6 +204,7 @@ export function ProteanField() {
     };
     resize();
     mount.addEventListener("pointermove", onPointerMove);
+    mount.addEventListener("pointerleave", onPointerLeave);
     window.addEventListener("resize", resize);
 
     const clock = new THREE.Clock();
@@ -198,6 +212,7 @@ export function ProteanField() {
     const draw = () => {
       const time = clock.getElapsedTime();
       uniforms.uTime.value = time;
+      (uniforms.uPointer.value as THREE.Vector2).lerp(pointer, 0.075);
       field.rotation.y += (pointer.x * 0.08 - field.rotation.y) * 0.025;
       field.rotation.x += (-pointer.y * 0.035 - field.rotation.x) * 0.02;
       camera.position.x += (pointer.x * 0.35 - camera.position.x) * 0.018;
@@ -218,6 +233,7 @@ export function ProteanField() {
     return () => {
       cancelAnimationFrame(animation);
       mount.removeEventListener("pointermove", onPointerMove);
+      mount.removeEventListener("pointerleave", onPointerLeave);
       window.removeEventListener("resize", resize);
       geometry.dispose();
       material.dispose();
@@ -234,6 +250,8 @@ export function ProteanField() {
     uniformsRef.current.uCurrent.value = current;
     uniformsRef.current.uSkew.value = skew;
     uniformsRef.current.uCloud.value = sky === "clear" ? 0 : sky === "cloud" ? 0.48 : 0.92;
+    mountRef.current?.style.setProperty("--fallback-storm", `${storm}%`);
+    mountRef.current?.style.setProperty("--fallback-wave", `${waveHeight / 5}px`);
   }, [waveHeight, storm, current, skew, sky]);
 
   const reset = () => {
@@ -252,6 +270,7 @@ export function ProteanField() {
         role="img"
         aria-label="A dimensional field of isosceles triangles deformed by sine and cosine waves"
       />
+      <p className="playground-interaction-cue" aria-hidden="true">Move across the water ↗</p>
       <div className="wave-readout" aria-hidden="true">
         <span>calm</span>
         <i />

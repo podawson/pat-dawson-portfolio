@@ -281,13 +281,13 @@ export function ProteanField() {
         <h2>Wave controls</h2>
         <section className="control-section">
           <p>Surface</p>
-          <label>Wave height <output>{waveHeight}</output><input type="range" min="5" max="100" value={waveHeight} onChange={(event) => setWaveHeight(Number(event.target.value))} /></label>
-          <label>Current <output>{current}</output><input type="range" min="0" max="100" value={current} onChange={(event) => setCurrent(Number(event.target.value))} /></label>
-          <label>Skew <output>{skew}</output><input type="range" min="-55" max="55" value={skew} onChange={(event) => setSkew(Number(event.target.value))} /></label>
+          <label>Wave height <output>{waveHeight}</output><input type="range" min="5" max="100" value={waveHeight} onInput={(event) => setWaveHeight(Number(event.currentTarget.value))} /></label>
+          <label>Current <output>{current}</output><input type="range" min="0" max="100" value={current} onInput={(event) => setCurrent(Number(event.currentTarget.value))} /></label>
+          <label>Skew <output>{skew}</output><input type="range" min="-55" max="55" value={skew} onInput={(event) => setSkew(Number(event.currentTarget.value))} /></label>
         </section>
         <section className="control-section">
           <p>Weather</p>
-          <label>Storm water <output>{storm}</output><input type="range" min="0" max="100" value={storm} onChange={(event) => setStorm(Number(event.target.value))} /></label>
+          <label>Storm water <output>{storm}</output><input type="range" min="0" max="100" value={storm} onInput={(event) => setStorm(Number(event.currentTarget.value))} /></label>
           <div className="sky-switch" role="group" aria-label="Sky condition">
             {(["clear", "cloud", "fog"] as Sky[]).map((condition) => (
               <button className={sky === condition ? "is-active" : ""} key={condition} onClick={() => setSky(condition)} type="button">

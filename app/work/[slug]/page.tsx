@@ -20,7 +20,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <p className="kicker">{project.eyebrow} · {project.year}</p>
             <h1>{project.title}</h1>
             <p className="project-hero__question">{project.question}</p>
-            <p>{project.summary}</p>
+            <p className="project-hero__headline">{project.headline}</p>
+            <p className="project-hero__summary">{project.summary}</p>
           </div>
           <div className="project-hero__image"><img src={project.image} alt="" /></div>
         </header>
@@ -29,6 +30,31 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div><p className="micro">Role</p><p>{project.role}</p></div>
           <div><p className="micro">Outcome</p><p>{project.outcome}</p></div>
           <div><p className="micro">Lenses</p><p>{project.categories.join(" · ")}</p></div>
+        </section>
+
+        <section className="project-narrative">
+          <div className="project-narrative__title">
+            <p className="kicker">The operating story</p>
+            <h2>What the system held,<br />and what it left human.</h2>
+          </div>
+          <div className="project-narrative__body">
+            <p>{project.narrative}</p>
+            <aside>
+              <p className="micro">Authority boundary</p>
+              <p>{project.authority}</p>
+            </aside>
+          </div>
+        </section>
+
+        <section className="project-evidence" aria-label="Evidence and recommended artifacts">
+          <div>
+            <p className="kicker">By the numbers</p>
+            <ul>{project.metrics.map((metric) => <li key={metric}>{metric}</li>)}</ul>
+          </div>
+          <div>
+            <p className="kicker">Artifacts that carry the case</p>
+            <ol>{project.artifacts.map((artifact) => <li key={artifact}>{artifact}</li>)}</ol>
+          </div>
         </section>
 
         <section className="project-details">
@@ -52,4 +78,3 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     </main>
   );
 }
-

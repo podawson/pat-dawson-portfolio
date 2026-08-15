@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ProteanField } from "../components/ProteanField";
 import { SiteHeader } from "../components/SiteHeader";
 
@@ -7,15 +8,14 @@ export default function PlaygroundPage() {
       <SiteHeader inverse />
       <section className="playground-intro">
         <p className="kicker kicker--light">Playground</p>
-        <h1>Small instruments<br />for looking sideways.</h1>
-        <p>These are not case studies. They are places to touch the logic, move a parameter, and watch a system disclose itself.</p>
+        <h1>Weather for<br />a protean surface.</h1>
+        <p>A minimal water study built from one repeated isosceles triangle. Change the field, then watch calm geometry move toward storm, cloud, and fog.</p>
       </section>
       <ProteanField />
       <section className="playground-footnote">
-        <p>Density changes what can connect. Reach changes what counts as near. Drift changes which relationships survive.</p>
-        <a href="/#constellation">Return to the project field ↗</a>
+        <p>The surface is deliberately inspectable: one primitive, a few explicit uniforms, and no simulated realism hiding how the atmosphere is made.</p>
+        <Link href="/#constellation">Return to the project field ↗</Link>
       </section>
     </main>
   );
 }
-

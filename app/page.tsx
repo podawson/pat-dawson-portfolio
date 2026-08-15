@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Constellation } from "./components/Constellation";
 import { SiteHeader } from "./components/SiteHeader";
 import { featuredProjects } from "./data";
@@ -37,8 +38,8 @@ export default function Home() {
         <p className="kicker kicker--light">The archive is wider than the shortlist</p>
         <h2>Every project is a node.<br />Every node has neighbors.</h2>
         <div>
-          <a href="/work">Browse all work ↗</a>
-          <a href="/playground">Open the playground ↗</a>
+          <Link href="/work">Browse all work ↗</Link>
+          <Link href="/playground">Open the playground ↗</Link>
         </div>
       </section>
 

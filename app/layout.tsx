@@ -1,0 +1,67 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono, Libre_Caslon_Text } from "next/font/google";
+import { headers } from "next/headers";
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const caslon = Libre_Caslon_Text({
+  variable: "--font-caslon",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
+  const base = new URL(`${protocol}://${host}`);
+  const description = "Patrick Dawson is a New York-based designer and product lead working across architecture, fabrication, experiential systems, and independent AI products.";
+  const preview = new URL("/og.png", base).toString();
+
+  return {
+    metadataBase: base,
+    title: {
+      default: "Pat Dawson — Places, stories, systems",
+      template: "%s — Pat Dawson",
+    },
+    description,
+    icons: { icon: "/icon.png", shortcut: "/icon.png" },
+    openGraph: {
+      title: "Pat Dawson — Nothing here is ever finished.",
+      description,
+      type: "website",
+      images: [{ url: preview, width: 1800, height: 942, alt: "Pat Dawson — Nothing here is ever finished. Places, stories, systems." }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Pat Dawson — Nothing here is ever finished.",
+      description,
+      images: [preview],
+    },
+  };
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${caslon.variable}`}
+      >
+        {children}
+      </body>
+    </html>
+  );
+}

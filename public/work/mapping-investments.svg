@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="Abstract three-dimensional civic map">
+  <defs>
+    <linearGradient id="map-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090b0a"/>
+      <stop offset="0.58" stop-color="#15211d"/>
+      <stop offset="1" stop-color="#362c22"/>
+    </linearGradient>
+    <radialGradient id="map-glow">
+      <stop offset="0" stop-color="#e6aa68" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#e6aa68" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="map-blur"><feGaussianBlur stdDeviation="34"/></filter>
+    <pattern id="map-grid" width="44" height="44" patternUnits="userSpaceOnUse" patternTransform="skewX(-18) rotate(-9)">
+      <path d="M44 0H0V44" fill="none" stroke="#dfe7df" stroke-opacity="0.08" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#map-bg)"/>
+  <circle cx="1180" cy="340" r="420" fill="url(#map-glow)" filter="url(#map-blur)"/>
+  <rect width="1600" height="1000" fill="url(#map-grid)"/>
+  <g fill="none" stroke="#d9e6dd" stroke-opacity="0.16" stroke-width="2">
+    <path d="M-80 760C150 650 237 818 448 698S798 496 1028 556s319-17 655-236"/>
+    <path d="M-70 804C135 696 262 858 470 742s354-204 578-143 326-8 642-230"/>
+    <path d="M-52 848C174 738 288 899 500 786s366-194 584-132 319 0 620-219"/>
+    <path d="M74 164C270 250 418 112 584 223s301 130 474 62 284-21 493 96"/>
+    <path d="M62 204C269 289 404 150 578 260s311 126 486 59 291-13 506 105"/>
+  </g>
+  <g fill="#e9efe7" fill-opacity="0.08" stroke="#e9efe7" stroke-opacity="0.18">
+    <path d="M220 655l162-76 134 60-161 83z"/><path d="M382 579v-126l134 58v128z"/><path d="M220 655V526l162-73v126z"/>
+    <path d="M1000 595l213-102 162 77-213 107z"/><path d="M1213 493V323l162 74v173z"/><path d="M1000 595V430l213-107v170z"/>
+    <path d="M650 424l136-65 104 49-136 68z"/><path d="M786 359V252l104 47v109z"/><path d="M650 424V318l136-66v107z"/>
+  </g>
+  <g fill="none" stroke="#ecaa62" stroke-width="2.2" stroke-opacity="0.72">
+    <path d="M268 618C426 539 513 613 666 493S928 300 1198 401"/>
+    <path d="M355 683C498 602 666 660 805 552s216-86 367 16" stroke-dasharray="8 13"/>
+  </g>
+  <g fill="#f3d6af" stroke="#fff5e3" stroke-width="4">
+    <circle cx="268" cy="618" r="13"/><circle cx="355" cy="683" r="9"/><circle cx="488" cy="569" r="11"/>
+    <circle cx="596" cy="552" r="8"/><circle cx="666" cy="493" r="15"/><circle cx="752" cy="405" r="9"/>
+    <circle cx="862" cy="342" r="12"/><circle cx="971" cy="326" r="8"/><circle cx="1079" cy="359" r="10"/>
+    <circle cx="1198" cy="401" r="15"/><circle cx="805" cy="552" r="10"/><circle cx="1023" cy="500" r="8"/><circle cx="1172" cy="568" r="12"/>
+  </g>
+  <g fill="none" stroke="#72d9e8" stroke-opacity="0.28">
+    <circle cx="666" cy="493" r="65"/><circle cx="666" cy="493" r="94"/>
+    <circle cx="1198" cy="401" r="54"/><circle cx="1198" cy="401" r="84"/>
+  </g>
+</svg>

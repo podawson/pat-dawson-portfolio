@@ -263,7 +263,7 @@ export const projects: Project[] = [
     authority: "AI agents accelerated implementation inside explicit prompt contracts; Patrick retained design direction, regression review, and responsibility for every public interaction.",
     role: "UX and interaction designer · AI-directed frontend builder",
     outcome: "A production 3D civic narrative delivered for a live investor event on a hard deadline.",
-    image: "/work/mapping-investments.jpg",
+    image: "/work/mapping-investments.svg",
     categories: ["AI systems", "Place", "Culture"],
     node: { x: 56, y: 23, size: 42 },
     metrics: ["13 sites", "3 eras", "90 years of neighborhood history"],
@@ -286,7 +286,7 @@ export const projects: Project[] = [
     authority: "The pipeline classifies and drafts inside explicit bounds; a PM reviews the high-risk items and remains the publisher of record.",
     role: "AI systems designer · pipeline architect",
     outcome: "Five consistent outputs per cycle, a deterministic audit trail, and a workflow handed off for non-engineering ownership.",
-    image: "/work/release-intelligence.jpg",
+    image: "/work/release-intelligence.svg",
     categories: ["AI systems", "Experience"],
     node: { x: 78, y: 26, size: 48 },
     metrics: ["40–60% → <5% custom bucket", "3–5 hr → 20–40 min per cycle", "12+ batches / 100+ tickets"],
@@ -309,7 +309,7 @@ export const projects: Project[] = [
     authority: "The agent ranks evidence-backed conflicts; the project manager remains responsible for interpreting context and authorizing action.",
     role: "Product design · reasoning architecture · build",
     outcome: "A handed-off project-reasoning workflow that turns cross-document conflict into a prioritized, inspectable action list.",
-    image: "/work/gleanings.jpg",
+    image: "/work/gleanings.svg",
     categories: ["AI systems", "Experience"],
     node: { x: 90, y: 43, size: 46 },
     metrics: ["4+ heterogeneous source classes", "Conflicts ranked by cost + schedule", "Human review before action"],
@@ -332,7 +332,7 @@ export const projects: Project[] = [
     authority: "The system surfaced and ranked candidates; traders retained confirmation and execution authority, and performance claims remain tied to timestamped evidence.",
     role: "AI product strategist · co-founder · model operations",
     outcome: "A 0→5,000+ trader product with an auditable model-development archive and measurable improvement across its operating period.",
-    image: "/work/string.png",
+    image: "/work/string.jpg",
     categories: ["AI systems", "Culture"],
     featured: true,
     node: { x: 70, y: 13, size: 62 },
@@ -394,6 +394,31 @@ export const projectConnections: ProjectConnection[] = [
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);
+
+const constellationPhrases: Record<ConnectionKind, string> = {
+  method: "shares a method with",
+  handoff: "shares a handoff with",
+  authority: "shares an authority boundary with",
+  constraint: "shares a constraint with",
+  lineage: "continues a working lineage with",
+};
+
+export function getProjectConstellationLine(slug: string) {
+  const projectRelationships = projectConnections
+    .filter((connection) => connection.from === slug || connection.to === slug);
+  const relationships = (projectRelationships.length > 1
+    ? [projectRelationships[0], projectRelationships[projectRelationships.length - 1]]
+    : projectRelationships)
+    .map((connection) => {
+      const neighborSlug = connection.from === slug ? connection.to : connection.from;
+      const neighbor = projects.find((project) => project.slug === neighborSlug);
+      return `${constellationPhrases[connection.kind]} ${neighbor?.title ?? "another project"}`;
+    });
+
+  return relationships.length
+    ? `In the constellation · ${relationships.join(" · ")}`
+    : "In the constellation · one project among connected methods, handoffs, and constraints";
+}
 
 export function getProject(slug: string) {
   return projects.find((project) => project.slug === slug);

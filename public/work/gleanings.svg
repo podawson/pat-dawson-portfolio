@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="Abstract project records converging into ranked findings">
+  <defs>
+    <linearGradient id="gl-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6f2e9"/>
+      <stop offset="1" stop-color="#e5e8df"/>
+    </linearGradient>
+    <linearGradient id="gl-rank" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1f3529"/>
+      <stop offset="1" stop-color="#739077"/>
+    </linearGradient>
+    <filter id="gl-shadow"><feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#17201b" flood-opacity="0.13"/></filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#gl-bg)"/>
+  <g fill="#fbfaf6" stroke="#17201b" stroke-width="3" filter="url(#gl-shadow)">
+    <path d="M95 155h300l80 80v380H95z"/><path d="M475 235h-80v-80" fill="none"/>
+    <path d="M420 385h300l80 80v380H420z"/><path d="M800 465h-80v-80" fill="none"/>
+    <path d="M800 125h300l80 80v380H800z"/><path d="M1180 205h-80v-80" fill="none"/>
+    <path d="M1125 330h300l80 80v380h-380z"/><path d="M1505 410h-80v-80" fill="none"/>
+  </g>
+  <g stroke="#89928a" stroke-width="3" opacity="0.6">
+    <path d="M145 278h250M145 330h210M145 382h250M145 434h175"/>
+    <path d="M470 510h250M470 562h205M470 614h250M470 666h162"/>
+    <path d="M850 248h250M850 300h195M850 352h250M850 404h170"/>
+    <path d="M1175 453h250M1175 505h205M1175 557h250M1175 609h180"/>
+  </g>
+  <g fill="none" stroke="#a34d33" stroke-width="6" stroke-linecap="round" opacity="0.76">
+    <path d="M470 620C610 738 734 708 817 600"/>
+    <path d="M1120 550C1007 705 914 722 817 600"/>
+    <path d="M410 430C568 404 696 470 817 600"/>
+    <path d="M1180 380C1030 375 920 450 817 600"/>
+  </g>
+  <circle cx="817" cy="600" r="42" fill="#fbfaf6" stroke="#a34d33" stroke-width="9"/>
+  <g transform="translate(590 725)" filter="url(#gl-shadow)">
+    <rect width="620" height="86" rx="43" fill="url(#gl-rank)"/>
+    <rect x="74" y="112" width="472" height="70" rx="35" fill="#739077"/>
+    <rect x="146" y="208" width="328" height="58" rx="29" fill="#a9b7aa"/>
+    <g fill="#f6f2e9">
+      <circle cx="52" cy="43" r="13"/><circle cx="118" cy="43" r="7"/><circle cx="154" cy="43" r="7"/>
+      <circle cx="116" cy="147" r="10"/><circle cx="161" cy="147" r="6"/>
+      <circle cx="187" cy="237" r="8"/>
+    </g>
+  </g>
+</svg>

@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Constellation } from "./components/Constellation";
 import { SiteHeader } from "./components/SiteHeader";
-import { featuredProjects } from "./data";
+import { featuredProjects, getProjectConstellationLine } from "./data";
 
 export default function Home() {
   return (
-    <main>
+    <main className="home-page">
       <SiteHeader inverse />
       <Constellation />
 
@@ -25,7 +25,7 @@ export default function Home() {
               <div className="selected-project__copy">
                 <p className="micro">{project.eyebrow} · {project.year}</p>
                 <h3><a href={`/work/${project.slug}`}>{project.title}</a></h3>
-                <p className="question">{project.question}</p>
+                <p className="question constellation-line">{getProjectConstellationLine(project.slug)}</p>
                 <p>{project.summary}</p>
                 <a className="text-link" href={`/work/${project.slug}`}>View the case study ↗</a>
               </div>

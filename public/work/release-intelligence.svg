@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="Abstract deterministic release pipeline">
+  <defs>
+    <linearGradient id="ri-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6f1e8"/>
+      <stop offset="1" stop-color="#e7e0d4"/>
+    </linearGradient>
+    <linearGradient id="ri-flow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d7ac69"/>
+      <stop offset="0.55" stop-color="#a34d33"/>
+      <stop offset="1" stop-color="#5c2742"/>
+    </linearGradient>
+    <filter id="ri-shadow"><feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#342b24" flood-opacity="0.16"/></filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#ri-bg)"/>
+  <g opacity="0.18" stroke="#17201b" stroke-width="1">
+    <path d="M0 160H1600M0 320H1600M0 480H1600M0 640H1600M0 800H1600"/>
+    <path d="M160 0V1000M320 0V1000M480 0V1000M640 0V1000M800 0V1000M960 0V1000M1120 0V1000M1280 0V1000M1440 0V1000"/>
+  </g>
+  <g filter="url(#ri-shadow)">
+    <g fill="#fbfaf6" stroke="#17201b" stroke-width="3">
+      <rect x="110" y="310" width="170" height="360" rx="28"/>
+      <rect x="346" y="262" width="170" height="456" rx="28"/>
+      <rect x="582" y="338" width="170" height="304" rx="28"/>
+      <rect x="818" y="220" width="170" height="540" rx="28"/>
+      <rect x="1054" y="300" width="170" height="380" rx="28"/>
+      <rect x="1290" y="354" width="170" height="272" rx="28"/>
+    </g>
+    <g fill="none" stroke="url(#ri-flow)" stroke-width="18" stroke-linecap="round">
+      <path d="M195 490H431"/><path d="M431 490H667"/><path d="M667 490H903"/><path d="M903 490H1139"/><path d="M1139 490H1375"/>
+    </g>
+    <g fill="#fbfaf6" stroke="#a34d33" stroke-width="8">
+      <circle cx="195" cy="490" r="28"/><circle cx="431" cy="490" r="28"/><circle cx="667" cy="490" r="28"/>
+      <circle cx="903" cy="490" r="28"/><circle cx="1139" cy="490" r="28"/><circle cx="1375" cy="490" r="28"/>
+    </g>
+  </g>
+  <g fill="none" stroke="#17201b" stroke-width="3" opacity="0.7">
+    <path d="M141 385h108M141 414h72M141 575h108M141 604h82"/>
+    <path d="M377 350h108M377 379h75M377 600h108M377 629h88"/>
+    <path d="M613 409h108M613 438h70M613 546h108M613 575h84"/>
+    <path d="M849 306h108M849 335h76M849 646h108M849 675h90"/>
+    <path d="M1085 382h108M1085 411h72M1085 568h108M1085 597h86"/>
+    <path d="M1321 420h108M1321 449h72M1321 536h108M1321 565h82"/>
+  </g>
+  <g fill="#17201b">
+    <circle cx="195" cy="250" r="7"/><circle cx="431" cy="202" r="7"/><circle cx="667" cy="278" r="7"/>
+    <circle cx="903" cy="160" r="7"/><circle cx="1139" cy="240" r="7"/><circle cx="1375" cy="294" r="7"/>
+  </g>
+</svg>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { categories, projects, type Category } from "../data";
+import { categories, getProjectConstellationLine, projects, type Category } from "../data";
 
 export function ProjectGrid() {
   const [category, setCategory] = useState<"All" | Category>("All");
@@ -26,7 +26,7 @@ export function ProjectGrid() {
             <div className="work-card__body">
               <p className="micro">{project.eyebrow} · {project.year}</p>
               <h2><a href={`/work/${project.slug}`}>{project.title}</a></h2>
-              <p className="question">{project.question}</p>
+              <p className="question constellation-line">{getProjectConstellationLine(project.slug)}</p>
               <p>{project.summary}</p>
               <div className="tag-row">{project.categories.map((tag) => <span key={tag}>{tag}</span>)}</div>
             </div>
@@ -36,4 +36,3 @@ export function ProjectGrid() {
     </>
   );
 }
-

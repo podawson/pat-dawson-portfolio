@@ -70,6 +70,7 @@ img { display: block; width: 100%; }
 .home-page { background: var(--night); color: var(--cream); }
 .constellation { background: radial-gradient(circle at 74% 35%, #132026 0, #0a1012 26%, var(--night) 64%); color: var(--cream); height: max(860px, 100vh); min-height: 820px; overflow: hidden; position: relative; }
 .constellation::after { background: radial-gradient(ellipse 58% 52% at 20% 19%, rgba(9,11,10,.93) 0, rgba(9,11,10,.74) 42%, rgba(9,11,10,.22) 70%, transparent 86%), linear-gradient(90deg, rgba(114,217,232,.07), transparent 18%, transparent 82%, rgba(166,167,255,.06)); content: ""; inset: 0; pointer-events: none; position: absolute; z-index: 3; }
+.constellation.is-selected-web::after { background: radial-gradient(ellipse 56% 50% at 20% 19%, rgba(9,11,10,.94) 0, rgba(9,11,10,.7) 43%, rgba(9,11,10,.12) 70%, transparent 88%), radial-gradient(circle at 68% 46%, rgba(41,72,255,.1), transparent 46%); }
 .constellation-copy { left: 5.2vw; max-width: 690px; position: absolute; top: 13vh; z-index: 8; }
 .constellation-copy h1 { font-family: var(--display); font-size: clamp(62px, 6.7vw, 112px); font-weight: 400; letter-spacing: -.045em; line-height: .91; margin: 18px 0 25px; max-width: 760px; }
 .constellation-copy > p:last-child { color: rgba(245, 241, 232, .66); font-size: 15px; line-height: 1.62; max-width: 520px; }
@@ -100,8 +101,12 @@ img { display: block; width: 100%; }
 .project-node__count { align-items: center; background: #d8f2ef; border-radius: 50%; color: #081012; display: flex; font-family: var(--mono); font-size: 7px; height: 17px; justify-content: center; opacity: 0; position: absolute; right: -4px; top: -4px; transition: opacity .2s ease; width: 17px; }
 .project-node:hover .project-node__name, .project-node:focus-visible .project-node__name, .project-node.is-active .project-node__name, .project-node:hover .project-node__count, .project-node:focus-visible .project-node__count, .project-node.is-active .project-node__count { opacity: 1; }
 .project-node:hover, .project-node:focus-visible, .project-node.is-active { background: radial-gradient(circle, rgba(114,217,232,.23), rgba(166,167,255,.08) 55%, transparent 76%); border-color: #9de7ec; box-shadow: 0 0 0 7px rgba(114,217,232,.05), 0 0 28px rgba(114,217,232,.14); outline: none; transform: translate(-50%, -50%) scale(1.08); z-index: 9; }
+.constellation.is-selected-web .project-node.is-related { background: radial-gradient(circle, rgba(67,95,255,.32), rgba(114,217,232,.11) 54%, transparent 78%); border-color: rgba(126,224,238,.78); box-shadow: 0 0 0 5px rgba(41,72,255,.07), 0 0 30px rgba(69,116,255,.22); opacity: .95; }
+.constellation.is-selected-web .project-node.is-active { animation: float 7s ease-in-out infinite alternate, node-pulse 2.65s ease-in-out infinite; background: radial-gradient(circle at 42% 38%, rgba(238,252,255,.48), rgba(54,104,255,.31) 43%, rgba(255,116,62,.12) 67%, transparent 78%); border-color: #d7fbff; box-shadow: 0 0 0 9px rgba(65,116,255,.1), 0 0 42px rgba(103,222,255,.34); }
+.constellation.is-selected-web .project-node.is-outside-web { opacity: .22; }
 .project-node.is-muted { opacity: .1; pointer-events: none; }
 @keyframes float { from { margin-top: -5px; } to { margin-top: 7px; } }
+@keyframes node-pulse { 0%, 100% { box-shadow: 0 0 0 7px rgba(65,116,255,.08), 0 0 30px rgba(103,222,255,.28); filter: saturate(1.08); } 50% { box-shadow: 0 0 0 14px rgba(65,116,255,.025), 0 0 54px rgba(103,222,255,.46); filter: saturate(1.6); } }
 .constellation-card { backdrop-filter: blur(20px); background: rgba(9, 13, 14, .82); border: 1px solid rgba(206, 238, 236, .24); border-radius: 18px; bottom: 42px; color: var(--cream); padding: 14px; position: absolute; right: 4.2vw; width: min(430px, 36vw); z-index: 14; }
 .constellation-card__top { display: grid; gap: 14px; grid-template-columns: 118px 1fr; }
 .constellation-card__image { border-radius: 11px; height: 126px; overflow: hidden; }
@@ -322,6 +327,6 @@ img { display: block; width: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .project-node { animation: none; }
+  .project-node, .constellation.is-selected-web .project-node.is-active { animation: none; }
   .selected-project__image img, .work-card__image img { transition: none; }
 }

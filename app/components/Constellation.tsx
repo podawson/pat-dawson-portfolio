@@ -102,6 +102,8 @@ function RelationshipLines({
       const stepY = height / (rows - 1);
       const scale = Math.min(width, height);
       const values = new Float32Array(columns * rows);
+      const heatValues = new Float32Array(columns * rows);
+      const pulse = reduceMotion ? 1 : 0.96 + Math.sin(time * 0.0021) * 0.08;
 
       const nodeFields = fieldProjects.map((project) => ({
         point: pointFor(project.slug),
@@ -119,6 +121,21 @@ function RelationshipLines({
         sigma: scale * (connection.from === activeSlug || connection.to === activeSlug ? 0.03 : 0.022),
         weight: connection.from === activeSlug || connection.to === activeSlug ? 0.72 : 0.54,
       }));
+      const selectedNodeFields = fieldProjects
+        .filter((project) => selectedSlugs.has(project.slug))
+        .map((project) => ({
+          point: pointFor(project.slug),
+          sigma: scale * (project.slug === activeSlug ? 0.025 : 0.034),
+          weight: (project.slug === activeSlug ? 1.3 : 0.58) * pulse,
+        }));
+      const selectedEdgeFields = fieldConnections
+        .filter((connection) => connection.from === activeSlug || connection.to === activeSlug)
+        .map((connection) => ({
+          start: pointFor(connection.from),
+          end: pointFor(connection.to),
+          sigma: scale * 0.021,
+          weight: 0.68 * pulse,
+        }));
 
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
@@ -134,13 +151,27 @@ function RelationshipLines({
               value += edge.weight * Math.exp(-(distance ** 2) / (2 * edge.sigma ** 2));
             }
           });
+          let activeHeat = 0;
+          selectedNodeFields.forEach((node) => {
+            const distanceSquared = (sample.x - node.point.x) ** 2 + (sample.y - node.point.y) ** 2;
+            activeHeat += node.weight * Math.exp(-distanceSquared / (2 * node.sigma ** 2));
+          });
+          selectedEdgeFields.forEach((edge) => {
+            const distance = distanceToSegment(sample, edge.start, edge.end);
+            if (distance < edge.sigma * 3.6) {
+              activeHeat += edge.weight * Math.exp(-(distance ** 2) / (2 * edge.sigma ** 2));
+            }
+          });
+          value += activeHeat * (selectedOnly ? 0.5 : 0.13);
           if (pointer && !reduceMotion) {
             const pointerSigma = scale * 0.105;
             const pointerDistanceSquared = (sample.x - pointer.x) ** 2 + (sample.y - pointer.y) ** 2;
             value -= 0.72 * Math.exp(-pointerDistanceSquared / (2 * pointerSigma ** 2));
           }
           value += Math.sin(sample.x * 0.0042 + sample.y * 0.0031 + time * 0.00016) * 0.022;
-          values[row * columns + column] = value;
+          const index = row * columns + column;
+          values[index] = value;
+          heatValues[index] = activeHeat;
         }
       }
 
@@ -149,6 +180,7 @@ function RelationshipLines({
       const imageData = fieldContext.createImageData(columns, rows);
       for (let index = 0; index < values.length; index += 1) {
         const value = values[index];
+        const heat = heatValues[index];
         const column = index % columns;
         const row = Math.floor(index / columns);
         const paletteAmount = Math.max(0, Math.min(1, column / columns * 0.58 + row / rows * 0.42));
@@ -160,34 +192,50 @@ function RelationshipLines({
         const right = values[row * columns + Math.min(columns - 1, column + 1)];
         const above = values[Math.max(0, row - 1) * columns + column];
         const below = values[Math.min(rows - 1, row + 1) * columns + column];
-        let normalX = -(right - left) * 2.7;
-        let normalY = -(below - above) * 2.7;
-        let normalZ = 0.82;
+        const normalStrength = selectedOnly ? 5.2 : 3.15;
+        let normalX = -(right - left) * normalStrength;
+        let normalY = -(below - above) * normalStrength;
+        let normalZ = selectedOnly ? 0.58 : 0.78;
         const normalLength = Math.hypot(normalX, normalY, normalZ) || 1;
         normalX /= normalLength;
         normalY /= normalLength;
         normalZ /= normalLength;
-        const light = Math.max(0, normalX * -0.43 + normalY * -0.48 + normalZ * 0.76);
-        const brightness = 0.46 + light * 0.76;
-        const highlight = smoothstep(0.5, 0.78, light);
+        const light = Math.max(0, normalX * -0.46 + normalY * -0.43 + normalZ * 0.77);
+        const brightness = (selectedOnly ? 0.22 : 0.42) + light * (selectedOnly ? 1.02 : 0.8);
+        const highlight = smoothstep(selectedOnly ? 0.42 : 0.5, 0.8, light);
+        const specular = Math.pow(Math.max(0, light), selectedOnly ? 9 : 12) * (selectedOnly ? 0.85 : 0.3);
+        const rim = smoothstep(0.24, 0.92, Math.hypot(normalX, normalY));
         const offset = index * 4;
-        const baseRed = from[0] + (to[0] - from[0]) * colorAmount;
-        const baseGreen = from[1] + (to[1] - from[1]) * colorAmount;
-        const baseBlue = from[2] + (to[2] - from[2]) * colorAmount;
-        imageData.data[offset] = Math.min(255, baseRed * brightness + 245 * highlight * 0.2);
-        imageData.data[offset + 1] = Math.min(255, baseGreen * brightness + 245 * highlight * 0.2);
-        imageData.data[offset + 2] = Math.min(255, baseBlue * brightness + 238 * highlight * 0.2);
-        const body = smoothstep(0.4, 0.82, value) * 0.34;
-        const edge = Math.exp(-Math.pow((value - 0.52) / 0.07, 2)) * 0.31;
-        const innerRidge = Math.exp(-Math.pow((value - 0.88) / 0.13, 2)) * 0.09;
-        imageData.data[offset + 3] = Math.min(205, (body + edge + innerRidge) * 255);
+        let baseRed = from[0] + (to[0] - from[0]) * colorAmount;
+        let baseGreen = from[1] + (to[1] - from[1]) * colorAmount;
+        let baseBlue = from[2] + (to[2] - from[2]) * colorAmount;
+        const heatAmount = smoothstep(0.12, 1.18, heat);
+        const heatColorAmount = heatAmount < 0.62 ? heatAmount / 0.62 : (heatAmount - 0.62) / 0.38;
+        const heatFrom = heatAmount < 0.62 ? [43, 83, 255] : [92, 226, 255];
+        const heatTo = heatAmount < 0.62 ? [92, 226, 255] : [255, 116, 62];
+        const heatRed = heatFrom[0] + (heatTo[0] - heatFrom[0]) * heatColorAmount;
+        const heatGreen = heatFrom[1] + (heatTo[1] - heatFrom[1]) * heatColorAmount;
+        const heatBlue = heatFrom[2] + (heatTo[2] - heatFrom[2]) * heatColorAmount;
+        const heatMix = heatAmount * (selectedOnly ? 0.84 : 0.48);
+        baseRed += (heatRed - baseRed) * heatMix;
+        baseGreen += (heatGreen - baseGreen) * heatMix;
+        baseBlue += (heatBlue - baseBlue) * heatMix;
+        const whiteLift = highlight * (selectedOnly ? 0.27 : 0.19) + specular * 0.72 + rim * heatAmount * 0.15;
+        imageData.data[offset] = Math.min(255, baseRed * brightness + 255 * whiteLift);
+        imageData.data[offset + 1] = Math.min(255, baseGreen * brightness + 255 * whiteLift);
+        imageData.data[offset + 2] = Math.min(255, baseBlue * brightness + 250 * whiteLift);
+        const body = smoothstep(0.38, 0.84, value) * (selectedOnly ? 0.5 : 0.34);
+        const edge = Math.exp(-Math.pow((value - 0.52) / (selectedOnly ? 0.085 : 0.07), 2)) * (selectedOnly ? 0.4 : 0.31);
+        const innerRidge = Math.exp(-Math.pow((value - 0.96) / 0.15, 2)) * (selectedOnly ? 0.17 : 0.09);
+        const hotPeak = smoothstep(0.56, 1.24, heat) * (selectedOnly ? 0.18 : 0.04);
+        imageData.data[offset + 3] = Math.min(selectedOnly ? 235 : 205, (body + edge + innerRidge + hotPeak) * 255);
       }
       fieldContext.putImageData(imageData, 0, 0);
 
       context.save();
       context.globalCompositeOperation = "screen";
       context.imageSmoothingEnabled = true;
-      context.filter = "blur(3.5px) saturate(1.22)";
+      context.filter = selectedOnly ? "blur(2px) saturate(1.58) contrast(1.08)" : "blur(3.5px) saturate(1.22)";
       context.drawImage(fieldCanvas, -7, -7, width + 14, height + 14);
       context.restore();
 
@@ -219,7 +267,10 @@ function RelationshipLines({
       contourGradient.addColorStop(0.52, "#a6a7ff");
       contourGradient.addColorStop(1, "#f59a69");
 
-      [0.44, 0.52, 0.7, 0.92, 1.16].forEach((level) => {
+      const contourLevels = selectedOnly
+        ? [0.4, 0.52, 0.64, 0.77, 0.92, 1.08, 1.26, 1.46, 1.7, 1.96, 2.24]
+        : [0.44, 0.52, 0.7, 0.92, 1.16];
+      contourLevels.forEach((level) => {
         context.save();
         context.beginPath();
         for (let row = 0; row < rows - 1; row += 1) {
@@ -251,8 +302,10 @@ function RelationshipLines({
           }
         }
         context.strokeStyle = level === 0.52 ? "rgba(247,244,233,.9)" : contourGradient;
-        context.globalAlpha = level === 0.52 ? 0.62 : 0.14;
-        context.lineWidth = level === 0.52 ? 1.15 : 0.48;
+        context.globalAlpha = level === 0.52 ? (selectedOnly ? 0.86 : 0.62) : (selectedOnly ? 0.25 : 0.14);
+        context.lineWidth = level === 0.52 ? (selectedOnly ? 1.55 : 1.15) : (selectedOnly ? 0.62 : 0.48);
+        context.shadowColor = level === 0.52 && selectedOnly ? "rgba(142,229,238,.7)" : "transparent";
+        context.shadowBlur = level === 0.52 && selectedOnly ? 7 : 0;
         context.stroke();
         context.restore();
       });
@@ -281,7 +334,7 @@ function RelationshipLines({
       for (let row = Math.floor(rowStride / 2); row < rows - 1; row += rowStride) {
         for (let column = Math.floor(columnStride / 2); column < columns - 1; column += columnStride) {
           const value = values[row * columns + column];
-          if (value > 0.47 && value < 1.18 && (row + column) % 3 !== 0) {
+          if (value > 0.47 && value < (selectedOnly ? 1.9 : 1.18) && (row + column) % 3 !== 0) {
             seeds.push({ x: column * stepX, y: row * stepY });
           }
         }
@@ -290,13 +343,13 @@ function RelationshipLines({
       context.save();
       context.globalCompositeOperation = "screen";
       context.strokeStyle = contourGradient;
-      context.globalAlpha = 0.135;
-      context.lineWidth = 0.42;
-      seeds.slice(0, 62).forEach((seed, seedIndex) => {
+      context.globalAlpha = selectedOnly ? 0.23 : 0.135;
+      context.lineWidth = selectedOnly ? 0.56 : 0.42;
+      seeds.slice(0, selectedOnly ? 88 : 62).forEach((seed, seedIndex) => {
         const trace = (direction: number) => {
           const points: Point[] = [];
           let point = { ...seed };
-          for (let step = 0; step < 32; step += 1) {
+          for (let step = 0; step < (selectedOnly ? 40 : 32); step += 1) {
             const gradient = gradientAt(point);
             const magnitude = Math.hypot(gradient.x, gradient.y);
             if (magnitude < 0.002) break;
@@ -363,16 +416,16 @@ function RelationshipLines({
           context.moveTo(start.x, start.y);
           context.quadraticCurveTo(strandControl.x, strandControl.y, end.x, end.y);
           context.strokeStyle = bundleGradient;
-          context.globalAlpha = isActive ? 0.15 : 0.058;
-          context.lineWidth = 0.42;
+          context.globalAlpha = isActive ? (selectedOnly ? 0.3 : 0.15) : 0.058;
+          context.lineWidth = selectedOnly && isActive ? 0.58 : 0.42;
           context.stroke();
         }
         context.restore();
 
         context.save();
         context.strokeStyle = relationColor[connection.kind];
-        context.globalAlpha = isActive ? 0.7 : 0.14;
-        context.lineWidth = isActive ? 1.35 : 0.65;
+        context.globalAlpha = isActive ? (selectedOnly ? 0.94 : 0.7) : 0.14;
+        context.lineWidth = isActive ? (selectedOnly ? 1.85 : 1.35) : 0.65;
         if (connection.kind === "constraint") context.setLineDash([3, 6]);
         if (connection.kind === "handoff") context.setLineDash([12, 5]);
         context.beginPath();
@@ -390,9 +443,9 @@ function RelationshipLines({
         context.fillStyle = relationColor[connection.kind];
         context.globalAlpha = isActive ? 0.95 : 0.26;
         context.shadowColor = relationColor[connection.kind];
-        context.shadowBlur = isActive ? 12 : 4;
+        context.shadowBlur = isActive ? (selectedOnly ? 20 : 12) : 4;
         context.beginPath();
-        context.arc(px, py, isActive ? 2.4 : 1.25, 0, Math.PI * 2);
+        context.arc(px, py, isActive ? (selectedOnly ? 3.15 : 2.4) : 1.25, 0, Math.PI * 2);
         context.fill();
         context.restore();
       });
@@ -447,7 +500,11 @@ export function Constellation() {
   );
 
   return (
-    <section className="constellation" id="constellation" aria-labelledby="constellation-title">
+    <section
+      className={`constellation ${selectedOnly ? "is-selected-web" : ""}`}
+      id="constellation"
+      aria-labelledby="constellation-title"
+    >
       <div className="constellation-copy">
         <p className="kicker kicker--light">An explorable practice / 14 projects / 20 explicit links</p>
         <h1 id="constellation-title">Nothing here is ever finished.</h1>
@@ -462,7 +519,7 @@ export function Constellation() {
           All relations
         </button>
         <button className={selectedOnly ? "is-active" : ""} onClick={() => setSelectedOnly(true)} type="button">
-          Selected web
+          Selected constellation
         </button>
       </div>
 
@@ -488,8 +545,12 @@ export function Constellation() {
       </div>
 
       <div className="surface-index" aria-hidden="true">
-        <span>Implicit surface / live project topology</span>
-        <span>14 attractors · 20 constraints · 5 relation types</span>
+        <span>{selectedOnly ? "Raised field / selected constellation" : "Implicit surface / live project topology"}</span>
+        <span>
+          {selectedOnly
+            ? `${activeConnections.length + 1} attractors · ${activeConnections.length} active constraints`
+            : "14 attractors · 20 constraints · 5 relation types"}
+        </span>
       </div>
 
       <div className="axis axis--horizontal" aria-hidden="true"><span>Storytelling</span><span>Computation</span></div>
@@ -501,13 +562,15 @@ export function Constellation() {
         {projects.map((project, index) => {
           const visible = category === "All" || project.categories.includes(category);
           const activeNode = project.slug === active.slug;
+          const relatedNode = activeConnections.some((connection) => connection.neighbor?.slug === project.slug);
+          const outsideSelectedWeb = selectedOnly && !activeNode && !relatedNode;
           const relationCount = projectConnections.filter(
             (connection) => connection.from === project.slug || connection.to === project.slug,
           ).length;
           return (
             <button
               aria-label={`Preview ${project.title}; ${relationCount} documented connections`}
-              className={`project-node ${visible ? "" : "is-muted"} ${activeNode ? "is-active" : ""}`}
+              className={`project-node ${visible ? "" : "is-muted"} ${activeNode ? "is-active" : ""} ${relatedNode ? "is-related" : ""} ${outsideSelectedWeb ? "is-outside-web" : ""}`}
               key={project.slug}
               onClick={() => setActiveSlug(project.slug)}
               onFocus={() => setActiveSlug(project.slug)}

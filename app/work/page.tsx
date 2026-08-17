@@ -6,14 +6,14 @@ export default function WorkPage() {
     <main>
       <SiteHeader />
       <section className="page-intro">
-        <p className="kicker">Work / archive</p>
-        <h1>Places, stories,<br />systems, sometimes a mess.</h1>
-        <p className="page-intro__lede">Filter by the kind of work you need to understand. Projects can—and usually do—belong to more than one category.</p>
+        <p className="kicker">Work / Index</p>
+        <h1>Fourteen projects.<br />Many ways through.</h1>
+        <p className="page-intro__lede">Use the lenses to follow a discipline, or move by adjacency. Hover, focus, or use the arrow keys to preview the work without leaving the Index.</p>
       </section>
-      <section className="work-index" aria-label="Project archive">
+      <section className="work-index" aria-label="Project Index">
         <ProjectGrid />
       </section>
-      <footer className="site-footer site-footer--light"><a href="/">← Back to the constellation</a><a href="mailto:patrickdawsono@gmail.com">Say hello ↗</a></footer>
+      <footer className="site-footer site-footer--light"><a href="/">← Back to the Field</a><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a></footer>
     </main>
   );
 }

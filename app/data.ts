@@ -13,6 +13,8 @@ export type Project = {
   role: string;
   outcome: string;
   image: string;
+  artifactImage?: string;
+  indexPill: string;
   categories: Category[];
   featured?: boolean;
   node: { x: number; y: number; size: number };
@@ -53,9 +55,10 @@ export const projects: Project[] = [
     role: "Architectural designer · computational site modeling",
     outcome: "A phased restoration proposal grounded in archival research, survey geometry, public hearings, and maintenance planning.",
     image: "/work/charlesgate.jpg",
+    indexPill: "river under the road",
     categories: ["Place", "Culture"],
     featured: true,
-    node: { x: 16, y: 73, size: 56 },
+    node: { x: 25.3, y: 66.2, size: 32 },
     metrics: ["Point-cloud survey → highway mesh", "Grasshopper-automated tree placement", "Phased public-realm delivery"],
     artifacts: ["Historical river overlays", "Point-cloud / mesh comparison", "Public-hearing and phasing diagrams"],
     details: [
@@ -77,8 +80,9 @@ export const projects: Project[] = [
     role: "Co-founder · business development · creative direction",
     outcome: "A regulatory and spatial reuse package used by the owner for DOB filing and fundraising.",
     image: "/work/east-broadway.jpg",
+    indexPill: "five uses, one envelope",
     categories: ["Place", "Culture"],
-    node: { x: 29, y: 64, size: 44 },
+    node: { x: 36.7, y: 75.2, size: 28 },
     metrics: ["~$5M revitalization study", "Zoning + licensing + operating model", "Existing FAR verified"],
     artifacts: ["Historic-plan comparison", "Regulatory constraint matrix", "Filing and fundraising package"],
     details: [
@@ -100,8 +104,9 @@ export const projects: Project[] = [
     role: "Architectural designer · fabrication-set author",
     outcome: "Five trusses and 100+ addressable lights installed with zero drilling or welding to original components.",
     image: "/work/ouellette.jpg",
+    indexPill: "one fabricator, zero shortcuts",
     categories: ["Fabrication", "Place", "Experience"],
-    node: { x: 21, y: 50, size: 42 },
+    node: { x: 46.2, y: 80.6, size: 26 },
     metrics: ["5 historic trusses", "100+ addressable lights", "0 original components modified"],
     artifacts: ["Clamp family and tolerance studies", "Fabrication sheets", "Installed night sequence"],
     details: [
@@ -123,8 +128,9 @@ export const projects: Project[] = [
     role: "Grant writer · concept · construction · installation",
     outcome: "A competition-selected installation dismantled by the public and recycled after the festival.",
     image: "/work/flower-tower.jpg",
+    indexPill: "a monument that disperses",
     categories: ["Fabrication", "Place", "Culture"],
-    node: { x: 11, y: 37, size: 40 },
+    node: { x: 21.5, y: 44.6, size: 26 },
     metrics: ["800+ stems and seed packets", "6-foot cardboard structure", "~$400 material budget"],
     artifacts: ["Grant and competition submission", "Perforation / assembly logic", "Time-lapse of public depletion"],
     details: [
@@ -146,9 +152,10 @@ export const projects: Project[] = [
     role: "Business development · strategy · lead design · delivery",
     outcome: "A hospitality project delivered from schematic design through permitting, construction, and opening.",
     image: "/work/caleta.jpg",
+    indexPill: "punk rock, fully permitted",
     categories: ["Place", "Fabrication", "Culture"],
     featured: true,
-    node: { x: 36, y: 43, size: 60 },
+    node: { x: 34.8, y: 33.8, size: 32 },
     metrics: ["Concept → permit → opening", "Rated kitchen separation", "ADA + fire/life safety coordination"],
     artifacts: ["Material and lighting studies", "Permit / construction set", "Rated-glass field detail"],
     details: [
@@ -170,8 +177,9 @@ export const projects: Project[] = [
     role: "Spatial experience design lead · systems and playbook author",
     outcome: "200+ conversions initiated across a 900+ location portfolio, with repeatable delivery logic and no single universal layout.",
     image: "/work/wework.jpg",
+    indexPill: "900 buildings, shared rules",
     categories: ["Place", "Experience", "AI systems"],
-    node: { x: 48, y: 69, size: 46 },
+    node: { x: 69, y: 66.2, size: 27 },
     metrics: ["900+ locations analyzed", "200+ conversions initiated", "2–150 person floor plates"],
     artifacts: ["Portfolio opportunity matrix", "Custom Revit analysis", "Operational conversion playbook"],
     details: [
@@ -193,8 +201,9 @@ export const projects: Project[] = [
     role: "Experiential project manager · AI strategy and technical coordination",
     outcome: "A first-of-kind enterprise physical-AI space advanced through construction without losing public presence at the site.",
     image: "/work/intuit.jpg",
+    indexPill: "500 images, four decisions",
     categories: ["Experience", "Place", "AI systems"],
-    node: { x: 59, y: 58, size: 48 },
+    node: { x: 61.4, y: 28.4, size: 29 },
     metrics: ["500+ generated visualizations", "4 curated decision-moving images", "1st physical-AI customer space in portfolio"],
     artifacts: ["Workshop-to-prompt translation", "500→4 curation funnel", "Temporary / permanent delivery timeline"],
     details: [
@@ -216,9 +225,10 @@ export const projects: Project[] = [
     role: "Experiential project manager · media systems lead",
     outcome: "A permanent audiovisual passage delivered on schedule inside an active 1,388-foot enterprise headquarters.",
     image: "/work/vanderbilt.jpg",
+    indexPill: "150-year archive, one passage",
     categories: ["Experience", "AI systems", "Place"],
     featured: true,
-    node: { x: 67, y: 39, size: 64 },
+    node: { x: 65.2, y: 19.4, size: 34 },
     metrics: ["5 hardware zones", "15 generative modes", "150-year archive taxonomy"],
     artifacts: ["Mode and content taxonomy", "Systems / commissioning map", "Directional-audio field study"],
     details: [
@@ -240,9 +250,10 @@ export const projects: Project[] = [
     role: "Research design engineer · HRI and interface design",
     outcome: "An NSF-funded live industrial prototype joining fatigue estimation, gesture control, projected intent, and worker-set assistance.",
     image: "/work/gymnast.jpg",
+    indexPill: "the robot asks first",
     categories: ["Experience", "AI systems", "Fabrication"],
     featured: true,
-    node: { x: 79, y: 58, size: 56 },
+    node: { x: 72.8, y: 57.2, size: 30 },
     metrics: ["NSF Award #1928654", "UR-10 live prototype", "Closed fatigue-to-adjustment loop"],
     artifacts: ["Fatigue-to-adjustment flowchart", "Gesture-programming studies", "Projected interface on physical box"],
     details: [
@@ -264,8 +275,10 @@ export const projects: Project[] = [
     role: "UX and interaction designer · AI-directed frontend builder",
     outcome: "A production 3D civic narrative delivered for a live investor event on a hard deadline.",
     image: "/work/mapping-investments.svg",
+    artifactImage: "/work/mapping-investments.svg",
+    indexPill: "history you can navigate",
     categories: ["AI systems", "Place", "Culture"],
-    node: { x: 56, y: 23, size: 42 },
+    node: { x: 76.6, y: 46.4, size: 26 },
     metrics: ["13 sites", "3 eras", "90 years of neighborhood history"],
     artifacts: ["Prompt contracts + regression guards", "Land-over-time state diagram", "Cartographic system comparison"],
     details: [
@@ -287,8 +300,10 @@ export const projects: Project[] = [
     role: "AI systems designer · pipeline architect",
     outcome: "Five consistent outputs per cycle, a deterministic audit trail, and a workflow handed off for non-engineering ownership.",
     image: "/work/release-intelligence.svg",
+    artifactImage: "/work/release-intelligence.svg",
+    indexPill: "five honest documents",
     categories: ["AI systems", "Experience"],
-    node: { x: 78, y: 26, size: 48 },
+    node: { x: 84.2, y: 55.4, size: 28 },
     metrics: ["40–60% → <5% custom bucket", "3–5 hr → 20–40 min per cycle", "12+ batches / 100+ tickets"],
     artifacts: ["Pencil architecture → functional system", "Six-stage pipeline diagram", "Batch-by-batch error table"],
     details: [
@@ -310,8 +325,10 @@ export const projects: Project[] = [
     role: "Product design · reasoning architecture · build",
     outcome: "A handed-off project-reasoning workflow that turns cross-document conflict into a prioritized, inspectable action list.",
     image: "/work/gleanings.svg",
+    artifactImage: "/work/gleanings.svg",
+    indexPill: "conflicts before they compound",
     categories: ["AI systems", "Experience"],
-    node: { x: 90, y: 43, size: 46 },
+    node: { x: 80.4, y: 62.6, size: 26 },
     metrics: ["4+ heterogeneous source classes", "Conflicts ranked by cost + schedule", "Human review before action"],
     artifacts: ["File-ingestion and reconciliation map", "Ranked discrepancy interface", "Finding-to-source evidence trail"],
     details: [
@@ -333,9 +350,10 @@ export const projects: Project[] = [
     role: "AI product strategist · co-founder · model operations",
     outcome: "A 0→5,000+ trader product with an auditable model-development archive and measurable improvement across its operating period.",
     image: "/work/string.jpg",
+    indexPill: "eight exports, one ledger",
     categories: ["AI systems", "Culture"],
     featured: true,
-    node: { x: 70, y: 13, size: 62 },
+    node: { x: 80.4, y: 41, size: 32 },
     metrics: ["0 → 5,000+ active traders", "40% → 62% reported hit rate", "~$250K revenue"],
     artifacts: ["Model-version performance table", "Maximum-X distribution + denominator", "Call / leaderboard evidence ledger"],
     details: [
@@ -357,9 +375,10 @@ export const projects: Project[] = [
     role: "AI product lead · interaction design · narrative strategy",
     outcome: "A cross-channel character product used by ~10,000 active chatbot users, supported by an automated media pipeline and a 1.2M-follower distribution surface.",
     image: "/work/aintivirus.jpg",
+    indexPill: "a ghost with guardrails",
     categories: ["AI systems", "Culture"],
     featured: true,
-    node: { x: 89, y: 15, size: 68 },
+    node: { x: 57.6, y: 37.4, size: 34 },
     metrics: ["~10,000 active chatbot users", "1.2M X followers (audience)", "Script → voice → published episode"],
     artifacts: ["Private/public corpus boundary map", "Character runtime + channel architecture", "Podcast automation sequence"],
     details: [

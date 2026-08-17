@@ -1,13 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import {
-  categories,
-  projectConnections,
-  projects,
-  type Category,
-  type ConnectionKind,
-} from "../data";
+import fieldSeeds from "../field-seeds.json";
+import { projectConnections, projects, type ConnectionKind } from "../data";
 
 const relationColor: Record<ConnectionKind, string> = {
   method: "#72d9e8",
@@ -17,32 +12,29 @@ const relationColor: Record<ConnectionKind, string> = {
   lineage: "#e09ac6",
 };
 
-function RelationshipLines({
-  activeSlug,
-  category,
-  selectedOnly,
-}: {
-  activeSlug: string;
-  category: "All" | Category;
-  selectedOnly: boolean;
-}) {
+function hashText(value: string) {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const context = canvas.getContext("2d");
-    if (!context) return;
-    const fieldCanvas = document.createElement("canvas");
-    const fieldContext = fieldCanvas.getContext("2d");
-    if (!fieldContext) return;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
 
-    let animation = 0;
     let width = 0;
     let height = 0;
-    let pointer: { x: number; y: number } | null = null;
-    let lastFrame = -Infinity;
+    let animation = 0;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const seed = hashText(activeSlug);
+    const phase = (seed % 997) / 997;
 
     const resize = () => {
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -55,573 +47,287 @@ function RelationshipLines({
 
     const pointFor = (slug: string) => {
       const project = projects.find((item) => item.slug === slug) ?? projects[0];
-      return { x: (project.node.x / 100) * width, y: (project.node.y / 100) * height };
+      return { x: project.node.x / 100 * width, y: project.node.y / 100 * height };
     };
 
-    const visible = (slug: string) => {
-      const project = projects.find((item) => item.slug === slug);
-      return category === "All" || Boolean(project?.categories.includes(category));
-    };
+    const activeConnections = projectConnections.filter(
+      (connection) => connection.from === activeSlug || connection.to === activeSlug,
+    );
+    const connectedSlugs = new Set([
+      activeSlug,
+      ...activeConnections.flatMap((connection) => [connection.from, connection.to]),
+    ]);
 
-    type Point = { x: number; y: number };
-
-    const distanceToSegment = (point: Point, start: Point, end: Point) => {
+    const curve = (start: { x: number; y: number }, end: { x: number; y: number }, index: number) => {
       const dx = end.x - start.x;
       const dy = end.y - start.y;
-      const lengthSquared = dx * dx + dy * dy || 1;
-      const amount = Math.max(0, Math.min(1, ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared));
-      const nearestX = start.x + amount * dx;
-      const nearestY = start.y + amount * dy;
-      return Math.hypot(point.x - nearestX, point.y - nearestY);
+      const length = Math.max(1, Math.hypot(dx, dy));
+      const bend = (((seed >> (index % 12)) & 15) - 7.5) * 4.4 + (index % 2 ? 24 : -24);
+      return {
+        x: (start.x + end.x) / 2 - dy / length * bend,
+        y: (start.y + end.y) / 2 + dx / length * bend,
+      };
     };
 
-    const smoothstep = (edge0: number, edge1: number, value: number) => {
-      const amount = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
-      return amount * amount * (3 - 2 * amount);
-    };
-
-    const drawTopology = (time: number) => {
-      const selectedSlugs = new Set<string>([activeSlug]);
-      projectConnections.forEach((connection) => {
-        if (connection.from === activeSlug) selectedSlugs.add(connection.to);
-        if (connection.to === activeSlug) selectedSlugs.add(connection.from);
-      });
-
-      const fieldProjects = projects.filter(
-        (project) => visible(project.slug) && (!selectedOnly || selectedSlugs.has(project.slug)),
-      );
-      const fieldConnections = projectConnections.filter((connection) => {
-        const activeConnection = connection.from === activeSlug || connection.to === activeSlug;
-        return visible(connection.from) && visible(connection.to) && (!selectedOnly || activeConnection);
-      });
-
-      const cell = Math.max(11, Math.min(16, Math.round(Math.min(width, height) / 82)));
-      const columns = Math.max(2, Math.ceil(width / cell) + 1);
-      const rows = Math.max(2, Math.ceil(height / cell) + 1);
-      const stepX = width / (columns - 1);
-      const stepY = height / (rows - 1);
+    const drawSurface = (time: number) => {
+      const cell = Math.max(14, Math.min(20, Math.round(Math.min(width, height) / 58)));
+      const columns = Math.ceil(width / cell) + 1;
+      const rows = Math.ceil(height / cell) + 1;
+      const surface = document.createElement("canvas");
+      surface.width = columns;
+      surface.height = rows;
+      const surfaceContext = surface.getContext("2d");
+      if (!surfaceContext) return;
+      const imageData = surfaceContext.createImageData(columns, rows);
+      const pulse = reduceMotion ? 1 : 0.96 + Math.sin(time * 0.0022) * 0.07;
       const scale = Math.min(width, height);
-      const values = new Float32Array(columns * rows);
-      const heatValues = new Float32Array(columns * rows);
-      const pulse = reduceMotion ? 1 : 0.96 + Math.sin(time * 0.0021) * 0.08;
-
-      const nodeFields = fieldProjects.map((project) => ({
-        point: pointFor(project.slug),
-        sigma: scale * 0.038 + project.node.size * 0.28,
-        weight:
-          0.72 +
-          projectConnections.filter(
-            (connection) => connection.from === project.slug || connection.to === project.slug,
-          ).length * 0.055 +
-          (project.slug === activeSlug ? 0.2 : 0),
-      }));
-      const edgeFields = fieldConnections.map((connection) => ({
-        start: pointFor(connection.from),
-        end: pointFor(connection.to),
-        sigma: scale * (connection.from === activeSlug || connection.to === activeSlug ? 0.03 : 0.022),
-        weight: connection.from === activeSlug || connection.to === activeSlug ? 0.72 : 0.54,
-      }));
-      const selectedNodeFields = fieldProjects
-        .filter((project) => selectedSlugs.has(project.slug))
-        .map((project) => ({
-          point: pointFor(project.slug),
-          sigma: scale * (project.slug === activeSlug ? 0.025 : 0.034),
-          weight: (project.slug === activeSlug ? 1.3 : 0.58) * pulse,
-        }));
-      const selectedEdgeFields = fieldConnections
-        .filter((connection) => connection.from === activeSlug || connection.to === activeSlug)
-        .map((connection) => ({
-          start: pointFor(connection.from),
-          end: pointFor(connection.to),
-          sigma: scale * 0.021,
-          weight: 0.68 * pulse,
-        }));
 
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
-          const sample = { x: column * stepX, y: row * stepY };
+          const x = column / Math.max(1, columns - 1) * width;
+          const y = row / Math.max(1, rows - 1) * height;
           let value = 0;
-          nodeFields.forEach((node) => {
-            const distanceSquared = (sample.x - node.point.x) ** 2 + (sample.y - node.point.y) ** 2;
-            value += node.weight * Math.exp(-distanceSquared / (2 * node.sigma ** 2));
+          projects.forEach((project) => {
+            const point = pointFor(project.slug);
+            const selected = connectedSlugs.has(project.slug);
+            const sigma = scale * (selected ? 0.055 : 0.04);
+            const distance = (x - point.x) ** 2 + (y - point.y) ** 2;
+            value += (selected ? 1.12 * pulse : 0.15) * Math.exp(-distance / (2 * sigma ** 2));
           });
-          edgeFields.forEach((edge) => {
-            const distance = distanceToSegment(sample, edge.start, edge.end);
-            if (distance < edge.sigma * 3.4) {
-              value += edge.weight * Math.exp(-(distance ** 2) / (2 * edge.sigma ** 2));
-            }
-          });
-          let activeHeat = 0;
-          selectedNodeFields.forEach((node) => {
-            const distanceSquared = (sample.x - node.point.x) ** 2 + (sample.y - node.point.y) ** 2;
-            activeHeat += node.weight * Math.exp(-distanceSquared / (2 * node.sigma ** 2));
-          });
-          selectedEdgeFields.forEach((edge) => {
-            const distance = distanceToSegment(sample, edge.start, edge.end);
-            if (distance < edge.sigma * 3.6) {
-              activeHeat += edge.weight * Math.exp(-(distance ** 2) / (2 * edge.sigma ** 2));
-            }
-          });
-          value += activeHeat * (selectedOnly ? 0.5 : 0.13);
-          if (pointer && !reduceMotion) {
-            const pointerSigma = scale * 0.105;
-            const pointerDistanceSquared = (sample.x - pointer.x) ** 2 + (sample.y - pointer.y) ** 2;
-            value -= 0.72 * Math.exp(-pointerDistanceSquared / (2 * pointerSigma ** 2));
-          }
-          value += Math.sin(sample.x * 0.0042 + sample.y * 0.0031 + time * 0.00016) * 0.022;
-          const index = row * columns + column;
-          values[index] = value;
-          heatValues[index] = activeHeat;
+          value += Math.sin(x * 0.005 + y * 0.0034 + phase * 8) * 0.025;
+          const ridge = Math.max(0, Math.min(1, (value - 0.18) / 1.35));
+          const crest = Math.pow(ridge, 1.65);
+          const offset = (row * columns + column) * 4;
+          imageData.data[offset] = 34 + crest * 125;
+          imageData.data[offset + 1] = 44 + crest * 116;
+          imageData.data[offset + 2] = 83 + crest * 148;
+          imageData.data[offset + 3] = Math.min(225, ridge * 230);
         }
       }
-
-      fieldCanvas.width = columns;
-      fieldCanvas.height = rows;
-      const imageData = fieldContext.createImageData(columns, rows);
-      for (let index = 0; index < values.length; index += 1) {
-        const value = values[index];
-        const heat = heatValues[index];
-        const column = index % columns;
-        const row = Math.floor(index / columns);
-        const paletteAmount = Math.max(0, Math.min(1, column / columns * 0.58 + row / rows * 0.42));
-        const firstHalf = paletteAmount < 0.5;
-        const colorAmount = firstHalf ? paletteAmount * 2 : (paletteAmount - 0.5) * 2;
-        const from = firstHalf ? [113, 220, 232] : [163, 151, 239];
-        const to = firstHalf ? [163, 151, 239] : [241, 139, 91];
-        const left = values[row * columns + Math.max(0, column - 1)];
-        const right = values[row * columns + Math.min(columns - 1, column + 1)];
-        const above = values[Math.max(0, row - 1) * columns + column];
-        const below = values[Math.min(rows - 1, row + 1) * columns + column];
-        const normalStrength = selectedOnly ? 5.2 : 3.15;
-        let normalX = -(right - left) * normalStrength;
-        let normalY = -(below - above) * normalStrength;
-        let normalZ = selectedOnly ? 0.58 : 0.78;
-        const normalLength = Math.hypot(normalX, normalY, normalZ) || 1;
-        normalX /= normalLength;
-        normalY /= normalLength;
-        normalZ /= normalLength;
-        const light = Math.max(0, normalX * -0.46 + normalY * -0.43 + normalZ * 0.77);
-        const brightness = (selectedOnly ? 0.22 : 0.42) + light * (selectedOnly ? 1.02 : 0.8);
-        const highlight = smoothstep(selectedOnly ? 0.42 : 0.5, 0.8, light);
-        const specular = Math.pow(Math.max(0, light), selectedOnly ? 9 : 12) * (selectedOnly ? 0.85 : 0.3);
-        const rim = smoothstep(0.24, 0.92, Math.hypot(normalX, normalY));
-        const offset = index * 4;
-        let baseRed = from[0] + (to[0] - from[0]) * colorAmount;
-        let baseGreen = from[1] + (to[1] - from[1]) * colorAmount;
-        let baseBlue = from[2] + (to[2] - from[2]) * colorAmount;
-        const heatAmount = smoothstep(0.12, 1.18, heat);
-        const heatColorAmount = heatAmount < 0.62 ? heatAmount / 0.62 : (heatAmount - 0.62) / 0.38;
-        const heatFrom = heatAmount < 0.62 ? [43, 83, 255] : [92, 226, 255];
-        const heatTo = heatAmount < 0.62 ? [92, 226, 255] : [255, 116, 62];
-        const heatRed = heatFrom[0] + (heatTo[0] - heatFrom[0]) * heatColorAmount;
-        const heatGreen = heatFrom[1] + (heatTo[1] - heatFrom[1]) * heatColorAmount;
-        const heatBlue = heatFrom[2] + (heatTo[2] - heatFrom[2]) * heatColorAmount;
-        const heatMix = heatAmount * (selectedOnly ? 0.84 : 0.48);
-        baseRed += (heatRed - baseRed) * heatMix;
-        baseGreen += (heatGreen - baseGreen) * heatMix;
-        baseBlue += (heatBlue - baseBlue) * heatMix;
-        const whiteLift = highlight * (selectedOnly ? 0.27 : 0.19) + specular * 0.72 + rim * heatAmount * 0.15;
-        imageData.data[offset] = Math.min(255, baseRed * brightness + 255 * whiteLift);
-        imageData.data[offset + 1] = Math.min(255, baseGreen * brightness + 255 * whiteLift);
-        imageData.data[offset + 2] = Math.min(255, baseBlue * brightness + 250 * whiteLift);
-        const body = smoothstep(0.38, 0.84, value) * (selectedOnly ? 0.5 : 0.34);
-        const edge = Math.exp(-Math.pow((value - 0.52) / (selectedOnly ? 0.085 : 0.07), 2)) * (selectedOnly ? 0.4 : 0.31);
-        const innerRidge = Math.exp(-Math.pow((value - 0.96) / 0.15, 2)) * (selectedOnly ? 0.17 : 0.09);
-        const hotPeak = smoothstep(0.56, 1.24, heat) * (selectedOnly ? 0.18 : 0.04);
-        imageData.data[offset + 3] = Math.min(selectedOnly ? 235 : 205, (body + edge + innerRidge + hotPeak) * 255);
-      }
-      fieldContext.putImageData(imageData, 0, 0);
-
+      surfaceContext.putImageData(imageData, 0, 0);
       context.save();
       context.globalCompositeOperation = "screen";
-      context.imageSmoothingEnabled = true;
-      context.filter = selectedOnly ? "blur(2px) saturate(1.58) contrast(1.08)" : "blur(3.5px) saturate(1.22)";
-      context.drawImage(fieldCanvas, -7, -7, width + 14, height + 14);
+      context.filter = "blur(7px) saturate(1.18) contrast(1.16)";
+      context.drawImage(surface, -12, -12, width + 24, height + 24);
       context.restore();
 
-      const interpolation = (first: number, second: number, level: number) => {
-        if (Math.abs(second - first) < 0.0001) return 0.5;
-        return Math.max(0, Math.min(1, (level - first) / (second - first)));
-      };
-      const edgePoint = (
-        edge: number,
-        column: number,
-        row: number,
-        corners: [number, number, number, number],
-        level: number,
-      ) => {
-        const x = column * stepX;
-        const y = row * stepY;
-        if (edge === 0) return { x: x + interpolation(corners[0], corners[1], level) * stepX, y };
-        if (edge === 1) return { x: x + stepX, y: y + interpolation(corners[1], corners[2], level) * stepY };
-        if (edge === 2) return { x: x + interpolation(corners[3], corners[2], level) * stepX, y: y + stepY };
-        return { x, y: y + interpolation(corners[0], corners[3], level) * stepY };
-      };
-      const contourPairs: Record<number, number[][]> = {
-        1: [[3, 0]], 2: [[0, 1]], 3: [[3, 1]], 4: [[1, 2]],
-        6: [[0, 2]], 7: [[3, 2]], 8: [[2, 3]], 9: [[0, 2]],
-        11: [[1, 2]], 12: [[1, 3]], 13: [[0, 1]], 14: [[3, 0]],
-      };
-      const contourGradient = context.createLinearGradient(width * 0.08, height * 0.2, width * 0.92, height * 0.8);
-      contourGradient.addColorStop(0, "#8ce6ec");
-      contourGradient.addColorStop(0.52, "#a6a7ff");
-      contourGradient.addColorStop(1, "#f59a69");
-
-      const contourLevels = selectedOnly
-        ? [0.4, 0.52, 0.64, 0.77, 0.92, 1.08, 1.26, 1.46, 1.7, 1.96, 2.24]
-        : [0.44, 0.52, 0.7, 0.92, 1.16];
-      contourLevels.forEach((level) => {
-        context.save();
-        context.beginPath();
-        for (let row = 0; row < rows - 1; row += 1) {
-          for (let column = 0; column < columns - 1; column += 1) {
-            const corners: [number, number, number, number] = [
-              values[row * columns + column],
-              values[row * columns + column + 1],
-              values[(row + 1) * columns + column + 1],
-              values[(row + 1) * columns + column],
-            ];
-            const mask =
-              (corners[0] >= level ? 1 : 0) |
-              (corners[1] >= level ? 2 : 0) |
-              (corners[2] >= level ? 4 : 0) |
-              (corners[3] >= level ? 8 : 0);
-            if (mask === 0 || mask === 15) continue;
-            const centerAbove = (corners[0] + corners[1] + corners[2] + corners[3]) / 4 >= level;
-            const pairs = mask === 5
-              ? (centerAbove ? [[3, 2], [0, 1]] : [[3, 0], [2, 1]])
-              : mask === 10
-                ? (centerAbove ? [[3, 0], [2, 1]] : [[3, 2], [0, 1]])
-                : contourPairs[mask] ?? [];
-            pairs.forEach(([firstEdge, secondEdge]) => {
-              const first = edgePoint(firstEdge, column, row, corners, level);
-              const second = edgePoint(secondEdge, column, row, corners, level);
-              context.moveTo(first.x, first.y);
-              context.lineTo(second.x, second.y);
-            });
-          }
-        }
-        context.strokeStyle = level === 0.52 ? "rgba(247,244,233,.9)" : contourGradient;
-        context.globalAlpha = level === 0.52 ? (selectedOnly ? 0.86 : 0.62) : (selectedOnly ? 0.25 : 0.14);
-        context.lineWidth = level === 0.52 ? (selectedOnly ? 1.55 : 1.15) : (selectedOnly ? 0.62 : 0.48);
-        context.shadowColor = level === 0.52 && selectedOnly ? "rgba(142,229,238,.7)" : "transparent";
-        context.shadowBlur = level === 0.52 && selectedOnly ? 7 : 0;
-        context.stroke();
-        context.restore();
-      });
-
-      const sampleField = (x: number, y: number) => {
-        const gridX = Math.max(0, Math.min(columns - 1.001, x / stepX));
-        const gridY = Math.max(0, Math.min(rows - 1.001, y / stepY));
-        const column = Math.floor(gridX);
-        const row = Math.floor(gridY);
-        const amountX = gridX - column;
-        const amountY = gridY - row;
-        const top = values[row * columns + column] * (1 - amountX) + values[row * columns + column + 1] * amountX;
-        const bottom = values[(row + 1) * columns + column] * (1 - amountX) + values[(row + 1) * columns + column + 1] * amountX;
-        return top * (1 - amountY) + bottom * amountY;
-      };
-      const gradientAt = (point: Point) => {
-        const epsilon = cell * 1.15;
-        return {
-          x: sampleField(point.x + epsilon, point.y) - sampleField(point.x - epsilon, point.y),
-          y: sampleField(point.x, point.y + epsilon) - sampleField(point.x, point.y - epsilon),
-        };
-      };
-      const seeds: Point[] = [];
-      const columnStride = Math.max(7, Math.floor(columns / 15));
-      const rowStride = Math.max(6, Math.floor(rows / 11));
-      for (let row = Math.floor(rowStride / 2); row < rows - 1; row += rowStride) {
-        for (let column = Math.floor(columnStride / 2); column < columns - 1; column += columnStride) {
-          const value = values[row * columns + column];
-          if (value > 0.47 && value < (selectedOnly ? 1.9 : 1.18) && (row + column) % 3 !== 0) {
-            seeds.push({ x: column * stepX, y: row * stepY });
-          }
-        }
-      }
-
+      const activePoint = pointFor(activeSlug);
       context.save();
-      context.globalCompositeOperation = "screen";
-      context.strokeStyle = contourGradient;
-      context.globalAlpha = selectedOnly ? 0.23 : 0.135;
-      context.lineWidth = selectedOnly ? 0.56 : 0.42;
-      seeds.slice(0, selectedOnly ? 88 : 62).forEach((seed, seedIndex) => {
-        const trace = (direction: number) => {
-          const points: Point[] = [];
-          let point = { ...seed };
-          for (let step = 0; step < (selectedOnly ? 40 : 32); step += 1) {
-            const gradient = gradientAt(point);
-            const magnitude = Math.hypot(gradient.x, gradient.y);
-            if (magnitude < 0.002) break;
-            const normalX = gradient.x / magnitude;
-            const normalY = gradient.y / magnitude;
-            const curl = Math.sin(seedIndex * 0.73 + step * 0.19 + time * 0.00008) * 0.16;
-            point = {
-              x: point.x + (normalX * direction - normalY * curl) * cell * 0.82,
-              y: point.y + (normalY * direction + normalX * curl) * cell * 0.82,
-            };
-            if (point.x < 0 || point.x > width || point.y < 0 || point.y > height || sampleField(point.x, point.y) < 0.38) break;
-            points.push(point);
-          }
-          return points;
-        };
-        const path = [...trace(-1).reverse(), seed, ...trace(1)];
-        if (path.length < 4) return;
+      context.strokeStyle = "rgba(216,234,248,.2)";
+      context.lineWidth = 0.58;
+      for (let ring = 0; ring < 13; ring += 1) {
         context.beginPath();
-        context.moveTo(path[0].x, path[0].y);
-        path.slice(1).forEach((point) => context.lineTo(point.x, point.y));
+        context.ellipse(
+          activePoint.x,
+          activePoint.y,
+          34 + ring * 15,
+          18 + ring * 9,
+          phase * Math.PI,
+          0,
+          Math.PI * 2,
+        );
         context.stroke();
-      });
+      }
       context.restore();
     };
 
-    const draw = (time: number) => {
-      if (!reduceMotion && time - lastFrame < 34) {
-        animation = requestAnimationFrame(draw);
-        return;
-      }
-      lastFrame = time;
-      context.clearRect(0, 0, width, height);
-
-      drawTopology(time);
-
-      projectConnections.forEach((connection, index) => {
-        if (!visible(connection.from) || !visible(connection.to)) return;
-        const isActive = connection.from === activeSlug || connection.to === activeSlug;
-        if (selectedOnly && !isActive) return;
-
+    const drawConnections = (time: number) => {
+      activeConnections.forEach((connection, index) => {
         const start = pointFor(connection.from);
         const end = pointFor(connection.to);
+        const control = curve(start, end, index);
+        const color = relationColor[connection.kind];
         const dx = end.x - start.x;
         const dy = end.y - start.y;
-        const length = Math.max(Math.sqrt(dx * dx + dy * dy), 1);
-        const bend = ((index % 5) - 2) * 18 + (isActive ? 12 : 0);
-        const control = {
-          x: (start.x + end.x) / 2 - (dy / length) * bend,
-          y: (start.y + end.y) / 2 + (dx / length) * bend,
-        };
+        const length = Math.max(1, Math.hypot(dx, dy));
 
         context.save();
-        const bundleGradient = context.createLinearGradient(start.x, start.y, end.x, end.y);
-        bundleGradient.addColorStop(0, relationColor[connection.kind]);
-        bundleGradient.addColorStop(0.5, "#f5f1e8");
-        bundleGradient.addColorStop(1, relationColor[connection.kind]);
-        for (let strand = -4; strand <= 4; strand += 1) {
-          const strandBend = bend + strand * (5 + Math.min(7, length * 0.006));
-          const strandControl = {
-            x: (start.x + end.x) / 2 - (dy / length) * strandBend,
-            y: (start.y + end.y) / 2 + (dx / length) * strandBend,
-          };
+        context.globalCompositeOperation = "screen";
+        for (let strand = -9; strand <= 9; strand += 1) {
+          const spread = strand * 4.2;
           context.beginPath();
           context.moveTo(start.x, start.y);
-          context.quadraticCurveTo(strandControl.x, strandControl.y, end.x, end.y);
-          context.strokeStyle = bundleGradient;
-          context.globalAlpha = isActive ? (selectedOnly ? 0.3 : 0.15) : 0.058;
-          context.lineWidth = selectedOnly && isActive ? 0.58 : 0.42;
+          context.quadraticCurveTo(
+            control.x - dy / length * spread,
+            control.y + dx / length * spread,
+            end.x,
+            end.y,
+          );
+          context.strokeStyle = color;
+          context.globalAlpha = 0.08 + (1 - Math.abs(strand) / 10) * 0.22;
+          context.lineWidth = strand === 0 ? 1.35 : 0.42;
           context.stroke();
         }
-        context.restore();
 
-        context.save();
-        context.strokeStyle = relationColor[connection.kind];
-        context.globalAlpha = isActive ? (selectedOnly ? 0.94 : 0.7) : 0.14;
-        context.lineWidth = isActive ? (selectedOnly ? 1.85 : 1.35) : 0.65;
-        if (connection.kind === "constraint") context.setLineDash([3, 6]);
-        if (connection.kind === "handoff") context.setLineDash([12, 5]);
-        context.beginPath();
-        context.moveTo(start.x, start.y);
-        context.quadraticCurveTo(control.x, control.y, end.x, end.y);
-        context.stroke();
-        context.restore();
+        for (let loose = 0; loose < 4; loose += 1) {
+          const side = loose % 2 ? 1 : -1;
+          const extension = 28 + loose * 17 + (seed % 19);
+          context.beginPath();
+          context.moveTo(end.x, end.y);
+          context.quadraticCurveTo(
+            end.x + dx / length * extension * 0.5 + side * dy / length * 20,
+            end.y + dy / length * extension * 0.5 - side * dx / length * 20,
+            end.x + dx / length * extension,
+            end.y + dy / length * extension,
+          );
+          context.globalAlpha = 0.12;
+          context.lineWidth = 0.45;
+          context.stroke();
+        }
 
-        const speed = 0.000035 + (index % 4) * 0.000007;
-        const phase = (time * speed + index * 0.17) % 1;
-        const oneMinus = 1 - phase;
-        const px = oneMinus * oneMinus * start.x + 2 * oneMinus * phase * control.x + phase * phase * end.x;
-        const py = oneMinus * oneMinus * start.y + 2 * oneMinus * phase * control.y + phase * phase * end.y;
-        context.save();
-        context.fillStyle = relationColor[connection.kind];
-        context.globalAlpha = isActive ? 0.95 : 0.26;
-        context.shadowColor = relationColor[connection.kind];
-        context.shadowBlur = isActive ? (selectedOnly ? 20 : 12) : 4;
+        const progress = reduceMotion ? 0.62 : (time * (0.00009 + index * 0.000008) + phase) % 1;
+        const inverse = 1 - progress;
+        const px = inverse * inverse * start.x + 2 * inverse * progress * control.x + progress * progress * end.x;
+        const py = inverse * inverse * start.y + 2 * inverse * progress * control.y + progress * progress * end.y;
+        context.fillStyle = color;
+        context.globalAlpha = 0.98;
+        context.shadowColor = color;
+        context.shadowBlur = 16;
         context.beginPath();
-        context.arc(px, py, isActive ? (selectedOnly ? 3.15 : 2.4) : 1.25, 0, Math.PI * 2);
+        context.arc(px, py, 2.8, 0, Math.PI * 2);
         context.fill();
         context.restore();
-      });
 
+        const midpoint = 0.5;
+        const inverseMid = 1 - midpoint;
+        const labelX = inverseMid * inverseMid * start.x + 2 * inverseMid * midpoint * control.x + midpoint * midpoint * end.x;
+        const labelY = inverseMid * inverseMid * start.y + 2 * inverseMid * midpoint * control.y + midpoint * midpoint * end.y;
+        const tangentX = 2 * inverseMid * (control.x - start.x) + 2 * midpoint * (end.x - control.x);
+        const tangentY = 2 * inverseMid * (control.y - start.y) + 2 * midpoint * (end.y - control.y);
+        let angle = Math.atan2(tangentY, tangentX);
+        if (angle > Math.PI / 2 || angle < -Math.PI / 2) angle += Math.PI;
+        context.save();
+        context.translate(labelX, labelY);
+        context.rotate(angle);
+        context.fillStyle = color;
+        context.globalAlpha = 0.92;
+        context.font = "600 11px ui-monospace, SFMono-Regular, Menlo, monospace";
+        context.letterSpacing = "1px";
+        const label = connection.kind.toUpperCase();
+        const measure = context.measureText(label);
+        context.fillStyle = "rgba(8,11,13,.88)";
+        context.fillRect(-measure.width / 2 - 6, -9, measure.width + 12, 16);
+        context.fillStyle = color;
+        context.fillText(label, -measure.width / 2, 3);
+        context.restore();
+      });
+    };
+
+    const draw = (time: number) => {
+      context.clearRect(0, 0, width, height);
+      drawSurface(time);
+      drawConnections(time);
       if (!reduceMotion) animation = requestAnimationFrame(draw);
     };
 
     resize();
-    const updatePointer = (event: PointerEvent) => {
-      const bounds = canvas.getBoundingClientRect();
-      const inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
-      pointer = inside ? { x: event.clientX - bounds.left, y: event.clientY - bounds.top } : null;
-    };
-    const clearPointer = () => { pointer = null; };
     window.addEventListener("resize", resize);
-    window.addEventListener("pointermove", updatePointer, { passive: true });
-    window.addEventListener("blur", clearPointer);
     if (reduceMotion) draw(0);
     else animation = requestAnimationFrame(draw);
-
     return () => {
       cancelAnimationFrame(animation);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("pointermove", updatePointer);
-      window.removeEventListener("blur", clearPointer);
     };
-  }, [activeSlug, category, selectedOnly]);
+  }, [activeSlug]);
 
-  return <canvas ref={canvasRef} aria-hidden="true" className="relationship-lines" />;
+  return <canvas ref={canvasRef} className="field-selected-geometry" aria-hidden="true" />;
 }
 
 export function Constellation() {
-  const [category, setCategory] = useState<"All" | Category>("All");
-  const [activeSlug, setActiveSlug] = useState("vanderbilt-passage");
-  const [selectedOnly, setSelectedOnly] = useState(false);
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const [restSeed, setRestSeed] = useState(fieldSeeds.seeds[0]);
   const active = useMemo(
-    () => projects.find((project) => project.slug === activeSlug) ?? projects[0],
+    () => projects.find((project) => project.slug === activeSlug) ?? null,
     [activeSlug],
   );
-  const activeConnections = useMemo(
-    () =>
-      projectConnections
-        .filter((connection) => connection.from === activeSlug || connection.to === activeSlug)
-        .map((connection) => ({
-          ...connection,
-          neighbor: projects.find(
-            (project) =>
-              project.slug === (connection.from === activeSlug ? connection.to : connection.from),
-          ),
-        })),
-    [activeSlug],
-  );
+  const activeConnections = useMemo(() => activeSlug
+    ? projectConnections
+      .filter((connection) => connection.from === activeSlug || connection.to === activeSlug)
+      .map((connection) => ({
+        ...connection,
+        neighbor: projects.find((project) => project.slug === (connection.from === activeSlug ? connection.to : connection.from)),
+      }))
+    : [], [activeSlug]);
+
+  useEffect(() => {
+    const daily = hashText(new Date().toISOString().slice(0, 10));
+    setRestSeed(fieldSeeds.seeds[daily % fieldSeeds.seeds.length]);
+  }, []);
 
   return (
-    <section
-      className={`constellation ${selectedOnly ? "is-selected-web" : ""}`}
-      id="constellation"
-      aria-labelledby="constellation-title"
-    >
-      <div className="constellation-copy">
-        <p className="kicker kicker--light">An explorable practice / 14 projects / 20 explicit links</p>
-        <h1 id="constellation-title">Nothing here is ever finished.</h1>
-        <p>
-          Select a node to see the working lineage: shared methods, difficult handoffs,
-          bounded authority, and constraints that migrate from one medium to another.
-        </p>
+    <section className={`field ${active ? "is-constellation" : ""}`} id="field" aria-labelledby="field-title">
+      <img className="field-resting-image" src={`/field/field-${restSeed}.svg`} alt="" fetchPriority="high" />
+      {active && <SelectedGeometry activeSlug={active.slug} />}
+
+      <div className="field-copy">
+        <p className="kicker kicker--light">The Field</p>
+        <h1 id="field-title">Nothing here is ever finished.</h1>
+        <p>Select a project to reveal the methods, handoffs, authority boundaries, constraints, and lineages that hold the work together.</p>
       </div>
 
-      <div className="constellation-controls" aria-label="Relationship display">
-        <button className={selectedOnly ? "" : "is-active"} onClick={() => setSelectedOnly(false)} type="button">
-          All relations
-        </button>
-        <button className={selectedOnly ? "is-active" : ""} onClick={() => setSelectedOnly(true)} type="button">
-          Selected constellation
-        </button>
+      <div className="field-axes" aria-hidden="true">
+        <span className="field-axis field-axis--story">Storytelling</span>
+        <span className="field-axis field-axis--compute">Computation</span>
+        <span className="field-axis field-axis--atmosphere">Atmosphere</span>
+        <span className="field-axis field-axis--architecture">Architecture</span>
+        <i />
       </div>
 
-      <div className="constellation-filters" role="group" aria-label="Filter projects">
-        {categories.map((item) => (
-          <button
-            className={category === item ? "is-active" : ""}
-            key={item}
-            onClick={() => setCategory(item)}
-            type="button"
-          >
-            {item}
-          </button>
-        ))}
-      </div>
-
-      <div className="relationship-legend" aria-label="Connection types">
-        {(Object.keys(relationColor) as ConnectionKind[]).map((kind) => (
-          <span key={kind} style={{ "--legend": relationColor[kind] } as CSSProperties}>
-            {kind}
-          </span>
-        ))}
-      </div>
-
-      <div className="surface-index" aria-hidden="true">
-        <span>{selectedOnly ? "Raised field / selected constellation" : "Implicit surface / live project topology"}</span>
-        <span>
-          {selectedOnly
-            ? `${activeConnections.length + 1} attractors · ${activeConnections.length} active constraints`
-            : "14 attractors · 20 constraints · 5 relation types"}
-        </span>
-      </div>
-
-      <div className="axis axis--horizontal" aria-hidden="true"><span>Storytelling</span><span>Computation</span></div>
-      <div className="axis axis--vertical" aria-hidden="true"><span>Atmosphere</span><span>Architecture</span></div>
-
-      <RelationshipLines activeSlug={activeSlug} category={category} selectedOnly={selectedOnly} />
-
-      <div className="node-field">
+      <div className="field-nodes">
         {projects.map((project, index) => {
-          const visible = category === "All" || project.categories.includes(category);
-          const activeNode = project.slug === active.slug;
-          const relatedNode = activeConnections.some((connection) => connection.neighbor?.slug === project.slug);
-          const outsideSelectedWeb = selectedOnly && !activeNode && !relatedNode;
-          const relationCount = projectConnections.filter(
-            (connection) => connection.from === project.slug || connection.to === project.slug,
-          ).length;
+          const isActive = active?.slug === project.slug;
+          const isRelated = activeConnections.some((connection) => connection.neighbor?.slug === project.slug);
           return (
             <button
-              aria-label={`Preview ${project.title}; ${relationCount} documented connections`}
-              className={`project-node ${visible ? "" : "is-muted"} ${activeNode ? "is-active" : ""} ${relatedNode ? "is-related" : ""} ${outsideSelectedWeb ? "is-outside-web" : ""}`}
+              className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${active && !isActive && !isRelated ? "is-quiet" : ""}`}
               key={project.slug}
               onClick={() => setActiveSlug(project.slug)}
-              onFocus={() => setActiveSlug(project.slug)}
               style={{
                 left: `${project.node.x}%`,
                 top: `${project.node.y}%`,
                 width: project.node.size,
                 height: project.node.size,
-                animationDelay: `${index * -0.42}s`,
                 "--node-order": index,
               } as CSSProperties}
               type="button"
+              aria-label={`Select ${project.title}`}
             >
-              <span className="project-node__index">{String(index + 1).padStart(2, "0")}</span>
-              <span className="project-node__name">{project.title}</span>
-              <span className="project-node__count">{relationCount}</span>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{project.title}</strong>
             </button>
           );
         })}
       </div>
 
-      <aside className="constellation-card" aria-live="polite">
-        <div className="constellation-card__top">
-          <div className="constellation-card__image"><img src={active.image} alt="" /></div>
-          <div>
-            <p className="micro">{active.eyebrow} · {active.year}</p>
-            <h2>{active.title}</h2>
-            <p>{active.question}</p>
-          </div>
-        </div>
-        <div className="constellation-relations">
-          <p className="micro">Why this node connects</p>
-          {activeConnections.slice(0, 4).map((connection) => (
-            <button
-              key={`${connection.from}-${connection.to}`}
-              onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)}
-              type="button"
-            >
-              <i style={{ background: relationColor[connection.kind] }} />
-              <span>
-                <strong>{connection.neighbor?.title}</strong>
-                <small>{connection.reason}</small>
-              </span>
-            </button>
-          ))}
-        </div>
-        <div className="tag-row">{active.categories.map((tag) => <span key={tag}>{tag}</span>)}</div>
-        <a href={`/work/${active.slug}`}>Open case study <span>↗</span></a>
-      </aside>
+      {active && (
+        <>
+          <button className="field-close" onClick={() => setActiveSlug(null)} type="button">Return to Field ×</button>
+          <aside className="constellation-document" aria-live="polite">
+            <div className="constellation-artifact">
+              <p>{active.eyebrow} · {active.year}</p>
+              <div><img src={active.artifactImage ?? active.image} alt="" /></div>
+              <h2>{active.title}</h2>
+              <a href={`/work/${active.slug}`}>Open case study ↗</a>
+            </div>
+            <div className="constellation-key">
+              <p className="micro">This constellation</p>
+              {activeConnections.map((connection) => (
+                <button key={`${connection.from}-${connection.to}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
+                  <i style={{ background: relationColor[connection.kind] }} />
+                  <span><small>{connection.kind}</small><strong>{connection.neighbor?.title}</strong><em>{connection.reason}</em></span>
+                </button>
+              ))}
+              <div className="constellation-taxonomy" aria-label="Relationship types">
+                {(Object.keys(relationColor) as ConnectionKind[]).map((kind) => (
+                  <span key={kind} style={{ "--relation": relationColor[kind] } as CSSProperties}>{kind}</span>
+                ))}
+              </div>
+            </div>
+          </aside>
+        </>
+      )}
 
-      <p className="constellation-scroll">Move by relationship, filter by lens, or follow the straight sequence below ↓</p>
+      {!active && <p className="field-caption">Select a numbered bead to raise a constellation. Scroll for selected work ↓</p>}
     </section>
   );
 }

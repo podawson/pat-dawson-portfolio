@@ -10,9 +10,9 @@ export default function Home() {
 
       <section className="selected-work" id="selected-work" aria-labelledby="selected-title">
         <div className="section-heading">
-          <p className="kicker">Curated sequence</p>
+          <p className="kicker">Selected work</p>
           <h2 id="selected-title">From existing conditions<br />to working systems.</h2>
-          <p>This is the straight path through the work. The constellation above is the scenic route.</p>
+          <p>This is the straight path through the work. The Field above is the scenic route.</p>
         </div>
         <div className="selected-list">
           {featuredProjects.map((project, index) => (
@@ -38,14 +38,14 @@ export default function Home() {
         <h2>Every project is a node.<br />Every node has neighbors.</h2>
         <div>
           <a href="/work">Browse all work ↗</a>
-          <a href="/playground">Open the playground ↗</a>
+          <a href="/studies">Open the studies ↗</a>
         </div>
       </section>
 
       <footer className="site-footer">
         <p>Patrick Dawson · New York · 2026</p>
         <a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a>
-        <p>Still changing shape.</p>
+        <p>Always in progress.</p>
       </footer>
     </main>
   );

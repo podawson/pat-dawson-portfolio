@@ -1,0 +1,20 @@
+import { SiteHeader } from "../components/SiteHeader";
+import { WaterStudy } from "../components/WaterStudy";
+
+export default function StudiesPage() {
+  return (
+    <main className="studies-page">
+      <SiteHeader inverse />
+      <section className="studies-intro">
+        <p className="kicker kicker--light">Studies / Water 01</p>
+        <h1>One triangle,<br />many seas.</h1>
+        <p>A minimal water study built from one repeated isosceles triangle. Change the field, then watch calm geometry move toward storm, cloud, and fog.</p>
+      </section>
+      <WaterStudy />
+      <section className="studies-footnote">
+        <p>The surface is deliberately inspectable: one primitive, nineteen explicit parameters, four observational presets, and no simulated realism hiding how the atmosphere is made.</p>
+        <a href="/#field">Return to the Field ↗</a>
+      </section>
+    </main>
+  );
+}

@@ -1,13 +1,6 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Anelix Decoratif";
-  src: url("/fonts/anelix-decoratif.otf") format("opentype");
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: "Yaplux Type";
   src: url("/fonts/yaplux-type.otf") format("opentype");
   font-style: normal;
@@ -35,8 +28,8 @@
   --muted: #6d756f;
   --sans: var(--font-geist-sans), Arial, sans-serif;
   --mono: var(--font-geist-mono), monospace;
-  --brand: "AMS", "Anelix Decoratif", Georgia, serif;
-  --display: "Anelix Decoratif", Georgia, serif;
+  --brand: "AMS", Georgia, serif;
+  --display: "Yaplux Type", Georgia, serif;
   --editorial: "Yaplux Type", Georgia, serif;
   --serif: var(--display);
 }
@@ -346,6 +339,8 @@ img { display: block; width: 100%; }
 .field.is-constellation::after { background: radial-gradient(ellipse 34% 42% at 10% 12%, rgba(9,11,13,.92), transparent 84%), linear-gradient(180deg, rgba(9,11,13,.12), rgba(9,11,13,.42)); }
 .field-resting-image { height: 100%; inset: 0; object-fit: cover; opacity: .9; pointer-events: none; position: absolute; width: 100%; z-index: 1; }
 .field.is-constellation .field-resting-image { filter: saturate(.35) brightness(.52); opacity: .48; }
+.field-resting-geometry { filter: saturate(1.12); height: 100%; inset: 0; opacity: .94; pointer-events: none; position: absolute; transition: filter .35s ease, opacity .35s ease; width: 100%; z-index: 2; }
+.field.is-constellation .field-resting-geometry { filter: saturate(.32) brightness(.48); opacity: .2; }
 .field-resting-connections { height: 100%; inset: 0; pointer-events: none; position: absolute; width: 100%; z-index: 3; }
 .field-resting-connections path { fill: none; opacity: .18; stroke: rgba(198,220,229,.42); stroke-linecap: round; stroke-width: .54px; vector-effect: non-scaling-stroke; }
 .field-resting-connections g:nth-child(5n + 1) path { stroke: rgba(114,217,232,.46); }

@@ -7,7 +7,7 @@ export function SiteHeader({ inverse = false }: { inverse?: boolean }) {
       </a>
       <nav aria-label="Primary navigation">
         <a href="/work">Work</a>
-        <a href="/#field">Map</a>
+        <a href="/#field">Play</a>
         <a href="/studies">Studies</a>
         <a href="/about">About</a>
       </nav>

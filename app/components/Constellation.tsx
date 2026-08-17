@@ -35,6 +35,182 @@ function restingPath(fromSlug: string, toSlug: string, strand: number) {
   return `M ${from.node.x} ${from.node.y} Q ${controlX} ${controlY} ${to.node.x} ${to.node.y}`;
 }
 
+function RestingGeometry() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
+
+    let width = 0;
+    let height = 0;
+    let resizeFrame = 0;
+
+    const pointFor = (slug: string) => {
+      const project = projects.find((item) => item.slug === slug) ?? projects[0];
+      return { x: project.node.x / 100 * width, y: project.node.y / 100 * height };
+    };
+
+    const distanceToSegment = (
+      x: number,
+      y: number,
+      start: { x: number; y: number },
+      end: { x: number; y: number },
+    ) => {
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const lengthSquared = dx * dx + dy * dy || 1;
+      const amount = Math.max(0, Math.min(1, ((x - start.x) * dx + (y - start.y) * dy) / lengthSquared));
+      const px = start.x + amount * dx;
+      const py = start.y + amount * dy;
+      return Math.hypot(x - px, y - py);
+    };
+
+    const draw = () => {
+      context.clearRect(0, 0, width, height);
+      const scale = Math.min(width, height);
+      const points = projects.map((project) => ({ ...pointFor(project.slug), size: project.node.size }));
+      const segments = projectConnections.map((connection) => ({
+        start: pointFor(connection.from),
+        end: pointFor(connection.to),
+        kind: connection.kind,
+      }));
+
+      const elevationAt = (x: number, y: number) => {
+        let elevation = 0;
+        points.forEach((point) => {
+          const sigma = scale * (0.032 + point.size / 2500);
+          const distance = (x - point.x) ** 2 + (y - point.y) ** 2;
+          elevation += 0.68 * Math.exp(-distance / (2 * sigma ** 2));
+        });
+        segments.forEach((segment) => {
+          const sigma = scale * 0.022;
+          const distance = distanceToSegment(x, y, segment.start, segment.end);
+          elevation += 0.17 * Math.exp(-(distance * distance) / (2 * sigma ** 2));
+        });
+        return Math.min(1.7, elevation);
+      };
+
+      const cell = Math.max(10, Math.min(15, Math.round(scale / 68)));
+      const columns = Math.ceil(width / cell) + 2;
+      const rows = Math.ceil(height / cell) + 2;
+      const surface = document.createElement("canvas");
+      surface.width = columns;
+      surface.height = rows;
+      const surfaceContext = surface.getContext("2d");
+      if (!surfaceContext) return;
+      const imageData = surfaceContext.createImageData(columns, rows);
+
+      for (let row = 0; row < rows; row += 1) {
+        for (let column = 0; column < columns; column += 1) {
+          const x = column / Math.max(1, columns - 1) * width;
+          const y = row / Math.max(1, rows - 1) * height;
+          const elevation = elevationAt(x, y);
+          const body = Math.max(0, Math.min(1, (elevation - 0.055) / 1.12));
+          const crest = Math.pow(body, 1.75);
+          const shoulder = Math.pow(body, 0.72);
+          const offset = (row * columns + column) * 4;
+          imageData.data[offset] = 20 + shoulder * 34 + crest * 128;
+          imageData.data[offset + 1] = 25 + shoulder * 46 + crest * 151;
+          imageData.data[offset + 2] = 56 + shoulder * 92 + crest * 95;
+          imageData.data[offset + 3] = Math.min(232, shoulder * 205);
+        }
+      }
+      surfaceContext.putImageData(imageData, 0, 0);
+
+      context.save();
+      context.filter = "blur(24px)";
+      context.globalAlpha = 0.54;
+      context.drawImage(surface, 8, 30, width, height);
+      context.restore();
+
+      context.save();
+      context.globalCompositeOperation = "screen";
+      context.filter = "blur(5px) saturate(1.28) contrast(1.16)";
+      context.drawImage(surface, -8, -13, width + 16, height + 20);
+      context.restore();
+
+      const projected = (x: number, y: number) => {
+        const elevation = Math.max(0, elevationAt(x, y) - 0.04);
+        return {
+          x: x + (x / Math.max(width, 1) - 0.52) * elevation * 28,
+          y: y - elevation * 62,
+          elevation,
+        };
+      };
+
+      context.save();
+      context.globalCompositeOperation = "screen";
+      for (let row = 0; row <= 24; row += 1) {
+        context.beginPath();
+        for (let column = 0; column <= 60; column += 1) {
+          const point = projected(column / 60 * width, row / 24 * height);
+          if (column === 0) context.moveTo(point.x, point.y);
+          else context.lineTo(point.x, point.y);
+        }
+        context.strokeStyle = `rgba(205,226,244,${0.042 + row % 4 * 0.009})`;
+        context.lineWidth = row % 4 === 0 ? 0.7 : 0.38;
+        context.stroke();
+      }
+      for (let column = 0; column <= 42; column += 1) {
+        context.beginPath();
+        for (let row = 0; row <= 46; row += 1) {
+          const point = projected(column / 42 * width, row / 46 * height);
+          if (row === 0) context.moveTo(point.x, point.y);
+          else context.lineTo(point.x, point.y);
+        }
+        context.strokeStyle = `rgba(122,177,231,${0.03 + column % 5 * 0.008})`;
+        context.lineWidth = 0.42;
+        context.stroke();
+      }
+      context.restore();
+
+      projects.forEach((project, index) => {
+        const point = pointFor(project.slug);
+        const projectedPoint = projected(point.x, point.y);
+        const seed = hashText(project.slug);
+        context.save();
+        context.globalCompositeOperation = "screen";
+        context.translate(projectedPoint.x, projectedPoint.y);
+        context.rotate((seed % 360) / 360 * Math.PI);
+        for (let ring = 11; ring >= 0; ring -= 1) {
+          const radius = project.node.size * (0.8 + ring * 0.27);
+          const lift = (11 - ring) * 1.1;
+          context.beginPath();
+          context.ellipse(lift * 0.22, -lift, radius * 1.65, radius * 0.82, index * 0.07, 0, Math.PI * 2);
+          context.strokeStyle = `rgba(${ring % 3 === 0 ? "226,241,246" : "137,177,228"},${0.045 + (11 - ring) * 0.01})`;
+          context.lineWidth = ring % 3 === 0 ? 0.72 : 0.38;
+          context.stroke();
+        }
+        context.restore();
+      });
+    };
+
+    const resize = () => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(() => {
+        const ratio = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth;
+        height = canvas.clientHeight;
+        canvas.width = Math.floor(width * ratio);
+        canvas.height = Math.floor(height * ratio);
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        draw();
+      });
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    return () => {
+      cancelAnimationFrame(resizeFrame);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="field-resting-geometry" aria-hidden="true" />;
+}
+
 function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -346,6 +522,7 @@ export function Constellation() {
   return (
     <section className={`field ${active ? "is-constellation" : ""}`} id="field" aria-labelledby="field-title">
       <img className="field-resting-image" src={`/field/field-${restSeed}.svg`} alt="" fetchPriority="high" />
+      <RestingGeometry />
       <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         {projectConnections.map((connection) => (
           <g key={`${connection.from}-${connection.to}`}>

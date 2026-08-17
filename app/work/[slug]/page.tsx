@@ -42,8 +42,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div className="project-narrative__body">
             <p>{project.narrative}</p>
             <aside>
-              <p className="micro">Authority boundary</p>
-              <p>{project.authority}</p>
+              <p className="micro">Agency boundary</p>
+              <p>{project.agency}</p>
             </aside>
           </div>
         </section>

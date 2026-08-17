@@ -7,7 +7,7 @@ import { projectConnections, projects, type ConnectionKind } from "../data";
 const relationColor: Record<ConnectionKind, string> = {
   method: "#72d9e8",
   handoff: "#f58a61",
-  authority: "#a6a7ff",
+  agency: "#a6a7ff",
   constraint: "#d9e6e4",
   lineage: "#e09ac6",
 };
@@ -19,6 +19,20 @@ function hashText(value: string) {
     hash = Math.imul(hash, 16777619);
   }
   return hash >>> 0;
+}
+
+function restingPath(fromSlug: string, toSlug: string, strand: number) {
+  const from = projects.find((project) => project.slug === fromSlug) ?? projects[0];
+  const to = projects.find((project) => project.slug === toSlug) ?? projects[0];
+  const dx = to.node.x - from.node.x;
+  const dy = to.node.y - from.node.y;
+  const length = Math.max(1, Math.hypot(dx, dy));
+  const seed = hashText(`${fromSlug}-${toSlug}`);
+  const direction = seed % 2 ? 1 : -1;
+  const bend = direction * (5.5 + seed % 7) + strand * 1.35;
+  const controlX = (from.node.x + to.node.x) / 2 - dy / length * bend;
+  const controlY = (from.node.y + to.node.y) / 2 + dx / length * bend;
+  return `M ${from.node.x} ${from.node.y} Q ${controlX} ${controlY} ${to.node.x} ${to.node.y}`;
 }
 
 function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
@@ -82,19 +96,23 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
       const pulse = reduceMotion ? 1 : 0.96 + Math.sin(time * 0.0022) * 0.07;
       const scale = Math.min(width, height);
 
+      const elevationAt = (x: number, y: number) => {
+        let value = 0;
+        projects.forEach((project) => {
+          const point = pointFor(project.slug);
+          const selected = connectedSlugs.has(project.slug);
+          const sigma = scale * (selected ? 0.055 : 0.04);
+          const distance = (x - point.x) ** 2 + (y - point.y) ** 2;
+          value += (selected ? 1.12 * pulse : 0.15) * Math.exp(-distance / (2 * sigma ** 2));
+        });
+        return value + Math.sin(x * 0.005 + y * 0.0034 + phase * 8) * 0.025;
+      };
+
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
           const x = column / Math.max(1, columns - 1) * width;
           const y = row / Math.max(1, rows - 1) * height;
-          let value = 0;
-          projects.forEach((project) => {
-            const point = pointFor(project.slug);
-            const selected = connectedSlugs.has(project.slug);
-            const sigma = scale * (selected ? 0.055 : 0.04);
-            const distance = (x - point.x) ** 2 + (y - point.y) ** 2;
-            value += (selected ? 1.12 * pulse : 0.15) * Math.exp(-distance / (2 * sigma ** 2));
-          });
-          value += Math.sin(x * 0.005 + y * 0.0034 + phase * 8) * 0.025;
+          const value = elevationAt(x, y);
           const ridge = Math.max(0, Math.min(1, (value - 0.18) / 1.35));
           const crest = Math.pow(ridge, 1.65);
           const offset = (row * columns + column) * 4;
@@ -110,6 +128,68 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
       context.filter = "blur(7px) saturate(1.18) contrast(1.16)";
       context.drawImage(surface, -12, -12, width + 24, height + 24);
       context.restore();
+
+      const projected = (x: number, y: number) => {
+        const elevation = Math.max(0, elevationAt(x, y) - 0.08);
+        return {
+          x: x + (x / Math.max(width, 1) - 0.5) * elevation * 25,
+          y: y - elevation * 68,
+          elevation,
+        };
+      };
+
+      context.save();
+      context.globalCompositeOperation = "screen";
+      context.lineWidth = 0.48;
+      for (let row = 0; row <= 18; row += 1) {
+        context.beginPath();
+        for (let column = 0; column <= 42; column += 1) {
+          const point = projected(column / 42 * width, row / 18 * height);
+          if (column === 0) context.moveTo(point.x, point.y);
+          else context.lineTo(point.x, point.y);
+        }
+        context.strokeStyle = `rgba(188,215,242,${0.045 + row % 3 * 0.012})`;
+        context.stroke();
+      }
+      for (let column = 0; column <= 30; column += 1) {
+        context.beginPath();
+        for (let row = 0; row <= 34; row += 1) {
+          const point = projected(column / 30 * width, row / 34 * height);
+          if (row === 0) context.moveTo(point.x, point.y);
+          else context.lineTo(point.x, point.y);
+        }
+        context.strokeStyle = `rgba(115,172,226,${0.038 + column % 4 * 0.009})`;
+        context.stroke();
+      }
+      context.restore();
+
+      connectedSlugs.forEach((slug, index) => {
+        const point = pointFor(slug);
+        const relatedConnection = activeConnections.find((connection) => connection.from === slug || connection.to === slug);
+        const color = slug === activeSlug ? "#e8fbff" : relationColor[relatedConnection?.kind ?? "method"];
+        context.save();
+        context.globalCompositeOperation = "screen";
+        context.strokeStyle = color;
+        context.shadowColor = color;
+        context.shadowBlur = slug === activeSlug ? 10 : 4;
+        for (let ring = 0; ring < 10; ring += 1) {
+          const lift = (9 - ring) * (slug === activeSlug ? 5.4 : 3.8);
+          context.globalAlpha = 0.055 + (10 - ring) * 0.013;
+          context.lineWidth = ring % 3 === 0 ? 0.8 : 0.42;
+          context.beginPath();
+          context.ellipse(
+            point.x + lift * 0.24,
+            point.y - lift,
+            23 + ring * (slug === activeSlug ? 10.5 : 7.5),
+            11 + ring * (slug === activeSlug ? 5.1 : 3.5),
+            phase * Math.PI + index * 0.17,
+            0,
+            Math.PI * 2,
+          );
+          context.stroke();
+        }
+        context.restore();
+      });
 
       const activePoint = pointFor(activeSlug);
       context.save();
@@ -254,15 +334,33 @@ export function Constellation() {
     setRestSeed(fieldSeeds.seeds[daily % fieldSeeds.seeds.length]);
   }, []);
 
+  useEffect(() => {
+    if (!activeSlug) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActiveSlug(null);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [activeSlug]);
+
   return (
     <section className={`field ${active ? "is-constellation" : ""}`} id="field" aria-labelledby="field-title">
       <img className="field-resting-image" src={`/field/field-${restSeed}.svg`} alt="" fetchPriority="high" />
+      <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {projectConnections.map((connection) => (
+          <g key={`${connection.from}-${connection.to}`}>
+            {[-1, 0, 1].map((strand) => (
+              <path key={strand} d={restingPath(connection.from, connection.to, strand)} />
+            ))}
+          </g>
+        ))}
+      </svg>
       {active && <SelectedGeometry activeSlug={active.slug} />}
 
       <div className="field-copy">
         <p className="kicker kicker--light">The Field</p>
         <h1 id="field-title">Nothing here is ever finished.</h1>
-        <p>Select a project to reveal the methods, handoffs, authority boundaries, constraints, and lineages that hold the work together.</p>
+        <p>Select a project to reveal the methods, handoffs, agency boundaries, constraints, and lineages that hold the work together.</p>
       </div>
 
       <div className="field-axes" aria-hidden="true">
@@ -281,7 +379,7 @@ export function Constellation() {
             <button
               className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${active && !isActive && !isRelated ? "is-quiet" : ""}`}
               key={project.slug}
-              onClick={() => setActiveSlug(project.slug)}
+              onClick={() => setActiveSlug((current) => current === project.slug ? null : project.slug)}
               style={{
                 left: `${project.node.x}%`,
                 top: `${project.node.y}%`,
@@ -301,8 +399,10 @@ export function Constellation() {
 
       {active && (
         <>
-          <button className="field-close" onClick={() => setActiveSlug(null)} type="button">Return to Field ×</button>
           <aside className="constellation-document" aria-live="polite">
+            <button className="constellation-document__close" onClick={() => setActiveSlug(null)} type="button" aria-label="Close project detail and return to the full Field">
+              <span>Full Field</span><b aria-hidden="true">×</b>
+            </button>
             <div className="constellation-artifact">
               <p>{active.eyebrow} · {active.year}</p>
               <div><img src={active.artifactImage ?? active.image} alt="" /></div>

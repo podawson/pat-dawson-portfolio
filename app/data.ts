@@ -9,7 +9,7 @@ export type Project = {
   headline: string;
   summary: string;
   narrative: string;
-  authority: string;
+  agency: string;
   role: string;
   outcome: string;
   image: string;
@@ -23,7 +23,7 @@ export type Project = {
   details: { title: string; body: string }[];
 };
 
-export type ConnectionKind = "method" | "handoff" | "authority" | "constraint" | "lineage";
+export type ConnectionKind = "method" | "handoff" | "agency" | "constraint" | "lineage";
 
 export type ProjectConnection = {
   from: string;
@@ -51,7 +51,7 @@ export const projects: Project[] = [
     headline: "Archival evidence and point-cloud survey became the working geometry for a reparative park restoration.",
     summary: "The proposal recovered the buried course of the Muddy River and treated public testimony, ecological repair, and the highway itself as existing conditions—not background context.",
     narrative: "Charlesgate was once a connector in Boston’s park system. Urban Renewal put a highway through it, buried the Muddy River, and left a public landscape cut off from both its ecology and its history. The project began by refusing to treat the residual space under the road as a blank site. Archival plans were used to recover what had been displaced; point-cloud survey became a workable mesh of the highway; Grasshopper automated tree modeling and placement across a large, irregular landscape. Those technical models sat beside public hearings, agency coordination, maintenance planning, and a phased approach to reuse. Daylighting the river was both ecological infrastructure and a way to make the site’s loss legible. The accountable parties stayed visible throughout: the public shaped the brief, agencies held the long-term maintenance burden, and the design team translated that record into a sequence that could actually be delivered.",
-    authority: "The model organized evidence and geometry; community stakeholders and city agencies retained authority over what repair meant and how it would be maintained.",
+    agency: "The model organized evidence and geometry; community stakeholders and city agencies retained the final say over what repair meant and how it would be maintained.",
     role: "Architectural designer · computational site modeling",
     outcome: "A phased restoration proposal grounded in archival research, survey geometry, public hearings, and maintenance planning.",
     image: "/work/charlesgate.jpg",
@@ -76,7 +76,7 @@ export const projects: Project[] = [
     headline: "A roughly $5M reuse study reconciled zoning, licensing, structure, and digital-asset regulation in one operating proposal.",
     summary: "Historic plans and field conditions were cross-read against use restrictions, setbacks, competing-retail separation, and floor-area limits before the vision was packaged for filing and fundraising.",
     narrative: "The building sits beneath the Manhattan Bridge in a part of the city where almost every interesting idea collides with a different rule. The work was not a speculative image dropped into an empty shell. Existing structure, historic plans, school setbacks, competing-retail separation, licensing, digital-asset regulation, and floor-area ratio were tested against one another until the proposal had a credible operating envelope. That envelope supported a roughly $5M revitalization study combining food, gathering, work, and neighborhood uses. The project’s value was the translation: an open-ended ambition became a document an owner, regulator, investor, and design team could each interrogate from their own position. The study was used as input for DOB filing and fundraising, with every spatial move tied back to the evidence that made it possible.",
-    authority: "The proposal surfaced viable options; the owner, regulators, and operators retained authority over filing, capital, and final use.",
+    agency: "The proposal surfaced viable options; the owner, regulators, and operators retained the final say over filing, capital, and use.",
     role: "Co-founder · business development · creative direction",
     outcome: "A regulatory and spatial reuse package used by the owner for DOB filing and fundraising.",
     image: "/work/east-broadway.jpg",
@@ -100,7 +100,7 @@ export const projects: Project[] = [
     headline: "A reversible clamp-and-leg system let one local steel fabricator illuminate the country’s longest lenticular truss bridge.",
     summary: "Preservation rules prohibited drilling or welding, so the fabrication package had to carry the entire installation logic without modifying a single original component.",
     narrative: "Ouellette Bridge dates to the 1880s, remains fully functional, and is the longest lenticular truss bridge in the country. The lighting brief therefore came with one defining constraint: alter none of the original ironwork. Drilling and welding were ruled out. A family of reversible clamps and small legs instead supported custom light housings along the road barriers, casting warm light across the lattice without leaving a mark. The project was developed as a fabrication problem, not only a lighting concept. Details, dimensions, tolerances, cable paths, and repeatable parts were organized so a single local steel fabricator could build and install the system across five trusses and more than one hundred addressable lights. The drawings were the handoff: if they failed, the design failed in the field.",
-    authority: "The drawing set defined a reversible system; the fabricator and preservation constraints governed every final attachment in the field.",
+    agency: "The drawing set defined a reversible system; the fabricator and preservation constraints governed every final attachment in the field.",
     role: "Architectural designer · fabrication-set author",
     outcome: "Five trusses and 100+ addressable lights installed with zero drilling or welding to original components.",
     image: "/work/ouellette.jpg",
@@ -124,7 +124,7 @@ export const projects: Project[] = [
     headline: "A six-foot public monument was designed to disappear into 800+ flowers, seed packets, notes, and drawings over one weekend.",
     summary: "The competition-selected installation treated dismantling as participation: the public took resources away and authored what remained.",
     narrative: "Flower Tower was selected for the inPublic Festival in Downtown Crossing alongside work by more than sixty artists. It was a six-foot hollow cardboard structure perforated for 800+ cut stems and seed packets. Visitors could take a flower immediately, take seed home for later, and write or draw on the hand-mixed chalkboard surface revealed as the object emptied. By Monday the monument had been depleted and recycled. That disappearance was the project. Instead of asking the public to preserve a completed object, the work redistributed its material and authorship to the people around it. Built for roughly $400, it remains an early version of a question that now runs through the practice: how can a system increase someone’s capability without taking away their sense of authorship?",
-    authority: "The structure set the conditions; the public decided how it changed, what left the site, and what remained on its surface.",
+    agency: "The structure set the conditions; the public decided how it changed, what left the site, and what remained on its surface.",
     role: "Grant writer · concept · construction · installation",
     outcome: "A competition-selected installation dismantled by the public and recycled after the festival.",
     image: "/work/flower-tower.jpg",
@@ -148,7 +148,7 @@ export const projects: Project[] = [
     headline: "A restaurant and scoop shop moved from concept through permitting, construction, inspection, and opening without sanding off its attitude.",
     summary: "Deep black finishes, silky plaster, mirrored bars, rated glass, and an ADA restroom disco ball held a deliberately subversive concept inside a code-compliant hospitality operation.",
     narrative: "Caleta & Bad Habit wanted the opposite of the clean white-tiled ice-cream parlor. The work translated that attitude into architecture and carried it through the full arc: concept, client review, permit drawings, construction, inspections, punch, and opening. Black finishes ran from the scooping counter into the lounge; silky plaster, exposed brick, mirrored bars, red light, warped grids, and a disco ball kept the room serious about atmosphere but not about itself. The harder design work sat behind the surfaces. Fire-rated walls had to separate the kitchen, while the experience depended on seeing the operation. Rated glass inserts preserved that sightline without weakening the code strategy. The role crossed 3D visualization, construction documents, fabricator coordination, city review, and field decisions. Design intent and fire/life safety pulled in different directions, and both had to win.",
-    authority: "The design team held the concept; fabricators, code consultants, inspectors, and operators each retained authority over the conditions they were accountable for.",
+    agency: "The design team held the concept; fabricators, code consultants, inspectors, and operators each kept control of the conditions they were accountable for.",
     role: "Business development · strategy · lead design · delivery",
     outcome: "A hospitality project delivered from schematic design through permitting, construction, and opening.",
     image: "/work/caleta.jpg",
@@ -173,7 +173,7 @@ export const projects: Project[] = [
     headline: "A Revit-driven analysis and operational playbook initiated 200+ higher-revenue conversions across a 900+ location portfolio.",
     summary: "Real-estate, product, leasing, and MEP data were combined into one decision surface, then translated into rules distributed teams could run without Patrick in the room.",
     narrative: "The assignment began as a portfolio problem: find locations where underperforming space could become a higher-revenue configuration without making the member experience worse. Data from real estate, product, leasing, engineering, and MEP was organized into a matrix across more than nine hundred locations. A custom Revit script flagged non-revenue space over-allocated relative to offices; the matrix identified where conversion was feasible; an operational playbook governed furniture, materials, finishes, electrical, ventilation, accessibility, and recurring building conditions. That sequence initiated more than two hundred conversions across offices ranging from two-person suites to 150-person floor plates. The playbook was the product. It let distributed teams make consistent decisions while preserving the cases that truly required local judgment, and it reduced the need to solve the same problem from zero in every building.",
-    authority: "The analysis ranked opportunities and bounded repeatable decisions; local project teams retained judgment where building, code, or member conditions diverged.",
+    agency: "The analysis ranked opportunities and bounded repeatable decisions; local project teams retained judgment where building, code, or member conditions diverged.",
     role: "Spatial experience design lead · systems and playbook author",
     outcome: "200+ conversions initiated across a 900+ location portfolio, with repeatable delivery logic and no single universal layout.",
     image: "/work/wework.jpg",
@@ -197,7 +197,7 @@ export const projects: Project[] = [
     headline: "The first customer-facing Intuit space enabled by physical AI was delivered alongside temporary activations running through active construction.",
     summary: "Discovery output became structured input for a trained image model—500+ visualizations narrowed to four decision-moving directions—while engineering, fabrication, landlord, and site work advanced in parallel.",
     narrative: "Astor Place was Intuit’s first customer-facing space enabled by physical AI anywhere in its global real-estate portfolio. There was no internal precedent for what the experience should be or how it should be delivered. Workshop output from Intuit Futures was translated into structured input for a trained image model, producing more than five hundred visualizations. Four were curated because they moved the decision makers; the volume only mattered because a judgment layer made it useful. Meanwhile the permanent storefront was under active construction, and the brand could not disappear from the address. Temporary retail activations ran concurrently, each carrying its own fire/life-safety, landlord, creative, fabrication, and schedule requirements. The work therefore operated as two overlapping projects—one permanent, one disposable—held together by the same public promise.",
-    authority: "The generative system expanded the option space; the project team curated four directions and remained accountable for the built experience and every site decision.",
+    agency: "The generative system expanded the option space; the project team curated four directions and remained accountable for the built experience and every site decision.",
     role: "Experiential project manager · AI strategy and technical coordination",
     outcome: "A first-of-kind enterprise physical-AI space advanced through construction without losing public presence at the site.",
     image: "/work/intuit.jpg",
@@ -221,7 +221,7 @@ export const projects: Project[] = [
     headline: "Five hardware zones and fifteen generative modes landed inside a live enterprise headquarters as the final trade on site.",
     summary: "Unreal Engine, TouchDesigner, live data, generative audio, directional sound, custom playout, and a 150-year archive were coordinated as one permanent passage—not separate technical scopes.",
     narrative: "Vanderbilt Passage is a real-time media environment at the base of JPMorgan Chase’s new global headquarters. Five hardware zones run fifteen generative modes across Unreal Engine and TouchDesigner, with live data feeds, generative audio, directional sound, and a custom playout interface. A 150-year corporate archive was read and sorted into a working taxonomy so each mode had an intentional content language rather than a folder of available images. Some scenes exposed the mechanics of their particles; others used quiet local-time parallax. Live market APIs had to clear enterprise security review. The directional-audio workstream was the first the studio had attempted. The creative system was only half the problem: the team arrived downstream of the GC, electrical, AV, enclosure, finishes, and FF&E. Every upstream delay compressed commissioning. The installation still had to open as one calm, continuous experience rather than reveal the coordination stack underneath it.",
-    authority: "The media system transformed approved data and archive content; operators retained a custom playout interface and the institution governed live feeds, security, and publication.",
+    agency: "The media system transformed approved data and archive content; operators retained a custom playout interface and the institution governed live feeds, security, and publication.",
     role: "Experiential project manager · media systems lead",
     outcome: "A permanent audiovisual passage delivered on schedule inside an active 1,388-foot enterprise headquarters.",
     image: "/work/vanderbilt.jpg",
@@ -242,11 +242,11 @@ export const projects: Project[] = [
     title: "Gymnast CoBot",
     year: "2019–21",
     eyebrow: "Human–robot interaction · MassRobotics",
-    question: "How much authority should a robot have beside a tired worker?",
+    question: "How much agency should a robot have beside a tired worker?",
     headline: "A UR-10 projected its intent before moving and adjusted handover height and rhythm from live fatigue signals and worker preference.",
     summary: "The NSF-funded prototype combined biosignatures, gesture programming, projection, and physical adaptation so the robot supported the person without hiding its next move.",
     narrative: "The Gymnast CoBot explored collaborative automation in a physically demanding industrial setting. A biosignature pipeline combined heart rate and movement with worker attributes to estimate fatigue live. That estimate fed the UR-10’s handover height and rhythm, but it did not set a universal level of assistance. Workers selected how much support they wanted along a range, from strain reduction to something closer to exercise, and the robot micro-adjusted within that preference. Wristband-tracked arm gestures kept control hands-free. A projected interface cast the robot’s intended path and next action onto the work surface before it moved, making automation legible to the person beside it. Months of industry research—labor conditions, species trends, fishing grounds, and embodied carbon—preceded the interface. The system architecture, projection flow, and physical box had to be designed together because none of them could explain the robot alone.",
-    authority: "The robot could adapt within a bounded support range; the worker set that range and could see the system’s intent before motion occurred.",
+    agency: "The robot could adapt within a bounded support range; the worker set that range and could see the system’s intent before motion occurred.",
     role: "Research design engineer · HRI and interface design",
     outcome: "An NSF-funded live industrial prototype joining fatigue estimation, gesture control, projected intent, and worker-set assistance.",
     image: "/work/gymnast.jpg",
@@ -271,7 +271,7 @@ export const projects: Project[] = [
     headline: "A 3D civic map translated thirteen sites, three eras, and ninety years of research into an investor-event experience.",
     summary: "MapLibre GL JS, terrain, building extrusions, custom WebGL layers, and a multi-phase site-selection state machine were directed through prompt contracts and iterative visual critique.",
     narrative: "A parcel map is data until it carries a reason for being navigated. This interactive 3D experience connected thirteen sites to three eras and ninety years of neighborhood history, revealing detail progressively as the viewer moved between place, time, and stewardship. The production stack combined MapLibre GL JS, OpenStreetMap building extrusions, AWS DEM terrain, custom WebGL animation layers, two programmatic cartographic systems, and a multi-phase site-selection state machine. The build was directed through structured AI-agent prompting: prompt contracts, regression guards, and iterative visual critique held the interface on-model across dozens of changes. That process resembled design direction more than code generation. The result shipped to a hard live-event deadline while maintaining one evidence chain from historical research to the interaction shown on screen.",
-    authority: "AI agents accelerated implementation inside explicit prompt contracts; Patrick retained design direction, regression review, and responsibility for every public interaction.",
+    agency: "AI agents accelerated implementation inside explicit prompt contracts; Patrick retained design direction, regression review, and responsibility for every public interaction.",
     role: "UX and interaction designer · AI-directed frontend builder",
     outcome: "A production 3D civic narrative delivered for a live investor event on a hard deadline.",
     image: "/work/mapping-investments.svg",
@@ -296,7 +296,7 @@ export const projects: Project[] = [
     headline: "Deterministic classification replaced a black-box LLM step, cutting the unexplainable custom bucket from 40–60% to under 5%.",
     summary: "The model handles voice and format only. Python owns classification and grouping, verbatim narrative seeds constrain generation, and a proportional review gate routes the PM to the 2–3 items that matter.",
     narrative: "One release cycle required the same Linear tickets to be rewritten for five audiences: customer release notes, internal changelog, sales brief, support FAQ, and Slack. A first all-LLM approach failed in the useful way—tickets classified differently across runs, 40–60% fell into an unexplainable custom bucket, and nobody could see why. The fix was architectural, not another prompt. Classification and grouping moved into deterministic Python; the model became responsible only for voice and format. Six stages and a sixteen-field schema feed five audience-specific prompt contracts. Verbatim narrative seeds prevent unsupported feature claims. Three validation passes each target a failure the model had actually made. Across 12+ batches and 100+ tickets, the custom bucket fell below 5% and PM work dropped from 3–5 hours to 20–40 minutes. A review gate concentrates attention on the 2–3 high-risk items instead of pretending the system no longer needs an owner.",
-    authority: "The pipeline classifies and drafts inside explicit bounds; a PM reviews the high-risk items and remains the publisher of record.",
+    agency: "The pipeline classifies and drafts inside explicit bounds; a PM reviews the high-risk items and remains the publisher of record.",
     role: "AI systems designer · pipeline architect",
     outcome: "Five consistent outputs per cycle, a deterministic audit trail, and a workflow handed off for non-engineering ownership.",
     image: "/work/release-intelligence.svg",
@@ -321,7 +321,7 @@ export const projects: Project[] = [
     headline: "A reasoning agent reads schedules, drawings, budgets, and meeting notes together, then ranks conflicts by anticipated cost and schedule impact.",
     summary: "The interface is built for triage rather than exhaustiveness: a project manager needs the three discrepancies worth acting on, with the evidence chain still attached.",
     narrative: "Project risk rarely sits inside one document. It appears between a schedule and a drawing set, a budget and a field note, an RFI and the decision it is waiting on. Gleanings ingests those heterogeneous records together and surfaces the conflicts between them: scope drift, budget-to-actuals gaps, unresolved dependencies, and downstream cost that only becomes visible when several sources are read against one another. The ranking is the product. An unranked list of every discrepancy simply creates another coordination burden, so findings are ordered by anticipated cost and schedule impact and returned with their source trail intact. The system does not make the project decision. It routes scarce reviewer attention to the conflicts most likely to compound into change orders, preserving enough evidence for the accountable project manager to agree, reject, or investigate. The agent was handed off and put into use.",
-    authority: "The agent ranks evidence-backed conflicts; the project manager remains responsible for interpreting context and authorizing action.",
+    agency: "The agent ranks evidence-backed conflicts; the project manager remains responsible for interpreting context and authorizing action.",
     role: "Product design · reasoning architecture · build",
     outcome: "A handed-off project-reasoning workflow that turns cross-document conflict into a prioritized, inspectable action list.",
     image: "/work/gleanings.svg",
@@ -346,7 +346,7 @@ export const projects: Project[] = [
     headline: "Product strategy and model operations raised reported hit rate from 40% to 62% while scaling from zero to 5,000+ active traders.",
     summary: "The venture worked backward from high-value trader behavior, prioritized signal quality over call volume, and now has an eight-export evidence archive for reconstructing models, calls, leaderboards, and maximum-X outcomes.",
     narrative: "String was a real-time Solana intelligence product for identifying high-potential projects early. The product problem was not access to more calls; it was deciding which behavioral symptoms inside noisy on-chain activity were worth surfacing, and how much control an automated system should hold once it found them. Product strategy worked backward from the tools and routines used by high-value traders, translating research into model features, opportunity ranking, and a fee model. Reported hit rate rose from 40% to 62% as signal quality took priority over volume, and the platform scaled to more than five thousand active traders and roughly $250K in revenue. The durable artifact is now the development record: eight Telegram exports normalized into calls, contract addresses, timestamps, model labels, leaderboard snapshots, and reported outcomes. That record can compare precision, average maximum-X, call volume, and tail exposure without letting one flattering metric hide another.",
-    authority: "The system surfaced and ranked candidates; traders retained confirmation and execution authority, and performance claims remain tied to timestamped evidence.",
+    agency: "The system surfaced and ranked candidates; confirmation and execution remained with traders, and performance claims stay tied to timestamped evidence.",
     role: "AI product strategist · co-founder · model operations",
     outcome: "A 0→5,000+ trader product with an auditable model-development archive and measurable improvement across its operating period.",
     image: "/work/string.jpg",
@@ -371,7 +371,7 @@ export const projects: Project[] = [
     headline: "A character LLM, voice clone, and automated podcast pipeline moved from private corpus to published episode with minimal human touch.",
     summary: "Public writing, private unreleased material, reply constraints, voice synthesis, and cross-channel publishing formed one operated character system—not a standalone chatbot demo.",
     narrative: "AIntivirus brought John McAfee’s voice back as an interactive AI character. The significant work lived behind the provocation. A character model trained on public writing and a body of private, unreleased material—the specificity that separates a recognizably situated voice from a collage of famous quotes. Around that model sat reply selection, response constraints, stored interaction history, deployment operations, and a cross-channel interface spanning X, Telegram, and the web. A voice clone and automated podcast pipeline moved from script to synthesized voice to published audio with minimal human touch. The product reached roughly ten thousand active chatbot users while operating in front of an inherited audience of 1.2 million X followers; those are separate product and audience measures. The surrounding privacy products and crypto community shaped the tone, but the transferable project is a source-grounded character system and a multimodal production operation that could keep it coherent in public.",
-    authority: "The character generated inside a bounded source and publishing system; product operators retained selection, safety, and release authority across every channel.",
+    agency: "The character generated inside a bounded source and publishing system; product operators retained control of selection, safety, and release across every channel.",
     role: "AI product lead · interaction design · narrative strategy",
     outcome: "A cross-channel character product used by ~10,000 active chatbot users, supported by an automated media pipeline and a 1.2M-follower distribution surface.",
     image: "/work/aintivirus.jpg",
@@ -392,18 +392,18 @@ export const projects: Project[] = [
 export const projectConnections: ProjectConnection[] = [
   { from: "charlesgate-park", to: "mapping-investments", kind: "method", reason: "Historical research becomes a navigable spatial model rather than a static report." },
   { from: "charlesgate-park", to: "88-east-broadway", kind: "constraint", reason: "Existing conditions and regulation define the design envelope before form-making begins." },
-  { from: "charlesgate-park", to: "flower-tower", kind: "authority", reason: "Civic work returns agency and resources to the public instead of treating participation as validation." },
+  { from: "charlesgate-park", to: "flower-tower", kind: "agency", reason: "Civic work returns agency and resources to the public instead of treating participation as validation." },
   { from: "88-east-broadway", to: "caleta", kind: "handoff", reason: "An open-ended concept is translated into a package legible to owners, regulators, and builders." },
   { from: "ouellette-bridge", to: "caleta", kind: "constraint", reason: "Fabrication detail preserves design intent where code, preservation, and field reality could erase it." },
   { from: "ouellette-bridge", to: "vanderbilt-passage", kind: "handoff", reason: "Lighting and media only become architecture when installation logic survives the last mile." },
-  { from: "flower-tower", to: "gymnast-cobot", kind: "authority", reason: "The system sets conditions while the person inside it retains authorship over the outcome." },
+  { from: "flower-tower", to: "gymnast-cobot", kind: "agency", reason: "The system sets conditions while the person inside it retains authorship over the outcome." },
   { from: "caleta", to: "intuit-astor-place", kind: "lineage", reason: "Brand becomes a physical operating condition inside active construction, not a graphic layer added afterward." },
   { from: "wework-conversions", to: "release-intelligence", kind: "method", reason: "One-off expert judgment becomes an auditable playbook another team can own." },
   { from: "wework-conversions", to: "gleanings", kind: "method", reason: "Heterogeneous project data is reduced to a ranked decision surface rather than another archive." },
   { from: "intuit-astor-place", to: "vanderbilt-passage", kind: "handoff", reason: "First-of-kind enterprise systems land inside live construction, compliance, and public opening conditions." },
   { from: "vanderbilt-passage", to: "string", kind: "method", reason: "Live data is transformed into a legible interface without hiding that a system is making selections." },
-  { from: "gymnast-cobot", to: "release-intelligence", kind: "authority", reason: "Automation proposes or adapts; the accountable human sees the state and confirms the consequential action." },
-  { from: "gymnast-cobot", to: "gleanings", kind: "authority", reason: "Machine intelligence routes scarce attention while judgment remains with the worker or project manager." },
+  { from: "gymnast-cobot", to: "release-intelligence", kind: "agency", reason: "Automation proposes or adapts; the accountable human sees the state and confirms the consequential action." },
+  { from: "gymnast-cobot", to: "gleanings", kind: "agency", reason: "Machine intelligence routes scarce attention while judgment remains with the worker or project manager." },
   { from: "mapping-investments", to: "release-intelligence", kind: "method", reason: "Prompt contracts, deterministic boundaries, and regression checks keep AI-directed production inspectable." },
   { from: "mapping-investments", to: "string", kind: "method", reason: "Dense evidence becomes an exploratory interface where relationships are more useful than a linear summary." },
   { from: "release-intelligence", to: "string", kind: "lineage", reason: "Model improvement is credible only when versions, denominators, failures, and outcomes remain comparable." },
@@ -417,7 +417,7 @@ export const featuredProjects = projects.filter((project) => project.featured);
 const constellationPhrases: Record<ConnectionKind, string> = {
   method: "shares a method with",
   handoff: "shares a handoff with",
-  authority: "shares an authority boundary with",
+  agency: "shares an agency boundary with",
   constraint: "shares a constraint with",
   lineage: "continues a working lineage with",
 };

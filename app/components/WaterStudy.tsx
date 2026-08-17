@@ -33,7 +33,7 @@ const groups: Array<{ title: string; controls: Array<{ key: keyof WaterSettings;
     { key: "foam", label: "Foam", min: 0, max: 100 },
   ]},
   { title: "Weather", controls: [
-    { key: "storm", label: "Storm water", min: 0, max: 100 }, { key: "windAngle", label: "Wind angle", min: 0, max: 180 },
+    { key: "storm", label: "Storm water / speed", min: 0, max: 100 }, { key: "windAngle", label: "Wind angle", min: 0, max: 180 },
     { key: "gust", label: "Gust", min: 0, max: 100 }, { key: "rain", label: "Rain", min: 0, max: 100 },
   ]},
   { title: "Light", controls: [
@@ -48,7 +48,7 @@ const groups: Array<{ title: string; controls: Array<{ key: keyof WaterSettings;
 
 const vertexShader = `
   uniform float uTime; uniform float uWaveHeight; uniform float uChop; uniform float uSwell;
-  uniform float uCurrent; uniform float uSkew; uniform float uFetch; uniform float uGust;
+  uniform float uCurrent; uniform float uSkew; uniform float uFetch; uniform float uGust; uniform float uStorm;
   uniform float uRain; uniform float uWindAngle; uniform vec2 uPointer;
   attribute vec3 aBarycentric; attribute vec3 aCenter; attribute float aTip;
   varying vec3 vBarycentric; varying float vElevation; varying float vCrest; varying float vDistance;
@@ -58,14 +58,17 @@ const vertexShader = `
     mat2 wind = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
     vec2 q = wind * aCenter.xz;
     float scale = mix(2.2, .56, uFetch);
-    float time = uTime * mix(.18, 1.15, uCurrent);
+    float time = uTime * (mix(.18, 1.15, uCurrent) + uStorm * 1.72);
     float base = sin(q.x * scale + time * 1.7) + .58 * cos(q.y * scale * 1.27 - time * 1.1);
     float sharpened = sign(base) * pow(abs(base) * .5, mix(1.0, .34, uChop));
     float swell = sin((q.x + q.y * .28) * .24 + time * .34) * uSwell * 1.7;
     float gust = pow(.5 + .5 * sin(uTime * 1.7 + q.y * .18), 7.0) * uGust;
     float rainCell = sin(length(fract((q + uTime * .17) * .43) - .5) * 36.0 - uTime * 9.0) * uRain;
-    float amplitude = .12 + uWaveHeight * 1.48;
-    float elevation = (sharpened * amplitude + swell + gust * sharpened * .72 + rainCell * .17);
+    float stormCross = sin(q.x * scale * 2.6 - time * 3.4) * cos(q.y * scale * 1.9 + time * 2.2);
+    float stormRake = sin((q.x - q.y * .54) * scale * 3.5 + time * 5.1);
+    float amplitude = .12 + uWaveHeight * 1.48 + uStorm * .5;
+    float elevation = sharpened * amplitude + swell + gust * sharpened * .72 + rainCell * .17;
+    elevation += (stormCross * .34 + stormRake * .16) * uStorm * (1.0 + uChop * .65);
     vec2 pointerCenter = vec2(uPointer.x * 6.5, -uPointer.y * 4.0);
     float pointerDistance = distance(aCenter.xz, pointerCenter);
     elevation += exp(-pointerDistance * .72) * sin(pointerDistance * 4.2 - uTime * 3.0) * .72;
@@ -73,6 +76,8 @@ const vertexShader = `
     p.z = aCenter.z + (p.z - aCenter.z) * stretch;
     p.x += (p.z - aCenter.z) * uSkew * .34;
     p.x += sin(q.y * .42 + time) * uCurrent * .42;
+    p.x += stormCross * uStorm * .18;
+    p.z += stormRake * uStorm * .13;
     p.y += elevation;
     vBarycentric = aBarycentric; vElevation = elevation; vCrest = max(0.0, sharpened); vDistance = length(aCenter.xz) / 10.0;
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(p, 1.0);

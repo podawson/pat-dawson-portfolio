@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ProteanField } from "../components/ProteanField";
 import { SiteHeader } from "../components/SiteHeader";
 
@@ -14,7 +13,7 @@ export default function PlaygroundPage() {
       <ProteanField />
       <section className="playground-footnote">
         <p>The surface is deliberately inspectable: one primitive, a few explicit uniforms, and no simulated realism hiding how the atmosphere is made.</p>
-        <Link href="/#constellation">Return to the project field ↗</Link>
+        <a href="/#constellation">Return to the project field ↗</a>
       </section>
     </main>
   );

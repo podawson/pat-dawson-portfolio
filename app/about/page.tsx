@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { SiteHeader } from "../components/SiteHeader";
 
 export default function AboutPage() {
@@ -32,10 +31,10 @@ export default function AboutPage() {
         <p className="kicker kicker--light">A small personal mythology</p>
         <h2>Proteus is the old man of the sea: elusive, prophetic, and capable of assuming many forms.</h2>
         <p>“Protean” is often used as a euphemism for versatility. I like the less tidy version: change shape when the situation demands it, but keep the thread of meaning intact.</p>
-        <Link href="/playground">Play with the shape-shifting field ↗</Link>
+        <a href="/playground">Play with the shape-shifting field ↗</a>
       </section>
 
-      <footer className="site-footer site-footer--light"><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a><Link href="/work">Browse the work ↗</Link></footer>
+      <footer className="site-footer site-footer--light"><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a><a href="/work">Browse the work ↗</a></footer>
     </main>
   );
 }

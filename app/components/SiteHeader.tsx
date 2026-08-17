@@ -1,17 +1,15 @@
-import Link from "next/link";
-
 export function SiteHeader({ inverse = false }: { inverse?: boolean }) {
   return (
     <header className={`site-header ${inverse ? "site-header--inverse" : ""}`}>
-      <Link className="wordmark" href="/" aria-label="Patrick Dawson home">
+      <a className="wordmark" href="/" aria-label="Patrick Dawson home">
         <span className="wordmark-mark">+</span>
         <span>Pat Dawson</span>
-      </Link>
+      </a>
       <nav aria-label="Primary navigation">
-        <Link href="/work">Work</Link>
-        <Link href="/#constellation">Map</Link>
-        <Link href="/playground">Playground</Link>
-        <Link href="/about">About</Link>
+        <a href="/work">Work</a>
+        <a href="/#constellation">Map</a>
+        <a href="/playground">Playground</a>
+        <a href="/about">About</a>
       </nav>
     </header>
   );

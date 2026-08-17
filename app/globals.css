@@ -52,7 +52,9 @@ img { display: block; width: 100%; }
   right: 0;
   top: 0;
   z-index: 30;
+  pointer-events: none;
 }
+.site-header a { pointer-events: auto; position: relative; }
 .site-header--inverse { color: var(--cream); }
 .wordmark { align-items: center; display: flex; font-size: 14px; font-weight: 650; gap: 9px; text-transform: uppercase; letter-spacing: .04em; }
 .wordmark-mark { align-items: center; border: 1px solid currentColor; border-radius: 50%; display: inline-flex; font-family: var(--display); font-size: 18px; height: 28px; justify-content: center; width: 28px; }
@@ -67,7 +69,7 @@ img { display: block; width: 100%; }
 
 .home-page { background: var(--night); color: var(--cream); }
 .constellation { background: radial-gradient(circle at 74% 35%, #132026 0, #0a1012 26%, var(--night) 64%); color: var(--cream); height: max(860px, 100vh); min-height: 820px; overflow: hidden; position: relative; }
-.constellation::after { background: linear-gradient(90deg, rgba(114,217,232,.07), transparent 18%, transparent 82%, rgba(166,167,255,.06)); content: ""; inset: 0; pointer-events: none; position: absolute; z-index: 1; }
+.constellation::after { background: radial-gradient(ellipse 58% 52% at 20% 19%, rgba(9,11,10,.93) 0, rgba(9,11,10,.74) 42%, rgba(9,11,10,.22) 70%, transparent 86%), linear-gradient(90deg, rgba(114,217,232,.07), transparent 18%, transparent 82%, rgba(166,167,255,.06)); content: ""; inset: 0; pointer-events: none; position: absolute; z-index: 3; }
 .constellation-copy { left: 5.2vw; max-width: 690px; position: absolute; top: 13vh; z-index: 8; }
 .constellation-copy h1 { font-family: var(--display); font-size: clamp(62px, 6.7vw, 112px); font-weight: 400; letter-spacing: -.045em; line-height: .91; margin: 18px 0 25px; max-width: 760px; }
 .constellation-copy > p:last-child { color: rgba(245, 241, 232, .66); font-size: 15px; line-height: 1.62; max-width: 520px; }
@@ -78,6 +80,8 @@ img { display: block; width: 100%; }
 .relationship-legend { bottom: 88px; display: flex; flex-wrap: wrap; gap: 12px; left: 5.2vw; max-width: 480px; position: absolute; z-index: 12; }
 .relationship-legend span { align-items: center; color: rgba(245,241,232,.52); display: flex; font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
 .relationship-legend span::before { background: var(--legend); border-radius: 50%; box-shadow: 0 0 12px var(--legend); content: ""; height: 5px; margin-right: 6px; width: 5px; }
+.surface-index { color: rgba(245,241,232,.35); display: grid; font-family: var(--mono); font-size: 8px; gap: 5px; letter-spacing: .09em; position: absolute; right: 4.2vw; text-align: right; text-transform: uppercase; top: 154px; z-index: 8; }
+.surface-index span:last-child { color: rgba(114,217,232,.5); }
 .axis { color: rgba(245, 241, 232, .28); display: flex; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; pointer-events: none; position: absolute; text-transform: uppercase; z-index: 2; }
 .axis--horizontal { bottom: 18%; justify-content: space-between; left: 10%; right: 10%; }
 .axis--horizontal::before { background: rgba(245, 241, 232, .12); content: ""; height: 1px; left: 0; position: absolute; right: 0; top: -10px; }
@@ -86,9 +90,11 @@ img { display: block; width: 100%; }
 .relationship-lines, .node-field { inset: 0; position: absolute; }
 .relationship-lines { height: 100%; pointer-events: none; width: 100%; z-index: 2; }
 .node-field { z-index: 4; }
-.project-node { align-items: center; animation: float 7s ease-in-out infinite alternate; background: radial-gradient(circle, rgba(245,241,232,.18), rgba(245,241,232,.015) 48%, transparent 72%); border: 1px solid rgba(219, 239, 238, .38); border-radius: 50%; color: var(--cream); cursor: pointer; display: flex; justify-content: center; padding: 0; position: absolute; transform: translate(-50%, -50%); transition: border-color .25s ease, background .25s ease, opacity .25s ease, box-shadow .25s ease, transform .25s ease; z-index: 4; }
-.project-node::before, .project-node::after { border: 1px solid rgba(114,217,232,.24); border-radius: 50%; content: ""; inset: 12%; position: absolute; transform: rotate(calc(var(--node-order) * 17deg)) scaleX(.64); }
-.project-node::after { border-color: rgba(166,167,255,.22); inset: 25%; transform: rotate(calc(var(--node-order) * -23deg)) scaleY(.58); }
+.project-node { align-items: center; animation: float 7s ease-in-out infinite alternate; background: radial-gradient(ellipse at 42% 38%, rgba(245,241,232,.2), rgba(114,217,232,.055) 42%, rgba(7,11,13,.02) 68%, transparent 74%); border: 1px solid rgba(219, 239, 238, .38); border-radius: 58% 42% 55% 45% / 46% 57% 43% 54%; color: var(--cream); cursor: pointer; display: flex; justify-content: center; padding: 0; position: absolute; transform: translate(-50%, -50%); transition: border-color .25s ease, background .25s ease, opacity .25s ease, box-shadow .25s ease, transform .25s ease; z-index: 4; }
+.project-node:nth-child(3n + 1) { border-radius: 41% 59% 46% 54% / 58% 39% 61% 42%; }
+.project-node:nth-child(3n + 2) { border-radius: 63% 37% 57% 43% / 41% 61% 39% 59%; }
+.project-node::before, .project-node::after { border: 1px solid rgba(114,217,232,.24); border-radius: 61% 39% 55% 45% / 42% 58% 42% 58%; content: ""; inset: 9%; position: absolute; transform: rotate(calc(var(--node-order) * 17deg)) scaleX(.72); }
+.project-node::after { border-color: rgba(166,167,255,.22); border-radius: 43% 57% 38% 62% / 62% 37% 63% 38%; inset: 22%; transform: rotate(calc(var(--node-order) * -23deg)) scaleY(.62); }
 .project-node__index { color: rgba(245,241,232,.7); font-family: var(--mono); font-size: 8px; position: relative; z-index: 2; }
 .project-node__name { background: rgba(8,12,13,.88); border: 1px solid rgba(245, 241, 232, .16); border-radius: 999px; font-family: var(--mono); font-size: 9px; left: 50%; opacity: 0; padding: 6px 9px; pointer-events: none; position: absolute; top: calc(100% + 7px); transform: translateX(-50%); transition: opacity .2s ease; white-space: nowrap; }
 .project-node__count { align-items: center; background: #d8f2ef; border-radius: 50%; color: #081012; display: flex; font-family: var(--mono); font-size: 7px; height: 17px; justify-content: center; opacity: 0; position: absolute; right: -4px; top: -4px; transition: opacity .2s ease; width: 17px; }

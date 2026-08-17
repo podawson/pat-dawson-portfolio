@@ -37,6 +37,7 @@ function RelationshipLines({
     let animation = 0;
     let width = 0;
     let height = 0;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const resize = () => {
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -57,25 +58,177 @@ function RelationshipLines({
       return category === "All" || Boolean(project?.categories.includes(category));
     };
 
-    const draw = (time: number) => {
-      context.clearRect(0, 0, width, height);
+    type Point = { x: number; y: number };
+
+    const traceSmooth = (points: Point[], move = true) => {
+      if (points.length < 2) return;
+      if (move) context.moveTo(points[0].x, points[0].y);
+      for (let index = 1; index < points.length - 1; index += 1) {
+        const midpoint = {
+          x: (points[index].x + points[index + 1].x) / 2,
+          y: (points[index].y + points[index + 1].y) / 2,
+        };
+        context.quadraticCurveTo(points[index].x, points[index].y, midpoint.x, midpoint.y);
+      }
+      const last = points[points.length - 1];
+      context.lineTo(last.x, last.y);
+    };
+
+    const drawWarpedLattice = (time: number) => {
+      const anchors = projects.filter((project) => visible(project.slug)).map((project) => pointFor(project.slug));
+      const phase = time * 0.00008;
 
       context.save();
-      context.strokeStyle = "rgba(230,242,240,.035)";
-      context.lineWidth = 0.6;
-      for (let x = 0; x < width; x += 72) {
+      context.lineWidth = 0.45;
+      context.strokeStyle = "rgba(210,236,238,.055)";
+
+      for (let row = 0; row <= 12; row += 1) {
+        const baseY = (row / 12) * height;
         context.beginPath();
-        context.moveTo(x, 0);
-        context.lineTo(x, height);
+        for (let column = 0; column <= 30; column += 1) {
+          const x = (column / 30) * width;
+          let warp = 0;
+          anchors.forEach((anchor, index) => {
+            const distance = (x - anchor.x) / Math.max(width * 0.13, 1);
+            const influence = Math.exp(-(distance * distance));
+            warp += Math.sin(row * 0.62 + index * 0.91 + phase) * influence * (7 + (index % 4) * 2.5);
+          });
+          const y = baseY + warp;
+          if (column === 0) context.moveTo(x, y);
+          else context.lineTo(x, y);
+        }
         context.stroke();
       }
-      for (let y = 0; y < height; y += 72) {
+
+      context.strokeStyle = "rgba(166,167,255,.042)";
+      for (let column = 0; column <= 18; column += 1) {
+        const baseX = (column / 18) * width;
         context.beginPath();
-        context.moveTo(0, y);
-        context.lineTo(width, y);
+        for (let row = 0; row <= 24; row += 1) {
+          const y = (row / 24) * height;
+          let warp = 0;
+          anchors.forEach((anchor, index) => {
+            const distance = (y - anchor.y) / Math.max(height * 0.16, 1);
+            const influence = Math.exp(-(distance * distance));
+            warp += Math.cos(column * 0.47 + index * 0.72 - phase) * influence * (5 + (index % 3) * 2);
+          });
+          const x = baseX + warp;
+          if (row === 0) context.moveTo(x, y);
+          else context.lineTo(x, y);
+        }
         context.stroke();
       }
       context.restore();
+    };
+
+    const drawMembrane = (
+      slugs: string[],
+      colors: [string, string],
+      time: number,
+      membraneIndex: number,
+    ) => {
+      const points = slugs.filter(visible).map(pointFor);
+      if (points.length < 3) return;
+      const phase = time * 0.00011 + membraneIndex * 1.7;
+      const gradient = context.createLinearGradient(points[0].x, points[0].y, points[points.length - 1].x, points[points.length - 1].y);
+      gradient.addColorStop(0, colors[0]);
+      gradient.addColorStop(1, colors[1]);
+
+      const outer = 34 + membraneIndex * 3;
+      const upper = points.map((point, index) => ({
+        x: point.x + Math.cos(phase + index * 1.1) * 5,
+        y: point.y - outer + Math.sin(phase + index * 0.8) * 9,
+      }));
+      const lower = [...points].reverse().map((point, index) => ({
+        x: point.x + Math.sin(phase + index * 0.9) * 5,
+        y: point.y + outer + Math.cos(phase + index * 0.75) * 9,
+      }));
+
+      context.save();
+      context.beginPath();
+      traceSmooth(upper);
+      context.lineTo(lower[0].x, lower[0].y);
+      traceSmooth(lower, false);
+      context.closePath();
+      context.fillStyle = gradient;
+      context.globalAlpha = 0.045;
+      context.fill();
+
+      for (let contour = -7; contour <= 7; contour += 1) {
+        const offset = contour * 6;
+        const contourPoints = points.map((point, index) => ({
+          x: point.x + Math.cos(index * 0.86 + phase) * Math.abs(contour) * 0.75,
+          y: point.y + offset + Math.sin(index * 1.16 - phase) * (8 + Math.abs(contour) * 0.85),
+        }));
+        context.beginPath();
+        traceSmooth(contourPoints);
+        context.strokeStyle = gradient;
+        context.globalAlpha = contour === 0 ? 0.28 : 0.105;
+        context.lineWidth = contour === 0 ? 0.9 : 0.48;
+        context.stroke();
+      }
+
+      points.forEach((point, index) => {
+        const ribHeight = outer + Math.sin(phase + index) * 8;
+        context.beginPath();
+        context.moveTo(point.x - 2, point.y - ribHeight);
+        context.quadraticCurveTo(point.x + Math.sin(phase + index) * 8, point.y, point.x + 2, point.y + ribHeight);
+        context.strokeStyle = gradient;
+        context.globalAlpha = 0.09;
+        context.lineWidth = 0.45;
+        context.stroke();
+      });
+      context.restore();
+    };
+
+    const drawAnchorWells = (time: number) => {
+      projects.forEach((project, index) => {
+        if (!visible(project.slug)) return;
+        const point = pointFor(project.slug);
+        const degree = projectConnections.filter(
+          (connection) => connection.from === project.slug || connection.to === project.slug,
+        ).length;
+        if (degree < 2 && project.slug !== activeSlug) return;
+        context.save();
+        context.translate(point.x, point.y);
+        context.rotate(index * 0.37 + time * 0.000018);
+        for (let ring = 1; ring <= Math.min(6, degree + 2); ring += 1) {
+          context.beginPath();
+          context.ellipse(0, 0, 12 + ring * 9, 5 + ring * 4.5, ring * 0.18, 0, Math.PI * 2);
+          context.strokeStyle = relationColor[projectConnections.find(
+            (connection) => connection.from === project.slug || connection.to === project.slug,
+          )?.kind ?? "method"];
+          context.globalAlpha = project.slug === activeSlug ? 0.16 - ring * 0.012 : 0.052;
+          context.lineWidth = 0.45;
+          context.stroke();
+        }
+        context.restore();
+      });
+    };
+
+    const draw = (time: number) => {
+      context.clearRect(0, 0, width, height);
+
+      drawWarpedLattice(time);
+      drawMembrane(
+        ["flower-tower", "ouellette-bridge", "caleta", "vanderbilt-passage", "string", "aintivirus"],
+        ["#72d9e8", "#a6a7ff"],
+        time,
+        0,
+      );
+      drawMembrane(
+        ["charlesgate-park", "88-east-broadway", "wework-conversions", "intuit-astor-place", "mapping-investments"],
+        ["#f58a61", "#e09ac6"],
+        time,
+        1,
+      );
+      drawMembrane(
+        ["caleta", "gymnast-cobot", "release-intelligence", "gleanings", "string"],
+        ["#a6a7ff", "#72d9e8"],
+        time,
+        2,
+      );
+      drawAnchorWells(time);
 
       projectConnections.forEach((connection, index) => {
         if (!visible(connection.from) || !visible(connection.to)) return;
@@ -121,12 +274,13 @@ function RelationshipLines({
         context.restore();
       });
 
-      animation = requestAnimationFrame(draw);
+      if (!reduceMotion) animation = requestAnimationFrame(draw);
     };
 
     resize();
     window.addEventListener("resize", resize);
-    animation = requestAnimationFrame(draw);
+    if (reduceMotion) draw(0);
+    else animation = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animation);
@@ -198,6 +352,11 @@ export function Constellation() {
             {kind}
           </span>
         ))}
+      </div>
+
+      <div className="surface-index" aria-hidden="true">
+        <span>Relational surface / project topology</span>
+        <span>14 anchors · 20 edges · 5 relation types</span>
       </div>
 
       <div className="axis axis--horizontal" aria-hidden="true"><span>Storytelling</span><span>Computation</span></div>

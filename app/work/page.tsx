@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ProjectGrid } from "../components/ProjectGrid";
 import { SiteHeader } from "../components/SiteHeader";
 
@@ -14,7 +13,7 @@ export default function WorkPage() {
       <section className="work-index" aria-label="Project archive">
         <ProjectGrid />
       </section>
-      <footer className="site-footer site-footer--light"><Link href="/">← Back to the constellation</Link><a href="mailto:patrickdawsono@gmail.com">Say hello ↗</a></footer>
+      <footer className="site-footer site-footer--light"><a href="/">← Back to the constellation</a><a href="mailto:patrickdawsono@gmail.com">Say hello ↗</a></footer>
     </main>
   );
 }

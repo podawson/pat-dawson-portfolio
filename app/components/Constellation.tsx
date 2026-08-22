@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { projectConnections, projects, type ConnectionKind } from "../data";
 import { MapBody3D } from "../map/MapBody3D";
+import { ProjectGlyph } from "./ProjectGlyph";
 
 const relationColor: Record<ConnectionKind, string> = {
   method: "#72d9e8",
@@ -15,7 +16,7 @@ const relationColor: Record<ConnectionKind, string> = {
 const relationLabel: Record<ConnectionKind, string> = {
   method: "Method",
   handoff: "Handoff",
-  agency: "Authorship",
+  agency: "Judgment",
   constraint: "Constraint",
   lineage: "Lineage",
 };
@@ -494,6 +495,7 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
 }
 
 export function Constellation() {
+  void SelectedGeometry;
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [bodyReady, setBodyReady] = useState(false);
   const handleBodyReady = useCallback((ready: boolean) => setBodyReady(ready), []);
@@ -520,7 +522,7 @@ export function Constellation() {
   }, [activeSlug]);
 
   return (
-    <section className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`} id="field" aria-labelledby="field-title">
+    <section className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`} id="map" aria-labelledby="field-title">
       <MapBody3D activeSlug={activeSlug} onReadyChange={handleBodyReady} />
       {!bodyReady && <RestingGeometry />}
       <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -532,12 +534,10 @@ export function Constellation() {
           </g>
         ))}
       </svg>
-      {active && <SelectedGeometry activeSlug={active.slug} />}
-
       <div className="field-copy">
         <p className="kicker kicker--light">The Map</p>
         <h1 id="field-title">Nothing here is ever finished.</h1>
-        <p>Select a project to reveal the methods, handoffs, authorship, constraints, and lineages that hold the work together.</p>
+        <p>Select a project to reveal the methods, handoffs, judgment, constraints, and lineages that hold the work together.</p>
       </div>
 
       <div className="field-axes" aria-hidden="true">
@@ -575,33 +575,23 @@ export function Constellation() {
       </div>
 
       {active && (
-        <>
-          <aside className="constellation-document" aria-live="polite">
-            <button className="constellation-document__close" onClick={() => setActiveSlug(null)} type="button" aria-label="Close project detail and return to the full Map">
-              <span aria-hidden="true">×</span>
-            </button>
-            <div className="constellation-artifact">
-              <p>{active.eyebrow} · {active.year}</p>
-              <div><img src={active.artifactImage ?? active.image} alt="" /></div>
-              <h2>{active.title}</h2>
-              <a href={`/work/${active.slug}`}>Open case study ↗</a>
-            </div>
-            <div className="constellation-key">
-              <p className="micro">This constellation</p>
-              {activeConnections.map((connection) => (
-                <button key={`${connection.from}-${connection.to}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
-                  <i style={{ background: relationColor[connection.kind] }} />
-                  <span><small>{relationLabel[connection.kind]}</small><strong>{connection.neighbor?.title}</strong><em>{connection.reason}</em></span>
-                </button>
-              ))}
-              <div className="constellation-taxonomy" aria-label="Relationship types">
-                {(Object.keys(relationColor) as ConnectionKind[]).map((kind) => (
-                  <span key={kind} style={{ "--relation": relationColor[kind] } as CSSProperties}>{relationLabel[kind]}</span>
-                ))}
-              </div>
-            </div>
-          </aside>
-        </>
+        <aside className="map-selection-band" aria-live="polite">
+          <ProjectGlyph slug={active.slug} />
+          <div className="map-selection-band__identity">
+            <p>{active.eyebrow} · {active.year}</p>
+            <h2>{active.title}</h2>
+          </div>
+          <div className="map-selection-band__relations" aria-label="Related projects">
+            {activeConnections.slice(0, 4).map((connection) => (
+              <button key={`${connection.from}-${connection.to}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
+                <i style={{ background: relationColor[connection.kind] }} />
+                <span><small>{relationLabel[connection.kind]}</small>{connection.neighbor?.title}</span>
+              </button>
+            ))}
+          </div>
+          <a className="map-selection-band__open" href={`/work/${active.slug}`}>Open case ↗</a>
+          <button className="map-selection-band__close" onClick={() => setActiveSlug(null)} type="button" aria-label="Close selection">×</button>
+        </aside>
       )}
 
       {!active && <p className="field-caption">Select a numbered bead to raise a constellation. Scroll for selected work ↓</p>}

@@ -1,5 +1,5 @@
 import { SiteHeader } from "../../components/SiteHeader";
-import { getProject, getProjectConstellationLine, projects } from "../../data";
+import { getProject, projects } from "../../data";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -19,7 +19,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div className="project-hero__copy">
             <p className="kicker">{project.eyebrow} · {project.year}</p>
             <h1>{project.title}</h1>
-            <p className="project-hero__question constellation-line">{getProjectConstellationLine(project.slug)}</p>
             <p className="project-hero__headline">{project.headline}</p>
             <p className="project-hero__summary">{project.summary}</p>
             <div className="tag-row project-hero__tags" aria-label="Project lenses">

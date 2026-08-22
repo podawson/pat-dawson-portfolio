@@ -1,20 +1,6 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Yaplux Type";
-  src: url("/fonts/yaplux-type.otf") format("opentype");
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "AMS";
-  src: url("/fonts/ams-regular.otf") format("opentype");
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: "IDAF";
   src: url("/fonts/idaf-regular.otf") format("opentype");
   font-style: normal;
@@ -33,12 +19,14 @@
   --acid: #00e63b;
   --line: rgba(23, 32, 27, 0.18);
   --muted: #6d756f;
-  --sans: var(--font-geist-sans), Arial, sans-serif;
-  --mono: var(--font-geist-mono), monospace;
+  --sans: "Instrument Sans Variable", Arial, sans-serif;
+  --mono: "Martian Mono Variable", monospace;
   --brand: "IDAF", Georgia, serif;
-  --display: "Yaplux Type", Georgia, serif;
-  --editorial: "Yaplux Type", Georgia, serif;
+  --display: var(--sans);
+  --editorial: var(--sans);
   --serif: var(--display);
+  --text-on-dark: #c9c9c4;
+  --muted-on-dark: #858986;
 }
 
 * { box-sizing: border-box; }
@@ -68,10 +56,11 @@ img { display: block; width: 100%; }
 .wordmark-mark { align-items: center; border: 1px solid currentColor; border-radius: 50%; display: inline-flex; font-family: var(--sans); font-size: 16px; font-weight: 450; height: 28px; justify-content: center; width: 28px; }
 .wordmark > span:last-child { font-family: var(--brand); font-size: 20px; font-weight: 400; letter-spacing: .015em; line-height: 1; }
 .site-header nav { display: flex; gap: 6px; justify-self: end; }
-.site-header nav a { border: 1px solid transparent; border-radius: 999px; font-size: 13px; padding: 9px 15px; }
+.site-header nav a { align-items: center; border: 1px solid transparent; border-radius: 999px; display: flex; font-size: 14px; font-weight: 500; gap: 7px; padding: 9px 15px; }
+.site-header nav a.is-active::before { background: currentColor; border-radius: 50%; content: ""; height: 4px; width: 4px; }
 .site-header nav a:hover, .site-header nav a:focus-visible { border-color: currentColor; outline: none; }
 
-.kicker, .micro { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .07em; margin: 0; text-transform: uppercase; }
+.kicker, .micro { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; margin: 0; text-transform: uppercase; }
 .kicker--light { color: rgba(245, 241, 232, .62); }
 .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag-row span { border: 1px solid currentColor; border-radius: 999px; font-family: var(--mono); font-size: 9px; padding: 5px 8px; text-transform: uppercase; }
@@ -158,7 +147,7 @@ img { display: block; width: 100%; }
 .site-footer--light { background: var(--cream); border-top: 1px solid var(--line); color: var(--ink); }
 
 .page-intro { min-height: 610px; padding: 160px 6vw 90px; }
-.page-intro h1, .about-hero h1, .playground-intro h1, .project-hero h1 { font-family: var(--serif); font-size: clamp(64px, 8.5vw, 132px); font-weight: 400; letter-spacing: -.065em; line-height: .86; margin: 38px 0; }
+.page-intro h1, .about-hero h1, .playground-intro h1, .project-hero h1 { font-family: var(--display); font-size: clamp(52px, 6vw, 76px); font-weight: 500; letter-spacing: -.03em; line-height: .92; margin: 32px 0; }
 .page-intro__lede { color: var(--muted); font-size: 18px; line-height: 1.55; max-width: 660px; }
 .work-index { border-top: 1px solid var(--line); padding: 0 4vw 120px; }
 .work-filters { background: rgba(245, 241, 232, .92); display: flex; gap: 5px; overflow-x: auto; padding: 18px 0; position: sticky; top: 0; z-index: 20; }
@@ -178,7 +167,7 @@ img { display: block; width: 100%; }
 .project-page { padding-top: 76px; }
 .project-hero { display: grid; grid-template-columns: 1fr 1.06fr; min-height: calc(100vh - 76px); }
 .project-hero__copy { align-self: center; padding: 80px 6vw; }
-.project-hero h1 { font-size: clamp(68px, 8vw, 120px); margin: 34px 0 30px; }
+.project-hero h1 { font-size: clamp(52px, 6vw, 76px); margin: 30px 0 24px; }
 .project-hero__question { color: var(--rust); line-height: 1.55; max-width: 620px; }
 .constellation-line { font-family: var(--mono); font-size: 10px !important; font-style: normal !important; font-weight: 600; letter-spacing: .055em; text-transform: uppercase; }
 .project-hero__headline { font-size: 17px; font-weight: 650; line-height: 1.45; max-width: 620px; }
@@ -343,10 +332,12 @@ img { display: block; width: 100%; }
 /* v8 — Field */
 .field { background: #090b0d; color: var(--cream); height: max(860px, 100vh); min-height: 820px; overflow: hidden; position: relative; }
 .field::after { background: radial-gradient(ellipse 31% 37% at 10% 12%, rgba(9,11,13,.76), transparent 86%), linear-gradient(180deg, rgba(9,11,13,.03), rgba(9,11,13,.2)); content: ""; inset: 0; pointer-events: none; position: absolute; z-index: 2; }
-.field.is-constellation::after { background: radial-gradient(ellipse 31% 37% at 10% 12%, rgba(9,11,13,.78), transparent 86%), linear-gradient(180deg, rgba(9,11,13,.03), rgba(9,11,13,.2)); }
+.field.is-constellation::after { background: radial-gradient(ellipse 31% 37% at 10% 12%, rgba(9,11,13,.64), transparent 86%), linear-gradient(180deg, rgba(9,11,13,.01), rgba(9,11,13,.08)); }
 .field-body-3d { height: 100%; inset: 0; opacity: .98; pointer-events: auto; position: absolute; transition: filter .45s ease, opacity .45s ease; width: 100%; z-index: 1; }
 .field-body-3d canvas { display: block; height: 100%; width: 100%; }
-.field.is-constellation .field-body-3d { filter: saturate(1.14) contrast(1.04); opacity: .92; }
+.field.is-constellation .field-body-3d { filter: saturate(1.08) contrast(1.03); opacity: 1; }
+.has-sculptural-body .field-resting-geometry, .has-sculptural-body .field-resting-connections { opacity: 0; }
+.map-reset-view { background: rgba(8,12,16,.78); border: 1px solid rgba(235,245,246,.42); border-radius: 999px; bottom: 28px; color: var(--text-on-dark); cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; padding: 9px 12px; position: absolute; right: 4.2vw; text-transform: uppercase; z-index: 9; }
 .field-resting-image { height: 100%; inset: 0; object-fit: cover; opacity: .9; pointer-events: none; position: absolute; width: 100%; z-index: 1; }
 .field.is-constellation .field-resting-image { filter: saturate(.35) brightness(.52); opacity: .48; }
 .field-resting-geometry { filter: saturate(1.12); height: 100%; inset: 0; opacity: .94; pointer-events: none; position: absolute; transition: filter .35s ease, opacity .35s ease; width: 100%; z-index: 2; }
@@ -360,8 +351,8 @@ img { display: block; width: 100%; }
 .field-selected-geometry { height: 100%; inset: 0; pointer-events: none; position: absolute; width: 100%; z-index: 3; }
 .field-copy { left: 4.2vw; max-width: 255px; pointer-events: none; position: absolute; top: 104px; z-index: 8; }
 .field-copy h1 { font-family: var(--display); font-size: clamp(32px, 2.7vw, 46px); font-weight: 400; letter-spacing: -.045em; line-height: .92; margin: 13px 0 18px; }
-.field-copy > p:last-child { color: rgba(245,241,232,.62); font-size: 13px; line-height: 1.52; margin: 0; }
-.field.is-constellation .field-copy { opacity: .52; transform: scale(.82); transform-origin: left top; transition: opacity .3s ease, transform .3s ease; }
+.field-copy > p:last-child { color: var(--muted-on-dark); font-size: 13px; line-height: 1.52; margin: 0; }
+.field.is-constellation .field-copy { opacity: .72; transition: opacity .3s ease; }
 .field-axes { inset: 13% 8% 12%; pointer-events: none; position: absolute; z-index: 4; }
 .field-axes::before, .field-axes::after { background: rgba(235,241,241,.105); content: ""; left: 50%; position: absolute; top: 50%; }
 .field-axes::before { height: 1px; transform: translateX(-50%); width: 100%; }
@@ -378,10 +369,22 @@ img { display: block; width: 100%; }
 .field-node > strong { background: rgba(7,10,13,.9); border: 1px solid rgba(245,241,232,.18); border-radius: 999px; font-family: var(--mono); font-size: 10px; font-weight: 500; left: 50%; opacity: 0; padding: 7px 9px; pointer-events: none; position: absolute; top: calc(100% + 7px); transform: translateX(-50%); white-space: nowrap; }
 .field-node:hover, .field-node:focus-visible { border-color: #eafcff; box-shadow: 0 0 0 6px rgba(114,217,232,.08), 0 0 23px rgba(114,217,232,.22); outline: none; transform: translate(-50%,-50%) scale(1.18); z-index: 9; }
 .field-node:hover > strong, .field-node:focus-visible > strong, .field-node.is-active > strong { opacity: 1; }
-.field-node.is-quiet { opacity: .28; }
+.field-node.is-quiet { opacity: .42; }
 .field-node.is-related { border-color: rgba(166,205,255,.86); box-shadow: 0 0 22px rgba(111,151,255,.3); opacity: .92; }
-.field-node.is-active { animation: field-node-pulse 2.4s ease-in-out infinite; border-color: white; box-shadow: 0 0 0 6px rgba(111,151,255,.12), 0 0 34px rgba(114,217,232,.44); opacity: 1; transform: translate(-50%,-50%) scale(1.25); z-index: 10; }
-@keyframes field-node-pulse { 50% { box-shadow: 0 0 0 13px rgba(111,151,255,.035), 0 0 52px rgba(114,217,232,.6); } }
+.field-node.is-active { border-color: white; box-shadow: 0 0 0 6px rgba(111,151,255,.12), 0 0 34px rgba(114,217,232,.44); opacity: 1; transform: translate(-50%,-50%) scale(1.25); z-index: 10; }
+.map-selection-band { align-items: center; backdrop-filter: blur(18px); background: rgba(6,9,13,.92); border-top: 1px solid rgba(255,255,255,.42); bottom: 0; color: var(--text-on-dark); display: grid; gap: 18px; grid-template-columns: 54px minmax(180px,.78fr) minmax(360px,1.8fr) auto 28px; left: 0; min-height: 92px; padding: 13px 4.2vw; position: absolute; right: 0; z-index: 15; }
+.project-glyph { height: 50px; width: 50px; }
+.project-glyph rect, .project-glyph line, .project-glyph path { fill: none; stroke: rgba(214,229,234,.46); stroke-width: .8; vector-effect: non-scaling-stroke; }
+.project-glyph circle { fill: #a6dfff; stroke: white; stroke-width: .8; }
+.map-selection-band__identity p { color: var(--muted-on-dark); font-family: var(--mono); font-size: 9px; letter-spacing: .09em; margin: 0 0 4px; text-transform: uppercase; }
+.map-selection-band__identity h2 { font-size: 22px; font-weight: 500; letter-spacing: -.03em; line-height: .98; margin: 0; }
+.map-selection-band__relations { display: flex; gap: 6px; min-width: 0; overflow-x: auto; }
+.map-selection-band__relations button { align-items: center; background: transparent; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; color: inherit; cursor: pointer; display: flex; flex: 0 0 auto; gap: 7px; padding: 8px 10px; }
+.map-selection-band__relations i { border-radius: 50%; height: 5px; width: 5px; }
+.map-selection-band__relations span { font-size: 11px; white-space: nowrap; }
+.map-selection-band__relations small { color: var(--muted-on-dark); font-family: var(--mono); font-size: 7px; letter-spacing: .08em; margin-right: 5px; text-transform: uppercase; }
+.map-selection-band__open { border-bottom: 1px solid currentColor; font-family: var(--mono); font-size: 9px; padding-bottom: 3px; text-transform: uppercase; white-space: nowrap; }
+.map-selection-band__close { background: transparent; border: 0; color: var(--text-on-dark); cursor: pointer; font-size: 21px; font-weight: 300; padding: 0; }
 .constellation-document { background: rgba(7,10,12,.96); border: 1px solid rgba(255,255,255,.9); bottom: 34px; box-shadow: 0 18px 70px rgba(0,0,0,.56); color: var(--cream); display: grid; grid-template-columns: minmax(250px,1.05fr) minmax(230px,.95fr); max-height: 420px; overflow: hidden; position: absolute; right: 4.2vw; width: min(680px, 56vw); z-index: 14; }
 .constellation-document__close { align-items: center; backdrop-filter: blur(12px); background: rgba(7,10,12,.88); border: 1px solid rgba(255,255,255,.58); border-radius: 50%; color: var(--cream); cursor: pointer; display: flex; height: 31px; justify-content: center; padding: 0; position: absolute; right: 12px; top: 12px; transition: background .18s ease, border-color .18s ease, transform .18s ease; width: 31px; z-index: 4; }
 .constellation-document__close span { font-family: var(--sans); font-size: 19px; font-weight: 300; line-height: 1; transform: translateY(-1px); }
@@ -406,7 +409,7 @@ img { display: block; width: 100%; }
 
 /* v8 — Index */
 .page-intro--work { min-height: 280px; padding-bottom: 26px; padding-top: 104px; }
-.page-intro--work h1 { font-size: clamp(50px,5.5vw,82px); line-height: .88; margin: 15px 0 13px; }
+.page-intro--work h1 { font-size: clamp(48px,5vw,76px); font-weight: 500; letter-spacing: -.03em; line-height: .92; margin: 15px 0 13px; }
 .page-intro--work .page-intro__lede { font-size: 13px; line-height: 1.42; max-width: 610px; }
 .work-index { overflow: hidden; padding: 0 3.5vw 30px; }
 .index-shell { min-height: 550px; padding-top: 12px; position: relative; }
@@ -418,7 +421,7 @@ img { display: block; width: 100%; }
 .index-list { list-style: none; margin: 0; padding: 0; position: relative; width: 54%; z-index: 3; }
 .index-list li { align-items: center; display: grid; gap: 11px; grid-template-columns: 23px minmax(0,auto) 1fr; height: clamp(21px,3vh,28px); opacity: .38; transition: opacity .2s ease; }
 .index-list li > span { color: var(--muted); font-family: var(--mono); font-size: 9px; }
-.index-list li > a { font-family: var(--display); font-size: clamp(19px,1.72vw,28px); letter-spacing: -.04em; line-height: .92; outline: none; white-space: nowrap; width: fit-content; }
+.index-list li > a { font-family: var(--display); font-size: clamp(18px,1.55vw,25px); font-weight: 500; letter-spacing: -.03em; line-height: .95; outline: none; white-space: nowrap; width: fit-content; }
 .index-list li > em { background: var(--rust); border-radius: 999px; color: white; font-family: var(--mono); font-size: 8px; font-style: normal; justify-self: start; opacity: 0; padding: 6px 8px; transform: translateX(-8px); transition: opacity .18s ease, transform .18s ease; white-space: nowrap; }
 .index-list li.is-active { opacity: 1; }
 .index-list li.is-active > a { font-style: italic; }
@@ -437,6 +440,7 @@ img { display: block; width: 100%; }
 
 /* Work index — shared Map night system */
 .work-page--dark { background: var(--night); color: var(--cream); min-height: 100vh; }
+.work-page--dark { --cream: var(--text-on-dark); }
 .work-page--dark .page-intro--work { background: radial-gradient(circle at 78% 8%, rgba(90,98,194,.12), transparent 34%), linear-gradient(180deg, #090b0d 0%, #0a0e10 100%); }
 .work-page--dark .page-intro--work .kicker { color: rgba(245,241,232,.48); }
 .work-page--dark .page-intro--work .page-intro__lede { color: rgba(245,241,232,.6); }
@@ -524,6 +528,7 @@ img { display: block; width: 100%; }
   .field-copy { left: 22px; top: 98px; }
   .field-axes { inset: 18% 7% 14%; }
   .field-axis--atmosphere, .field-axis--architecture { left: calc(50% + 10px); }
+  .map-selection-band { gap: 12px; grid-template-columns: 50px minmax(150px,.8fr) minmax(280px,1.5fr) auto 24px; padding-left: 22px; padding-right: 22px; }
   .constellation-document { bottom: 26px; grid-template-columns: 1fr; left: 22px; max-height: 440px; right: 22px; width: auto; }
   .constellation-artifact { border-bottom: 1px solid var(--line); border-right: 0; grid-template-columns: 105px 1fr; grid-template-rows: auto auto; }
   .constellation-artifact > div { grid-row: 1/3; min-height: 110px; }
@@ -551,6 +556,18 @@ img { display: block; width: 100%; }
 }
 
 @media (max-width: 580px) {
+  .field.is-constellation .field-body-3d, .field.is-constellation .field-nodes, .field.is-constellation .field-axes { transform: translateY(-10vh); }
+  .field-body-3d, .field-nodes, .field-axes { transition: transform .35s ease; }
+  .map-selection-band { align-content: start; bottom: 0; gap: 10px 12px; grid-template-columns: 44px 1fr 26px; grid-template-rows: auto 1fr auto; height: 30vh; min-height: 220px; padding: 16px 18px; }
+  .map-selection-band .project-glyph { grid-row: 1; height: 42px; width: 42px; }
+  .map-selection-band__identity { grid-column: 2; }
+  .map-selection-band__identity h2 { font-size: 20px; }
+  .map-selection-band__relations { grid-column: 1 / -1; grid-row: 2; }
+  .map-selection-band__relations button { align-items: start; border-radius: 10px; flex-direction: column; min-width: 126px; }
+  .map-selection-band__relations small { display: block; margin: 0 0 3px; }
+  .map-selection-band__open { grid-column: 1 / -1; grid-row: 3; justify-self: start; }
+  .map-selection-band__close { grid-column: 3; grid-row: 1; }
+  .map-reset-view { bottom: calc(30vh + 14px); right: 18px; }
   .field-axis { font-size: 8px; }
   .field-caption { bottom: 16px; font-size: 9px; text-align: center; width: calc(100% - 44px); }
   .field-node { transform: translate(-50%,-50%) scale(.8); }

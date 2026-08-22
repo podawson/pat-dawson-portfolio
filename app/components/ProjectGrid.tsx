@@ -13,6 +13,28 @@ export function ProjectGrid() {
   const active = projects[activeIndex];
   const isVisible = (index: number) => lens === "All" || projects[index].categories.includes(lens);
 
+  useEffect(() => {
+    const readLens = () => {
+      const value = new URLSearchParams(window.location.search).get("lens")?.toLowerCase();
+      const match = categories.find((item) => item.toLowerCase().replace(/\s+/g, "-") === value);
+      const nextLens = match ?? "All";
+      setLens(nextLens);
+      const first = projects.findIndex((project) => nextLens === "All" || project.categories.includes(nextLens));
+      if (first >= 0) setActiveIndex(first);
+    };
+    readLens();
+    window.addEventListener("popstate", readLens);
+    return () => window.removeEventListener("popstate", readLens);
+  }, []);
+
+  const selectLens = (item: "All" | Category) => {
+    setLens(item);
+    const first = projects.findIndex((project) => item === "All" || project.categories.includes(item));
+    if (first >= 0) setActiveIndex(first);
+    const query = item === "All" ? "" : `?lens=${item.toLowerCase().replace(/\s+/g, "-")}`;
+    window.history.replaceState({}, "", `/work${query}`);
+  };
+
   const measure = () => {
     const shell = shellRef.current;
     const item = itemRefs.current[activeIndex];
@@ -37,12 +59,6 @@ export function ProjectGrid() {
     return () => window.removeEventListener("resize", measure);
   });
 
-  useEffect(() => {
-    if (isVisible(activeIndex)) return;
-    const first = projects.findIndex((_, index) => isVisible(index));
-    if (first >= 0) setActiveIndex(first);
-  }, [lens, activeIndex]);
-
   const move = (direction: number) => {
     let next = activeIndex;
     for (let attempt = 0; attempt < projects.length; attempt += 1) {
@@ -59,16 +75,11 @@ export function ProjectGrid() {
     <div
       className="index-shell"
       ref={shellRef}
-      onKeyDown={(event) => {
-        if (event.key === "ArrowDown" || event.key === "ArrowRight") { event.preventDefault(); move(1); }
-        if (event.key === "ArrowUp" || event.key === "ArrowLeft") { event.preventDefault(); move(-1); }
-        if (event.key === "Enter") window.location.assign(`/work/${active.slug}`);
-      }}
     >
       <div className="index-lenses" role="group" aria-label="Lenses">
         <span>Lenses</span>
         {categories.map((item) => (
-          <button className={lens === item ? "is-active" : ""} key={item} onClick={() => setLens(item)} type="button">
+          <button className={lens === item ? "is-active" : ""} key={item} onClick={() => selectLens(item)} type="button">
             {item}<sup>{item === "All" ? projects.length : projects.filter((project) => project.categories.includes(item)).length}</sup>
           </button>
         ))}
@@ -90,6 +101,10 @@ export function ProjectGrid() {
               ref={(element) => { itemRefs.current[index] = element; }}
               onFocus={() => isVisible(index) && setActiveIndex(index)}
               onMouseEnter={() => isVisible(index) && setActiveIndex(index)}
+              onKeyDown={(event) => {
+                if (event.key === "ArrowDown" || event.key === "ArrowRight") { event.preventDefault(); move(1); }
+                if (event.key === "ArrowUp" || event.key === "ArrowLeft") { event.preventDefault(); move(-1); }
+              }}
               onClick={(event) => {
                 if (event.detail === 0) return;
                 const pointerIsCoarse = window.matchMedia("(pointer: coarse)").matches;

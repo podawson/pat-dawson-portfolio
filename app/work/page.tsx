@@ -1,10 +1,11 @@
+import Link from "next/link";
 import { ProjectGrid } from "../components/ProjectGrid";
 import { SiteHeader } from "../components/SiteHeader";
 
 export default function WorkPage() {
   return (
-    <main>
-      <SiteHeader />
+    <main className="work-page work-page--dark">
+      <SiteHeader inverse />
       <section className="page-intro page-intro--work">
         <p className="kicker">Work / Index</p>
         <h1>Fourteen projects.<br />Many ways through.</h1>
@@ -13,7 +14,7 @@ export default function WorkPage() {
       <section className="work-index" aria-label="Project Index">
         <ProjectGrid />
       </section>
-      <footer className="site-footer site-footer--light"><a href="/">← Back to the Map</a><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a></footer>
+      <footer className="site-footer"><Link href="/">← Back to the Map</Link><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a></footer>
     </main>
   );
 }

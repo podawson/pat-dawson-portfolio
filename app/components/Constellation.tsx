@@ -12,6 +12,14 @@ const relationColor: Record<ConnectionKind, string> = {
   lineage: "#e09ac6",
 };
 
+const relationLabel: Record<ConnectionKind, string> = {
+  method: "Method",
+  handoff: "Handoff",
+  agency: "Authorship",
+  constraint: "Constraint",
+  lineage: "Lineage",
+};
+
 function hashText(value: string) {
   let hash = 2166136261;
   for (let index = 0; index < value.length; index += 1) {
@@ -455,7 +463,7 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
         context.globalAlpha = 0.92;
         context.font = "600 11px ui-monospace, SFMono-Regular, Menlo, monospace";
         context.letterSpacing = "1px";
-        const label = connection.kind.toUpperCase();
+        const label = relationLabel[connection.kind].toUpperCase();
         const measure = context.measureText(label);
         context.fillStyle = "rgba(8,11,13,.88)";
         context.fillRect(-measure.width / 2 - 6, -9, measure.width + 12, 16);
@@ -529,7 +537,7 @@ export function Constellation() {
       <div className="field-copy">
         <p className="kicker kicker--light">The Map</p>
         <h1 id="field-title">Nothing here is ever finished.</h1>
-        <p>Select a project to reveal the methods, handoffs, agency boundaries, constraints, and lineages that hold the work together.</p>
+        <p>Select a project to reveal the methods, handoffs, authorship, constraints, and lineages that hold the work together.</p>
       </div>
 
       <div className="field-axes" aria-hidden="true">
@@ -569,8 +577,8 @@ export function Constellation() {
       {active && (
         <>
           <aside className="constellation-document" aria-live="polite">
-            <button className="constellation-document__close" onClick={() => setActiveSlug(null)} type="button" aria-label="Close project detail and return to the full Field">
-              <span>Full Field</span><b aria-hidden="true">×</b>
+            <button className="constellation-document__close" onClick={() => setActiveSlug(null)} type="button" aria-label="Close project detail and return to the full Map">
+              <span aria-hidden="true">×</span>
             </button>
             <div className="constellation-artifact">
               <p>{active.eyebrow} · {active.year}</p>
@@ -583,12 +591,12 @@ export function Constellation() {
               {activeConnections.map((connection) => (
                 <button key={`${connection.from}-${connection.to}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
                   <i style={{ background: relationColor[connection.kind] }} />
-                  <span><small>{connection.kind}</small><strong>{connection.neighbor?.title}</strong><em>{connection.reason}</em></span>
+                  <span><small>{relationLabel[connection.kind]}</small><strong>{connection.neighbor?.title}</strong><em>{connection.reason}</em></span>
                 </button>
               ))}
               <div className="constellation-taxonomy" aria-label="Relationship types">
                 {(Object.keys(relationColor) as ConnectionKind[]).map((kind) => (
-                  <span key={kind} style={{ "--relation": relationColor[kind] } as CSSProperties}>{kind}</span>
+                  <span key={kind} style={{ "--relation": relationColor[kind] } as CSSProperties}>{relationLabel[kind]}</span>
                 ))}
               </div>
             </div>

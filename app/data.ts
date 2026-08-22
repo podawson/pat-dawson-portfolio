@@ -392,7 +392,7 @@ export const projects: Project[] = [
 export const projectConnections: ProjectConnection[] = [
   { from: "charlesgate-park", to: "mapping-investments", kind: "method", reason: "Historical research becomes a navigable spatial model rather than a static report." },
   { from: "charlesgate-park", to: "88-east-broadway", kind: "constraint", reason: "Existing conditions and regulation define the design envelope before form-making begins." },
-  { from: "charlesgate-park", to: "flower-tower", kind: "agency", reason: "Civic work returns agency and resources to the public instead of treating participation as validation." },
+  { from: "charlesgate-park", to: "flower-tower", kind: "agency", reason: "Civic work returns authorship and resources to the public instead of treating participation as validation." },
   { from: "88-east-broadway", to: "caleta", kind: "handoff", reason: "An open-ended concept is translated into a package legible to owners, regulators, and builders." },
   { from: "ouellette-bridge", to: "caleta", kind: "constraint", reason: "Fabrication detail preserves design intent where code, preservation, and field reality could erase it." },
   { from: "ouellette-bridge", to: "vanderbilt-passage", kind: "handoff", reason: "Lighting and media only become architecture when installation logic survives the last mile." },
@@ -417,7 +417,7 @@ export const featuredProjects = projects.filter((project) => project.featured);
 const constellationPhrases: Record<ConnectionKind, string> = {
   method: "shares a method with",
   handoff: "shares a handoff with",
-  agency: "shares an agency boundary with",
+  agency: "keeps authorship visible beside",
   constraint: "shares a constraint with",
   lineage: "continues a working lineage with",
 };

@@ -42,7 +42,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div className="project-narrative__body">
             <p>{project.narrative}</p>
             <aside>
-              <p className="micro">Agency boundary</p>
+              <p className="micro">Where authorship stays human</p>
               <p>{project.agency}</p>
             </aside>
           </div>

@@ -10,7 +10,7 @@ type MapBody3DProps = {
 };
 
 const MAX_NODES = 14;
-const MAX_SEGMENTS = 48;
+const MAX_SEGMENTS = 28;
 
 type Segment = {
   from: number;
@@ -41,7 +41,7 @@ function buildSegments(points: THREE.Vector3[]) {
     const length = a.distanceTo(b);
     const radius = THREE.MathUtils.clamp((0.205 - length * 0.013) * edge.thickness, 0.075, 0.19);
     const rest = edgeIndex % 5 === 0 ? 0.52 : edgeIndex % 3 === 0 ? 0.68 : 0.86;
-    if (length > 4.1) {
+    if (length > 5.5) {
       const midpoint = a.clone().lerp(b, 0.5);
       midpoint.z -= 0.72 + length * 0.045;
       midpoint.y += (edgeIndex % 2 ? 1 : -1) * 0.16;
@@ -66,14 +66,13 @@ const fragmentShader = `
   precision highp float;
   #define MAX_NODES ${MAX_NODES}
   #define MAX_SEGMENTS ${MAX_SEGMENTS}
-  #define MAX_STEPS 96
+  #define MAX_STEPS 44
 
   uniform vec2 uResolution;
   uniform float uTime;
   uniform float uStepCount;
   uniform float uNodeBlend;
   uniform float uEdgeBlend;
-  uniform mat3 uInvRotation;
   uniform vec3 uNodes[MAX_NODES];
   uniform float uNodeRadius[MAX_NODES];
   uniform float uInfluence[MAX_NODES];
@@ -106,8 +105,24 @@ const fragmentShader = `
     return mix(b, a, h) - k * h * (1.0 - h);
   }
 
+  float mapDistance(vec3 worldPoint) {
+    vec3 p = worldPoint;
+    float result = 100.0;
+    for (int i = 0; i < MAX_NODES; i++) {
+      float radius = uNodeRadius[i] * (1.0 + uInfluence[i] * 0.19);
+      float d = sdSphere(p, uNodes[i], radius);
+      result = smin(result, d, uNodeBlend);
+    }
+    for (int i = 0; i < MAX_SEGMENTS; i++) {
+      if (float(i) >= uSegmentCount) break;
+      vec2 capsule = sdCapsule(p, uSegmentA[i], uSegmentB[i], uSegmentRadius[i]);
+      result = smin(result, capsule.x, uEdgeBlend);
+    }
+    return result;
+  }
+
   vec4 mapScene(vec3 worldPoint) {
-    vec3 p = uInvRotation * worldPoint;
+    vec3 p = worldPoint;
     vec4 result = vec4(100.0, -1.0, -1.0, 0.0);
     for (int i = 0; i < MAX_NODES; i++) {
       float radius = uNodeRadius[i] * (1.0 + uInfluence[i] * 0.19);
@@ -134,35 +149,17 @@ const fragmentShader = `
     const float e = 0.0035;
     const vec2 k = vec2(1.0, -1.0);
     return normalize(
-      k.xyy * mapScene(p + k.xyy * e).x +
-      k.yyx * mapScene(p + k.yyx * e).x +
-      k.yxy * mapScene(p + k.yxy * e).x +
-      k.xxx * mapScene(p + k.xxx * e).x
+      k.xyy * mapDistance(p + k.xyy * e) +
+      k.yyx * mapDistance(p + k.yyx * e) +
+      k.yxy * mapDistance(p + k.yxy * e) +
+      k.xxx * mapDistance(p + k.xxx * e)
     );
   }
 
   float ambientOcclusion(vec3 p, vec3 n) {
-    float occlusion = 0.0;
-    float weight = 1.0;
-    for (int i = 1; i <= 5; i++) {
-      float distance = 0.055 * float(i);
-      float sampleDistance = mapScene(p + n * distance).x;
-      occlusion += (distance - sampleDistance) * weight;
-      weight *= 0.72;
-    }
-    return clamp(1.0 - occlusion * 2.7, 0.18, 1.0);
-  }
-
-  float softShadow(vec3 origin, vec3 direction) {
-    float result = 1.0;
-    float travel = 0.055;
-    for (int i = 0; i < 14; i++) {
-      float h = mapScene(origin + direction * travel).x;
-      result = min(result, 12.0 * h / travel);
-      travel += clamp(h, 0.025, 0.22);
-      if (h < 0.001 || travel > 5.2) break;
-    }
-    return clamp(result, 0.14, 1.0);
+    const float distance = 0.11;
+    float sampleDistance = mapDistance(p + n * distance);
+    return clamp(1.0 - (distance - sampleDistance) * 2.1, 0.28, 1.0);
   }
 
   vec3 nodeTint(float id) {
@@ -199,18 +196,18 @@ const fragmentShader = `
     }
 
     float travel = nearHit;
-    vec4 hitData = vec4(100.0);
+    float sceneDistance = 100.0;
     bool hit = false;
     for (int step = 0; step < MAX_STEPS; step++) {
       if (float(step) >= uStepCount || travel > farHit) break;
       vec3 point = rayOrigin + rayDirection * travel;
-      hitData = mapScene(point);
-      if (hitData.x < 0.0018) { hit = true; break; }
-      travel += max(hitData.x * 0.74, 0.009);
+      sceneDistance = mapDistance(point);
+      if (sceneDistance < 0.0028) { hit = true; break; }
+      travel += max(sceneDistance * 0.82, 0.014);
     }
 
     if (!hit) {
-      float glow = exp(-max(hitData.x, 0.0) * 7.0) * 0.055;
+      float glow = exp(-max(sceneDistance, 0.0) * 7.0) * 0.055;
       background += vec3(0.12, 0.28, 0.47) * glow;
       float vignette = smoothstep(1.34, 0.16, length(uv * vec2(0.72, 0.92)));
       background *= 0.72 + vignette * 0.28;
@@ -220,20 +217,15 @@ const fragmentShader = `
     }
 
     vec3 point = rayOrigin + rayDirection * travel;
+    vec4 hitData = mapScene(point);
     vec3 normal = normalTetrahedron(point);
     vec3 keyDirection = normalize(vec3(-0.46, 0.72, 0.54));
     vec3 fillDirection = normalize(vec3(0.62, -0.08, 0.42));
     float key = max(dot(normal, keyDirection), 0.0);
     float fill = max(dot(normal, fillDirection), 0.0);
-    float shadow = softShadow(point + normal * 0.012, keyDirection);
     float ao = ambientOcclusion(point, normal);
     float fresnel = pow(1.0 - max(dot(normal, -rayDirection), 0.0), 3.2);
-    float thickness = 0.0;
-    for (int i = 1; i <= 4; i++) {
-      float sampleDistance = mapScene(point - rayDirection * (0.055 * float(i))).x;
-      thickness += smoothstep(0.03, -0.12, sampleDistance);
-    }
-    thickness /= 4.0;
+    float thickness = clamp(1.0 - abs(dot(normal, -rayDirection)), 0.0, 1.0);
 
     int nodeIndex = int(clamp(hitData.y, 0.0, float(MAX_NODES - 1)));
     float influence = uInfluence[nodeIndex];
@@ -242,7 +234,7 @@ const fragmentShader = `
     vec3 color = mix(deep, nodeTint(hitData.y), 0.46 + key * 0.22);
     color += violet * fill * 0.24;
     color *= mix(0.58, 1.0, ao);
-    color *= mix(0.66, 1.0, key * shadow);
+    color *= mix(0.68, 1.0, key);
     color += vec3(0.18, 0.77, 0.92) * fresnel * 0.34;
     color += vec3(0.31, 0.39, 0.82) * (1.0 - thickness) * 0.13;
     color += vec3(0.16, 0.45, 0.84) * influence * 0.32;
@@ -268,10 +260,14 @@ const fragmentShader = `
 export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeSlugRef = useRef(activeSlug);
+  const wakeRef = useRef<(() => void) | null>(null);
   const [rotated, setRotated] = useState(false);
   const resetRef = useRef<(() => void) | null>(null);
 
-  useEffect(() => { activeSlugRef.current = activeSlug; }, [activeSlug]);
+  useEffect(() => {
+    activeSlugRef.current = activeSlug;
+    wakeRef.current?.();
+  }, [activeSlug]);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -305,10 +301,9 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
     const uniforms = {
       uResolution: { value: new THREE.Vector2(1, 1) },
       uTime: { value: 0 },
-      uStepCount: { value: mobile ? 48 : 96 },
+      uStepCount: { value: mobile ? 22 : 32 },
       uNodeBlend: { value: 0.30 },
       uEdgeBlend: { value: 0.18 },
-      uInvRotation: { value: new THREE.Matrix3() },
       uNodes: { value: paddedPoints.map((point) => point.clone()) },
       uNodeRadius: { value: Array.from({ length: MAX_NODES }, (_, index) => nodeRadii[index] ?? 0) },
       uInfluence: { value: influences },
@@ -322,15 +317,35 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
     const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, depthWrite: false, depthTest: false });
     const geometry = new THREE.PlaneGeometry(2, 2);
     scene.add(new THREE.Mesh(geometry, material));
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1 : 1.45));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     mount.appendChild(renderer.domElement);
 
     const drawBufferSize = new THREE.Vector2();
+    let scheduledFrame = 0;
+    let lastFrameAt = 0;
+    let activeUntil = performance.now() + 1200;
+    let inViewport = true;
+    const frameInterval = 1000 / (mobile ? 20 : 24);
+    const schedule = () => {
+      if (!scheduledFrame && inViewport && !document.hidden) scheduledFrame = requestAnimationFrame(draw);
+    };
+    const wake = (duration = 1500) => {
+      activeUntil = Math.max(activeUntil, performance.now() + duration);
+      schedule();
+    };
+    wakeRef.current = () => wake(activeSlugRef.current ? 2800 : 1300);
+
     const resize = () => {
-      renderer.setSize(Math.max(1, mount.clientWidth), Math.max(1, mount.clientHeight), false);
+      const width = Math.max(1, mount.clientWidth);
+      const height = Math.max(1, mount.clientHeight);
+      const maxWidth = mobile ? 420 : 760;
+      const maxHeight = mobile ? 560 : 520;
+      const baseScale = mobile ? 0.48 : 0.56;
+      renderer.setPixelRatio(Math.max(0.42, Math.min(window.devicePixelRatio || 1, baseScale, maxWidth / width, maxHeight / height)));
+      renderer.setSize(width, height, false);
       renderer.getDrawingBufferSize(drawBufferSize);
       uniforms.uResolution.value.copy(drawBufferSize);
+      wake(500);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -346,12 +361,12 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
     let pitchVelocity = 0;
     const clampYaw = THREE.MathUtils.degToRad(40);
     const clampPitch = THREE.MathUtils.degToRad(25);
-    const setRotationFlag = (value: boolean) => setRotated((current) => current === value ? current : value);
     resetRef.current = () => {
       targetYaw = 0;
       targetPitch = 0;
       yawVelocity = 0;
       pitchVelocity = 0;
+      wake(1200);
     };
 
     const onPointerDown = (event: PointerEvent) => {
@@ -360,6 +375,7 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
       pointerX = event.clientX;
       pointerY = event.clientY;
       mount.setPointerCapture(event.pointerId);
+      wake(1800);
     };
     const onPointerMove = (event: PointerEvent) => {
       if (!dragging || reduceMotion) return;
@@ -371,12 +387,14 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
       pitchVelocity = THREE.MathUtils.clamp(dy * 0.0017, -0.036, 0.036);
       targetYaw = THREE.MathUtils.clamp(targetYaw + yawVelocity, -clampYaw, clampYaw);
       targetPitch = THREE.MathUtils.clamp(targetPitch + pitchVelocity, -clampPitch, clampPitch);
+      wake(1000);
     };
     const onPointerUp = (event: PointerEvent) => {
       dragging = false;
       targetYaw = 0;
       targetPitch = 0;
       if (mount.hasPointerCapture(event.pointerId)) mount.releasePointerCapture(event.pointerId);
+      wake(1300);
     };
     mount.addEventListener("pointerdown", onPointerDown);
     mount.addEventListener("pointermove", onPointerMove);
@@ -385,15 +403,22 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
     mount.style.touchAction = "none";
 
     const rotation4 = new THREE.Matrix4();
-    const inverseRotation = new THREE.Matrix3();
+    const rotation3 = new THREE.Matrix3();
     const euler = new THREE.Euler(0, 0, 0, "YXZ");
-    let frame = 0;
     let lastActive: string | null | undefined;
+    let rotationFlag = false;
     const started = performance.now();
     onReadyChange(true);
 
-    const draw = () => {
-      const elapsed = (performance.now() - started) / 1000;
+    function draw(now: number) {
+      scheduledFrame = 0;
+      if (!inViewport || document.hidden) return;
+      if (now - lastFrameAt < frameInterval) {
+        schedule();
+        return;
+      }
+      lastFrameAt = now;
+      const elapsed = (now - started) / 1000;
       const active = activeSlugRef.current;
       if (active !== lastActive) {
         influenceTargets.fill(0);
@@ -410,27 +435,7 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
           });
         }
         lastActive = active;
-      }
-
-      const blend = reduceMotion ? 1 : 0.09;
-      for (let index = 0; index < MAX_NODES; index += 1) {
-        influences[index] += (influenceTargets[index] - influences[index]) * blend;
-        const base = basePoints[index];
-        const displayed = uniforms.uNodes.value[index] as THREE.Vector3;
-        if (base && displayed) displayed.set(base.x, base.y, base.z + influences[index] * 0.34);
-      }
-      for (let index = 0; index < MAX_SEGMENTS; index += 1) {
-        segmentActivity[index] += (segmentActivityTargets[index] - segmentActivity[index]) * blend;
-        const segment = segments[index];
-        if (!segment) continue;
-        const activeAmount = Math.max(influences[segment.from], influences[segment.to]);
-        const a = uniforms.uSegmentA.value[index] as THREE.Vector3;
-        const b = uniforms.uSegmentB.value[index] as THREE.Vector3;
-        a.copy(segment.a);
-        b.copy(segment.b);
-        if (a.distanceTo(basePoints[segment.from]) < 0.001) a.z += influences[segment.from] * 0.34;
-        if (b.distanceTo(basePoints[segment.to]) < 0.001) b.z += influences[segment.to] * 0.34;
-        uniforms.uSegmentRadius.value[index] = segment.radius * (segment.rest + activeAmount * (1 - segment.rest));
+        activeUntil = Math.max(activeUntil, now + (active ? 2800 : 1200));
       }
 
       if (!dragging) {
@@ -443,19 +448,65 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
         targetYaw *= 0.89;
         targetPitch *= 0.89;
       }
-      setRotationFlag(Math.abs(yaw) + Math.abs(pitch) > 0.012);
+      const isRotated = Math.abs(yaw) + Math.abs(pitch) > 0.012;
+      if (isRotated !== rotationFlag) {
+        rotationFlag = isRotated;
+        setRotated(isRotated);
+      }
       euler.set(pitch, yaw, 0);
       rotation4.makeRotationFromEuler(euler);
-      inverseRotation.setFromMatrix4(rotation4).transpose();
-      uniforms.uInvRotation.value.copy(inverseRotation);
+      rotation3.setFromMatrix4(rotation4);
+
+      const blend = reduceMotion ? 1 : 0.12;
+      let transitioning = false;
+      for (let index = 0; index < MAX_NODES; index += 1) {
+        influences[index] += (influenceTargets[index] - influences[index]) * blend;
+        if (Math.abs(influenceTargets[index] - influences[index]) > 0.008) transitioning = true;
+        const base = basePoints[index];
+        const displayed = uniforms.uNodes.value[index] as THREE.Vector3;
+        if (base && displayed) displayed.set(base.x, base.y, base.z + influences[index] * 0.34).applyMatrix3(rotation3);
+      }
+      for (let index = 0; index < MAX_SEGMENTS; index += 1) {
+        segmentActivity[index] += (segmentActivityTargets[index] - segmentActivity[index]) * blend;
+        if (Math.abs(segmentActivityTargets[index] - segmentActivity[index]) > 0.008) transitioning = true;
+        const segment = segments[index];
+        if (!segment) continue;
+        const activeAmount = Math.max(influences[segment.from], influences[segment.to]);
+        const a = uniforms.uSegmentA.value[index] as THREE.Vector3;
+        const b = uniforms.uSegmentB.value[index] as THREE.Vector3;
+        a.copy(segment.a);
+        b.copy(segment.b);
+        if (a.distanceTo(basePoints[segment.from]) < 0.001) a.z += influences[segment.from] * 0.34;
+        if (b.distanceTo(basePoints[segment.to]) < 0.001) b.z += influences[segment.to] * 0.34;
+        a.applyMatrix3(rotation3);
+        b.applyMatrix3(rotation3);
+        uniforms.uSegmentRadius.value[index] = segment.radius * (segment.rest + activeAmount * (1 - segment.rest));
+      }
       uniforms.uTime.value = reduceMotion ? 0 : elapsed;
       renderer.render(scene, camera);
-      frame = requestAnimationFrame(draw);
+      const rotating = dragging || Math.abs(targetYaw - yaw) + Math.abs(targetPitch - pitch) > 0.003;
+      if (!reduceMotion && (transitioning || rotating || now < activeUntil)) schedule();
+    }
+
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      inViewport = entry?.isIntersecting ?? true;
+      if (inViewport) wake(500);
+      else if (scheduledFrame) {
+        cancelAnimationFrame(scheduledFrame);
+        scheduledFrame = 0;
+      }
+    }, { threshold: 0.01 });
+    intersectionObserver.observe(mount);
+    const onVisibilityChange = () => {
+      if (!document.hidden) wake(500);
     };
-    frame = requestAnimationFrame(draw);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    schedule();
 
     return () => {
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(scheduledFrame);
+      intersectionObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("resize", resize);
       mount.removeEventListener("pointerdown", onPointerDown);
       mount.removeEventListener("pointermove", onPointerMove);
@@ -466,6 +517,7 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
       renderer.dispose();
       renderer.domElement.remove();
       resetRef.current = null;
+      wakeRef.current = null;
       onReadyChange(false);
     };
   }, [onReadyChange]);

@@ -6,9 +6,9 @@ export function SiteHeader({ inverse = false }: { inverse?: boolean }) {
         <span>Pat Dawson</span>
       </a>
       <nav aria-label="Primary navigation">
+        <a href="/#field">Map</a>
         <a href="/work">Work</a>
-        <a href="/#field">Play</a>
-        <a href="/studies">Studies</a>
+        <a href="/studies">Play</a>
         <a href="/about">About</a>
       </nav>
     </header>

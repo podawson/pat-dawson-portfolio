@@ -5,7 +5,7 @@ export default function WorkPage() {
   return (
     <main>
       <SiteHeader />
-      <section className="page-intro">
+      <section className="page-intro page-intro--work">
         <p className="kicker">Work / Index</p>
         <h1>Fourteen projects.<br />Many ways through.</h1>
         <p className="page-intro__lede">Use the lenses to follow a discipline, or move by adjacency. Hover, focus, or use the arrow keys to preview the work without leaving the Index.</p>
@@ -13,7 +13,7 @@ export default function WorkPage() {
       <section className="work-index" aria-label="Project Index">
         <ProjectGrid />
       </section>
-      <footer className="site-footer site-footer--light"><a href="/">← Back to the Field</a><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a></footer>
+      <footer className="site-footer site-footer--light"><a href="/">← Back to the Map</a><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a></footer>
     </main>
   );
 }

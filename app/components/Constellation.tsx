@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import fieldSeeds from "../field-seeds.json";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { projectConnections, projects, type ConnectionKind } from "../data";
+import { MapBody3D } from "../map/MapBody3D";
 
 const relationColor: Record<ConnectionKind, string> = {
   method: "#72d9e8",
@@ -131,60 +131,56 @@ function RestingGeometry() {
       context.drawImage(surface, -8, -13, width + 16, height + 20);
       context.restore();
 
-      const projected = (x: number, y: number) => {
-        const elevation = Math.max(0, elevationAt(x, y) - 0.04);
-        return {
-          x: x + (x / Math.max(width, 1) - 0.52) * elevation * 28,
-          y: y - elevation * 62,
-          elevation,
-        };
-      };
-
       context.save();
       context.globalCompositeOperation = "screen";
-      for (let row = 0; row <= 24; row += 1) {
-        context.beginPath();
-        for (let column = 0; column <= 60; column += 1) {
-          const point = projected(column / 60 * width, row / 24 * height);
-          if (column === 0) context.moveTo(point.x, point.y);
-          else context.lineTo(point.x, point.y);
-        }
-        context.strokeStyle = `rgba(205,226,244,${0.042 + row % 4 * 0.009})`;
-        context.lineWidth = row % 4 === 0 ? 0.7 : 0.38;
-        context.stroke();
-      }
-      for (let column = 0; column <= 42; column += 1) {
-        context.beginPath();
-        for (let row = 0; row <= 46; row += 1) {
-          const point = projected(column / 42 * width, row / 46 * height);
-          if (row === 0) context.moveTo(point.x, point.y);
-          else context.lineTo(point.x, point.y);
-        }
-        context.strokeStyle = `rgba(122,177,231,${0.03 + column % 5 * 0.008})`;
-        context.lineWidth = 0.42;
-        context.stroke();
-      }
-      context.restore();
+      context.lineCap = "round";
+      segments.forEach((segment, index) => {
+        const dx = segment.end.x - segment.start.x;
+        const dy = segment.end.y - segment.start.y;
+        const length = Math.max(1, Math.hypot(dx, dy));
+        const normalX = -dy / length;
+        const normalY = dx / length;
+        const seed = hashText(`${index}-${segment.kind}`);
+        const bend = ((seed % 29) - 14) * 1.8;
+        const center = {
+          x: (segment.start.x + segment.end.x) / 2 + normalX * bend,
+          y: (segment.start.y + segment.end.y) / 2 + normalY * bend,
+        };
+        const color = relationColor[segment.kind];
 
-      projects.forEach((project, index) => {
-        const point = pointFor(project.slug);
-        const projectedPoint = projected(point.x, point.y);
-        const seed = hashText(project.slug);
         context.save();
-        context.globalCompositeOperation = "screen";
-        context.translate(projectedPoint.x, projectedPoint.y);
-        context.rotate((seed % 360) / 360 * Math.PI);
-        for (let ring = 11; ring >= 0; ring -= 1) {
-          const radius = project.node.size * (0.8 + ring * 0.27);
-          const lift = (11 - ring) * 1.1;
+        context.filter = "blur(17px)";
+        context.globalAlpha = 0.12;
+        context.strokeStyle = color;
+        context.lineWidth = Math.max(44, scale * 0.072);
+        context.beginPath();
+        context.moveTo(segment.start.x, segment.start.y + 13);
+        context.quadraticCurveTo(center.x, center.y + 24, segment.end.x, segment.end.y + 13);
+        context.stroke();
+        context.restore();
+
+        for (let strand = -16; strand <= 16; strand += 1) {
+          const amount = strand / 16;
+          const spread = amount * Math.min(74, length * 0.15);
+          const flutter = Math.sin((strand + index) * 1.7) * 7;
           context.beginPath();
-          context.ellipse(lift * 0.22, -lift, radius * 1.65, radius * 0.82, index * 0.07, 0, Math.PI * 2);
-          context.strokeStyle = `rgba(${ring % 3 === 0 ? "226,241,246" : "137,177,228"},${0.045 + (11 - ring) * 0.01})`;
-          context.lineWidth = ring % 3 === 0 ? 0.72 : 0.38;
+          context.moveTo(
+            segment.start.x + normalX * spread * 0.18,
+            segment.start.y + normalY * spread * 0.18,
+          );
+          context.quadraticCurveTo(
+            center.x + normalX * (spread + flutter),
+            center.y + normalY * (spread + flutter) - Math.cos(amount * Math.PI) * 12,
+            segment.end.x + normalX * spread * 0.18,
+            segment.end.y + normalY * spread * 0.18,
+          );
+          context.strokeStyle = strand % 5 === 0 ? "rgba(230,238,255,.34)" : color;
+          context.globalAlpha = 0.055 + (1 - Math.abs(amount)) * 0.055;
+          context.lineWidth = strand % 5 === 0 ? 0.72 : 0.38;
           context.stroke();
         }
-        context.restore();
       });
+      context.restore();
     };
 
     const resize = () => {
@@ -491,7 +487,8 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
 
 export function Constellation() {
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
-  const [restSeed, setRestSeed] = useState(fieldSeeds.seeds[0]);
+  const [bodyReady, setBodyReady] = useState(false);
+  const handleBodyReady = useCallback((ready: boolean) => setBodyReady(ready), []);
   const active = useMemo(
     () => projects.find((project) => project.slug === activeSlug) ?? null,
     [activeSlug],
@@ -506,11 +503,6 @@ export function Constellation() {
     : [], [activeSlug]);
 
   useEffect(() => {
-    const daily = hashText(new Date().toISOString().slice(0, 10));
-    setRestSeed(fieldSeeds.seeds[daily % fieldSeeds.seeds.length]);
-  }, []);
-
-  useEffect(() => {
     if (!activeSlug) return;
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setActiveSlug(null);
@@ -520,9 +512,9 @@ export function Constellation() {
   }, [activeSlug]);
 
   return (
-    <section className={`field ${active ? "is-constellation" : ""}`} id="field" aria-labelledby="field-title">
-      <img className="field-resting-image" src={`/field/field-${restSeed}.svg`} alt="" fetchPriority="high" />
-      <RestingGeometry />
+    <section className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`} id="field" aria-labelledby="field-title">
+      <MapBody3D activeSlug={activeSlug} onReadyChange={handleBodyReady} />
+      {!bodyReady && <RestingGeometry />}
       <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         {projectConnections.map((connection) => (
           <g key={`${connection.from}-${connection.to}`}>
@@ -535,7 +527,7 @@ export function Constellation() {
       {active && <SelectedGeometry activeSlug={active.slug} />}
 
       <div className="field-copy">
-        <p className="kicker kicker--light">The Field</p>
+        <p className="kicker kicker--light">The Map</p>
         <h1 id="field-title">Nothing here is ever finished.</h1>
         <p>Select a project to reveal the methods, handoffs, agency boundaries, constraints, and lineages that hold the work together.</p>
       </div>

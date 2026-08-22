@@ -82,8 +82,8 @@ export function ProjectGrid() {
       </svg>
 
       <ol className="index-list" aria-label="Project Index">
-        {projects.map((project, index) => (
-          <li className={`${index === activeIndex ? "is-active" : ""} ${isVisible(index) ? "" : "is-filtered"}`} key={project.slug}>
+        {projects.map((project, index) => isVisible(index) ? (
+          <li className={index === activeIndex ? "is-active" : ""} key={project.slug}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <a
               href={`/work/${project.slug}`}
@@ -105,7 +105,7 @@ export function ProjectGrid() {
             </a>
             <em>{project.indexPill}</em>
           </li>
-        ))}
+        ) : null)}
       </ol>
 
       <div className="index-preview-wrap">

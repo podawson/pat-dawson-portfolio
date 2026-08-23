@@ -36,6 +36,9 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
   const fromRef = useRef(activeIndex);
   const transitStartRef = useRef(0);
   const hoverIndexRef = useRef(-1);
+  const hoverShapeFromRef = useRef<Capsule | null>(null);
+  const hoverCurrentShapeRef = useRef<Capsule | null>(null);
+  const hoverMoveStartedRef = useRef(0);
   const hoverAmountRef = useRef(0);
   const hoverTargetRef = useRef(0);
   const hoverStartedRef = useRef(0);
@@ -70,7 +73,18 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
 
     const fromCapsule = capsules[fromRef.current] ?? capsules[activeRef.current];
     const toCapsule = capsules[activeRef.current];
-    const hoverCapsule = capsules[hoverIndexRef.current] ?? toCapsule;
+    const hoverTargetCapsule = capsules[hoverIndexRef.current] ?? toCapsule;
+    const hoverShapeFrom = hoverShapeFromRef.current ?? toCapsule;
+    const hoverMoveProgress = reducedMotionRef.current ? 1 : Math.max(0, Math.min(1, (now - hoverMoveStartedRef.current) / CORPUS_MOTION.navHoverIn));
+    const hoverMoveAmount = corpusEase(hoverMoveProgress);
+    const hoverCapsule: Capsule = {
+      ax: hoverShapeFrom.ax + (hoverTargetCapsule.ax - hoverShapeFrom.ax) * hoverMoveAmount,
+      ay: hoverShapeFrom.ay + (hoverTargetCapsule.ay - hoverShapeFrom.ay) * hoverMoveAmount,
+      bx: hoverShapeFrom.bx + (hoverTargetCapsule.bx - hoverShapeFrom.bx) * hoverMoveAmount,
+      by: hoverShapeFrom.by + (hoverTargetCapsule.by - hoverShapeFrom.by) * hoverMoveAmount,
+      radius: hoverShapeFrom.radius + (hoverTargetCapsule.radius - hoverShapeFrom.radius) * hoverMoveAmount,
+    };
+    hoverCurrentShapeRef.current = hoverCapsule;
     const centerOf = (capsule: Capsule) => ({
       x: (capsule.ax + capsule.bx) * 0.5,
       y: (capsule.ay + capsule.by) * 0.5,
@@ -125,7 +139,7 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
     }
     context.putImageData(image, 0, 0);
 
-    if (transiting || hovering) frameRef.current = requestAnimationFrame((time) => drawFrameRef.current(time));
+    if (transiting || hovering || hoverMoveProgress < 1) frameRef.current = requestAnimationFrame((time) => drawFrameRef.current(time));
   }, [inverse]);
 
   useEffect(() => { drawFrameRef.current = draw; }, [draw]);
@@ -188,6 +202,10 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
 
   const setHover = useCallback((index: number, target: number) => {
     if (reducedMotionRef.current) return;
+    if (target > 0 && index !== hoverIndexRef.current) {
+      hoverShapeFromRef.current = hoverCurrentShapeRef.current ?? capsulesRef.current[activeRef.current] ?? null;
+      hoverMoveStartedRef.current = performance.now();
+    }
     hoverIndexRef.current = index;
     hoverFromRef.current = hoverAmountRef.current;
     hoverTargetRef.current = target;

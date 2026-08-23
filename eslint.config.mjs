@@ -10,6 +10,10 @@ import tseslint from "typescript-eslint";
 const eslintConfig = defineConfig([
   globalIgnores([
     ".next/**",
+    ".openai/**",
+    ".tmp/**",
+    ".vinext/**",
+    ".wrangler/**",
     "dist/**",
     "out/**",
     "build/**",
@@ -34,6 +38,11 @@ const eslintConfig = defineConfig([
       react: {
         version: "detect",
       },
+    },
+    rules: {
+      // Native document navigation is intentional: the current production
+      // adapter's enhanced-link prefetch layer fails before routes resolve.
+      "@next/next/no-html-link-for-pages": "off",
     },
   },
 ]);

@@ -203,7 +203,7 @@ export const projects: Project[] = [
     image: "/work/intuit.jpg",
     indexPill: "500 images, four decisions",
     categories: ["Experience", "Place", "AI systems"],
-    node: { x: 61.4, y: 28.4, size: 29 },
+    node: { x: 54.8, y: 42.2, size: 29 },
     metrics: ["500+ generated visualizations", "4 curated decision-moving images", "1st physical-AI customer space in portfolio"],
     artifacts: ["Workshop-to-prompt translation", "500→4 curation funnel", "Temporary / permanent delivery timeline"],
     details: [
@@ -228,7 +228,7 @@ export const projects: Project[] = [
     indexPill: "150-year archive, one passage",
     categories: ["Experience", "AI systems", "Place"],
     featured: true,
-    node: { x: 65.2, y: 19.4, size: 34 },
+    node: { x: 58.8, y: 30.2, size: 34 },
     metrics: ["5 hardware zones", "15 generative modes", "150-year archive taxonomy"],
     artifacts: ["Mode and content taxonomy", "Systems / commissioning map", "Directional-audio field study"],
     details: [
@@ -378,7 +378,7 @@ export const projects: Project[] = [
     indexPill: "a ghost with guardrails",
     categories: ["AI systems", "Culture"],
     featured: true,
-    node: { x: 57.6, y: 37.4, size: 34 },
+    node: { x: 54.2, y: 35.4, size: 34 },
     metrics: ["~10,000 active chatbot users", "1.2M X followers (audience)", "Script → voice → published episode"],
     artifacts: ["Private/public corpus boundary map", "Character runtime + channel architecture", "Podcast automation sequence"],
     details: [

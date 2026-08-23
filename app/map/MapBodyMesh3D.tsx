@@ -9,6 +9,7 @@ import { CORPUS_MOTION, CORPUS_SMOOTH_MIN_GLSL, corpusEase } from "../visualMoti
 type MapBody3DProps = {
   activeSlug: string | null;
   emphasizedSlugs?: readonly string[];
+  filterColor?: string | null;
   highlightedNeighbors?: readonly string[];
   onAxisPositionsChange?: (positions: Readonly<Record<"story" | "compute" | "atmosphere" | "architecture" | "center", { x: number; y: number; visible: boolean }>>) => void;
   onReadyChange: (ready: boolean) => void;
@@ -18,7 +19,7 @@ type MapBody3DProps = {
 
 const MAX_RELATED = 4;
 const MAX_EMPHASIZED = 14;
-const DEFAULT_ROTATION = new THREE.Euler(-0.09, 0.12, -0.025, "YXZ");
+const DEFAULT_ROTATION = new THREE.Euler(0, 0, 0, "YXZ");
 
 function fieldPosition(index: number) {
   const node = mapNodes3D[index];
@@ -89,7 +90,7 @@ const vertexShader = `
     float nextFilterHeat = emphasizedField(position, false);
     float filterHeat = mix(previousFilterHeat, nextFilterHeat, smoothstep(0.0, 1.0, uFilterTransition));
     float selectionHeat = 1.0 - corpusSmoothMin(1.0 - broadHeat * 0.42, 1.0 - localHeat, 0.08);
-    transformed += normalize(normal) * (filterHeat * 0.040 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
+    transformed += normalize(normal) * (filterHeat * 0.072 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
 
     vec4 viewPosition = modelViewMatrix * vec4(transformed, 1.0);
     vLocalPosition = transformed;
@@ -109,6 +110,11 @@ const fragmentShader = `
   uniform float uRelatedCount;
   uniform float uSelection;
   uniform float uSelectionBloom;
+  uniform vec3 uFilterColor;
+  uniform vec3 uPreviousFilterColor;
+  uniform float uFilterActive;
+  uniform float uPreviousFilterActive;
+  uniform float uFilterTransition;
   varying vec3 vLocalPosition;
   varying vec3 vWorldNormal;
   varying vec3 vViewPosition;
@@ -146,17 +152,24 @@ const fragmentShader = `
     color += pearl * key * 0.24;
     color += mix(violet, cyan, depthTone) * fresnel * 0.62;
     color = mix(color, cyan, clamp(relatedHeat(vLocalPosition), 0.0, 0.38));
-    color = mix(color, mix(violet, cyan, depthTone), clamp(vFilterHeat * 0.20, 0.0, 0.34));
+    float filterPresence = mix(uPreviousFilterActive, uFilterActive, smoothstep(0.0, 1.0, uFilterTransition));
+    float filterMask = smoothstep(0.06, 0.68, vFilterHeat);
+    vec3 relationshipHue = mix(uPreviousFilterColor, uFilterColor, smoothstep(0.0, 1.0, uFilterTransition));
+    float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
+    vec3 quietColor = mix(vec3(luminance), graphite, 0.42);
+    color = mix(color, quietColor, (1.0 - filterMask) * filterPresence * 0.56);
+    color = mix(color, relationshipHue, filterMask * filterPresence * 0.46);
     color = mix(color, pearl, clamp(vSelectionHeat * 0.68 + uSelectionBloom * vSelectionHeat * 0.18, 0.0, 0.78));
 
     gl_FragColor = vec4(color, 1.0);
   }
 `;
 
-export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onResetMap }: MapBody3DProps) {
+export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null, highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onResetMap }: MapBody3DProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeSlugRef = useRef(activeSlug);
   const emphasizedSlugsRef = useRef(emphasizedSlugs);
+  const filterColorRef = useRef(filterColor);
   const highlightedNeighborsRef = useRef(highlightedNeighbors);
   const wakeRef = useRef<(() => void) | null>(null);
   const resetRef = useRef<(() => void) | null>(null);
@@ -166,9 +179,10 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbo
   useEffect(() => {
     activeSlugRef.current = activeSlug;
     emphasizedSlugsRef.current = emphasizedSlugs;
+    filterColorRef.current = filterColor;
     highlightedNeighborsRef.current = highlightedNeighbors;
     wakeRef.current?.();
-  }, [activeSlug, emphasizedSlugs, highlightedNeighbors]);
+  }, [activeSlug, emphasizedSlugs, filterColor, highlightedNeighbors]);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -218,6 +232,10 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbo
       uEmphasizedCount: { value: 0 },
       uPreviousEmphasizedCount: { value: 0 },
       uFilterTransition: { value: 1 },
+      uFilterColor: { value: new THREE.Color(filterColorRef.current ?? "#72d9e8") },
+      uPreviousFilterColor: { value: new THREE.Color(filterColorRef.current ?? "#72d9e8") },
+      uFilterActive: { value: filterColorRef.current ? 1 : 0 },
+      uPreviousFilterActive: { value: filterColorRef.current ? 1 : 0 },
       uSelection: { value: 0 },
       uSelectionBloom: { value: 0 },
       uSelectionTransition: { value: 1 },
@@ -278,7 +296,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbo
     let lastActiveIndex: number | undefined;
     let lastFilterKey = "";
     let filterStarted = performance.now();
-    let filterDuration = 1300;
+    let filterDuration = 560;
     let isDragging = false;
     const defaultQuaternion = new THREE.Quaternion().setFromEuler(DEFAULT_ROTATION);
     const rotationQuaternion = defaultQuaternion.clone();
@@ -410,10 +428,12 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbo
       uniforms.uSelectionBloom.value = reduceMotion ? 0 : Math.sin(progress * Math.PI) * (1 - progress * 0.18);
       uniforms.uSelectionTransition.value = lastActiveIndex === undefined ? 0 : eased;
 
-      const filterKey = emphasizedSlugsRef.current.join(",");
+      const filterKey = `${filterColorRef.current ?? "all"}:${emphasizedSlugsRef.current.join(",")}`;
       if (filterKey !== lastFilterKey) {
         previousEmphasizedPoints.forEach((point, index) => point.copy(emphasizedPoints[index]));
         uniforms.uPreviousEmphasizedCount.value = uniforms.uEmphasizedCount.value;
+        uniforms.uPreviousFilterColor.value.copy(uniforms.uFilterColor.value);
+        uniforms.uPreviousFilterActive.value = uniforms.uFilterActive.value;
         emphasizedPoints.forEach((point) => point.set(99, 99, 99));
         const indices = emphasizedSlugsRef.current.flatMap((slug) => {
           const index = nodeBySlug.get(slug);
@@ -421,9 +441,11 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbo
         }).slice(0, MAX_EMPHASIZED);
         indices.forEach((index, emphasizedIndex) => emphasizedPoints[emphasizedIndex].copy(nodeLocals[index]));
         uniforms.uEmphasizedCount.value = indices.length;
+        uniforms.uFilterColor.value.set(filterColorRef.current ?? "#72d9e8");
+        uniforms.uFilterActive.value = filterColorRef.current ? 1 : 0;
         uniforms.uFilterTransition.value = 0;
         filterStarted = now;
-        filterDuration = 1300;
+        filterDuration = 560;
         lastFilterKey = filterKey;
         wake(filterDuration + 120);
       }

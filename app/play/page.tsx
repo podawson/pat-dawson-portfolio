@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { SiteHeader } from "../components/SiteHeader";
 import { WaterStudy } from "../components/WaterStudy";
 
@@ -14,7 +13,7 @@ export default function PlayPage() {
       <WaterStudy />
       <section className="studies-footnote">
         <p>The surface is deliberately inspectable: one primitive, nineteen explicit parameters, four observational presets, and no simulated realism hiding how the atmosphere is made.</p>
-        <Link href="/#map">Return to the Corpus ↗</Link>
+        <a href="/#map">Return to the Corpus ↗</a>
       </section>
     </main>
   );

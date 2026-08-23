@@ -54,7 +54,7 @@ img { display: block; width: 100%; }
 .site-header--inverse { color: var(--cream); }
 .wordmark { align-items: center; display: flex; gap: 10px; text-transform: uppercase; }
 .wordmark-mark { align-items: center; border: 1px solid currentColor; border-radius: 50%; display: inline-flex; font-family: var(--sans); font-size: 16px; font-weight: 450; height: 28px; justify-content: center; width: 28px; }
-.wordmark > span:last-child { font-family: var(--brand); font-size: 20px; font-weight: 400; letter-spacing: .015em; line-height: 1; }
+.wordmark > span:last-child { font-family: var(--brand); font-size: 23px; font-weight: 400; letter-spacing: .015em; line-height: 1; }
 .site-header nav { display: flex; gap: 6px; justify-self: end; position: relative; }
 .site-header nav a { align-items: center; border: 1px solid transparent; border-radius: 999px; display: flex; font-size: 14px; font-weight: 500; gap: 7px; padding: 9px 15px; transition: color .18s ease, font-weight .18s ease; }
 .site-header nav a.is-active { font-weight: 680; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 42%, transparent); text-decoration-offset: 5px; text-decoration-thickness: 1px; }
@@ -369,18 +369,19 @@ img { display: block; width: 100%; }
 @keyframes relation-drift { to { stroke-dashoffset: -9px; } }
 .field-selected-geometry { height: 100%; inset: 0; pointer-events: none; position: absolute; width: 100%; z-index: 3; }
 .field-copy { left: 4.2vw; max-width: 255px; pointer-events: none; position: absolute; top: 104px; z-index: 8; }
-.field-copy h1 { font-family: var(--display); font-size: clamp(32px, 2.7vw, 46px); font-weight: 400; letter-spacing: -.045em; line-height: .92; margin: 13px 0 18px; }
+.field-copy h1 { font-family: var(--display); font-size: clamp(32px, 2.7vw, 46px); font-style: italic; font-weight: 400; letter-spacing: -.045em; line-height: .92; margin: 13px 0 18px; }
 .field-copy > p:last-child { color: var(--muted-on-dark); font-size: 13px; line-height: 1.52; margin: 0; }
 .field.is-constellation .field-copy { opacity: .72; transition: opacity .3s ease; }
 .field-relation-filter { align-items: center; bottom: 64px; display: flex; gap: 10px; left: 4.2vw; max-width: calc(100vw - 8.4vw); position: absolute; white-space: nowrap; z-index: 11; }
 .field.is-constellation .field-relation-filter { bottom: 112px; }
 .field-relation-filter > span { color: rgba(245,241,232,.42); display: block; flex: 0 0 auto; font-family: var(--mono); font-size: 8px; letter-spacing: .1em; margin: 0; text-transform: uppercase; }
 .field-relation-filter > div { display: flex; flex-wrap: nowrap; gap: 5px; max-width: none; }
-.field-relation-filter button { align-items: center; backdrop-filter: blur(12px); background: rgba(5,8,11,.64); border: 1px solid rgba(245,241,232,.18); border-radius: 999px; color: rgba(245,241,232,.62); cursor: pointer; display: inline-flex; font-family: var(--mono); font-size: 8px; gap: 5px; letter-spacing: .03em; padding: 6px 8px; }
+.field-relation-filter button { align-items: center; backdrop-filter: blur(12px); background: rgba(5,8,11,.64); border: 1px solid rgba(245,241,232,.18); border-radius: 999px; color: rgba(245,241,232,.62); cursor: pointer; display: inline-flex; font-family: var(--mono); font-size: 8px; gap: 5px; letter-spacing: .03em; padding: 6px 8px; position: relative; }
 .field-relation-filter button:hover, .field-relation-filter button:focus-visible { border-color: rgba(245,241,232,.48); color: var(--cream); outline: none; }
 .field-relation-filter button.is-active { background: rgba(245,241,232,.96); border-color: white; color: #080b0e; }
 .field-relation-filter button i { background: var(--relation-color); border-radius: 50%; box-shadow: 0 0 7px var(--relation-color); height: 5px; width: 5px; }
 .field-relation-filter button sup { font-size: 6px; opacity: .58; }
+.field-filter-announcement { clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }
 .field-axes { inset: 0; opacity: .46; pointer-events: none; position: absolute; z-index: 4; }
 .field-axes svg { height: 100%; inset: 0; overflow: visible; position: absolute; width: 100%; }
 .field-axes line { stroke: rgba(235,241,241,.19); stroke-width: .72px; vector-effect: non-scaling-stroke; }
@@ -397,8 +398,11 @@ img { display: block; width: 100%; }
 .field-node:hover, .field-node:focus-visible { border-color: #eafcff; box-shadow: 0 0 0 6px rgba(114,217,232,.08), 0 0 23px rgba(114,217,232,.22); outline: none; transform: translate(-50%,-50%) scale(1.18); z-index: 9; }
 .field-node:hover > strong, .field-node:focus-visible > strong, .field-node.is-active > strong { opacity: 1; }
 .field-node.is-quiet { opacity: .42; }
+.field-node.is-filter-muted { opacity: .25; }
+.field-node.is-filter-muted:hover, .field-node.is-filter-muted:focus-visible { opacity: .82; }
 .field-node.is-related { border-color: rgba(166,205,255,.86); box-shadow: 0 0 22px rgba(111,151,255,.3); opacity: .92; }
 .field-node.is-active { border-color: white; box-shadow: 0 0 0 6px rgba(111,151,255,.12), 0 0 34px rgba(114,217,232,.44); opacity: 1; transform: translate(-50%,-50%) scale(1.25); z-index: 10; }
+.field-node__relation-dot { background: var(--relation-color); border: 1px solid rgba(255,255,255,.8); border-radius: 50%; box-shadow: 0 0 8px var(--relation-color); height: 6px; position: absolute; right: -3px; top: -3px; width: 6px; }
 .map-selection-band { align-items: center; backdrop-filter: blur(18px); background: rgba(6,9,13,.92); border-top: 1px solid rgba(255,255,255,.42); bottom: 0; color: var(--text-on-dark); display: grid; gap: 18px; grid-template-columns: 54px minmax(180px,.78fr) minmax(360px,1.8fr) auto 28px; left: 0; min-height: 92px; padding: 13px 4.2vw; position: absolute; right: 0; z-index: 15; }
 .project-glyph { height: 50px; width: 50px; }
 .project-glyph rect, .project-glyph line, .project-glyph path { fill: none; stroke: rgba(214,229,234,.46); stroke-width: .8; vector-effect: non-scaling-stroke; }
@@ -595,9 +599,13 @@ img { display: block; width: 100%; }
   .map-selection-band__relations small { display: block; margin: 0 0 3px; }
   .map-selection-band__open { grid-column: 1 / -1; grid-row: 3; justify-self: start; }
   .map-selection-band__close { grid-column: 3; grid-row: 1; }
-  .field-relation-filter { bottom: 58px; left: 18px; max-width: calc(100vw - 36px); overflow-x: auto; right: 18px; }
+  .field-relation-filter { bottom: 58px; gap: 0; left: 18px; max-width: calc(100vw - 36px); overflow: visible; right: 18px; }
   .field.is-constellation .field-relation-filter { bottom: calc(30vh + 12px); }
-  .field-relation-filter > div { flex-wrap: nowrap; max-width: none; overflow-x: auto; }
+  .field-relation-filter > span { display: none; }
+  .field-relation-filter > div { flex-wrap: nowrap; gap: 3px; max-width: 100%; overflow: visible; width: 100%; }
+  .field-relation-filter button { flex: 1 1 auto; font-size: 6.8px; gap: 3px; justify-content: center; letter-spacing: 0; min-width: 0; padding: 5px 4px; }
+  .field-relation-filter button i { height: 4px; width: 4px; }
+  .field-relation-filter button sup { font-size: 5px; }
   .map-reset-view { bottom: calc(30vh + 14px); right: 18px; }
   .field-axis { font-size: 8px; }
   .field-caption { bottom: 16px; font-size: 9px; text-align: center; width: calc(100% - 44px); }

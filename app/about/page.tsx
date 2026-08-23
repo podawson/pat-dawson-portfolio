@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { SiteHeader } from "../components/SiteHeader";
 
 const focusAreas = [
@@ -60,7 +59,7 @@ export default function AboutPage() {
         <div className="education-list"><article><span>2021</span><div><h3>Master of Architecture</h3><p>Graduate study in architecture, technology, research, and delivery.</p></div></article><article><span>2019</span><div><h3>Bachelor of Science in Architecture</h3><p>Five-year co-op program integrating practice with studio education.</p></div></article></div>
       </section>
 
-      <footer className="site-footer"><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a><Link href="/work">Browse the work →</Link></footer>
+      <footer className="site-footer"><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a><a href="/work">Browse the work →</a></footer>
     </main>
   );
 }

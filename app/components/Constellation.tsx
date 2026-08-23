@@ -584,6 +584,12 @@ export function Constellation() {
   const emphasizedSlugs = useMemo(() => relationFilter === "all" ? [] : [...new Set(
     visibleConnections.flatMap((connection) => [connection.from, connection.to]),
   )], [relationFilter, visibleConnections]);
+  const relationshipProjectCounts = useMemo(() => Object.fromEntries(relationKinds.map((kind) => [
+    kind,
+    new Set(projectConnections
+      .filter((connection) => connection.kind === kind)
+      .flatMap((connection) => [connection.from, connection.to])).size,
+  ])) as Record<ConnectionKind, number>, []);
 
   useEffect(() => {
     if (!activeSlug) return;
@@ -596,7 +602,7 @@ export function Constellation() {
 
   return (
     <section className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`} id="map" aria-labelledby="field-title">
-      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} />
+      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} />
       {!bodyReady && <RestingGeometry />}
       <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         {visibleConnections.map((connection) => (
@@ -615,22 +621,28 @@ export function Constellation() {
       <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
         <span>Emphasize relationship</span>
         <div>
-          <button className={relationFilter === "all" ? "is-active" : ""} onClick={() => setRelationFilter("all")} type="button">
-            All<sup>{projectConnections.length}</sup>
+          <button aria-pressed={relationFilter === "all"} className={relationFilter === "all" ? "is-active" : ""} onClick={() => setRelationFilter("all")} type="button">
+            All<sup>{projects.length}</sup>
           </button>
           {relationKinds.map((kind) => (
             <button
+              aria-pressed={relationFilter === kind}
               className={relationFilter === kind ? "is-active" : ""}
               key={kind}
               onClick={() => setRelationFilter(kind)}
               style={{ "--relation-color": relationColor[kind] } as CSSProperties}
               type="button"
             >
-              <i />{relationLabel[kind]}<sup>{projectConnections.filter((connection) => connection.kind === kind).length}</sup>
+              <i />{relationLabel[kind]}<sup>{relationshipProjectCounts[kind]}</sup>
             </button>
           ))}
         </div>
       </div>
+      <p className="field-filter-announcement" aria-live="polite">
+        {relationFilter === "all"
+          ? `Showing all ${projects.length} projects.`
+          : `Emphasizing ${relationshipProjectCounts[relationFilter]} projects connected by ${relationLabel[relationFilter].toLowerCase()}.`}
+      </p>
 
       <div className="field-axes" ref={axisLayerRef} aria-hidden="true">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -667,9 +679,12 @@ export function Constellation() {
           const isQuiet = !isActive && ((active && !isRelated) || !matchesFilter);
           return (
             <button
-              className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${isQuiet ? "is-quiet" : ""}`}
+              className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${isQuiet ? "is-quiet" : ""} ${relationFilter !== "all" && !matchesFilter ? "is-filter-muted" : ""}`}
               key={project.slug}
-              onClick={() => setActiveSlug((current) => current === project.slug ? null : project.slug)}
+              onClick={() => {
+                if (relationFilter !== "all" && !matchesFilter) setRelationFilter("all");
+                setActiveSlug((current) => current === project.slug ? null : project.slug);
+              }}
               ref={(element) => { nodeRefs.current[index] = element; }}
               style={{
                 left: `${project.node.x}%`,
@@ -679,9 +694,10 @@ export function Constellation() {
                 "--node-order": index,
               } as CSSProperties}
               type="button"
-              aria-label={`Select ${project.title}`}
+              aria-label={`${isActive ? "Deselect" : "Select"} ${project.title}${relationFilter !== "all" && matchesFilter ? `, connected by ${relationLabel[relationFilter].toLowerCase()}` : ""}`}
             >
               <span>{String(index + 1).padStart(2, "0")}</span>
+              {relationFilter !== "all" && matchesFilter && <i className="field-node__relation-dot" style={{ "--relation-color": relationColor[relationFilter] } as CSSProperties} />}
               <strong>{project.title}</strong>
             </button>
           );

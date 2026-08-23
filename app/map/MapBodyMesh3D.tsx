@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { MarchingCubes } from "three/addons/objects/MarchingCubes.js";
 import { mapEdges3D, mapNodes3D } from "./graphGeometry";
+import { CORPUS_MOTION, CORPUS_SMOOTH_MIN_GLSL, corpusEase } from "../visualMotion";
 
 type MapBody3DProps = {
   activeSlug: string | null;
@@ -57,6 +58,8 @@ const vertexShader = `
   varying float vSelectionHeat;
   varying float vFilterHeat;
 
+  ${CORPUS_SMOOTH_MIN_GLSL}
+
   float pointField(vec3 point, vec3 fieldPoint) {
     float pointDistance = length(point - fieldPoint);
     return exp(-pointDistance * pointDistance * 8.4);
@@ -85,7 +88,7 @@ const vertexShader = `
     float previousFilterHeat = emphasizedField(position, true);
     float nextFilterHeat = emphasizedField(position, false);
     float filterHeat = mix(previousFilterHeat, nextFilterHeat, smoothstep(0.0, 1.0, uFilterTransition));
-    float selectionHeat = max(broadHeat * 0.42, localHeat);
+    float selectionHeat = 1.0 - corpusSmoothMin(1.0 - broadHeat * 0.42, 1.0 - localHeat, 0.08);
     transformed += normalize(normal) * (filterHeat * 0.040 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
 
     vec4 viewPosition = modelViewMatrix * vec4(transformed, 1.0);
@@ -269,7 +272,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbo
     let selection = 0;
     let selectionTarget = 0;
     let selectionFrom = 0;
-    let selectionDuration = 1500;
+    let selectionDuration = CORPUS_MOTION.selection;
     let selectionStarted = performance.now();
     let lastRelationKey: string | undefined;
     let lastActiveIndex: number | undefined;
@@ -401,7 +404,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbo
         wake(selectionDuration + 180);
       }
       const progress = reduceMotion ? 1 : THREE.MathUtils.clamp((now - selectionStarted) / selectionDuration, 0, 1);
-      const eased = progress * progress * (3 - 2 * progress);
+      const eased = corpusEase(progress);
       selection = THREE.MathUtils.lerp(selectionFrom, selectionTarget, eased);
       uniforms.uSelection.value = selection;
       uniforms.uSelectionBloom.value = reduceMotion ? 0 : Math.sin(progress * Math.PI) * (1 - progress * 0.18);

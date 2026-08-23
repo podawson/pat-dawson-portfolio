@@ -71,7 +71,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <section className="project-image-break"><img src={project.image} alt="" /></section>
 
         <nav className="next-project" aria-label="Next project">
-          <p className="micro">Next node</p>
           <a href={`/work/${next.slug}`}>{next.title} <span>↗</span></a>
           <p>{next.question}</p>
         </nav>

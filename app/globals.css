@@ -55,10 +55,20 @@ img { display: block; width: 100%; }
 .wordmark { align-items: center; display: flex; gap: 10px; text-transform: uppercase; }
 .wordmark-mark { align-items: center; border: 1px solid currentColor; border-radius: 50%; display: inline-flex; font-family: var(--sans); font-size: 16px; font-weight: 450; height: 28px; justify-content: center; width: 28px; }
 .wordmark > span:last-child { font-family: var(--brand); font-size: 20px; font-weight: 400; letter-spacing: .015em; line-height: 1; }
-.site-header nav { display: flex; gap: 6px; justify-self: end; }
-.site-header nav a { align-items: center; border: 1px solid transparent; border-radius: 999px; display: flex; font-size: 14px; font-weight: 500; gap: 7px; padding: 9px 15px; }
-.site-header nav a.is-active::before { background: currentColor; border-radius: 50%; content: ""; height: 4px; width: 4px; }
-.site-header nav a:hover, .site-header nav a:focus-visible { border-color: currentColor; outline: none; }
+.site-header nav { display: flex; gap: 6px; justify-self: end; position: relative; }
+.site-header nav a { align-items: center; border: 1px solid transparent; border-radius: 999px; display: flex; font-size: 14px; font-weight: 500; gap: 7px; padding: 9px 15px; transition: color .18s ease, font-weight .18s ease; }
+.site-header nav a.is-active { font-weight: 680; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 42%, transparent); text-decoration-offset: 5px; text-decoration-thickness: 1px; }
+.site-header nav a:hover, .site-header nav a:focus-visible { color: color-mix(in srgb, currentColor 78%, white); outline: none; }
+.nav-metaball { height: calc(100% + 24px); inset: -12px; pointer-events: none; position: absolute; width: calc(100% + 24px); z-index: 0; }
+
+@media (forced-colors: active) {
+  .nav-metaball { display: none; }
+  .site-header nav a.is-active { text-decoration-color: currentColor; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header nav a { transition: none; }
+}
 
 .kicker, .micro { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; margin: 0; text-transform: uppercase; }
 .kicker--light { color: rgba(245, 241, 232, .62); }

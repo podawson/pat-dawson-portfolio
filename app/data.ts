@@ -278,7 +278,7 @@ export const projects: Project[] = [
     artifactImage: "/work/mapping-investments.svg",
     indexPill: "history you can navigate",
     categories: ["AI systems", "Place", "Culture"],
-    node: { x: 76.6, y: 46.4, size: 26 },
+    node: { x: 67.2, y: 55.2, size: 26 },
     metrics: ["13 sites", "3 eras", "90 years of neighborhood history"],
     artifacts: ["Prompt contracts + regression guards", "Land-over-time state diagram", "Cartographic system comparison"],
     details: [

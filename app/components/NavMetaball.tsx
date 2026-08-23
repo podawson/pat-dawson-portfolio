@@ -71,12 +71,33 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
     const fromCapsule = capsules[fromRef.current] ?? capsules[activeRef.current];
     const toCapsule = capsules[activeRef.current];
     const hoverCapsule = capsules[hoverIndexRef.current] ?? toCapsule;
+    const centerOf = (capsule: Capsule) => ({
+      x: (capsule.ax + capsule.bx) * 0.5,
+      y: (capsule.ay + capsule.by) * 0.5,
+    });
+    const fromCenter = centerOf(fromCapsule);
+    const toCenter = centerOf(toCapsule);
+    const hoverCenter = centerOf(hoverCapsule);
     const centerGap = Math.abs((fromCapsule.ax + fromCapsule.bx - toCapsule.ax - toCapsule.bx) * 0.5);
     const bridge = transiting ? Math.pow(Math.sin(Math.PI * transitProgress), 0.72) : 0;
     const blend = CORPUS_MOTION.smoothMinRest + centerGap * 1.8 * bridge;
     const hoverGap = Math.abs((hoverCapsule.ax + hoverCapsule.bx - toCapsule.ax - toCapsule.bx) * 0.5);
-    const hoverBlend = CORPUS_MOTION.smoothMinRest + hoverGap * 0.24 * hoverAmountRef.current;
-    const color = inverse ? [245, 241, 232] : [23, 32, 27];
+    const hoverBlend = CORPUS_MOTION.smoothMinRest + hoverGap * 0.08 * hoverAmountRef.current;
+    const transitBridgeCapsule: Capsule = {
+      ax: fromCenter.x,
+      ay: fromCenter.y,
+      bx: toCenter.x,
+      by: toCenter.y,
+      radius: Math.min(fromCapsule.radius, toCapsule.radius) * (0.18 + bridge * 0.82),
+    };
+    const hoverBridgeCapsule: Capsule = {
+      ax: toCenter.x,
+      ay: toCenter.y,
+      bx: hoverCenter.x,
+      by: hoverCenter.y,
+      radius: Math.min(toCapsule.radius, hoverCapsule.radius) * 0.23,
+    };
+    const color = inverse ? [202, 205, 204] : [62, 67, 65];
 
     for (let py = 0; py < height; py += 1) {
       const y = py / ratio;
@@ -84,13 +105,17 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
         const x = px / ratio;
         const distanceFrom = capsuleDistance(x, y, fromCapsule, fromAmount);
         const distanceTo = capsuleDistance(x, y, toCapsule, toAmount);
-        const distanceHover = capsuleDistance(x, y, hoverCapsule, hoverAmountRef.current * 0.6);
-        const activeDistance = corpusSmoothMin(distanceFrom, distanceTo, blend);
-        const distance = corpusSmoothMin(activeDistance, distanceHover, hoverBlend);
+        const distanceTransitBridge = capsuleDistance(x, y, transitBridgeCapsule, transiting ? bridge : 0);
+        const distanceHoverBridge = capsuleDistance(x, y, hoverBridgeCapsule, Math.sqrt(hoverAmountRef.current));
+        const distanceHover = capsuleDistance(x, y, hoverCapsule, hoverAmountRef.current);
+        const activeCapsules = corpusSmoothMin(distanceFrom, distanceTo, blend);
+        const activeDistance = corpusSmoothMin(activeCapsules, distanceTransitBridge, CORPUS_MOTION.smoothMinRest);
+        const hoverDistance = corpusSmoothMin(distanceHoverBridge, distanceHover, hoverBlend);
+        const distance = corpusSmoothMin(activeDistance, hoverDistance, CORPUS_MOTION.smoothMinRest);
         const antialias = 0.9 / ratio;
         const fill = 1 - Math.max(0, Math.min(1, (distance + antialias) / (antialias * 2)));
         const rim = Math.max(0, 1 - Math.abs(distance) / 2.2) * 0.42;
-        const alpha = Math.max(0, Math.min(255, Math.round((fill * 0.105 + rim * 0.045) * 255)));
+        const alpha = Math.max(0, Math.min(255, Math.round((fill * 0.11 + rim * 0.045) * 255)));
         const offset = (py * width + px) * 4;
         image.data[offset] = color[0];
         image.data[offset + 1] = color[1];

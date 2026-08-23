@@ -451,7 +451,7 @@ img { display: block; width: 100%; }
 .index-lenses button.is-active { background: var(--ink); color: var(--cream); }
 .index-lenses sup { font-size: 7px; margin-left: 5px; }
 .index-list { list-style: none; margin: 0; padding: 0; position: relative; width: 54%; z-index: 3; }
-.index-list li { align-items: center; display: grid; gap: 11px; grid-template-columns: 23px minmax(0,auto) 1fr; height: clamp(21px,3vh,28px); opacity: .38; transition: opacity .2s ease; }
+.index-list li { align-items: center; display: grid; gap: 11px; grid-template-columns: 23px minmax(0,auto) 1fr; height: clamp(21px,3vh,28px); opacity: .38; pointer-events: auto; transition: opacity .2s ease; }
 .index-list li > span { color: var(--muted); font-family: var(--mono); font-size: 9px; }
 .index-list li > a { font-family: var(--display); font-size: clamp(20.7px,1.78vw,28.75px); font-weight: 500; letter-spacing: -.03em; line-height: .95; outline: none; white-space: nowrap; width: fit-content; }
 .index-list li > em { background: var(--rust); border-radius: 999px; color: white; font-family: var(--mono); font-size: 9.2px; font-style: normal; font-weight: 700; justify-self: start; letter-spacing: .02em; opacity: 0; padding: 6px 9px; transform: translateX(-8px); transition: opacity .18s ease, transform .18s ease; white-space: nowrap; }
@@ -461,7 +461,7 @@ img { display: block; width: 100%; }
 .index-preview-wrap { bottom: 0; left: 62%; position: absolute; right: 0; top: 53px; z-index: 3; }
 .index-preview { position: sticky; top: 110px; }
 .index-preview > div:first-child { background: #e5e2da; height: min(22vw,250px); overflow: hidden; }
-.index-preview img { height: 100%; object-fit: cover; }
+.index-preview img { height: 100%; object-fit: cover; transition: opacity .16s ease; }
 .index-preview > .micro { color: var(--muted); margin-top: 18px; }
 .index-preview h2 { font-family: var(--display); font-size: 29px; font-weight: 400; letter-spacing: -.035em; margin: 8px 0; }
 .index-preview > p:not(.micro) { color: var(--muted); font-size: 11px; line-height: 1.45; max-width: 540px; }

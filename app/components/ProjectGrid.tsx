@@ -10,6 +10,7 @@ export function ProjectGrid() {
   const shellRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const cardRef = useRef<HTMLDivElement>(null);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const active = projects[activeIndex];
   const isVisible = (index: number) => lens === "All" || projects[index].categories.includes(lens);
 
@@ -26,6 +27,31 @@ export function ProjectGrid() {
     window.addEventListener("popstate", readLens);
     return () => window.removeEventListener("popstate", readLens);
   }, []);
+
+  useEffect(() => {
+    projects.forEach((project) => {
+      const image = new Image();
+      image.src = project.image;
+    });
+    return () => {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    };
+  }, []);
+
+  const clearHoverIntent = () => {
+    if (!hoverTimerRef.current) return;
+    clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = null;
+  };
+
+  const queueHoverIntent = (index: number) => {
+    clearHoverIntent();
+    if (!isVisible(index) || index === activeIndex) return;
+    hoverTimerRef.current = setTimeout(() => {
+      setActiveIndex(index);
+      hoverTimerRef.current = null;
+    }, 110);
+  };
 
   const selectLens = (item: "All" | Category) => {
     setLens(item);
@@ -94,13 +120,20 @@ export function ProjectGrid() {
 
       <ol className="index-list" aria-label="Project Index">
         {projects.map((project, index) => isVisible(index) ? (
-          <li className={index === activeIndex ? "is-active" : ""} key={project.slug}>
+          <li
+            className={index === activeIndex ? "is-active" : ""}
+            key={project.slug}
+            onPointerEnter={() => queueHoverIntent(index)}
+            onPointerLeave={clearHoverIntent}
+          >
             <span>{String(index + 1).padStart(2, "0")}</span>
             <a
               href={`/work/${project.slug}`}
               ref={(element) => { itemRefs.current[index] = element; }}
-              onFocus={() => isVisible(index) && setActiveIndex(index)}
-              onMouseEnter={() => isVisible(index) && setActiveIndex(index)}
+              onFocus={() => {
+                clearHoverIntent();
+                if (isVisible(index)) setActiveIndex(index);
+              }}
               onKeyDown={(event) => {
                 if (event.key === "ArrowDown" || event.key === "ArrowRight") { event.preventDefault(); move(1); }
                 if (event.key === "ArrowUp" || event.key === "ArrowLeft") { event.preventDefault(); move(-1); }
@@ -124,7 +157,7 @@ export function ProjectGrid() {
       </ol>
 
       <div className="index-preview-wrap">
-        <article className="index-preview" ref={cardRef} key={active.slug}>
+        <article className="index-preview" ref={cardRef}>
           <div><img src={active.image} alt="" /></div>
           <p className="micro">{active.eyebrow} · {active.year}</p>
           <h2>{active.title}</h2>

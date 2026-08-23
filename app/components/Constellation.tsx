@@ -6,10 +6,10 @@ import { MapBody3D } from "../map/MapBodyMesh3D";
 import { ProjectGlyph } from "./ProjectGlyph";
 
 const relationColor: Record<ConnectionKind, string> = {
-  method: "#72d9e8",
+  method: "#63c99a",
   handoff: "#f58a61",
   agency: "#a6a7ff",
-  constraint: "#d9e6e4",
+  constraint: "#e4c85d",
   lineage: "#e09ac6",
 };
 
@@ -564,6 +564,10 @@ export function Constellation() {
     setActiveSlug(null);
     setRelationFilter("all");
   }, []);
+  const selectRelationFilter = useCallback((filter: "all" | ConnectionKind) => {
+    setActiveSlug(null);
+    setRelationFilter(filter);
+  }, []);
   const active = useMemo(
     () => projects.find((project) => project.slug === activeSlug) ?? null,
     [activeSlug],
@@ -621,7 +625,7 @@ export function Constellation() {
       <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
         <span>Emphasize relationship</span>
         <div>
-          <button aria-pressed={relationFilter === "all"} className={relationFilter === "all" ? "is-active" : ""} onClick={() => setRelationFilter("all")} type="button">
+          <button aria-pressed={relationFilter === "all"} className={relationFilter === "all" ? "is-active" : ""} onClick={() => selectRelationFilter("all")} type="button">
             All<sup>{projects.length}</sup>
           </button>
           {relationKinds.map((kind) => (
@@ -629,7 +633,7 @@ export function Constellation() {
               aria-pressed={relationFilter === kind}
               className={relationFilter === kind ? "is-active" : ""}
               key={kind}
-              onClick={() => setRelationFilter(kind)}
+              onClick={() => selectRelationFilter(kind)}
               style={{ "--relation-color": relationColor[kind] } as CSSProperties}
               type="button"
             >

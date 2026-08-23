@@ -402,7 +402,6 @@ img { display: block; width: 100%; }
 .field-node.is-filter-muted:hover, .field-node.is-filter-muted:focus-visible { opacity: .82; }
 .field-node.is-related { border-color: rgba(166,205,255,.86); box-shadow: 0 0 22px rgba(111,151,255,.3); opacity: .92; }
 .field-node.is-active { border-color: white; box-shadow: 0 0 0 6px rgba(111,151,255,.12), 0 0 34px rgba(114,217,232,.44); opacity: 1; transform: translate(-50%,-50%) scale(1.25); z-index: 10; }
-.field-node__relation-dot { background: var(--relation-color); border: 1px solid rgba(255,255,255,.8); border-radius: 50%; box-shadow: 0 0 8px var(--relation-color); height: 6px; position: absolute; right: -3px; top: -3px; width: 6px; }
 .map-selection-band { align-items: center; backdrop-filter: blur(18px); background: rgba(6,9,13,.92); border-top: 1px solid rgba(255,255,255,.42); bottom: 0; color: var(--text-on-dark); display: grid; gap: 18px; grid-template-columns: 54px minmax(180px,.78fr) minmax(360px,1.8fr) auto 28px; left: 0; min-height: 92px; padding: 13px 4.2vw; position: absolute; right: 0; z-index: 15; }
 .project-glyph { height: 50px; width: 50px; }
 .project-glyph rect, .project-glyph line, .project-glyph path { fill: none; stroke: rgba(214,229,234,.46); stroke-width: .8; vector-effect: non-scaling-stroke; }

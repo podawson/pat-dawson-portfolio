@@ -701,7 +701,6 @@ export function Constellation() {
               aria-label={`${isActive ? "Deselect" : "Select"} ${project.title}${relationFilter !== "all" && matchesFilter ? `, connected by ${relationLabel[relationFilter].toLowerCase()}` : ""}`}
             >
               <span>{String(index + 1).padStart(2, "0")}</span>
-              {relationFilter !== "all" && matchesFilter && <i className="field-node__relation-dot" style={{ "--relation-color": relationColor[relationFilter] } as CSSProperties} />}
               <strong>{project.title}</strong>
             </button>
           );

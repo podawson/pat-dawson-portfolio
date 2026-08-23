@@ -14,7 +14,7 @@ export default function PlayPage() {
       <WaterStudy />
       <section className="studies-footnote">
         <p>The surface is deliberately inspectable: one primitive, nineteen explicit parameters, four observational presets, and no simulated realism hiding how the atmosphere is made.</p>
-        <Link href="/#map">Return to the Map ↗</Link>
+        <Link href="/#map">Return to the Corpus ↗</Link>
       </section>
     </main>
   );

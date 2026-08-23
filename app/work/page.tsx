@@ -14,7 +14,7 @@ export default function WorkPage() {
       <section className="work-index" aria-label="Project Index">
         <ProjectGrid />
       </section>
-      <footer className="site-footer"><Link href="/#map">← Back to the Map</Link><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a></footer>
+      <footer className="site-footer"><Link href="/#map">← Back to the Corpus</Link><a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a></footer>
     </main>
   );
 }

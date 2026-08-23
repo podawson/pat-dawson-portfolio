@@ -609,11 +609,10 @@ export function Constellation() {
       </svg>
       <div className="field-copy">
         <p className="kicker kicker--light">The Corpus</p>
-        <h1 id="field-title">It grows.</h1>
-        <p>Select a project to reveal the methods, handoffs, judgment, constraints, and lineages that hold the work together.</p>
+        <h1 id="field-title">It Grows</h1>
       </div>
 
-      <div className="field-relation-filter" role="group" aria-label="Filter the map by relationship">
+      <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
         <span>Emphasize relationship</span>
         <div>
           <button className={relationFilter === "all" ? "is-active" : ""} onClick={() => setRelationFilter("all")} type="button">

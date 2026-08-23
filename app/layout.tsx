@@ -21,14 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     icons: { icon: "/icon.png", shortcut: "/icon.png" },
     openGraph: {
-      title: "Pat Dawson — Nothing here is ever finished.",
+      title: "Pat Dawson — It Grows",
       description,
       type: "website",
-      images: [{ url: preview, width: 1800, height: 942, alt: "Pat Dawson — Nothing here is ever finished. Places, stories, systems." }],
+      images: [{ url: preview, width: 1800, height: 942, alt: "Pat Dawson — It Grows. Places, stories, systems." }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Pat Dawson — Nothing here is ever finished.",
+      title: "Pat Dawson — It Grows",
       description,
       images: [preview],
     },

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export function SiteHeader({ inverse = false }: { inverse?: boolean }) {
   const pathname = usePathname();
   const items = [
-    { href: "/", label: "Map", active: pathname === "/" },
+    { href: "/", label: "Corpus", active: pathname === "/" },
     { href: "/work", label: "Work", active: pathname.startsWith("/work") },
     { href: "/play", label: "Play", active: pathname === "/play" || pathname === "/studies" || pathname === "/playground" },
     { href: "/about", label: "About", active: pathname === "/about" },

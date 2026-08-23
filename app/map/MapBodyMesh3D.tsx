@@ -508,13 +508,13 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbo
   }, [onAxisPositionsChange, onNodePositionsChange, onReadyChange]);
 
   return (
-    <div className={`field-body-3d ${dragging ? "is-dragging" : ""}`} ref={mountRef} aria-label="Drag freely to rotate the project map geometry in three dimensions">
+    <div className={`field-body-3d ${dragging ? "is-dragging" : ""}`} ref={mountRef} aria-label="Drag freely to rotate the project Corpus in three dimensions">
       <button
         className={`map-reset-view ${rotated ? "is-rotated" : ""}`}
         onClick={(event) => { event.stopPropagation(); resetRef.current?.(); onResetMap?.(); }}
         onPointerDown={(event) => event.stopPropagation()}
         type="button"
-      >Reset map</button>
+      >Reset Corpus</button>
     </div>
   );
 }

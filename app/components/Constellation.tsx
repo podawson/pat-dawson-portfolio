@@ -21,6 +21,8 @@ const relationLabel: Record<ConnectionKind, string> = {
   lineage: "Lineage",
 };
 
+const relationKinds: ConnectionKind[] = ["method", "handoff", "agency", "constraint", "lineage"];
+
 function hashText(value: string) {
   let hash = 2166136261;
   for (let index = 0; index < value.length; index += 1) {
@@ -497,9 +499,11 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
 export function Constellation() {
   void SelectedGeometry;
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const [relationFilter, setRelationFilter] = useState<ConnectionKind | "all">("all");
   const [bodyReady, setBodyReady] = useState(false);
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const connectionLayerRef = useRef<SVGSVGElement | null>(null);
+  const axisLayerRef = useRef<HTMLDivElement | null>(null);
   const handleBodyReady = useCallback((ready: boolean) => setBodyReady(ready), []);
   const handleNodePositions = useCallback((positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => {
     positions.forEach((position, index) => {
@@ -520,18 +524,66 @@ export function Constellation() {
       line.style.visibility = from.visible && to.visible ? "visible" : "hidden";
     });
   }, []);
+  const handleAxisPositions = useCallback((positions: Readonly<Record<"story" | "compute" | "atmosphere" | "architecture" | "center", { x: number; y: number; visible: boolean }>>) => {
+    const layer = axisLayerRef.current;
+    if (!layer) return;
+    const setLine = (name: string, from: typeof positions.story, to: typeof positions.story) => {
+      const line = layer.querySelector<SVGLineElement>(`line[data-axis-line="${name}"]`);
+      if (!line) return;
+      line.setAttribute("x1", String(from.x));
+      line.setAttribute("y1", String(from.y));
+      line.setAttribute("x2", String(to.x));
+      line.setAttribute("y2", String(to.y));
+      line.style.visibility = from.visible && to.visible ? "visible" : "hidden";
+    };
+    setLine("horizontal", positions.story, positions.compute);
+    setLine("vertical", positions.atmosphere, positions.architecture);
+    const readableAngle = (from: typeof positions.story, to: typeof positions.story) => {
+      let angle = Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI;
+      if (angle > 90) angle -= 180;
+      if (angle < -90) angle += 180;
+      return angle;
+    };
+    const horizontalAngle = readableAngle(positions.story, positions.compute);
+    const verticalAngle = readableAngle(positions.architecture, positions.atmosphere);
+    (["story", "compute", "atmosphere", "architecture"] as const).forEach((key) => {
+      const label = layer.querySelector<HTMLElement>(`[data-axis-label="${key}"]`);
+      if (!label) return;
+      label.style.left = `${positions[key].x}%`;
+      label.style.top = `${positions[key].y}%`;
+      label.style.visibility = positions[key].visible ? "visible" : "hidden";
+      label.style.setProperty("--axis-angle", `${key === "story" || key === "compute" ? horizontalAngle : verticalAngle}deg`);
+    });
+    const center = layer.querySelector<HTMLElement>("[data-axis-center]");
+    if (center) {
+      center.style.left = `${positions.center.x}%`;
+      center.style.top = `${positions.center.y}%`;
+    }
+  }, []);
+  const resetMap = useCallback(() => {
+    setActiveSlug(null);
+    setRelationFilter("all");
+  }, []);
   const active = useMemo(
     () => projects.find((project) => project.slug === activeSlug) ?? null,
     [activeSlug],
   );
-  const activeConnections = useMemo(() => activeSlug
+  const visibleConnections = useMemo(() => relationFilter === "all"
     ? projectConnections
+    : projectConnections.filter((connection) => connection.kind === relationFilter), [relationFilter]);
+  const activeConnections = useMemo(() => activeSlug
+    ? visibleConnections
       .filter((connection) => connection.from === activeSlug || connection.to === activeSlug)
       .map((connection) => ({
         ...connection,
         neighbor: projects.find((project) => project.slug === (connection.from === activeSlug ? connection.to : connection.from)),
       }))
-    : [], [activeSlug]);
+    : [], [activeSlug, visibleConnections]);
+  const highlightedNeighbors = useMemo(() => activeConnections
+    .flatMap((connection) => connection.neighbor?.slug ? [connection.neighbor.slug] : []), [activeConnections]);
+  const emphasizedSlugs = useMemo(() => relationFilter === "all" ? [] : [...new Set(
+    visibleConnections.flatMap((connection) => [connection.from, connection.to]),
+  )], [relationFilter, visibleConnections]);
 
   useEffect(() => {
     if (!activeSlug) return;
@@ -544,11 +596,11 @@ export function Constellation() {
 
   return (
     <section className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`} id="map" aria-labelledby="field-title">
-      <MapBody3D activeSlug={activeSlug} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} />
+      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} />
       {!bodyReady && <RestingGeometry />}
       <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        {projectConnections.map((connection) => (
-          <g key={`${connection.from}-${connection.to}`}>
+        {visibleConnections.map((connection) => (
+          <g key={`${connection.from}-${connection.to}-${connection.kind}`}>
             {[-1, 0, 1].map((strand) => (
               <path key={strand} d={restingPath(connection.from, connection.to, strand)} />
             ))}
@@ -556,24 +608,48 @@ export function Constellation() {
         ))}
       </svg>
       <div className="field-copy">
-        <p className="kicker kicker--light">The Map</p>
-        <h1 id="field-title">Nothing here is ever finished.</h1>
+        <p className="kicker kicker--light">The Corpus</p>
+        <h1 id="field-title">It grows.</h1>
         <p>Select a project to reveal the methods, handoffs, judgment, constraints, and lineages that hold the work together.</p>
       </div>
 
-      <div className="field-axes" aria-hidden="true">
-        <span className="field-axis field-axis--story">Storytelling</span>
-        <span className="field-axis field-axis--compute">Computation</span>
-        <span className="field-axis field-axis--atmosphere">Atmosphere</span>
-        <span className="field-axis field-axis--architecture">Architecture</span>
-        <i />
+      <div className="field-relation-filter" role="group" aria-label="Filter the map by relationship">
+        <span>Emphasize relationship</span>
+        <div>
+          <button className={relationFilter === "all" ? "is-active" : ""} onClick={() => setRelationFilter("all")} type="button">
+            All<sup>{projectConnections.length}</sup>
+          </button>
+          {relationKinds.map((kind) => (
+            <button
+              className={relationFilter === kind ? "is-active" : ""}
+              key={kind}
+              onClick={() => setRelationFilter(kind)}
+              style={{ "--relation-color": relationColor[kind] } as CSSProperties}
+              type="button"
+            >
+              <i />{relationLabel[kind]}<sup>{projectConnections.filter((connection) => connection.kind === kind).length}</sup>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="field-axes" ref={axisLayerRef} aria-hidden="true">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line data-axis-line="horizontal" />
+          <line data-axis-line="vertical" />
+        </svg>
+        <span className="field-axis field-axis--story" data-axis-label="story">Storytelling</span>
+        <span className="field-axis field-axis--compute" data-axis-label="compute">Computation</span>
+        <span className="field-axis field-axis--atmosphere" data-axis-label="atmosphere">Atmosphere</span>
+        <span className="field-axis field-axis--architecture" data-axis-label="architecture">Architecture</span>
+        <i data-axis-center />
       </div>
 
       {active && (
         <svg className="field-active-connections" ref={connectionLayerRef} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           {activeConnections.map((connection) => {
-            const fromIndex = projects.findIndex((project) => project.slug === connection.from);
-            const toIndex = projects.findIndex((project) => project.slug === connection.to);
+            const fromIndex = projects.findIndex((project) => project.slug === active.slug);
+            const toIndex = projects.findIndex((project) => project.slug === connection.neighbor?.slug);
             return (
               <g key={`${connection.from}-${connection.to}`} style={{ "--relation-color": relationColor[connection.kind] } as CSSProperties}>
                 <line className="field-active-connection-glow" data-from-index={fromIndex} data-to-index={toIndex} />
@@ -588,9 +664,11 @@ export function Constellation() {
         {projects.map((project, index) => {
           const isActive = active?.slug === project.slug;
           const isRelated = activeConnections.some((connection) => connection.neighbor?.slug === project.slug);
+          const matchesFilter = relationFilter === "all" || visibleConnections.some((connection) => connection.from === project.slug || connection.to === project.slug);
+          const isQuiet = !isActive && ((active && !isRelated) || !matchesFilter);
           return (
             <button
-              className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${active && !isActive && !isRelated ? "is-quiet" : ""}`}
+              className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${isQuiet ? "is-quiet" : ""}`}
               key={project.slug}
               onClick={() => setActiveSlug((current) => current === project.slug ? null : project.slug)}
               ref={(element) => { nodeRefs.current[index] = element; }}
@@ -619,19 +697,18 @@ export function Constellation() {
             <h2>{active.title}</h2>
           </div>
           <div className="map-selection-band__relations" aria-label="Related projects">
-            {activeConnections.slice(0, 4).map((connection) => (
+            {activeConnections.length ? activeConnections.slice(0, 4).map((connection) => (
               <button key={`${connection.from}-${connection.to}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
                 <i style={{ background: relationColor[connection.kind] }} />
                 <span><small>{relationLabel[connection.kind]}</small>{connection.neighbor?.title}</span>
               </button>
-            ))}
+            )) : <p className="map-selection-band__empty">No {relationFilter === "all" ? "related" : relationLabel[relationFilter].toLowerCase()} links recorded.</p>}
           </div>
           <a className="map-selection-band__open" href={`/work/${active.slug}`}>Open project ↗</a>
           <button className="map-selection-band__close" onClick={() => setActiveSlug(null)} type="button" aria-label="Close selection">×</button>
         </aside>
       )}
 
-      {!active && <p className="field-caption">Select a numbered bead to raise a constellation. Scroll for selected work ↓</p>}
     </section>
   );
 }

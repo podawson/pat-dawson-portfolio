@@ -7,11 +7,16 @@ import { mapEdges3D, mapNodes3D } from "./graphGeometry";
 
 type MapBody3DProps = {
   activeSlug: string | null;
+  emphasizedSlugs?: readonly string[];
+  highlightedNeighbors?: readonly string[];
+  onAxisPositionsChange?: (positions: Readonly<Record<"story" | "compute" | "atmosphere" | "architecture" | "center", { x: number; y: number; visible: boolean }>>) => void;
   onReadyChange: (ready: boolean) => void;
   onNodePositionsChange?: (positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => void;
+  onResetMap?: () => void;
 };
 
 const MAX_RELATED = 4;
+const MAX_EMPHASIZED = 14;
 const DEFAULT_ROTATION = new THREE.Euler(-0.09, 0.12, -0.025, "YXZ");
 
 function fieldPosition(index: number) {
@@ -35,25 +40,60 @@ function quadraticPoint(a: THREE.Vector3, control: THREE.Vector3, b: THREE.Vecto
 }
 
 const vertexShader = `
+  #define MAX_EMPHASIZED ${MAX_EMPHASIZED}
   uniform vec3 uActivePoint;
+  uniform vec3 uPreviousPoint;
+  uniform vec3 uEmphasizedPoints[MAX_EMPHASIZED];
+  uniform vec3 uPreviousEmphasizedPoints[MAX_EMPHASIZED];
+  uniform float uEmphasizedCount;
+  uniform float uPreviousEmphasizedCount;
+  uniform float uFilterTransition;
   uniform float uSelection;
   uniform float uSelectionBloom;
+  uniform float uSelectionTransition;
   varying vec3 vLocalPosition;
   varying vec3 vWorldNormal;
   varying vec3 vViewPosition;
   varying float vSelectionHeat;
+  varying float vFilterHeat;
+
+  float pointField(vec3 point, vec3 fieldPoint) {
+    float pointDistance = length(point - fieldPoint);
+    return exp(-pointDistance * pointDistance * 8.4);
+  }
+
+  float emphasizedField(vec3 point, bool previous) {
+    float heat = 0.0;
+    for (int index = 0; index < MAX_EMPHASIZED; index++) {
+      float count = previous ? uPreviousEmphasizedCount : uEmphasizedCount;
+      if (float(index) >= count) break;
+      heat += pointField(point, previous ? uPreviousEmphasizedPoints[index] : uEmphasizedPoints[index]);
+    }
+    return clamp(heat, 0.0, 1.35);
+  }
 
   void main() {
     vec3 transformed = position;
     float selectedDistance = length(position - uActivePoint);
-    float selectionHeat = exp(-selectedDistance * selectedDistance * 7.2) * uSelection;
-    transformed += normalize(normal) * selectionHeat * (0.07 + uSelectionBloom * 0.055);
+    float previousDistance = length(position - uPreviousPoint);
+    float transitionIn = smoothstep(0.02, 0.96, uSelectionTransition);
+    float transitionOut = 1.0 - smoothstep(0.04, 0.90, uSelectionTransition);
+    float broadHeat = (exp(-selectedDistance * selectedDistance * 2.35) * transitionIn + exp(-previousDistance * previousDistance * 2.35) * transitionOut) * smoothstep(0.0, 0.72, uSelection);
+    float localHeat = (exp(-selectedDistance * selectedDistance * 7.2) * transitionIn + exp(-previousDistance * previousDistance * 7.2) * transitionOut) * smoothstep(0.24, 1.0, uSelection);
+    float waveRadius = mix(0.78, 0.18, uSelection);
+    float travellingWave = exp(-pow(selectedDistance - waveRadius, 2.0) * 46.0) * uSelectionBloom;
+    float previousFilterHeat = emphasizedField(position, true);
+    float nextFilterHeat = emphasizedField(position, false);
+    float filterHeat = mix(previousFilterHeat, nextFilterHeat, smoothstep(0.0, 1.0, uFilterTransition));
+    float selectionHeat = max(broadHeat * 0.42, localHeat);
+    transformed += normalize(normal) * (filterHeat * 0.040 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
 
     vec4 viewPosition = modelViewMatrix * vec4(transformed, 1.0);
     vLocalPosition = transformed;
     vWorldNormal = normalize(mat3(modelMatrix) * normal);
     vViewPosition = -viewPosition.xyz;
     vSelectionHeat = selectionHeat;
+    vFilterHeat = filterHeat;
     gl_Position = projectionMatrix * viewPosition;
   }
 `;
@@ -70,6 +110,7 @@ const fragmentShader = `
   varying vec3 vWorldNormal;
   varying vec3 vViewPosition;
   varying float vSelectionHeat;
+  varying float vFilterHeat;
 
   float relatedHeat(vec3 point) {
     float heat = 0.0;
@@ -102,15 +143,18 @@ const fragmentShader = `
     color += pearl * key * 0.24;
     color += mix(violet, cyan, depthTone) * fresnel * 0.62;
     color = mix(color, cyan, clamp(relatedHeat(vLocalPosition), 0.0, 0.38));
+    color = mix(color, mix(violet, cyan, depthTone), clamp(vFilterHeat * 0.20, 0.0, 0.34));
     color = mix(color, pearl, clamp(vSelectionHeat * 0.68 + uSelectionBloom * vSelectionHeat * 0.18, 0.0, 0.78));
 
     gl_FragColor = vec4(color, 1.0);
   }
 `;
 
-export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: MapBody3DProps) {
+export function MapBody3D({ activeSlug, emphasizedSlugs = [], highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onResetMap }: MapBody3DProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeSlugRef = useRef(activeSlug);
+  const emphasizedSlugsRef = useRef(emphasizedSlugs);
+  const highlightedNeighborsRef = useRef(highlightedNeighbors);
   const wakeRef = useRef<(() => void) | null>(null);
   const resetRef = useRef<(() => void) | null>(null);
   const [rotated, setRotated] = useState(false);
@@ -118,8 +162,10 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
 
   useEffect(() => {
     activeSlugRef.current = activeSlug;
+    emphasizedSlugsRef.current = emphasizedSlugs;
+    highlightedNeighborsRef.current = highlightedNeighbors;
     wakeRef.current?.();
-  }, [activeSlug]);
+  }, [activeSlug, emphasizedSlugs, highlightedNeighbors]);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -146,15 +192,32 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
     const nodeFields = mapNodes3D.map((_, index) => fieldPosition(index));
     const nodeLocals = nodeFields.map(localPosition);
     const projectedNodes = nodeLocals.map(() => ({ x: 0, y: 0, visible: true }));
+    const axisLocals = {
+      story: new THREE.Vector3(-0.82, 0, 0),
+      compute: new THREE.Vector3(0.82, 0, 0),
+      atmosphere: new THREE.Vector3(0, 0.82, 0),
+      architecture: new THREE.Vector3(0, -0.82, 0),
+      center: new THREE.Vector3(0, 0, 0),
+    };
+    const projectedAxes = Object.fromEntries(Object.keys(axisLocals).map((key) => [key, { x: 0, y: 0, visible: true }])) as Record<keyof typeof axisLocals, { x: number; y: number; visible: boolean }>;
     const projectedPoint = new THREE.Vector3();
     const nodeBySlug = new Map(mapNodes3D.map((node, index) => [node.slug, index]));
     const relatedPoints = Array.from({ length: MAX_RELATED }, () => new THREE.Vector3(99, 99, 99));
+    const emphasizedPoints = Array.from({ length: MAX_EMPHASIZED }, () => new THREE.Vector3(99, 99, 99));
+    const previousEmphasizedPoints = Array.from({ length: MAX_EMPHASIZED }, () => new THREE.Vector3(99, 99, 99));
     const uniforms = {
       uActivePoint: { value: new THREE.Vector3(99, 99, 99) },
+      uPreviousPoint: { value: new THREE.Vector3(99, 99, 99) },
       uRelatedPoints: { value: relatedPoints },
       uRelatedCount: { value: 0 },
+      uEmphasizedPoints: { value: emphasizedPoints },
+      uPreviousEmphasizedPoints: { value: previousEmphasizedPoints },
+      uEmphasizedCount: { value: 0 },
+      uPreviousEmphasizedCount: { value: 0 },
+      uFilterTransition: { value: 1 },
       uSelection: { value: 0 },
       uSelectionBloom: { value: 0 },
+      uSelectionTransition: { value: 1 },
     };
     const material = new THREE.ShaderMaterial({
       vertexShader,
@@ -205,17 +268,34 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
     let renderUntil = performance.now() + 500;
     let selection = 0;
     let selectionTarget = 0;
+    let selectionFrom = 0;
+    let selectionDuration = 1500;
     let selectionStarted = performance.now();
-    let lastActive: string | null | undefined;
+    let lastRelationKey: string | undefined;
+    let lastActiveIndex: number | undefined;
+    let lastFilterKey = "";
+    let filterStarted = performance.now();
+    let filterDuration = 1300;
     let isDragging = false;
-    let pointerX = 0;
-    let pointerY = 0;
-    let rotationX = DEFAULT_ROTATION.x;
-    let rotationY = DEFAULT_ROTATION.y;
-    let velocityX = 0;
-    let velocityY = 0;
+    const defaultQuaternion = new THREE.Quaternion().setFromEuler(DEFAULT_ROTATION);
+    const rotationQuaternion = defaultQuaternion.clone();
+    const dragVector = new THREE.Vector3();
+    const nextDragVector = new THREE.Vector3();
+    const inertiaQuaternion = new THREE.Quaternion();
+    const identityQuaternion = new THREE.Quaternion();
+    const dragDelta = new THREE.Quaternion();
     let resetRequested = false;
     let rotationFlag = false;
+
+    const trackballPoint = (clientX: number, clientY: number, target: THREE.Vector3) => {
+      const bounds = mount.getBoundingClientRect();
+      const x = ((clientX - bounds.left) / Math.max(1, bounds.width)) * 2 - 1;
+      const y = -(((clientY - bounds.top) / Math.max(1, bounds.height)) * 2 - 1);
+      const radiusSquared = x * x + y * y;
+      if (radiusSquared <= 1) target.set(x, y, Math.sqrt(1 - radiusSquared));
+      else target.set(x, y, 0).normalize();
+      return target;
+    };
 
     const schedule = () => {
       if (!scheduledFrame && inViewport && !document.hidden) scheduledFrame = requestAnimationFrame(draw);
@@ -238,7 +318,7 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
     window.addEventListener("resize", resize);
 
     const updateRotationFlag = () => {
-      const changed = Math.abs(rotationX - DEFAULT_ROTATION.x) + Math.abs(rotationY - DEFAULT_ROTATION.y) > 0.025;
+      const changed = rotationQuaternion.angleTo(defaultQuaternion) > 0.025;
       if (changed !== rotationFlag) {
         rotationFlag = changed;
         setRotated(changed);
@@ -246,33 +326,28 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
     };
     resetRef.current = () => {
       resetRequested = true;
-      velocityX = 0;
-      velocityY = 0;
+      inertiaQuaternion.identity();
       wake(850);
     };
 
     const onPointerDown = (event: PointerEvent) => {
-      if (reduceMotion || event.button !== 0) return;
+      if (event.button !== 0) return;
+      if (event.target instanceof Element && event.target.closest(".map-reset-view")) return;
       isDragging = true;
       resetRequested = false;
-      pointerX = event.clientX;
-      pointerY = event.clientY;
-      velocityX = 0;
-      velocityY = 0;
+      trackballPoint(event.clientX, event.clientY, dragVector);
+      inertiaQuaternion.identity();
       mount.setPointerCapture(event.pointerId);
       setDragging(true);
       wake(800);
     };
     const onPointerMove = (event: PointerEvent) => {
-      if (!isDragging || reduceMotion) return;
-      const dx = event.clientX - pointerX;
-      const dy = event.clientY - pointerY;
-      pointerX = event.clientX;
-      pointerY = event.clientY;
-      velocityY = THREE.MathUtils.clamp(dx * 0.0048, -0.085, 0.085);
-      velocityX = THREE.MathUtils.clamp(dy * 0.0038, -0.064, 0.064);
-      rotationY += velocityY;
-      rotationX = THREE.MathUtils.clamp(rotationX + velocityX, -1.12, 1.12);
+      if (!isDragging) return;
+      trackballPoint(event.clientX, event.clientY, nextDragVector);
+      dragDelta.setFromUnitVectors(dragVector, nextDragVector);
+      rotationQuaternion.premultiply(dragDelta).normalize();
+      inertiaQuaternion.copy(dragDelta);
+      dragVector.copy(nextDragVector);
       updateRotationFlag();
       wake(500);
     };
@@ -291,38 +366,67 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
 
     function updateSelection(now: number) {
       const active = activeSlugRef.current;
-      if (active !== lastActive) {
-        const activeIndex = active ? nodeBySlug.get(active) : undefined;
+      const activeIndex = active ? nodeBySlug.get(active) : undefined;
+      const relationKey = highlightedNeighborsRef.current.join(",");
+      if (relationKey !== lastRelationKey) {
         relatedPoints.forEach((point) => point.set(99, 99, 99));
         if (activeIndex !== undefined) {
-          uniforms.uActivePoint.value.copy(nodeLocals[activeIndex]);
-          const neighbors = new Set<number>();
-          mapEdges3D.forEach((edge) => {
-            if (edge.from.slug === active) {
-              const index = nodeBySlug.get(edge.to.slug);
-              if (index !== undefined) neighbors.add(index);
-            } else if (edge.to.slug === active) {
-              const index = nodeBySlug.get(edge.from.slug);
-              if (index !== undefined) neighbors.add(index);
-            }
-          });
+          const neighbors = new Set<number>(highlightedNeighborsRef.current.flatMap((slug) => {
+            const index = nodeBySlug.get(slug);
+            return index === undefined ? [] : [index];
+          }));
           [...neighbors].slice(0, MAX_RELATED).forEach((index, relatedIndex) => relatedPoints[relatedIndex].copy(nodeLocals[index]));
           uniforms.uRelatedCount.value = Math.min(neighbors.size, MAX_RELATED);
-          selection = 0;
-          selectionTarget = 1;
         } else {
-          selectionTarget = 0;
           uniforms.uRelatedCount.value = 0;
         }
-        selectionStarted = now;
-        lastActive = active;
-        wake(900);
+        lastRelationKey = relationKey;
+        wake(700);
       }
-      selection += (selectionTarget - selection) * (reduceMotion ? 1 : 0.16);
+      if (activeIndex !== lastActiveIndex) {
+        uniforms.uPreviousPoint.value.copy(lastActiveIndex === undefined ? new THREE.Vector3(99, 99, 99) : nodeLocals[lastActiveIndex]);
+        if (activeIndex !== undefined) {
+          uniforms.uActivePoint.value.copy(nodeLocals[activeIndex]);
+          selectionFrom = selection;
+          selectionTarget = 1;
+          selectionDuration = 1650;
+        } else {
+          uniforms.uActivePoint.value.set(99, 99, 99);
+          selectionFrom = selection;
+          selectionTarget = 0;
+          selectionDuration = 900;
+        }
+        selectionStarted = now;
+        lastActiveIndex = activeIndex;
+        wake(selectionDuration + 180);
+      }
+      const progress = reduceMotion ? 1 : THREE.MathUtils.clamp((now - selectionStarted) / selectionDuration, 0, 1);
+      const eased = progress * progress * (3 - 2 * progress);
+      selection = THREE.MathUtils.lerp(selectionFrom, selectionTarget, eased);
       uniforms.uSelection.value = selection;
-      const arrival = THREE.MathUtils.clamp((now - selectionStarted) / 620, 0, 1);
-      uniforms.uSelectionBloom.value = reduceMotion ? 0 : Math.sin(arrival * Math.PI) * (1 - arrival * 0.32);
-      return Math.abs(selectionTarget - selection) > 0.004 || arrival < 1;
+      uniforms.uSelectionBloom.value = reduceMotion ? 0 : Math.sin(progress * Math.PI) * (1 - progress * 0.18);
+      uniforms.uSelectionTransition.value = lastActiveIndex === undefined ? 0 : eased;
+
+      const filterKey = emphasizedSlugsRef.current.join(",");
+      if (filterKey !== lastFilterKey) {
+        previousEmphasizedPoints.forEach((point, index) => point.copy(emphasizedPoints[index]));
+        uniforms.uPreviousEmphasizedCount.value = uniforms.uEmphasizedCount.value;
+        emphasizedPoints.forEach((point) => point.set(99, 99, 99));
+        const indices = emphasizedSlugsRef.current.flatMap((slug) => {
+          const index = nodeBySlug.get(slug);
+          return index === undefined ? [] : [index];
+        }).slice(0, MAX_EMPHASIZED);
+        indices.forEach((index, emphasizedIndex) => emphasizedPoints[emphasizedIndex].copy(nodeLocals[index]));
+        uniforms.uEmphasizedCount.value = indices.length;
+        uniforms.uFilterTransition.value = 0;
+        filterStarted = now;
+        filterDuration = 1300;
+        lastFilterKey = filterKey;
+        wake(filterDuration + 120);
+      }
+      const filterProgress = reduceMotion ? 1 : THREE.MathUtils.clamp((now - filterStarted) / filterDuration, 0, 1);
+      uniforms.uFilterTransition.value = filterProgress * filterProgress * (3 - 2 * filterProgress);
+      return progress < 1 || filterProgress < 1;
     }
 
     function draw(now: number) {
@@ -332,24 +436,21 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
       previousFrame = now;
       const selectionChanging = updateSelection(now);
       if (resetRequested) {
-        rotationX += (DEFAULT_ROTATION.x - rotationX) * 0.16 * delta;
-        const difference = Math.atan2(Math.sin(DEFAULT_ROTATION.y - rotationY), Math.cos(DEFAULT_ROTATION.y - rotationY));
-        rotationY += difference * 0.16 * delta;
-        if (Math.abs(rotationX - DEFAULT_ROTATION.x) + Math.abs(difference) < 0.004) {
-          rotationX = DEFAULT_ROTATION.x;
-          rotationY = DEFAULT_ROTATION.y;
+        rotationQuaternion.slerp(defaultQuaternion, 1 - Math.pow(0.78, delta));
+        if (rotationQuaternion.angleTo(defaultQuaternion) < 0.003) {
+          rotationQuaternion.copy(defaultQuaternion);
           resetRequested = false;
         }
       } else if (!isDragging && !reduceMotion) {
-        rotationX = THREE.MathUtils.clamp(rotationX + velocityX * delta, -1.12, 1.12);
-        rotationY += velocityY * delta;
-        velocityX *= Math.pow(0.91, delta);
-        velocityY *= Math.pow(0.91, delta);
-        if (Math.abs(velocityX) < 0.00008) velocityX = 0;
-        if (Math.abs(velocityY) < 0.00008) velocityY = 0;
+        const inertiaAngle = inertiaQuaternion.angleTo(identityQuaternion);
+        if (inertiaAngle > 0.00015) {
+          rotationQuaternion.premultiply(inertiaQuaternion).normalize();
+          inertiaQuaternion.slerp(identityQuaternion, 1 - Math.pow(0.90, delta));
+        } else {
+          inertiaQuaternion.identity();
+        }
       }
-      body.rotation.x = rotationX;
-      body.rotation.y = rotationY;
+      body.quaternion.copy(rotationQuaternion);
       updateRotationFlag();
       body.updateMatrixWorld(true);
       nodeLocals.forEach((node, index) => {
@@ -359,8 +460,15 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
         projectedNodes[index].visible = projectedPoint.z >= -1 && projectedPoint.z <= 1;
       });
       onNodePositionsChange?.(projectedNodes);
+      (Object.keys(axisLocals) as Array<keyof typeof axisLocals>).forEach((key) => {
+        projectedPoint.copy(axisLocals[key]).applyMatrix4(body.matrixWorld).project(camera);
+        projectedAxes[key].x = (projectedPoint.x * 0.5 + 0.5) * 100;
+        projectedAxes[key].y = (-projectedPoint.y * 0.5 + 0.5) * 100;
+        projectedAxes[key].visible = projectedPoint.z >= -1 && projectedPoint.z <= 1;
+      });
+      onAxisPositionsChange?.(projectedAxes);
       renderer.render(scene, camera);
-      const moving = isDragging || resetRequested || Math.abs(velocityX) + Math.abs(velocityY) > 0.0001;
+      const moving = isDragging || resetRequested || inertiaQuaternion.angleTo(identityQuaternion) > 0.00015;
       if (moving || selectionChanging || now < renderUntil) schedule();
     }
 
@@ -397,12 +505,16 @@ export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: 
       wakeRef.current = null;
       onReadyChange(false);
     };
-  }, [onNodePositionsChange, onReadyChange]);
+  }, [onAxisPositionsChange, onNodePositionsChange, onReadyChange]);
 
   return (
-    <div className={`field-body-3d ${dragging ? "is-dragging" : ""}`} ref={mountRef} aria-label="Drag to rotate the project map geometry">
-      <p className="map-rotation-hint">Drag to rotate</p>
-      {rotated && <button className="map-reset-view" onClick={() => resetRef.current?.()} type="button">Reset view</button>}
+    <div className={`field-body-3d ${dragging ? "is-dragging" : ""}`} ref={mountRef} aria-label="Drag freely to rotate the project map geometry in three dimensions">
+      <button
+        className={`map-reset-view ${rotated ? "is-rotated" : ""}`}
+        onClick={(event) => { event.stopPropagation(); resetRef.current?.(); onResetMap?.(); }}
+        onPointerDown={(event) => event.stopPropagation()}
+        type="button"
+      >Reset map</button>
     </div>
   );
 }

@@ -205,16 +205,17 @@ img { display: block; width: 100%; }
 .next-project a { display: flex; font-family: var(--serif); font-size: clamp(60px, 9vw, 140px); justify-content: space-between; letter-spacing: -.06em; line-height: .9; margin-top: 35px; }
 .next-project > p:last-child { color: rgba(245, 241, 232, .58); font-size: 17px; font-style: italic; line-height: 1.5; }
 
-.about-hero { align-items: center; display: grid; gap: 7vw; grid-template-columns: 1fr 1fr; min-height: 880px; padding: 140px 7vw 100px; }
+.about-page { --line: rgba(245,241,232,.16); --muted: rgba(245,241,232,.58); background: var(--night); color: var(--cream); min-height: 100vh; }
+.about-hero { align-items: center; background: radial-gradient(circle at 76% 44%, rgba(52,77,128,.20), transparent 34%), radial-gradient(circle at 22% 25%, rgba(114,217,232,.06), transparent 28%); display: grid; gap: 7vw; grid-template-columns: 1fr 1fr; min-height: 880px; padding: 140px 7vw 100px; }
 .about-hero h1 { font-size: clamp(64px, 7vw, 108px); }
 .about-lede { color: var(--rust); font-size: 21px; font-style: italic; line-height: 1.45; }
 .about-hero > div:first-child > p:last-child { color: var(--muted); font-size: 17px; line-height: 1.65; max-width: 650px; }
 .plus-map { aspect-ratio: 1; margin: 0 auto; max-width: 570px; position: relative; width: 100%; }
-.plus-map::before, .plus-map::after { background: var(--ink); content: ""; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); }
+.plus-map::before, .plus-map::after { background: linear-gradient(135deg, rgba(245,241,232,.96), rgba(172,202,231,.76)); box-shadow: 0 0 55px rgba(114,217,232,.09); content: ""; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); }
 .plus-map::before { height: 18%; width: 100%; }
 .plus-map::after { height: 100%; width: 18%; }
-.plus-map strong { color: var(--cream); font-family: var(--serif); font-size: 58px; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
-.plus-arm { color: var(--cream); font-family: var(--mono); font-size: 11px; position: absolute; text-transform: uppercase; z-index: 2; }
+.plus-map strong { color: var(--night); font-family: var(--serif); font-size: 58px; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
+.plus-arm { color: var(--night); font-family: var(--mono); font-size: 11px; position: absolute; text-transform: uppercase; z-index: 2; }
 .plus-arm--top { left: 50%; top: 12%; transform: translateX(-50%) rotate(-90deg); }
 .plus-arm--bottom { bottom: 12%; left: 50%; transform: translateX(-50%) rotate(-90deg); }
 .plus-arm--left { left: 9%; top: 50%; transform: translateY(-50%); }
@@ -340,6 +341,7 @@ img { display: block; width: 100%; }
 .has-sculptural-body .field-resting-geometry, .has-sculptural-body .field-resting-connections { opacity: 0; }
 .map-rotation-hint { bottom: 30px; color: rgba(221,232,236,.48); font-family: var(--mono); font-size: 9px; left: 4.2vw; letter-spacing: .09em; margin: 0; pointer-events: none; position: absolute; text-transform: uppercase; z-index: 9; }
 .map-reset-view { background: rgba(8,12,16,.78); border: 1px solid rgba(235,245,246,.42); border-radius: 999px; bottom: 28px; color: var(--text-on-dark); cursor: pointer; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; padding: 9px 12px; position: absolute; right: 4.2vw; text-transform: uppercase; z-index: 9; }
+.field.is-constellation .map-reset-view { bottom: 112px; }
 .field-resting-image { height: 100%; inset: 0; object-fit: cover; opacity: .9; pointer-events: none; position: absolute; width: 100%; z-index: 1; }
 .field.is-constellation .field-resting-image { filter: saturate(.35) brightness(.52); opacity: .48; }
 .field-resting-geometry { filter: saturate(1.12); height: 100%; inset: 0; opacity: .94; pointer-events: none; position: absolute; transition: filter .35s ease, opacity .35s ease; width: 100%; z-index: 2; }
@@ -352,24 +354,32 @@ img { display: block; width: 100%; }
 .field.is-constellation .field-resting-connections { filter: saturate(.72); opacity: .26; }
 .field-active-connections { height: 100%; inset: 0; overflow: visible; pointer-events: none; position: absolute; width: 100%; z-index: 4; }
 .field-active-connections line { vector-effect: non-scaling-stroke; }
-.field-active-connection-glow { opacity: .22; stroke: var(--relation-color); stroke-linecap: round; stroke-width: 5px; }
-.field-active-connection-dash { animation: relation-drift 3.2s linear infinite; filter: drop-shadow(0 0 4px var(--relation-color)); opacity: .9; stroke: var(--relation-color); stroke-dasharray: 2.2 3.1; stroke-linecap: round; stroke-width: 1.15px; }
-@keyframes relation-drift { to { stroke-dashoffset: -10.6; } }
+.field-active-connection-glow { opacity: .12; stroke: var(--relation-color); stroke-linecap: round; stroke-width: 7px; }
+.field-active-connection-dash { animation: relation-drift 1.15s linear infinite; filter: drop-shadow(0 0 4px var(--relation-color)); opacity: .72; stroke: var(--relation-color); stroke-dasharray: .01px 9px; stroke-linecap: round; stroke-width: 2.5px; }
+@keyframes relation-drift { to { stroke-dashoffset: -9px; } }
 .field-selected-geometry { height: 100%; inset: 0; pointer-events: none; position: absolute; width: 100%; z-index: 3; }
 .field-copy { left: 4.2vw; max-width: 255px; pointer-events: none; position: absolute; top: 104px; z-index: 8; }
 .field-copy h1 { font-family: var(--display); font-size: clamp(32px, 2.7vw, 46px); font-weight: 400; letter-spacing: -.045em; line-height: .92; margin: 13px 0 18px; }
 .field-copy > p:last-child { color: var(--muted-on-dark); font-size: 13px; line-height: 1.52; margin: 0; }
 .field.is-constellation .field-copy { opacity: .72; transition: opacity .3s ease; }
-.field-axes { inset: 13% 8% 12%; pointer-events: none; position: absolute; z-index: 4; }
-.field-axes::before, .field-axes::after { background: rgba(235,241,241,.105); content: ""; left: 50%; position: absolute; top: 50%; }
-.field-axes::before { height: 1px; transform: translateX(-50%); width: 100%; }
-.field-axes::after { height: 100%; transform: translateY(-50%); width: 1px; }
-.field-axes i { border: 1px solid rgba(235,241,241,.22); border-radius: 50%; height: 7px; left: 50%; position: absolute; top: 50%; transform: translate(-50%,-50%); width: 7px; }
-.field-axis { color: rgba(245,241,232,.42); font-family: var(--mono); font-size: 11px; letter-spacing: .08em; position: absolute; text-transform: uppercase; }
-.field-axis--story { left: 0; top: calc(50% - 20px); }
-.field-axis--compute { right: 0; top: calc(50% - 20px); }
-.field-axis--atmosphere { left: calc(50% + 15px); top: 0; writing-mode: vertical-rl; }
-.field-axis--architecture { bottom: 0; left: calc(50% + 15px); writing-mode: vertical-rl; }
+.field-relation-filter { align-items: center; bottom: 64px; display: flex; gap: 10px; left: 4.2vw; max-width: calc(100vw - 8.4vw); position: absolute; white-space: nowrap; z-index: 11; }
+.field.is-constellation .field-relation-filter { bottom: 112px; }
+.field-relation-filter > span { color: rgba(245,241,232,.42); display: block; flex: 0 0 auto; font-family: var(--mono); font-size: 8px; letter-spacing: .1em; margin: 0; text-transform: uppercase; }
+.field-relation-filter > div { display: flex; flex-wrap: nowrap; gap: 5px; max-width: none; }
+.field-relation-filter button { align-items: center; backdrop-filter: blur(12px); background: rgba(5,8,11,.64); border: 1px solid rgba(245,241,232,.18); border-radius: 999px; color: rgba(245,241,232,.62); cursor: pointer; display: inline-flex; font-family: var(--mono); font-size: 8px; gap: 5px; letter-spacing: .03em; padding: 6px 8px; }
+.field-relation-filter button:hover, .field-relation-filter button:focus-visible { border-color: rgba(245,241,232,.48); color: var(--cream); outline: none; }
+.field-relation-filter button.is-active { background: rgba(245,241,232,.96); border-color: white; color: #080b0e; }
+.field-relation-filter button i { background: var(--relation-color); border-radius: 50%; box-shadow: 0 0 7px var(--relation-color); height: 5px; width: 5px; }
+.field-relation-filter button sup { font-size: 6px; opacity: .58; }
+.field-axes { inset: 0; opacity: .46; pointer-events: none; position: absolute; z-index: 4; }
+.field-axes svg { height: 100%; inset: 0; overflow: visible; position: absolute; width: 100%; }
+.field-axes line { stroke: rgba(235,241,241,.19); stroke-width: .72px; vector-effect: non-scaling-stroke; }
+.field-axes i { border: 1px solid rgba(235,241,241,.3); border-radius: 50%; height: 7px; position: absolute; transform: translate(-50%,-50%); width: 7px; }
+.field-axis { color: rgba(245,241,232,.58); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; position: absolute; text-transform: uppercase; transform: translate(-50%,-50%) rotate(var(--axis-angle,0deg)); white-space: nowrap; }
+.field-axis--story { transform: translate(-105%,-50%) rotate(var(--axis-angle,0deg)); }
+.field-axis--compute { transform: translate(5%,-50%) rotate(var(--axis-angle,0deg)); }
+.field-axis--atmosphere { transform: translate(-50%,-115%) rotate(var(--axis-angle,-90deg)); }
+.field-axis--architecture { transform: translate(-50%,15%) rotate(var(--axis-angle,-90deg)); }
 .field-nodes { inset: 0; pointer-events: none; position: absolute; z-index: 5; }
 .field-node { align-items: center; background: radial-gradient(circle at 38% 34%, rgba(242,249,250,.34), rgba(97,126,171,.16) 34%, rgba(7,10,13,.28) 67%); border: 1px solid rgba(234,244,244,.56); border-radius: 50%; box-shadow: 0 0 0 3px rgba(207,230,233,.035); color: var(--cream); cursor: pointer; display: flex; justify-content: center; padding: 0; pointer-events: auto; position: absolute; transform: translate(-50%,-50%); transition: opacity .25s ease, transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
 .field-node > span { font-family: var(--mono); font-size: 8px; }
@@ -390,6 +400,7 @@ img { display: block; width: 100%; }
 .map-selection-band__relations i { border-radius: 50%; height: 5px; width: 5px; }
 .map-selection-band__relations span { font-size: 11px; white-space: nowrap; }
 .map-selection-band__relations small { color: var(--muted-on-dark); font-family: var(--mono); font-size: 7px; letter-spacing: .08em; margin-right: 5px; text-transform: uppercase; }
+.map-selection-band__empty { color: var(--muted-on-dark); font-family: var(--mono); font-size: 9px; margin: 0; }
 .map-selection-band__open { border-bottom: 1px solid currentColor; font-family: var(--mono); font-size: 9px; padding-bottom: 3px; text-transform: uppercase; white-space: nowrap; }
 .map-selection-band__close { background: transparent; border: 0; color: var(--text-on-dark); cursor: pointer; font-size: 21px; font-weight: 300; padding: 0; }
 .constellation-document { background: rgba(7,10,12,.96); border: 1px solid rgba(255,255,255,.9); bottom: 34px; box-shadow: 0 18px 70px rgba(0,0,0,.56); color: var(--cream); display: grid; grid-template-columns: minmax(250px,1.05fr) minmax(230px,.95fr); max-height: 420px; overflow: hidden; position: absolute; right: 4.2vw; width: min(680px, 56vw); z-index: 14; }
@@ -574,6 +585,9 @@ img { display: block; width: 100%; }
   .map-selection-band__relations small { display: block; margin: 0 0 3px; }
   .map-selection-band__open { grid-column: 1 / -1; grid-row: 3; justify-self: start; }
   .map-selection-band__close { grid-column: 3; grid-row: 1; }
+  .field-relation-filter { bottom: 58px; left: 18px; max-width: calc(100vw - 36px); overflow-x: auto; right: 18px; }
+  .field.is-constellation .field-relation-filter { bottom: calc(30vh + 12px); }
+  .field-relation-filter > div { flex-wrap: nowrap; max-width: none; overflow-x: auto; }
   .map-reset-view { bottom: calc(30vh + 14px); right: 18px; }
   .field-axis { font-size: 8px; }
   .field-caption { bottom: 16px; font-size: 9px; text-align: center; width: calc(100% - 44px); }

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { projectConnections, projects, type ConnectionKind } from "../data";
-import { MapBody3D } from "../map/MapBody3D";
+import { MapBody3D } from "../map/MapBodyMesh3D";
 import { ProjectGlyph } from "./ProjectGlyph";
 
 const relationColor: Record<ConnectionKind, string> = {

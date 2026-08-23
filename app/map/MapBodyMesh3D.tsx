@@ -8,6 +8,7 @@ import { mapEdges3D, mapNodes3D } from "./graphGeometry";
 type MapBody3DProps = {
   activeSlug: string | null;
   onReadyChange: (ready: boolean) => void;
+  onNodePositionsChange?: (positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => void;
 };
 
 const MAX_RELATED = 4;
@@ -107,7 +108,7 @@ const fragmentShader = `
   }
 `;
 
-export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
+export function MapBody3D({ activeSlug, onReadyChange, onNodePositionsChange }: MapBody3DProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeSlugRef = useRef(activeSlug);
   const wakeRef = useRef<(() => void) | null>(null);
@@ -144,6 +145,8 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
     camera.position.set(0, 0, mobile ? 13.8 : 14.8);
     const nodeFields = mapNodes3D.map((_, index) => fieldPosition(index));
     const nodeLocals = nodeFields.map(localPosition);
+    const projectedNodes = nodeLocals.map(() => ({ x: 0, y: 0, visible: true }));
+    const projectedPoint = new THREE.Vector3();
     const nodeBySlug = new Map(mapNodes3D.map((node, index) => [node.slug, index]));
     const relatedPoints = Array.from({ length: MAX_RELATED }, () => new THREE.Vector3(99, 99, 99));
     const uniforms = {
@@ -348,6 +351,14 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
       body.rotation.x = rotationX;
       body.rotation.y = rotationY;
       updateRotationFlag();
+      body.updateMatrixWorld(true);
+      nodeLocals.forEach((node, index) => {
+        projectedPoint.copy(node).applyMatrix4(body.matrixWorld).project(camera);
+        projectedNodes[index].x = (projectedPoint.x * 0.5 + 0.5) * 100;
+        projectedNodes[index].y = (-projectedPoint.y * 0.5 + 0.5) * 100;
+        projectedNodes[index].visible = projectedPoint.z >= -1 && projectedPoint.z <= 1;
+      });
+      onNodePositionsChange?.(projectedNodes);
       renderer.render(scene, camera);
       const moving = isDragging || resetRequested || Math.abs(velocityX) + Math.abs(velocityY) > 0.0001;
       if (moving || selectionChanging || now < renderUntil) schedule();
@@ -386,7 +397,7 @@ export function MapBody3D({ activeSlug, onReadyChange }: MapBody3DProps) {
       wakeRef.current = null;
       onReadyChange(false);
     };
-  }, [onReadyChange]);
+  }, [onNodePositionsChange, onReadyChange]);
 
   return (
     <div className={`field-body-3d ${dragging ? "is-dragging" : ""}`} ref={mountRef} aria-label="Drag to rotate the project map geometry">

@@ -498,7 +498,28 @@ export function Constellation() {
   void SelectedGeometry;
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [bodyReady, setBodyReady] = useState(false);
+  const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const connectionLayerRef = useRef<SVGSVGElement | null>(null);
   const handleBodyReady = useCallback((ready: boolean) => setBodyReady(ready), []);
+  const handleNodePositions = useCallback((positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => {
+    positions.forEach((position, index) => {
+      const element = nodeRefs.current[index];
+      if (!element) return;
+      element.style.left = `${position.x}%`;
+      element.style.top = `${position.y}%`;
+      element.style.visibility = position.visible ? "visible" : "hidden";
+    });
+    connectionLayerRef.current?.querySelectorAll<SVGLineElement>("line[data-from-index]").forEach((line) => {
+      const from = positions[Number(line.dataset.fromIndex)];
+      const to = positions[Number(line.dataset.toIndex)];
+      if (!from || !to) return;
+      line.setAttribute("x1", String(from.x));
+      line.setAttribute("y1", String(from.y));
+      line.setAttribute("x2", String(to.x));
+      line.setAttribute("y2", String(to.y));
+      line.style.visibility = from.visible && to.visible ? "visible" : "hidden";
+    });
+  }, []);
   const active = useMemo(
     () => projects.find((project) => project.slug === activeSlug) ?? null,
     [activeSlug],
@@ -523,7 +544,7 @@ export function Constellation() {
 
   return (
     <section className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`} id="map" aria-labelledby="field-title">
-      <MapBody3D activeSlug={activeSlug} onReadyChange={handleBodyReady} />
+      <MapBody3D activeSlug={activeSlug} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} />
       {!bodyReady && <RestingGeometry />}
       <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         {projectConnections.map((connection) => (
@@ -548,6 +569,21 @@ export function Constellation() {
         <i />
       </div>
 
+      {active && (
+        <svg className="field-active-connections" ref={connectionLayerRef} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          {activeConnections.map((connection) => {
+            const fromIndex = projects.findIndex((project) => project.slug === connection.from);
+            const toIndex = projects.findIndex((project) => project.slug === connection.to);
+            return (
+              <g key={`${connection.from}-${connection.to}`} style={{ "--relation-color": relationColor[connection.kind] } as CSSProperties}>
+                <line className="field-active-connection-glow" data-from-index={fromIndex} data-to-index={toIndex} />
+                <line className="field-active-connection-dash" data-from-index={fromIndex} data-to-index={toIndex} />
+              </g>
+            );
+          })}
+        </svg>
+      )}
+
       <div className="field-nodes">
         {projects.map((project, index) => {
           const isActive = active?.slug === project.slug;
@@ -557,6 +593,7 @@ export function Constellation() {
               className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${active && !isActive && !isRelated ? "is-quiet" : ""}`}
               key={project.slug}
               onClick={() => setActiveSlug((current) => current === project.slug ? null : project.slug)}
+              ref={(element) => { nodeRefs.current[index] = element; }}
               style={{
                 left: `${project.node.x}%`,
                 top: `${project.node.y}%`,
@@ -589,7 +626,7 @@ export function Constellation() {
               </button>
             ))}
           </div>
-          <a className="map-selection-band__open" href={`/work/${active.slug}`}>Open case ↗</a>
+          <a className="map-selection-band__open" href={`/work/${active.slug}`}>Open project ↗</a>
           <button className="map-selection-band__close" onClick={() => setActiveSlug(null)} type="button" aria-label="Close selection">×</button>
         </aside>
       )}

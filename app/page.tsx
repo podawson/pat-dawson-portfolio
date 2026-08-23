@@ -26,7 +26,7 @@ export default function Home() {
                 <p className="micro">{project.eyebrow} · {project.year}</p>
                 <h3><Link href={`/work/${project.slug}`}>{project.title}</Link></h3>
                 <p>{project.summary}</p>
-                <Link className="text-link" href={`/work/${project.slug}`}>View the case study ↗</Link>
+                <Link className="text-link" href={`/work/${project.slug}`}>View the project ↗</Link>
               </div>
             </article>
           ))}

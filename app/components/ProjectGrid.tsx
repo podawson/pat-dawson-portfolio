@@ -130,7 +130,7 @@ export function ProjectGrid() {
           <h2>{active.title}</h2>
           <p>{active.summary} {active.details[0]?.body}</p>
           <div className="tag-row">{active.categories.map((category) => <span key={category}>{category}</span>)}</div>
-          <a href={`/work/${active.slug}`}>Open case study ↗</a>
+          <a href={`/work/${active.slug}`}>Open project ↗</a>
         </article>
       </div>
     </div>

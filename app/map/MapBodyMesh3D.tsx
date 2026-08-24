@@ -66,7 +66,7 @@ const vertexShader = `
 
   float pointField(vec3 point, vec3 fieldPoint) {
     float pointDistance = length(point - fieldPoint);
-    return exp(-pointDistance * pointDistance * 8.4);
+    return exp(-pointDistance * pointDistance * 18.0);
   }
 
   float emphasizedField(vec3 point, bool previous) {
@@ -74,7 +74,7 @@ const vertexShader = `
     for (int index = 0; index < MAX_EMPHASIZED; index++) {
       float count = previous ? uPreviousEmphasizedCount : uEmphasizedCount;
       if (float(index) >= count) break;
-      heat += pointField(point, previous ? uPreviousEmphasizedPoints[index] : uEmphasizedPoints[index]);
+      heat = max(heat, pointField(point, previous ? uPreviousEmphasizedPoints[index] : uEmphasizedPoints[index]));
     }
     return clamp(heat, 0.0, 1.35);
   }
@@ -93,7 +93,9 @@ const vertexShader = `
     float nextFilterHeat = emphasizedField(position, false);
     float filterHeat = mix(previousFilterHeat, nextFilterHeat, smoothstep(0.0, 1.0, uFilterTransition));
     float selectionHeat = 1.0 - corpusSmoothMin(1.0 - broadHeat * 0.42, 1.0 - localHeat, 0.08);
-    transformed += normalize(normal) * (filterHeat * 0.072 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
+    float filterSwell = smoothstep(0.32, 0.78, filterHeat);
+    float filterAura = smoothstep(0.05, 0.50, filterHeat);
+    transformed += normalize(normal) * (filterSwell * 0.060 + filterAura * 0.012 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
 
     vec4 viewPosition = modelViewMatrix * vec4(transformed, 1.0);
     vLocalPosition = transformed;
@@ -163,7 +165,7 @@ const fragmentShader = `
     color += mix(violet, cyan, depthTone) * fresnel * 0.62;
     color = mix(color, cyan, clamp(relatedHeat(vLocalPosition), 0.0, 0.38));
     float filterPresence = mix(uPreviousFilterActive, uFilterActive, smoothstep(0.0, 1.0, uFilterTransition));
-    float filterMask = smoothstep(0.06, 0.68, vFilterHeat);
+    float filterMask = smoothstep(0.06, 0.66, vFilterHeat);
     vec3 relationshipHue = mix(uPreviousFilterColor, uFilterColor, smoothstep(0.0, 1.0, uFilterTransition));
     float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
     vec3 quietColor = mix(vec3(luminance), graphite, 0.42);
@@ -300,7 +302,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     };
     fitCorpusToViewport(mount.clientWidth, mount.clientHeight);
     body.rotation.copy(DEFAULT_ROTATION);
-    body.position.set(mobile ? 0 : 0.28, mobile ? -0.32 : 0.02, 0);
+    body.position.set(0, 0, 0);
     scene.add(body);
 
     let scheduledFrame = 0;

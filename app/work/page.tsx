@@ -7,7 +7,7 @@ export default function WorkPage() {
       <SiteHeader inverse />
       <section className="page-intro page-intro--work route-intro">
         <p className="kicker">WORK</p>
-        <h1>Selected Projects</h1>
+        <h1>Selected curation</h1>
         <p className="page-intro__lede">Filter or don&apos;t</p>
       </section>
       <section className="work-index" aria-label="Project Index">

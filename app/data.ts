@@ -344,7 +344,7 @@ export const projects: Project[] = [
     eyebrow: "Tricky",
     question: "Can a signal system improve in public and leave an inspectable record of how?",
     headline: "Product strategy and model operations raised reported hit rate from 40% to 62% while scaling from zero to 5,000+ active traders.",
-    summary: "The venture worked backward from high-value trader behavior, prioritized signal quality over call volume, and now has an eight-export evidence archive for reconstructing models, calls, leaderboards, and maximum-X outcomes.",
+    summary: "A real-time Solana signal product translated trader behavior into ranked opportunities, improving reported hit rate from 40% to 62% while scaling to 5,000+ active traders and leaving an auditable eight-export model record.",
     narrative: "String was a real-time Solana intelligence product for identifying high-potential projects early. The product problem was not access to more calls; it was deciding which behavioral symptoms inside noisy on-chain activity were worth surfacing, and how much control an automated system should hold once it found them. Product strategy worked backward from the tools and routines used by high-value traders, translating research into model features, opportunity ranking, and a fee model. Reported hit rate rose from 40% to 62% as signal quality took priority over volume, and the platform scaled to more than five thousand active traders and roughly $250K in revenue. The durable artifact is now the development record: eight Telegram exports normalized into calls, contract addresses, timestamps, model labels, leaderboard snapshots, and reported outcomes. That record can compare precision, average maximum-X, call volume, and tail exposure without letting one flattering metric hide another.",
     agency: "The system surfaced and ranked candidates; confirmation and execution remained with traders, and performance claims stay tied to timestamped evidence.",
     role: "AI product strategist · co-founder · model operations",
@@ -412,9 +412,7 @@ export const projectConnections: ProjectConnection[] = [
   { from: "mapping-investments", to: "aintivirus", kind: "uphold", reason: "A source record bounds what the new interpretive layer is allowed to claim." },
 
   // Quorum — independent parties could each have stopped the work.
-  { from: "charlesgate-park", to: "88-east-broadway", kind: "quorum", reason: "Public, regulatory, ownership, and technical constituencies define the design envelope together." },
-  { from: "88-east-broadway", to: "caleta", kind: "quorum", reason: "Owners, regulators, fabricators, and builders each hold a consequential veto." },
-  { from: "ouellette-bridge", to: "caleta", kind: "quorum", reason: "Preservation, code, fabrication, and field conditions must agree for the work to exist." },
+  { from: "charlesgate-park", to: "caleta", kind: "quorum", reason: "Public, regulatory, ownership, and technical constituencies define the design envelope together." },
   { from: "wework-conversions", to: "confidential-client", kind: "quorum", reason: "Distributed enterprise delivery depends on parties outside a single reporting line." },
   { from: "confidential-client", to: "vanderbilt-passage", kind: "quorum", reason: "Architecture, media, construction, compliance, and operations each control a necessary condition." },
   { from: "vanderbilt-passage", to: "gymnast-cobot", kind: "quorum", reason: "Technical, spatial, safety, and human-performance constraints must resolve together." },

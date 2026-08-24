@@ -20,6 +20,84 @@ const projectAccents: Record<string, string> = {
   aintivirus: "#7185ff",
 };
 
+const projectGalleries: Record<string, { src: string; caption: string }[]> = {
+  "charlesgate-park": [
+    { src: "/work/gallery/charlesgate-park/01.webp", caption: "Ecological repair begins with the site already there." },
+    { src: "/work/gallery/charlesgate-park/02.webp", caption: "Survey, archival geometry, and the infrastructural site model." },
+    { src: "/work/gallery/charlesgate-park/04.webp", caption: "A proposal to daylight the Muddy River and reconnect the park." },
+  ],
+  "88-east-broadway": [
+    { src: "/work/gallery/88-east-broadway/01.webp", caption: "The building beneath the Manhattan Bridge." },
+    { src: "/work/gallery/88-east-broadway/02.webp", caption: "The archival floor plan used to recover the record." },
+    { src: "/work/gallery/88-east-broadway/03.webp", caption: "A reuse concept organized inside the building's operating constraints." },
+  ],
+  "ouellette-bridge": [
+    { src: "/work/gallery/ouellette-bridge/01.webp", caption: "The reversible mounting system installed on the historic truss." },
+    { src: "/work/gallery/ouellette-bridge/02.webp", caption: "Fabrication details for housings that required no drilling or welding." },
+  ],
+  "flower-tower": [
+    { src: "/work/gallery/flower-tower/01.webp", caption: "A full-scale cardboard prototype tested before the event." },
+    { src: "/work/gallery/flower-tower/02.webp", caption: "Flower Tower in operation at Rockefeller Center." },
+    { src: "/work/gallery/flower-tower/03.webp", caption: "One of thousands of biodegradable plant-and-poem exchanges." },
+    { src: "/work/gallery/flower-tower/04.webp", caption: "Public participation was the structure's working material." },
+  ],
+  caleta: [
+    { src: "/work/gallery/caleta/01.webp", caption: "The completed interior: black tile, custom bar, and warm light." },
+    { src: "/work/gallery/caleta/02.webp", caption: "Construction, inspection, and opening assembled as one delivery record." },
+    { src: "/work/gallery/caleta/03.webp", caption: "Permit-set detail linking design intent to field execution." },
+    { src: "/work/gallery/caleta/04.webp", caption: "Caleta and Bad Habit at opening." },
+  ],
+  "wework-conversions": [
+    { src: "/work/gallery/wework-conversions/02.webp", caption: "A floor-plan analysis translated into repeatable conversion logic." },
+    { src: "/work/gallery/wework-conversions/03.webp", caption: "A completed conversion using the shared playbook." },
+    { src: "/work/gallery/wework-conversions/04.webp", caption: "Regional plan study across a distributed portfolio." },
+  ],
+  "confidential-client": [
+    { src: "/work/gallery/confidential-client/01.webp", caption: "A responsive textile threshold for an enterprise physical-AI environment." },
+    { src: "/work/gallery/confidential-client/02.webp", caption: "Media, lighting, and spatial interaction resolved as one experience." },
+    { src: "/work/gallery/confidential-client/03.webp", caption: "A translucent pavilion carried the interaction into the storefront." },
+  ],
+  "vanderbilt-passage": [
+    { src: "/work/gallery/vanderbilt-passage/02.webp", caption: "Historic imagery translated into a contemporary multi-modal scene." },
+    { src: "/work/gallery/vanderbilt-passage/03.webp", caption: "The real-time control surface in the installed passage." },
+    { src: "/work/gallery/vanderbilt-passage/04.webp", caption: "Generative media extended across the active supertall threshold." },
+    { src: "/work/gallery/vanderbilt-passage/05.webp", caption: "A completed sequence designed for movement, pause, and return." },
+  ],
+  "gymnast-cobot": [
+    { src: "/work/gallery/gymnast-cobot/01.webp", caption: "Human-robot interaction testing in the lab." },
+    { src: "/work/gallery/gymnast-cobot/02.webp", caption: "Foundational research assembled across fatigue, gesture, and safety." },
+    { src: "/work/gallery/gymnast-cobot/03.webp", caption: "The gesture-to-adjustment interaction model." },
+    { src: "/work/gallery/gymnast-cobot/05.webp", caption: "Full-scale testing with workers and observers." },
+  ],
+  "mapping-investments": [
+    { src: "/work/gallery/mapping-investments/01.webp", caption: "The interactive neighborhood model and project evidence pane." },
+    { src: "/work/gallery/mapping-investments/02.webp", caption: "History, ownership, investment, and impact layered in one spatial record." },
+  ],
+  "release-intelligence": [
+    { src: "/work/gallery/release-intelligence/01.webp", caption: "The deployed interface compares release notes against an operating method." },
+    { src: "/work/gallery/release-intelligence/02.webp", caption: "Early sketches established the source, comparison, and decision flow." },
+    { src: "/work/gallery/release-intelligence/03.webp", caption: "Alternative system structures were tested before implementation." },
+    { src: "/work/gallery/release-intelligence/04.webp", caption: "The functional architecture that survived the sketching process." },
+  ],
+  gleanings: [
+    { src: "/work/gallery/gleanings/01.webp", caption: "The reconciliation workspace receives heterogeneous project records." },
+    { src: "/work/gallery/gleanings/02.webp", caption: "A structured ask turns document conflict into an inspectable action list." },
+    { src: "/work/gallery/gleanings/03.webp", caption: "The generated output keeps evidence and next actions adjacent." },
+    { src: "/work/gallery/gleanings/04.webp", caption: "Schedules, notes, and references enter through one bounded workflow." },
+  ],
+  string: [
+    { src: "/work/gallery/string/01.webp", caption: "Product-development volume reconstructed from eight Telegram exports." },
+    { src: "/work/gallery/string/02.webp", caption: "Model snapshots compared without erasing changes in call volume or precision." },
+    { src: "/work/gallery/string/03.webp", caption: "A visual study for the system's Sky, Sun, and Earth signal model." },
+    { src: "/work/gallery/string/04.webp", caption: "Braided signals became a recurring image for ranked opportunity." },
+  ],
+  aintivirus: [
+    { src: "/work/gallery/aintivirus/02.webp", caption: "A live JohnBot conversation grounded in the private corpus." },
+    { src: "/work/gallery/aintivirus/03.webp", caption: "The character system became the project's public product surface." },
+    { src: "/work/gallery/aintivirus/04.webp", caption: "A privacy-service interface extended the character into utility." },
+  ],
+};
+
 export function generateStaticParams() {
   return [...projects.map((project) => ({ slug: project.slug })), { slug: "intuit-astor-place" }];
 }
@@ -31,6 +109,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const current = projects.findIndex((item) => item.slug === project.slug);
   const next = projects[(current + 1) % projects.length];
   const isSystemDiagram = project.slug === "release-intelligence" || project.slug === "gleanings";
+  const gallery = projectGalleries[project.slug] ?? [];
 
   return (
     <main className="project-page-shell" style={{ "--project-accent": projectAccents[project.slug] ?? "#72d9e8" } as CSSProperties}>
@@ -90,6 +169,22 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
 
         <section className={`project-image-break${isSystemDiagram ? " project-image-break--diagram" : ""}`}><img src={project.artifactImage ?? project.image} alt="" /></section>
+
+        {gallery.length > 0 && <section className="project-gallery" aria-label={`${project.title} project gallery`}>
+          {gallery.map((item, index) => (
+            <figure
+              key={item.src}
+              className={
+                index === 0 || (index === gallery.length - 1 && (gallery.length - 1) % 2 === 1)
+                  ? "project-gallery__lead"
+                  : undefined
+              }
+            >
+              <img src={item.src} alt={item.caption} loading="lazy" decoding="async" />
+              <figcaption>{item.caption}</figcaption>
+            </figure>
+          ))}
+        </section>}
 
         <nav className="next-project" aria-label="Next project">
           <a href={`/work/${next.slug}`}>{next.title} <span>↗</span></a>

@@ -158,7 +158,7 @@ export function ProjectGrid() {
           <div><img key={active.slug} src={active.image} alt="" decoding="async" fetchPriority="high" /></div>
           <p className="micro">{previewEyebrows[active.slug] ?? active.eyebrow} · {active.year}</p>
           <h2>{active.title}</h2>
-          <p>{active.summary} {active.details[0]?.body}</p>
+          <p>{active.summary}{active.slug === "string" ? "" : ` ${active.details[0]?.body ?? ""}`}</p>
           <div className="tag-row">{active.categories.map((category) => <span key={category}>{category}</span>)}</div>
           <a href={`/work/${active.slug}`}>Open project ↗</a>
         </article>

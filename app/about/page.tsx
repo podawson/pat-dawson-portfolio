@@ -26,8 +26,6 @@ export default function AboutPage() {
       <SiteHeader inverse />
       <section className="about-hero">
         <div className="route-intro">
-          <p className="kicker">ABOUT</p>
-          <h1>Patrick Dawson</h1>
           <p className="about-lede page-intro__lede">I work where architecture, atmosphere, storytelling, and computation fuse to become one deliverable.</p>
           <p>My background begins in physical space and extends through fabrication, experiential systems, product management, AI workflows, and cultural experiments.</p>
           <p>A fondness for pre-existing conditions flows through all of my endeavors as does transparency regarding the motivating design drivers of each and every output.</p>
@@ -43,11 +41,10 @@ export default function AboutPage() {
       </section>
 
       <section className="about-grid" aria-label="Practice principles">
-        <p className="about-grid__note">Four dispositions, not a sequence: things that remain true of the work rather than stages it passes through.</p>
-        <article><p className="micro">01 · Practice</p><h2>Find what is already there.</h2><p>A site, archive, behavior, or half-working tool is rarely empty. I start by making the existing record usable.</p></article>
-        <article><p className="micro">02 · Figure</p><h2>Think in the artifact.</h2><p>The drawing, the model, the deck, the diagram—these are where the problem gets worked out, not where a finished idea gets announced. Representation is the reasoning, not its wrapper.</p></article>
-        <article><p className="micro">03 · Broker</p><h2>Build the terms two parties can both work from.</h2><p>The drawing an engineer and a preservation board can both mark up. The ruleset a landlord and a municipality both accept. I construct the language that lets separate disciplines act together.</p></article>
-        <article><p className="micro">04 · Temper</p><h2>It gets stronger through use by people who weren&apos;t there.</h2><p>A package, ruleset, or interface meets conditions I didn&apos;t anticipate and hands I didn&apos;t train. What survives is more usable, while the decisions behind it stay legible.</p></article>
+        <article><p className="micro">01 · Practice</p><h2>Work from what exists.</h2><p>A site, archive, behavior, or half-working tool is never empty. I begin by making its existing conditions usable.</p></article>
+        <article><p className="micro">02 · Figure</p><h2>Reason through the artifact.</h2><p>The drawing, model, deck, or diagram is where the problem gets worked out—not where a finished idea gets announced.</p></article>
+        <article><p className="micro">03 · Broker</p><h2>Build a shared language.</h2><p>I construct the terms and intermediary artifacts that let separate disciplines understand one another and act together.</p></article>
+        <article><p className="micro">04 · Temper</p><h2>Design beyond the handoff.</h2><p>The work meets unanticipated conditions and untrained hands. What survives becomes more useful while its decisions remain legible.</p></article>
       </section>
 
       <section className="about-resume">

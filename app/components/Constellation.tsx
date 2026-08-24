@@ -614,10 +614,14 @@ export function Constellation() {
   }, [activeSlug]);
 
   return (
+    // The full graphical field is one pointer-driven application surface.
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <section
       className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""} ${showNodeNames ? "show-node-names" : ""}`}
       id="map"
       aria-labelledby="field-title"
+      role="application"
+      tabIndex={-1}
       onPointerDownCapture={(event) => {
         backgroundPointerRef.current = { x: event.clientX, y: event.clientY };
       }}
@@ -628,6 +632,9 @@ export function Constellation() {
         const start = backgroundPointerRef.current;
         if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 6) return;
         setActiveSlug(null);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") setActiveSlug(null);
       }}
     >
       <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} onToggleNodeNames={() => setShowNodeNames((current) => !current)} showNodeNames={showNodeNames} />
@@ -724,6 +731,7 @@ export function Constellation() {
               type="button"
               aria-label={`${isActive ? "Deselect" : "Select"} ${project.title}${relationFilter !== "all" && matchesFilter ? `, connected by ${relationLabel[relationFilter].toLowerCase()}` : ""}`}
             >
+              <span className="field-node__mobile-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
               <strong>{project.title}</strong>
             </button>
           );

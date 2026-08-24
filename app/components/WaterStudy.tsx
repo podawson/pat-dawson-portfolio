@@ -150,6 +150,16 @@ export function WaterStudy() {
   const [sky, setSky] = useState<Sky>("clear");
   const [panelOpen, setPanelOpen] = useState(true);
 
+  useEffect(() => {
+    if (!window.matchMedia("(max-width: 580px)").matches) return;
+    const frame = window.requestAnimationFrame(() => {
+      setPanelOpen(false);
+      setSettings((current) => ({ ...current, triangleCount: 710 }));
+      triangleCountRef.current = 710;
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   const applyPreset = (index: number) => { setSettings(presets[index].values); setSky(presets[index].sky); };
   const reset = () => { setSettings(initial); setSky("clear"); rotationTargetRef.current.set(0,0); panTargetRef.current.set(0,0); zoomTargetRef.current=0; };
 
@@ -166,7 +176,8 @@ export function WaterStudy() {
 
   useEffect(() => {
     const mount = mountRef.current; if (!mount) return;
-    const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(44,1,.1,100); camera.position.set(0,9.2,9.6); camera.lookAt(0,-.15,0);
+    const mobile = window.matchMedia("(max-width: 580px)").matches;
+    const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(mobile ? 48 : 44,1,.1,100); camera.position.set(0,mobile ? 11.7 : 9.2,mobile ? 6.9 : 9.6); camera.lookAt(0,mobile ? .22 : -.15,mobile ? .65 : 0);
     let renderer: THREE.WebGLRenderer;
     try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance", preserveDrawingBuffer: true }); }
     catch { mount.dataset.fallback = "true"; return; }
@@ -177,7 +188,7 @@ export function WaterStudy() {
       uResolution:{value:new THREE.Vector2(1,1)},uPointer:{value:new THREE.Vector2(0,0)},
     };
     uniformsRef.current=uniforms;
-    const geometry=makeTriangleField(initial.triangleCount); const material=new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:false,depthWrite:true,side:THREE.DoubleSide});
+    const geometry=makeTriangleField(mobile ? 710 : initial.triangleCount); const material=new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:false,depthWrite:true,side:THREE.DoubleSide});
     const field=new THREE.Mesh(geometry,material); scene.add(field); sceneRef.current={field,camera};
     const pointer=new THREE.Vector2(0,0);
     const rotationCurrent=new THREE.Vector2(0,0);
@@ -192,7 +203,7 @@ export function WaterStudy() {
     const resize=()=>{const width=mount.clientWidth,height=mount.clientHeight;renderer.setSize(width,height,false);camera.aspect=width/Math.max(height,1);camera.updateProjectionMatrix();uniforms.uResolution.value.set(width,height);};
     resize(); mount.addEventListener("pointerdown",onPointerDown); mount.addEventListener("pointermove",onPointerMove); mount.addEventListener("pointerup",endDrag); mount.addEventListener("pointercancel",endDrag); mount.addEventListener("pointerleave",onLeave); mount.addEventListener("wheel",onWheel,{passive:false}); window.addEventListener("resize",resize);
     const clock=new THREE.Clock(); let animation=0;
-    const draw=()=>{uniforms.uTime.value=clock.getElapsedTime();(uniforms.uPointer.value as THREE.Vector2).lerp(pointer,.075);rotationCurrent.lerp(rotationTargetRef.current,.085);panCurrent.lerp(panTargetRef.current,.09);zoomCurrent+=(zoomTargetRef.current-zoomCurrent)*.09;field.rotation.x=baseTiltRef.current+rotationCurrent.x;field.rotation.y=rotationCurrent.y;field.position.x=panCurrent.x;field.position.y=panCurrent.y;camera.position.z=baseCameraRef.current.x+zoomCurrent;camera.position.y=baseCameraRef.current.y;camera.lookAt(0,-.18,0);renderer.render(scene,camera);animation=requestAnimationFrame(draw);};
+    const draw=()=>{uniforms.uTime.value=clock.getElapsedTime();(uniforms.uPointer.value as THREE.Vector2).lerp(pointer,.075);rotationCurrent.lerp(rotationTargetRef.current,.085);panCurrent.lerp(panTargetRef.current,.09);zoomCurrent+=(zoomTargetRef.current-zoomCurrent)*.09;field.rotation.x=baseTiltRef.current+rotationCurrent.x;field.rotation.y=rotationCurrent.y;field.position.x=panCurrent.x;field.position.y=panCurrent.y;camera.position.z=baseCameraRef.current.x+zoomCurrent;camera.position.y=baseCameraRef.current.y;camera.lookAt(0,mobile ? .22 : -.18,mobile ? .65 : 0);renderer.render(scene,camera);animation=requestAnimationFrame(draw);};
     animation=requestAnimationFrame(draw);
     return()=>{cancelAnimationFrame(animation);mount.removeEventListener("pointerdown",onPointerDown);mount.removeEventListener("pointermove",onPointerMove);mount.removeEventListener("pointerup",endDrag);mount.removeEventListener("pointercancel",endDrag);mount.removeEventListener("pointerleave",onLeave);mount.removeEventListener("wheel",onWheel);window.removeEventListener("resize",resize);field.geometry.dispose();material.dispose();renderer.dispose();renderer.domElement.remove();uniformsRef.current=null;sceneRef.current=null;};
   }, []);
@@ -205,7 +216,9 @@ export function WaterStudy() {
       if(uniforms[uniformName]) uniforms[uniformName].value = key === "skew" ? value/55 : key === "windAngle" || key === "sunAngle" ? value/180 : value/100;
     });
     uniforms.uCloud.value=sky==="cloud"?.58:sky==="fog"?.38:0; uniforms.uFog.value=sky==="fog"?.94:0;
-    baseTiltRef.current=THREE.MathUtils.degToRad(-4-settings.tilt*.28); baseCameraRef.current.set(13.4-settings.zoom*.065,8.4+settings.tilt*.055);
+    const mobile = window.matchMedia("(max-width: 580px)").matches;
+    baseTiltRef.current=THREE.MathUtils.degToRad(-4-settings.tilt*.28);
+    baseCameraRef.current.set(mobile ? 7.8-settings.zoom*.02 : 13.4-settings.zoom*.065,mobile ? 10.9+settings.tilt*.047 : 8.4+settings.tilt*.055);
     mountRef.current?.style.setProperty("--study-vignette",String(settings.vignette/100));
     mountRef.current?.style.setProperty("--study-haze",String(settings.haze/100));
   },[settings,sky]);
@@ -225,6 +238,7 @@ export function WaterStudy() {
           <div className="study-actions"><button onClick={reset} type="button">Reset</button><button onClick={capture} type="button">Capture PNG</button></div>
           <p className="study-shortcuts"><span>H</span> controls <span>R</span> reset <span>1–4</span> presets</p>
         </div>}
+        {!panelOpen && <div className="study-presets study-presets--collapsed" aria-label="Water presets">{presets.map((preset,index)=><button aria-label={preset.name} key={preset.name} onClick={()=>applyPreset(index)} type="button">{index+1}</button>)}</div>}
         <button className="study-controls-toggle" onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button">{panelOpen?"Close":"Open"}</button>
       </aside>
     </div>

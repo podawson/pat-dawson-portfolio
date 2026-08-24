@@ -79,7 +79,7 @@ export const projects: Project[] = [
     agency: "The proposal surfaced viable options; the owner, regulators, and operators retained the final say over filing, capital, and use.",
     role: "Co-founder · business development · creative direction",
     outcome: "A regulatory and spatial reuse package used by the owner for DOB filing and fundraising.",
-    image: "/work/east-broadway.jpg",
+    image: "/work/88-east-broadway-main.webp",
     indexPill: "a delirious Chinatown building",
     categories: ["Place", "Culture"],
     node: { x: 36.7, y: 75.2, size: 28 },

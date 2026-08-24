@@ -52,6 +52,8 @@ const vertexShader = `
   uniform vec3 uPreviousEmphasizedPoints[MAX_EMPHASIZED];
   uniform float uEmphasizedCount;
   uniform float uPreviousEmphasizedCount;
+  uniform float uFilterActive;
+  uniform float uPreviousFilterActive;
   uniform float uFilterTransition;
   uniform float uSelection;
   uniform float uSelectionBloom;
@@ -95,7 +97,8 @@ const vertexShader = `
     float selectionHeat = 1.0 - corpusSmoothMin(1.0 - broadHeat * 0.42, 1.0 - localHeat, 0.08);
     float filterSwell = smoothstep(0.32, 0.78, filterHeat);
     float filterAura = smoothstep(0.05, 0.50, filterHeat);
-    transformed += normalize(normal) * (filterSwell * 0.060 + filterAura * 0.012 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
+    float filterBaseline = mix(uPreviousFilterActive, uFilterActive, smoothstep(0.0, 1.0, uFilterTransition));
+    transformed += normalize(normal) * (filterBaseline * 0.026 + filterSwell * 0.060 + filterAura * 0.012 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
 
     vec4 viewPosition = modelViewMatrix * vec4(transformed, 1.0);
     vLocalPosition = transformed;

@@ -69,7 +69,7 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/gymnast-cobot/03.webp", caption: "The gesture-to-adjustment interaction model." },
     { src: "/work/gallery/gymnast-cobot/05.webp", caption: "Full-scale testing with workers and observers." },
   ],
-  "mapping-investments": [
+  "civic-investment-map": [
     { src: "/work/gallery/mapping-investments/01.webp", caption: "The interactive neighborhood model and project evidence pane." },
     { src: "/work/gallery/mapping-investments/02.webp", caption: "History, ownership, investment, and impact layered in one spatial record." },
   ],
@@ -98,6 +98,26 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   ],
 };
 
+type GalleryItem = { src: string; caption: string };
+
+function ProjectMedia({ items, label }: { items: GalleryItem[]; label: string }) {
+  if (items.length === 0) return null;
+
+  return (
+    <section
+      className={`project-gallery${items.length === 1 ? " project-gallery--single" : ""}`}
+      aria-label={label}
+    >
+      {items.map((item) => (
+        <figure key={item.src}>
+          <img src={item.src} alt={item.caption} loading="lazy" decoding="async" />
+          <figcaption>{item.caption}</figcaption>
+        </figure>
+      ))}
+    </section>
+  );
+}
+
 export function generateStaticParams() {
   return [...projects.map((project) => ({ slug: project.slug })), { slug: "intuit-astor-place" }];
 }
@@ -110,6 +130,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const next = projects[(current + 1) % projects.length];
   const isSystemDiagram = project.slug === "release-intelligence" || project.slug === "gleanings";
   const gallery = projectGalleries[project.slug] ?? [];
+  const openingMedia = gallery.slice(0, 1);
+  const narrativeMedia = gallery.slice(1, 3);
+  const evidenceMedia = gallery.slice(3);
 
   return (
     <main className="project-page-shell" style={{ "--project-accent": projectAccents[project.slug] ?? "#72d9e8" } as CSSProperties}>
@@ -133,6 +156,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div><p className="micro">Outcome</p><p>{project.outcome}</p></div>
         </section>
 
+        <ProjectMedia items={openingMedia} label={`${project.title} opening artifact`} />
+
         <section className="project-narrative">
           <div className="project-narrative__title">
             <p className="kicker">The operating story</p>
@@ -147,6 +172,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
 
+        <ProjectMedia items={narrativeMedia} label={`${project.title} supporting artifacts`} />
+
         <section className="project-evidence" aria-label="Evidence and recommended artifacts">
           <div>
             <p className="kicker">By the numbers</p>
@@ -157,6 +184,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <ol>{project.artifacts.map((artifact) => <li key={artifact}>{artifact}</li>)}</ol>
           </div>
         </section>
+
+        <ProjectMedia items={evidenceMedia} label={`${project.title} additional evidence`} />
 
         <section className="project-details">
           {project.details.map((detail, index) => (
@@ -169,22 +198,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
 
         <section className={`project-image-break${isSystemDiagram ? " project-image-break--diagram" : ""}`}><img src={project.artifactImage ?? project.image} alt="" /></section>
-
-        {gallery.length > 0 && <section className="project-gallery" aria-label={`${project.title} project gallery`}>
-          {gallery.map((item, index) => (
-            <figure
-              key={item.src}
-              className={
-                index === 0 || (index === gallery.length - 1 && (gallery.length - 1) % 2 === 1)
-                  ? "project-gallery__lead"
-                  : undefined
-              }
-            >
-              <img src={item.src} alt={item.caption} loading="lazy" decoding="async" />
-              <figcaption>{item.caption}</figcaption>
-            </figure>
-          ))}
-        </section>}
 
         <nav className="next-project" aria-label="Next project">
           <a href={`/work/${next.slug}`}>{next.title} <span>↗</span></a>

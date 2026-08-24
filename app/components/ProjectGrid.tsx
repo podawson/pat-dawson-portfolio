@@ -136,14 +136,6 @@ export function ProjectGrid() {
                 if (event.key === "ArrowDown" || event.key === "ArrowRight") { event.preventDefault(); move(1); }
                 if (event.key === "ArrowUp" || event.key === "ArrowLeft") { event.preventDefault(); move(-1); }
               }}
-              onClick={(event) => {
-                if (event.detail === 0) return;
-                const pointerIsCoarse = window.matchMedia("(pointer: coarse)").matches;
-                if (pointerIsCoarse && activeIndex !== index) {
-                  event.preventDefault();
-                  setActiveIndex(index);
-                }
-              }}
               aria-current={index === activeIndex ? "true" : undefined}
               tabIndex={isVisible(index) ? 0 : -1}
             >

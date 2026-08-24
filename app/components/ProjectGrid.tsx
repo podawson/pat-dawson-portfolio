@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { categories, projects, type Category } from "../data";
 
 export function ProjectGrid() {
-  const [lens, setLens] = useState<"All" | Category>("All");
+  const [filter, setFilter] = useState<"All" | Category>("All");
   const [activeIndex, setActiveIndex] = useState(0);
   const [connector, setConnector] = useState({ startX: 0, startY: 0, endX: 0, endY: 0, width: 1, height: 1 });
   const shellRef = useRef<HTMLDivElement>(null);
@@ -12,21 +12,22 @@ export function ProjectGrid() {
   const cardRef = useRef<HTMLDivElement>(null);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const active = projects[activeIndex];
-  const isVisible = (index: number) => lens === "All" || projects[index].categories.includes(lens);
+  const isVisible = (index: number) => filter === "All" || projects[index].categories.includes(filter);
 
   useEffect(() => {
-    const readLens = () => {
-      const rawValue = new URLSearchParams(window.location.search).get("lens")?.toLowerCase();
+    const readFilter = () => {
+      const parameters = new URLSearchParams(window.location.search);
+      const rawValue = parameters.get("filter")?.toLowerCase();
       const value = rawValue === "ai-systems" ? "systems" : rawValue;
       const match = categories.find((item) => item.toLowerCase().replace(/\s+/g, "-") === value);
-      const nextLens = match ?? "All";
-      setLens(nextLens);
-      const first = projects.findIndex((project) => nextLens === "All" || project.categories.includes(nextLens));
+      const nextFilter = match ?? "All";
+      setFilter(nextFilter);
+      const first = projects.findIndex((project) => nextFilter === "All" || project.categories.includes(nextFilter));
       if (first >= 0) setActiveIndex(first);
     };
-    readLens();
-    window.addEventListener("popstate", readLens);
-    return () => window.removeEventListener("popstate", readLens);
+    readFilter();
+    window.addEventListener("popstate", readFilter);
+    return () => window.removeEventListener("popstate", readFilter);
   }, []);
 
   useEffect(() => {
@@ -51,14 +52,14 @@ export function ProjectGrid() {
     hoverTimerRef.current = setTimeout(() => {
       setActiveIndex(index);
       hoverTimerRef.current = null;
-    }, 110);
+    }, 28);
   };
 
-  const selectLens = (item: "All" | Category) => {
-    setLens(item);
+  const selectFilter = (item: "All" | Category) => {
+    setFilter(item);
     const first = projects.findIndex((project) => item === "All" || project.categories.includes(item));
     if (first >= 0) setActiveIndex(first);
-    const query = item === "All" ? "" : `?lens=${item.toLowerCase().replace(/\s+/g, "-")}`;
+    const query = item === "All" ? "" : `?filter=${item.toLowerCase().replace(/\s+/g, "-")}`;
     window.history.replaceState({}, "", `/work${query}`);
   };
 
@@ -81,7 +82,7 @@ export function ProjectGrid() {
     });
   };
 
-  useLayoutEffect(measure, [activeIndex, lens]);
+  useLayoutEffect(measure, [activeIndex, filter]);
   useEffect(() => {
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
@@ -104,10 +105,10 @@ export function ProjectGrid() {
       className="index-shell"
       ref={shellRef}
     >
-      <div className="index-lenses" role="group" aria-label="Lenses">
-        <span>Lenses</span>
+      <div className="index-filters" role="group" aria-label="Project filters">
+        <span>Filter</span>
         {categories.map((item) => (
-          <button className={lens === item ? "is-active" : ""} key={item} onClick={() => selectLens(item)} type="button">
+          <button className={filter === item ? "is-active" : ""} key={item} onClick={() => selectFilter(item)} type="button">
             {item}<sup>{item === "All" ? projects.length : projects.filter((project) => project.categories.includes(item)).length}</sup>
           </button>
         ))}

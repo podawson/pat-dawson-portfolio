@@ -21,7 +21,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <h1>{project.title}</h1>
             <p className="project-hero__headline">{project.headline}</p>
             <p className="project-hero__summary">{project.summary}</p>
-            <div className="tag-row project-hero__tags" aria-label="Project lenses">
+            <div className="tag-row project-hero__tags" aria-label="Project categories">
               {project.categories.map((category) => <span key={category}>{category}</span>)}
             </div>
           </div>

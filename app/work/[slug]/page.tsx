@@ -41,7 +41,6 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/ouellette-bridge/05.webp", caption: "Assembly studies resolved reversible attachments before fabrication." },
   ],
   "flower-tower": [
-    { src: "/work/gallery/flower-tower/01.webp", caption: "A full-scale cardboard prototype tested before the event." },
     { src: "/work/gallery/flower-tower/02.webp", caption: "Flower Tower in operation at Rockefeller Center." },
     { src: "/work/gallery/flower-tower/03.webp", caption: "One of thousands of biodegradable plant-and-poem exchanges." },
     { src: "/work/gallery/flower-tower/04.webp", caption: "Public participation was the structure's working material." },
@@ -60,7 +59,6 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   "wework-conversions": [
     { src: "/work/gallery/wework-conversions/02.webp", caption: "A floor-plan analysis translated into repeatable conversion logic." },
     { src: "/work/gallery/wework-conversions/03.webp", caption: "A completed conversion using the shared playbook." },
-    { src: "/work/gallery/wework-conversions/04.webp", caption: "Regional plan study across a distributed portfolio." },
     { src: "/work/gallery/wework-conversions/05.webp", caption: "A converted shared space operating inside one of the portfolio's inherited buildings." },
   ],
   "confidential-client": [
@@ -77,11 +75,9 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   "gymnast-cobot": [
     { src: "/work/gallery/gymnast-cobot/01.webp", caption: "Human-robot interaction testing in the lab." },
     { src: "/work/gallery/gymnast-cobot/02.webp", caption: "Foundational research assembled across fatigue, gesture, and safety." },
-    { src: "/work/gallery/gymnast-cobot/03.webp", caption: "The gesture-to-adjustment interaction model." },
     { src: "/work/gallery/gymnast-cobot/05.webp", caption: "Full-scale testing with workers and observers." },
   ],
   "mapping-investments": [
-    { src: "/work/gallery/mapping-investments/01.webp", caption: "The interactive neighborhood model and project evidence pane." },
     { src: "/work/gallery/mapping-investments/02.webp", caption: "History, ownership, investment, and impact layered in one spatial record." },
   ],
   "release-intelligence": [
@@ -91,16 +87,14 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/release-intelligence/04.webp", caption: "The functional architecture that survived the sketching process." },
   ],
   gleanings: [
+    { src: "/work/gallery/gleanings/04.webp", caption: "A quiet entry state makes the document set—not the interface—the starting point." },
     { src: "/work/gallery/gleanings/01.webp", caption: "The reconciliation workspace receives heterogeneous project records." },
-    { src: "/work/gallery/gleanings/02.webp", caption: "A structured ask turns document conflict into an inspectable action list." },
+    { src: "/work/gallery/gleanings/02.webp", caption: "Ranked risks keep urgency, evidence, and ownership in the same view." },
     { src: "/work/gallery/gleanings/03.webp", caption: "The generated output keeps evidence and next actions adjacent." },
-    { src: "/work/gallery/gleanings/04.webp", caption: "Schedules, notes, and references enter through one bounded workflow." },
   ],
   string: [
     { src: "/work/gallery/string/01.webp", caption: "Product-development volume reconstructed from eight Telegram exports." },
     { src: "/work/gallery/string/02.webp", caption: "Model snapshots compared without erasing changes in call volume or precision." },
-    { src: "/work/gallery/string/03.webp", caption: "A visual study for the system's Sky, Sun, and Earth signal model." },
-    { src: "/work/gallery/string/04.webp", caption: "Braided signals became a recurring image for ranked opportunity." },
   ],
   aintivirus: [
     { src: "/work/gallery/aintivirus/02.webp", caption: "A live JohnBot conversation grounded in the private corpus." },
@@ -140,10 +134,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const current = projects.findIndex((item) => item.slug === project.slug);
   const next = projects[(current + 1) % projects.length];
   const isSystemDiagram = project.slug === "release-intelligence" || project.slug === "gleanings";
-  const gallery = projectGalleries[project.slug] ?? [];
+  const gallery = (projectGalleries[project.slug] ?? []).filter(
+    (item, index, items) =>
+      item.src !== project.image &&
+      items.findIndex((candidate) => candidate.src === item.src) === index,
+  );
   const openingMedia = gallery.slice(0, 1);
   const narrativeMedia = gallery.slice(1, 3);
   const evidenceMedia = gallery.slice(3);
+  const endImage =
+    project.artifactImage &&
+    project.artifactImage !== project.image &&
+    !gallery.some((item) => item.src === project.artifactImage)
+      ? project.artifactImage
+      : null;
 
   return (
     <main className="project-page-shell" style={{ "--project-accent": projectAccents[project.slug] ?? "#72d9e8" } as CSSProperties}>
@@ -208,7 +212,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           ))}
         </section>
 
-        <section className={`project-image-break${isSystemDiagram ? " project-image-break--diagram" : ""}`}><img src={project.artifactImage ?? project.image} alt="" /></section>
+        {endImage ? (
+          <section className={`project-image-break${isSystemDiagram ? " project-image-break--diagram" : ""}`}>
+            <img src={endImage} alt={`${project.title} supporting artifact`} />
+          </section>
+        ) : null}
 
         <nav className="next-project" aria-label="Next project">
           <a href={`/work/${next.slug}`}>{next.title} <span>↗</span></a>

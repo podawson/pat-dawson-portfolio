@@ -504,6 +504,7 @@ export function Constellation() {
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const connectionLayerRef = useRef<SVGSVGElement | null>(null);
   const axisLayerRef = useRef<HTMLDivElement | null>(null);
+  const backgroundPointerRef = useRef({ x: 0, y: 0 });
   const handleBodyReady = useCallback((ready: boolean) => setBodyReady(ready), []);
   const handleNodePositions = useCallback((positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => {
     positions.forEach((position, index) => {
@@ -605,7 +606,22 @@ export function Constellation() {
   }, [activeSlug]);
 
   return (
-    <section className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`} id="map" aria-labelledby="field-title">
+    <section
+      className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`}
+      id="map"
+      aria-labelledby="field-title"
+      onPointerDownCapture={(event) => {
+        backgroundPointerRef.current = { x: event.clientX, y: event.clientY };
+      }}
+      onClick={(event) => {
+        if (!active) return;
+        const target = event.target as HTMLElement;
+        if (target.closest("button, a, .map-selection-band, .field-relation-filter, .site-header")) return;
+        const start = backgroundPointerRef.current;
+        if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 6) return;
+        setActiveSlug(null);
+      }}
+    >
       <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} />
       {!bodyReady && <RestingGeometry />}
       <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -626,7 +642,7 @@ export function Constellation() {
         <span>Emphasize relationship</span>
         <div>
           <button aria-pressed={relationFilter === "all"} className={relationFilter === "all" ? "is-active" : ""} onClick={() => selectRelationFilter("all")} type="button">
-            All<sup>{projects.length}</sup>
+            All
           </button>
           {relationKinds.map((kind) => (
             <button
@@ -637,7 +653,7 @@ export function Constellation() {
               style={{ "--relation-color": relationColor[kind] } as CSSProperties}
               type="button"
             >
-              <i />{relationLabel[kind]}<sup>{relationshipProjectCounts[kind]}</sup>
+              <i />{relationLabel[kind]}
             </button>
           ))}
         </div>
@@ -723,7 +739,6 @@ export function Constellation() {
             )) : <p className="map-selection-band__empty">No {relationFilter === "all" ? "related" : relationLabel[relationFilter].toLowerCase()} links recorded.</p>}
           </div>
           <a className="map-selection-band__open" href={`/work/${active.slug}`}>Open project ↗</a>
-          <button className="map-selection-band__close" onClick={() => setActiveSlug(null)} type="button" aria-label="Close selection">×</button>
         </aside>
       )}
 

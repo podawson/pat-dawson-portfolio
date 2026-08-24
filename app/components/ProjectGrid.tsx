@@ -106,7 +106,6 @@ export function ProjectGrid() {
       ref={shellRef}
     >
       <div className="index-filters" role="group" aria-label="Project filters">
-        <span>Filter</span>
         {categories.map((item) => (
           <button className={filter === item ? "is-active" : ""} key={item} onClick={() => selectFilter(item)} type="button">
             {item}<sup>{item === "All" ? projects.length : projects.filter((project) => project.categories.includes(item)).length}</sup>

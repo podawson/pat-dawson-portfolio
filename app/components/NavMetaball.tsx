@@ -112,7 +112,7 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
       by: hoverCenter.y,
       radius: Math.min(toCapsule.radius, hoverCapsule.radius) * 0.23,
     };
-    const color = inverse ? [202, 205, 204] : [62, 67, 65];
+    const color = inverse ? [224, 226, 222] : [62, 67, 65];
 
     for (let py = 0; py < height; py += 1) {
       const y = py / ratio;
@@ -126,11 +126,17 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
         const activeCapsules = corpusSmoothMin(distanceFrom, distanceTo, blend);
         const activeDistance = corpusSmoothMin(activeCapsules, distanceTransitBridge, CORPUS_MOTION.smoothMinRest);
         const hoverDistance = corpusSmoothMin(distanceHoverBridge, distanceHover, hoverBlend);
-        const distance = corpusSmoothMin(activeDistance, hoverDistance, CORPUS_MOTION.smoothMinRest);
         const antialias = 0.9 / ratio;
-        const fill = 1 - Math.max(0, Math.min(1, (distance + antialias) / (antialias * 2)));
-        const rim = Math.max(0, 1 - Math.abs(distance) / 2.2) * 0.42;
-        const alpha = Math.max(0, Math.min(255, Math.round((fill * 0.11 + rim * 0.045) * 255)));
+        const activeFill = 1 - Math.max(0, Math.min(1, (activeDistance + antialias) / (antialias * 2)));
+        const activeRim = Math.max(0, 1 - Math.abs(activeDistance) / 2.2) * 0.42;
+        const hoverFill = 1 - Math.max(0, Math.min(1, (hoverDistance + antialias) / (antialias * 2)));
+        const hoverRim = Math.max(0, 1 - Math.abs(hoverDistance) / 2.2) * 0.42;
+        const alpha = Math.max(0, Math.min(255, Math.round((
+          activeFill * 0.88
+          + activeRim * 0.11
+          + hoverFill * 0.17 * hoverAmountRef.current
+          + hoverRim * 0.04 * hoverAmountRef.current
+        ) * 255)));
         const offset = (py * width + px) * 4;
         image.data[offset] = color[0];
         image.data[offset + 1] = color[1];
@@ -225,7 +231,7 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
           clearTimeout(hoverLeaveTimerRef.current);
           hoverLeaveTimerRef.current = null;
         }
-        setHover(index, index === activeRef.current ? 0 : 1);
+        setHover(index, index === activeRef.current ? 0 : 0.58);
       };
       const leave = () => {
         if (hoverLeaveTimerRef.current) clearTimeout(hoverLeaveTimerRef.current);

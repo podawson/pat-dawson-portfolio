@@ -12,8 +12,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const next = projects[(current + 1) % projects.length];
 
   return (
-    <main>
-      <SiteHeader />
+    <main className="project-page-shell">
+      <SiteHeader inverse />
       <article className="project-page">
         <header className="project-hero">
           <div className="project-hero__copy">

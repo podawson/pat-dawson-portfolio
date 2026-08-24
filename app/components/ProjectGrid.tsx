@@ -16,7 +16,8 @@ export function ProjectGrid() {
 
   useEffect(() => {
     const readLens = () => {
-      const value = new URLSearchParams(window.location.search).get("lens")?.toLowerCase();
+      const rawValue = new URLSearchParams(window.location.search).get("lens")?.toLowerCase();
+      const value = rawValue === "ai-systems" ? "systems" : rawValue;
       const match = categories.find((item) => item.toLowerCase().replace(/\s+/g, "-") === value);
       const nextLens = match ?? "All";
       setLens(nextLens);
@@ -68,10 +69,11 @@ export function ProjectGrid() {
     if (!shell || !item || !card) return;
     const shellBounds = shell.getBoundingClientRect();
     const itemBounds = item.getBoundingClientRect();
+    const pillBounds = item.parentElement?.querySelector("em")?.getBoundingClientRect() ?? itemBounds;
     const cardBounds = card.getBoundingClientRect();
     setConnector({
-      startX: itemBounds.right - shellBounds.left + 14,
-      startY: itemBounds.top - shellBounds.top + itemBounds.height / 2,
+      startX: pillBounds.right - shellBounds.left,
+      startY: pillBounds.top - shellBounds.top + pillBounds.height / 2,
       endX: cardBounds.left - shellBounds.left - 14,
       endY: cardBounds.top - shellBounds.top + cardBounds.height * 0.36,
       width: shellBounds.width,

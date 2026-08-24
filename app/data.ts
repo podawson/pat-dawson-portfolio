@@ -1,4 +1,4 @@
-export type Category = "Place" | "Fabrication" | "Experience" | "AI systems" | "Culture";
+export type Category = "Place" | "Fabrication" | "Experience" | "Systems" | "Culture";
 
 export type Project = {
   slug: string;
@@ -37,7 +37,7 @@ export const categories: ("All" | Category)[] = [
   "Place",
   "Fabrication",
   "Experience",
-  "AI systems",
+  "Systems",
   "Culture",
 ];
 
@@ -178,7 +178,7 @@ export const projects: Project[] = [
     outcome: "200+ conversions initiated across a 900+ location portfolio, with repeatable delivery logic and no single universal layout.",
     image: "/work/wework.jpg",
     indexPill: "a playbook for 900 buildings",
-    categories: ["Place", "Experience", "AI systems"],
+    categories: ["Place", "Experience", "Systems"],
     node: { x: 69, y: 66.2, size: 27 },
     metrics: ["900+ locations analyzed", "200+ conversions initiated", "2–150 person floor plates"],
     artifacts: ["Portfolio opportunity matrix", "Custom Revit analysis", "Operational conversion playbook"],
@@ -202,7 +202,7 @@ export const projects: Project[] = [
     outcome: "A first-of-kind enterprise physical-AI space advanced through construction without losing public presence at the site.",
     image: "/work/intuit.jpg",
     indexPill: "the enterprise’s first physical AI",
-    categories: ["Experience", "Place", "AI systems"],
+    categories: ["Experience", "Place", "Systems"],
     node: { x: 54.8, y: 42.2, size: 29 },
     metrics: ["500+ generated visualizations", "4 curated decision-moving images", "1st physical-AI customer space in portfolio"],
     artifacts: ["Workshop-to-prompt translation", "500→4 curation funnel", "Temporary / permanent delivery timeline"],
@@ -226,7 +226,7 @@ export const projects: Project[] = [
     outcome: "A permanent audiovisual passage delivered on schedule inside an active 1,388-foot enterprise headquarters.",
     image: "/work/vanderbilt.jpg",
     indexPill: "150-year archive, one multimodal generative experience",
-    categories: ["Experience", "AI systems", "Place"],
+    categories: ["Experience", "Systems", "Place"],
     featured: true,
     node: { x: 58.8, y: 30.2, size: 34 },
     metrics: ["5 hardware zones", "15 generative modes", "150-year archive taxonomy"],
@@ -251,7 +251,7 @@ export const projects: Project[] = [
     outcome: "An NSF-funded live industrial prototype joining fatigue estimation, gesture control, projected intent, and worker-set assistance.",
     image: "/work/gymnast.jpg",
     indexPill: "the robot asks first",
-    categories: ["Experience", "AI systems", "Fabrication"],
+    categories: ["Experience", "Systems", "Fabrication"],
     featured: true,
     node: { x: 72.8, y: 57.2, size: 30 },
     metrics: ["NSF Award #1928654", "UR-10 live prototype", "Closed fatigue-to-adjustment loop"],
@@ -277,7 +277,7 @@ export const projects: Project[] = [
     image: "/work/mapping-investments.svg",
     artifactImage: "/work/mapping-investments.svg",
     indexPill: "history you can navigate",
-    categories: ["AI systems", "Place", "Culture"],
+    categories: ["Systems", "Place", "Culture"],
     node: { x: 67.2, y: 55.2, size: 26 },
     metrics: ["13 sites", "3 eras", "90 years of neighborhood history"],
     artifacts: ["Prompt contracts + regression guards", "Land-over-time state diagram", "Cartographic system comparison"],
@@ -302,7 +302,7 @@ export const projects: Project[] = [
     image: "/work/release-intelligence.svg",
     artifactImage: "/work/release-intelligence.svg",
     indexPill: "five honest documents",
-    categories: ["AI systems", "Experience"],
+    categories: ["Systems", "Experience"],
     node: { x: 84.2, y: 55.4, size: 28 },
     metrics: ["40–60% → <5% custom bucket", "3–5 hr → 20–40 min per cycle", "12+ batches / 100+ tickets"],
     artifacts: ["Pencil architecture → functional system", "Six-stage pipeline diagram", "Batch-by-batch error table"],
@@ -327,7 +327,7 @@ export const projects: Project[] = [
     image: "/work/gleanings.svg",
     artifactImage: "/work/gleanings.svg",
     indexPill: "conflicts before they compound",
-    categories: ["AI systems", "Experience"],
+    categories: ["Systems", "Experience"],
     node: { x: 80.4, y: 62.6, size: 26 },
     metrics: ["4+ heterogeneous source classes", "Conflicts ranked by cost + schedule", "Human review before action"],
     artifacts: ["File-ingestion and reconciliation map", "Ranked discrepancy interface", "Finding-to-source evidence trail"],
@@ -351,7 +351,7 @@ export const projects: Project[] = [
     outcome: "A 0→5,000+ trader product with an auditable model-development archive and measurable improvement across its operating period.",
     image: "/work/string.jpg",
     indexPill: "eight exports, one ledger",
-    categories: ["AI systems", "Culture"],
+    categories: ["Systems", "Culture"],
     featured: true,
     node: { x: 80.4, y: 41, size: 32 },
     metrics: ["0 → 5,000+ active traders", "40% → 62% reported hit rate", "~$250K revenue"],
@@ -376,7 +376,7 @@ export const projects: Project[] = [
     outcome: "A cross-channel character product used by ~10,000 active chatbot users, supported by an automated media pipeline and a 1.2M-follower distribution surface.",
     image: "/work/aintivirus.jpg",
     indexPill: "a ghost with guardrails",
-    categories: ["AI systems", "Culture"],
+    categories: ["Systems", "Culture"],
     featured: true,
     node: { x: 54.2, y: 35.4, size: 34 },
     metrics: ["~10,000 active chatbot users", "1.2M X followers (audience)", "Script → voice → published episode"],
@@ -408,7 +408,7 @@ export const projectConnections: ProjectConnection[] = [
   { from: "mapping-investments", to: "string", kind: "method", reason: "Dense evidence becomes an exploratory interface where relationships are more useful than a linear summary." },
   { from: "release-intelligence", to: "string", kind: "lineage", reason: "Model improvement is credible only when versions, denominators, failures, and outcomes remain comparable." },
   { from: "release-intelligence", to: "gleanings", kind: "lineage", reason: "Both systems separate deterministic evidence handling from bounded language-model judgment." },
-  { from: "gleanings", to: "aintivirus", kind: "constraint", reason: "A source-bounded corpus is the foundation for model behavior that can be explained and operated." },
+  { from: "gleanings", to: "aintivirus", kind: "lineage", reason: "Both systems derive explainable behavior from a deliberately bounded source corpus rather than an unconstrained model persona." },
   { from: "string", to: "aintivirus", kind: "lineage", reason: "Both products were built and operated inside fast, skeptical, high-volume public crypto communities." },
 ];
 

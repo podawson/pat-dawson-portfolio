@@ -15,6 +15,8 @@ type MapBody3DProps = {
   onReadyChange: (ready: boolean) => void;
   onNodePositionsChange?: (positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => void;
   onResetMap?: () => void;
+  onToggleNodeNames?: () => void;
+  showNodeNames?: boolean;
 };
 
 const MAX_RELATED = 4;
@@ -173,7 +175,7 @@ const fragmentShader = `
   }
 `;
 
-export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null, highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onResetMap }: MapBody3DProps) {
+export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null, highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onResetMap, onToggleNodeNames, showNodeNames = false }: MapBody3DProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeSlugRef = useRef(activeSlug);
   const emphasizedSlugsRef = useRef(emphasizedSlugs);
@@ -286,11 +288,17 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     });
     body.update();
     body.geometry.computeBoundingSphere();
-    body.scale.set(
-      (mobile ? 4.15 : 5.65) * DEFAULT_CORPUS_SCALE,
-      (mobile ? 4.65 : 3.85) * DEFAULT_CORPUS_SCALE,
-      (mobile ? 3.5 : 3.8) * DEFAULT_CORPUS_SCALE,
-    );
+    const fitCorpusToViewport = (width: number, height: number) => {
+      const fit = mobile
+        ? THREE.MathUtils.clamp(Math.min(width / 420, height / 780), 0.82, 1)
+        : THREE.MathUtils.clamp(Math.min(width / 1280, height / 800), 0.76, 1);
+      body.scale.set(
+        (mobile ? 3.25 : 5.65) * DEFAULT_CORPUS_SCALE * fit,
+        (mobile ? 3.9 : 3.85) * DEFAULT_CORPUS_SCALE * fit,
+        (mobile ? 3.0 : 3.8) * DEFAULT_CORPUS_SCALE * fit,
+      );
+    };
+    fitCorpusToViewport(mount.clientWidth, mount.clientHeight);
     body.rotation.copy(DEFAULT_ROTATION);
     body.position.set(mobile ? 0 : 0.28, mobile ? -0.32 : 0.02, 0);
     scene.add(body);
@@ -312,23 +320,19 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     let isDragging = false;
     const defaultQuaternion = new THREE.Quaternion().setFromEuler(DEFAULT_ROTATION);
     const rotationQuaternion = defaultQuaternion.clone();
-    const dragVector = new THREE.Vector3();
-    const nextDragVector = new THREE.Vector3();
-    const inertiaQuaternion = new THREE.Quaternion();
-    const identityQuaternion = new THREE.Quaternion();
+    const targetQuaternion = defaultQuaternion.clone();
+    const yawQuaternion = new THREE.Quaternion();
+    const pitchQuaternion = new THREE.Quaternion();
     const dragDelta = new THREE.Quaternion();
+    const worldUp = new THREE.Vector3(0, 1, 0);
+    const cameraRight = new THREE.Vector3(1, 0, 0);
+    let previousPointerX = 0;
+    let previousPointerY = 0;
+    let previousPointerTime = 0;
+    let yawVelocity = 0;
+    let pitchVelocity = 0;
     let resetRequested = false;
     let rotationFlag = false;
-
-    const trackballPoint = (clientX: number, clientY: number, target: THREE.Vector3) => {
-      const bounds = mount.getBoundingClientRect();
-      const x = ((clientX - bounds.left) / Math.max(1, bounds.width)) * 2 - 1;
-      const y = -(((clientY - bounds.top) / Math.max(1, bounds.height)) * 2 - 1);
-      const radiusSquared = x * x + y * y;
-      if (radiusSquared <= 1) target.set(x, y, Math.sqrt(1 - radiusSquared));
-      else target.set(x, y, 0).normalize();
-      return target;
-    };
 
     const schedule = () => {
       if (!scheduledFrame && inViewport && !document.hidden) scheduledFrame = requestAnimationFrame(draw);
@@ -345,6 +349,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
+      fitCorpusToViewport(width, height);
       wake(250);
     };
     resize();
@@ -359,7 +364,9 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     };
     resetRef.current = () => {
       resetRequested = true;
-      inertiaQuaternion.identity();
+      targetQuaternion.copy(defaultQuaternion);
+      yawVelocity = 0;
+      pitchVelocity = 0;
       wake(850);
     };
 
@@ -368,19 +375,32 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       if (event.target instanceof Element && event.target.closest(".map-reset-view")) return;
       isDragging = true;
       resetRequested = false;
-      trackballPoint(event.clientX, event.clientY, dragVector);
-      inertiaQuaternion.identity();
+      previousPointerX = event.clientX;
+      previousPointerY = event.clientY;
+      previousPointerTime = event.timeStamp;
+      yawVelocity = 0;
+      pitchVelocity = 0;
       mount.setPointerCapture(event.pointerId);
       setDragging(true);
       wake(800);
     };
     const onPointerMove = (event: PointerEvent) => {
       if (!isDragging) return;
-      trackballPoint(event.clientX, event.clientY, nextDragVector);
-      dragDelta.setFromUnitVectors(dragVector, nextDragVector);
-      rotationQuaternion.premultiply(dragDelta).normalize();
-      inertiaQuaternion.copy(dragDelta);
-      dragVector.copy(nextDragVector);
+      const bounds = mount.getBoundingClientRect();
+      const referenceSize = Math.max(280, Math.min(bounds.width, bounds.height));
+      const sensitivity = mobile ? 3.1 : 2.7;
+      const yawStep = THREE.MathUtils.clamp((event.clientX - previousPointerX) / referenceSize * sensitivity, -0.18, 0.18);
+      const pitchStep = THREE.MathUtils.clamp((event.clientY - previousPointerY) / referenceSize * sensitivity, -0.18, 0.18);
+      const elapsedFrames = THREE.MathUtils.clamp((event.timeStamp - previousPointerTime) / 16.67, 0.5, 2.5);
+      yawQuaternion.setFromAxisAngle(worldUp, yawStep);
+      pitchQuaternion.setFromAxisAngle(cameraRight, pitchStep);
+      dragDelta.copy(yawQuaternion).multiply(pitchQuaternion);
+      targetQuaternion.premultiply(dragDelta).normalize();
+      yawVelocity = THREE.MathUtils.lerp(yawVelocity, yawStep / elapsedFrames, 0.38);
+      pitchVelocity = THREE.MathUtils.lerp(pitchVelocity, pitchStep / elapsedFrames, 0.38);
+      previousPointerX = event.clientX;
+      previousPointerY = event.clientY;
+      previousPointerTime = event.timeStamp;
       updateRotationFlag();
       wake(500);
     };
@@ -473,19 +493,23 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       previousFrame = now;
       const selectionChanging = updateSelection(now);
       if (resetRequested) {
-        rotationQuaternion.slerp(defaultQuaternion, 1 - Math.pow(0.78, delta));
+        rotationQuaternion.slerp(defaultQuaternion, 1 - Math.pow(0.72, delta));
         if (rotationQuaternion.angleTo(defaultQuaternion) < 0.003) {
           rotationQuaternion.copy(defaultQuaternion);
+          targetQuaternion.copy(defaultQuaternion);
           resetRequested = false;
         }
-      } else if (!isDragging && !reduceMotion) {
-        const inertiaAngle = inertiaQuaternion.angleTo(identityQuaternion);
-        if (inertiaAngle > 0.00015) {
-          rotationQuaternion.premultiply(inertiaQuaternion).normalize();
-          inertiaQuaternion.slerp(identityQuaternion, 1 - Math.pow(0.90, delta));
-        } else {
-          inertiaQuaternion.identity();
+      } else {
+        if (!isDragging && !reduceMotion && (Math.abs(yawVelocity) > 0.00004 || Math.abs(pitchVelocity) > 0.00004)) {
+          yawQuaternion.setFromAxisAngle(worldUp, yawVelocity * delta);
+          pitchQuaternion.setFromAxisAngle(cameraRight, pitchVelocity * delta);
+          dragDelta.copy(yawQuaternion).multiply(pitchQuaternion);
+          targetQuaternion.premultiply(dragDelta).normalize();
+          const damping = Math.pow(0.84, delta);
+          yawVelocity *= damping;
+          pitchVelocity *= damping;
         }
+        rotationQuaternion.slerp(targetQuaternion, 1 - Math.pow(isDragging ? 0.48 : 0.68, delta));
       }
       body.quaternion.copy(rotationQuaternion);
       updateRotationFlag();
@@ -505,7 +529,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       });
       onAxisPositionsChange?.(projectedAxes);
       renderer.render(scene, camera);
-      const moving = isDragging || resetRequested || inertiaQuaternion.angleTo(identityQuaternion) > 0.00015;
+      const moving = isDragging || resetRequested || rotationQuaternion.angleTo(targetQuaternion) > 0.00015 || Math.abs(yawVelocity) > 0.00004 || Math.abs(pitchVelocity) > 0.00004;
       if (moving || selectionChanging || now < renderUntil) schedule();
     }
 
@@ -546,12 +570,21 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
 
   return (
     <div className={`field-body-3d ${dragging ? "is-dragging" : ""}`} ref={mountRef} aria-label="Drag freely to rotate the project Corpus in three dimensions">
-      <button
-        className={`map-reset-view ${rotated ? "is-rotated" : ""}`}
-        onClick={(event) => { event.stopPropagation(); resetRef.current?.(); onResetMap?.(); }}
-        onPointerDown={(event) => event.stopPropagation()}
-        type="button"
-      >Reset Corpus</button>
+      <div className="map-corpus-tools">
+        <button
+          aria-pressed={showNodeNames}
+          className={showNodeNames ? "is-active" : ""}
+          onClick={(event) => { event.stopPropagation(); onToggleNodeNames?.(); }}
+          onPointerDown={(event) => event.stopPropagation()}
+          type="button"
+        >{showNodeNames ? "Hide names" : "Show names"}</button>
+        <button
+          className={`map-reset-view ${rotated ? "is-rotated" : ""}`}
+          onClick={(event) => { event.stopPropagation(); resetRef.current?.(); onResetMap?.(); }}
+          onPointerDown={(event) => event.stopPropagation()}
+          type="button"
+        >Reset Corpus</button>
+      </div>
     </div>
   );
 }

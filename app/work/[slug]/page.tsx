@@ -1,6 +1,24 @@
 import { SiteHeader } from "../../components/SiteHeader";
 import { getProject, projects } from "../../data";
 import { redirect } from "next/navigation";
+import type { CSSProperties } from "react";
+
+const projectAccents: Record<string, string> = {
+  "charlesgate-park": "#8fc49a",
+  "88-east-broadway": "#62c7c7",
+  "ouellette-bridge": "#dfa45f",
+  "flower-tower": "#d884ad",
+  caleta: "#ef6757",
+  "wework-conversions": "#79b8a5",
+  "confidential-client": "#6ebee8",
+  "vanderbilt-passage": "#d5b46e",
+  "gymnast-cobot": "#dfc959",
+  "civic-investment-map": "#ed8b5d",
+  "release-intelligence": "#ef935c",
+  gleanings: "#a58bd4",
+  string: "#9dd6dc",
+  aintivirus: "#7185ff",
+};
 
 export function generateStaticParams() {
   return [...projects.map((project) => ({ slug: project.slug })), { slug: "intuit-astor-place" }];
@@ -15,7 +33,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const isSystemDiagram = project.slug === "release-intelligence" || project.slug === "gleanings";
 
   return (
-    <main className="project-page-shell">
+    <main className="project-page-shell" style={{ "--project-accent": projectAccents[project.slug] ?? "#72d9e8" } as CSSProperties}>
       <SiteHeader inverse />
       <article className="project-page">
         <header className="project-hero">

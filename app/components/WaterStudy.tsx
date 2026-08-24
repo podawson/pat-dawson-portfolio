@@ -218,13 +218,15 @@ export function WaterStudy() {
   return (
     <div className="study-tool study-tool--water">
       <div className={`study-canvas study-canvas--${sky}`} ref={mountRef} role="img" aria-label="An organic field of isosceles triangles deformed by live water, weather, light, and camera parameters"><div className="study-vignette" /></div>
-      <button className="study-controls-toggle" onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button">{panelOpen?"Close":"Open"}</button>
-      {panelOpen && <aside className="study-controls">
-        <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>
-        {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}{group.title==="Weather"&&<div className="study-sky-switch" role="group" aria-label="Sky condition">{(["clear","cloud","fog"] as Sky[]).map((condition)=><button className={sky===condition?"is-active":""} key={condition} onClick={()=>setSky(condition)} type="button">{condition}</button>)}</div>}</section>)}
-        <div className="study-actions"><button onClick={reset} type="button">Reset</button><button onClick={capture} type="button">Capture PNG</button></div>
-        <p className="study-shortcuts"><span>H</span> controls <span>R</span> reset <span>1–4</span> presets</p>
-      </aside>}
+      <aside className={`study-controls${panelOpen ? "" : " is-collapsed"}`}>
+        {panelOpen && <div className="study-controls__content">
+          <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>
+          {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
+          <div className="study-actions"><button onClick={reset} type="button">Reset</button><button onClick={capture} type="button">Capture PNG</button></div>
+          <p className="study-shortcuts"><span>H</span> controls <span>R</span> reset <span>1–4</span> presets</p>
+        </div>}
+        <button className="study-controls-toggle" onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button">{panelOpen?"Close":"Open"}</button>
+      </aside>
     </div>
   );
 }

@@ -23,7 +23,7 @@ export type Project = {
   details: { title: string; body: string }[];
 };
 
-export type ConnectionKind = "method" | "handoff" | "agency" | "constraint" | "lineage";
+export type ConnectionKind = "handoff" | "cede" | "uphold" | "quorum" | "graft";
 
 export type ProjectConnection = {
   from: string;
@@ -58,7 +58,7 @@ export const projects: Project[] = [
     indexPill: "a state, a city, and a community walk into a park",
     categories: ["Place", "Culture"],
     featured: true,
-    node: { x: 25.3, y: 66.2, size: 32 },
+    node: { x: 25.3, y: 43.5, size: 32 },
     metrics: ["Point-cloud survey → highway mesh", "Grasshopper-automated tree placement", "Phased public-realm delivery"],
     artifacts: ["Historical river overlays", "Point-cloud / mesh comparison", "Public-hearing and phasing diagrams"],
     details: [
@@ -130,7 +130,7 @@ export const projects: Project[] = [
     image: "/work/flower-tower-single.jpg",
     indexPill: "a monument that disperses",
     categories: ["Fabrication", "Place", "Culture"],
-    node: { x: 21.5, y: 44.6, size: 26 },
+    node: { x: 21.5, y: 38, size: 26 },
     metrics: ["800+ stems and seed packets", "6-foot cardboard structure", "~$400 material budget"],
     artifacts: ["Grant and competition submission", "Perforation / assembly logic", "Time-lapse of public depletion"],
     details: [
@@ -155,7 +155,7 @@ export const projects: Project[] = [
     indexPill: "punk rock fully permitted",
     categories: ["Place", "Fabrication", "Culture"],
     featured: true,
-    node: { x: 34.8, y: 33.8, size: 32 },
+    node: { x: 34.8, y: 56.5, size: 32 },
     metrics: ["Concept → permit → opening", "Rated kitchen separation", "ADA + fire/life safety coordination"],
     artifacts: ["Material and lighting studies", "Permit / construction set", "Rated-glass field detail"],
     details: [
@@ -179,7 +179,7 @@ export const projects: Project[] = [
     image: "/work/wework.jpg",
     indexPill: "a playbook for 900 buildings",
     categories: ["Place", "Experience", "Systems"],
-    node: { x: 69, y: 66.2, size: 27 },
+    node: { x: 69, y: 69.8, size: 27 },
     metrics: ["900+ locations analyzed", "200+ conversions initiated", "2–150 person floor plates"],
     artifacts: ["Portfolio opportunity matrix", "Custom Revit analysis", "Operational conversion playbook"],
     details: [
@@ -228,7 +228,7 @@ export const projects: Project[] = [
     indexPill: "150-year archive, one multimodal generative experience",
     categories: ["Experience", "Systems", "Place"],
     featured: true,
-    node: { x: 58.8, y: 53.5, size: 34 },
+    node: { x: 58.8, y: 46, size: 34 },
     metrics: ["5 hardware zones", "15 generative modes", "150-year archive taxonomy"],
     artifacts: ["Mode and content taxonomy", "Systems / commissioning map", "Directional-audio field study"],
     details: [
@@ -253,7 +253,7 @@ export const projects: Project[] = [
     indexPill: "the robot asks first",
     categories: ["Experience", "Systems", "Fabrication"],
     featured: true,
-    node: { x: 72.8, y: 57.2, size: 30 },
+    node: { x: 72.8, y: 59.5, size: 30 },
     metrics: ["NSF Award #1928654", "UR-10 live prototype", "Closed fatigue-to-adjustment loop"],
     artifacts: ["Fatigue-to-adjustment flowchart", "Gesture-programming studies", "Projected interface on physical box"],
     details: [
@@ -303,7 +303,7 @@ export const projects: Project[] = [
     artifactImage: "/work/release-intelligence-pipeline.svg",
     indexPill: "five honest documents",
     categories: ["Systems", "Experience"],
-    node: { x: 84.2, y: 55.4, size: 28 },
+    node: { x: 77.2, y: 51.2, size: 28 },
     metrics: ["40–60% → <5% custom bucket", "3–5 hr → 20–40 min per cycle", "12+ batches / 100+ tickets"],
     artifacts: ["Pencil architecture → functional system", "Six-stage pipeline diagram", "Batch-by-batch error table"],
     details: [
@@ -328,7 +328,7 @@ export const projects: Project[] = [
     artifactImage: "/work/gleanings.svg",
     indexPill: "conflicts before they compound",
     categories: ["Systems", "Experience"],
-    node: { x: 80.4, y: 62.6, size: 26 },
+    node: { x: 80.4, y: 66.2, size: 26 },
     metrics: ["4+ heterogeneous source classes", "Conflicts ranked by cost + schedule", "Human review before action"],
     artifacts: ["File-ingestion and reconciliation map", "Ranked discrepancy interface", "Finding-to-source evidence trail"],
     details: [
@@ -353,7 +353,7 @@ export const projects: Project[] = [
     indexPill: "eight exports, one ledger",
     categories: ["Systems", "Culture"],
     featured: true,
-    node: { x: 80.4, y: 41, size: 32 },
+    node: { x: 84.2, y: 41, size: 32 },
     metrics: ["0 → 5,000+ active traders", "40% → 62% reported hit rate", "~$250K revenue"],
     artifacts: ["Model-version performance table", "Maximum-X distribution + denominator", "Call / leaderboard evidence ledger"],
     details: [
@@ -390,36 +390,50 @@ export const projects: Project[] = [
 ];
 
 export const projectConnections: ProjectConnection[] = [
-  { from: "charlesgate-park", to: "mapping-investments", kind: "method", reason: "Historical research becomes a navigable spatial model rather than a static report." },
-  { from: "charlesgate-park", to: "88-east-broadway", kind: "constraint", reason: "Existing conditions and regulation define the design envelope before form-making begins." },
-  { from: "charlesgate-park", to: "flower-tower", kind: "agency", reason: "Civic work returns authorship and resources to the public instead of treating participation as validation." },
-  { from: "88-east-broadway", to: "caleta", kind: "handoff", reason: "An open-ended concept is translated into a package legible to owners, regulators, and builders." },
-  { from: "ouellette-bridge", to: "caleta", kind: "constraint", reason: "Fabrication detail preserves design intent where code, preservation, and field reality could erase it." },
-  { from: "ouellette-bridge", to: "vanderbilt-passage", kind: "handoff", reason: "Lighting and media only become architecture when installation logic survives the last mile." },
-  { from: "flower-tower", to: "gymnast-cobot", kind: "agency", reason: "The system sets conditions while the person inside it retains authorship over the outcome." },
-  { from: "caleta", to: "confidential-client", kind: "lineage", reason: "Brand becomes a physical operating condition inside active construction, not a graphic layer added afterward." },
-  { from: "wework-conversions", to: "release-intelligence", kind: "method", reason: "One-off expert judgment becomes an auditable playbook another team can own." },
-  { from: "wework-conversions", to: "gleanings", kind: "method", reason: "Heterogeneous project data is reduced to a ranked decision surface rather than another archive." },
-  { from: "confidential-client", to: "vanderbilt-passage", kind: "handoff", reason: "First-of-kind enterprise systems land inside live construction, compliance, and public opening conditions." },
-  { from: "vanderbilt-passage", to: "string", kind: "method", reason: "Live data is transformed into a legible interface without hiding that a system is making selections." },
-  { from: "gymnast-cobot", to: "release-intelligence", kind: "agency", reason: "Automation proposes or adapts; the accountable human sees the state and confirms the consequential action." },
-  { from: "gymnast-cobot", to: "gleanings", kind: "agency", reason: "Machine intelligence routes scarce attention while judgment remains with the worker or project manager." },
-  { from: "mapping-investments", to: "release-intelligence", kind: "method", reason: "Prompt contracts, deterministic boundaries, and regression checks keep AI-directed production inspectable." },
-  { from: "mapping-investments", to: "string", kind: "method", reason: "Dense evidence becomes an exploratory interface where relationships are more useful than a linear summary." },
-  { from: "release-intelligence", to: "string", kind: "lineage", reason: "Model improvement is credible only when versions, denominators, failures, and outcomes remain comparable." },
-  { from: "release-intelligence", to: "gleanings", kind: "lineage", reason: "Both systems separate deterministic evidence handling from bounded language-model judgment." },
-  { from: "gleanings", to: "aintivirus", kind: "lineage", reason: "Both systems derive explainable behavior from a deliberately bounded source corpus rather than an unconstrained model persona." },
-  { from: "string", to: "aintivirus", kind: "lineage", reason: "Both products were built and operated inside fast, skeptical, high-volume public crypto communities." },
+  // Handoff — the system had to work with its author absent.
+  { from: "ouellette-bridge", to: "vanderbilt-passage", kind: "handoff", reason: "Installation logic has to survive the last mile without the designer standing beside it." },
+  { from: "wework-conversions", to: "release-intelligence", kind: "handoff", reason: "Expert judgment becomes an auditable playbook another team can operate." },
+  { from: "confidential-client", to: "vanderbilt-passage", kind: "handoff", reason: "First-of-kind systems pass into construction, compliance, and public operation." },
+  { from: "mapping-investments", to: "gleanings", kind: "handoff", reason: "A structured decision surface lets operating teams continue the work after delivery." },
+  { from: "release-intelligence", to: "gleanings", kind: "handoff", reason: "Both workflows preserve the evidence and reasoning another operator needs to act." },
+
+  // Cede — consequential choice is deliberately given to someone else.
+  { from: "charlesgate-park", to: "flower-tower", kind: "cede", reason: "The project sets conditions for public authorship instead of treating participation as validation." },
+  { from: "flower-tower", to: "gymnast-cobot", kind: "cede", reason: "The system holds a frame while the person inside it determines the outcome." },
+  { from: "gymnast-cobot", to: "release-intelligence", kind: "cede", reason: "Automation proposes; an accountable person confirms the consequential action." },
+  { from: "gymnast-cobot", to: "gleanings", kind: "cede", reason: "Machine intelligence routes attention while judgment remains with the worker." },
+  { from: "gleanings", to: "aintivirus", kind: "cede", reason: "A bounded corpus shapes behavior while live users determine the conversation." },
+
+  // Uphold — a prior record had authority and could not simply be rewritten.
+  { from: "charlesgate-park", to: "ouellette-bridge", kind: "uphold", reason: "Both answer to physical and historical records that predate the brief." },
+  { from: "ouellette-bridge", to: "vanderbilt-passage", kind: "uphold", reason: "New work remains accountable to an inherited architectural record." },
+  { from: "vanderbilt-passage", to: "mapping-investments", kind: "uphold", reason: "The archive is a design authority rather than raw material to overwrite." },
+  { from: "gymnast-cobot", to: "mapping-investments", kind: "uphold", reason: "Evidence and constraints remain visible while a new system is introduced." },
+  { from: "mapping-investments", to: "aintivirus", kind: "uphold", reason: "A source record bounds what the new interpretive layer is allowed to claim." },
+
+  // Quorum — independent parties could each have stopped the work.
+  { from: "charlesgate-park", to: "88-east-broadway", kind: "quorum", reason: "Public, regulatory, ownership, and technical constituencies define the design envelope together." },
+  { from: "88-east-broadway", to: "caleta", kind: "quorum", reason: "Owners, regulators, fabricators, and builders each hold a consequential veto." },
+  { from: "ouellette-bridge", to: "caleta", kind: "quorum", reason: "Preservation, code, fabrication, and field conditions must agree for the work to exist." },
+  { from: "wework-conversions", to: "confidential-client", kind: "quorum", reason: "Distributed enterprise delivery depends on parties outside a single reporting line." },
+  { from: "confidential-client", to: "vanderbilt-passage", kind: "quorum", reason: "Architecture, media, construction, compliance, and operations each control a necessary condition." },
+  { from: "vanderbilt-passage", to: "gymnast-cobot", kind: "quorum", reason: "Technical, spatial, safety, and human-performance constraints must resolve together." },
+
+  // Graft — new work enters a system that is already operating.
+  { from: "charlesgate-park", to: "88-east-broadway", kind: "graft", reason: "The intervention enters a living civic or residential condition without suspending it." },
+  { from: "charlesgate-park", to: "mapping-investments", kind: "graft", reason: "New decision infrastructure is attached to an existing public record." },
+  { from: "mapping-investments", to: "string", kind: "graft", reason: "A live stream of evidence gains a new interpretive layer without stopping the underlying system." },
+  { from: "string", to: "aintivirus", kind: "graft", reason: "Both products entered fast-moving public communities that were already operating." },
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);
 
 const constellationPhrases: Record<ConnectionKind, string> = {
-  method: "shares a method with",
   handoff: "shares a handoff with",
-  agency: "keeps authorship visible beside",
-  constraint: "shares a constraint with",
-  lineage: "continues a working lineage with",
+  cede: "cedes consequential choice beside",
+  uphold: "upholds a prior record beside",
+  quorum: "shares a quorum with",
+  graft: "grafts into a live condition beside",
 };
 
 export function getProjectConstellationLine(slug: string) {

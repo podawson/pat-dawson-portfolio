@@ -65,11 +65,10 @@ export function ProjectGrid() {
     if (!shell || !item || !card) return;
     const shellBounds = shell.getBoundingClientRect();
     const itemBounds = item.getBoundingClientRect();
-    const pillBounds = item.parentElement?.querySelector("em")?.getBoundingClientRect() ?? itemBounds;
     const cardBounds = card.getBoundingClientRect();
     setConnector({
-      startX: pillBounds.right - shellBounds.left,
-      startY: pillBounds.top - shellBounds.top + pillBounds.height / 2,
+      startX: itemBounds.right - shellBounds.left + 16,
+      startY: itemBounds.top - shellBounds.top + itemBounds.height / 2,
       endX: cardBounds.left - shellBounds.left - 14,
       endY: cardBounds.top - shellBounds.top + cardBounds.height * 0.36,
       width: shellBounds.width,
@@ -110,9 +109,13 @@ export function ProjectGrid() {
 
       <svg className="index-connector" width={connector.width} height={connector.height} aria-hidden="true">
         <path
+          id="index-leader-path"
           pathLength="1"
           d={`M ${connector.startX} ${connector.startY} C ${connector.startX + 100} ${connector.startY}, ${connector.endX - 130} ${connector.endY}, ${connector.endX} ${connector.endY}`}
         />
+        <text className="index-connector__label" textAnchor="middle">
+          <textPath href="#index-leader-path" startOffset="50%">{active.indexPill}</textPath>
+        </text>
       </svg>
 
       <ol className="index-list" aria-label="Project Index">
@@ -146,7 +149,6 @@ export function ProjectGrid() {
             >
               {project.title}
             </a>
-            <em>{project.indexPill}</em>
           </li>
         ) : null)}
       </ol>

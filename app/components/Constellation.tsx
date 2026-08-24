@@ -6,22 +6,22 @@ import { MapBody3D } from "../map/MapBodyMesh3D";
 import { ProjectGlyph } from "./ProjectGlyph";
 
 const relationColor: Record<ConnectionKind, string> = {
-  method: "#63c99a",
   handoff: "#f58a61",
-  agency: "#a6a7ff",
-  constraint: "#e4c85d",
-  lineage: "#e09ac6",
+  cede: "#72d9e8",
+  uphold: "#a6a7ff",
+  quorum: "#e4c85d",
+  graft: "#63c99a",
 };
 
 const relationLabel: Record<ConnectionKind, string> = {
-  method: "Method",
   handoff: "Handoff",
-  agency: "Judgment",
-  constraint: "Constraint",
-  lineage: "Lineage",
+  cede: "Cede",
+  uphold: "Uphold",
+  quorum: "Quorum",
+  graft: "Graft",
 };
 
-const relationKinds: ConnectionKind[] = ["method", "handoff", "agency", "constraint", "lineage"];
+const relationKinds: ConnectionKind[] = ["handoff", "cede", "uphold", "quorum", "graft"];
 
 function hashText(value: string) {
   let hash = 2166136261;
@@ -349,7 +349,7 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
       connectedSlugs.forEach((slug, index) => {
         const point = pointFor(slug);
         const relatedConnection = activeConnections.find((connection) => connection.from === slug || connection.to === slug);
-        const color = slug === activeSlug ? "#e8fbff" : relationColor[relatedConnection?.kind ?? "method"];
+        const color = slug === activeSlug ? "#e8fbff" : relationColor[relatedConnection?.kind ?? "graft"];
         context.save();
         context.globalCompositeOperation = "screen";
         context.strokeStyle = color;
@@ -499,6 +499,7 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
 export function Constellation() {
   void SelectedGeometry;
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const [showNodeNames, setShowNodeNames] = useState(false);
   const [relationFilter, setRelationFilter] = useState<ConnectionKind | "all">("all");
   const [bodyReady, setBodyReady] = useState(false);
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -550,8 +551,15 @@ export function Constellation() {
     (["story", "compute", "atmosphere", "architecture"] as const).forEach((key) => {
       const label = layer.querySelector<HTMLElement>(`[data-axis-label="${key}"]`);
       if (!label) return;
-      label.style.left = `${positions[key].x}%`;
-      label.style.top = `${positions[key].y}%`;
+      const horizontal = key === "story" || key === "compute";
+      const safeX = horizontal
+        ? Math.max(12, Math.min(88, positions[key].x))
+        : Math.max(6, Math.min(94, positions[key].x));
+      const safeY = horizontal
+        ? Math.max(10, Math.min(90, positions[key].y))
+        : Math.max(9, Math.min(91, positions[key].y));
+      label.style.left = `${safeX}%`;
+      label.style.top = `${safeY}%`;
       label.style.visibility = positions[key].visible ? "visible" : "hidden";
       label.style.setProperty("--axis-angle", `${key === "story" || key === "compute" ? horizontalAngle : verticalAngle}deg`);
     });
@@ -607,7 +615,7 @@ export function Constellation() {
 
   return (
     <section
-      className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""}`}
+      className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""} ${showNodeNames ? "show-node-names" : ""}`}
       id="map"
       aria-labelledby="field-title"
       onPointerDownCapture={(event) => {
@@ -622,7 +630,7 @@ export function Constellation() {
         setActiveSlug(null);
       }}
     >
-      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} />
+      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} onToggleNodeNames={() => setShowNodeNames((current) => !current)} showNodeNames={showNodeNames} />
       {!bodyReady && <RestingGeometry />}
       <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         {visibleConnections.map((connection) => (

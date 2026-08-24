@@ -1,12 +1,14 @@
 import { SiteHeader } from "../../components/SiteHeader";
 import { getProject, projects } from "../../data";
+import { redirect } from "next/navigation";
 
 export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+  return [...projects.map((project) => ({ slug: project.slug })), { slug: "intuit-astor-place" }];
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  if (slug === "intuit-astor-place") redirect("/work/confidential-client");
   const project = getProject(slug) ?? projects[0];
   const current = projects.findIndex((item) => item.slug === project.slug);
   const next = projects[(current + 1) % projects.length];

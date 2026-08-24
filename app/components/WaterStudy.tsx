@@ -5,6 +5,7 @@ import * as THREE from "three";
 
 type Sky = "clear" | "cloud" | "fog";
 type WaterSettings = {
+  triangleCount: number;
   waveHeight: number; chop: number; swell: number; current: number; skew: number; fetch: number; foam: number;
   storm: number; windAngle: number; gust: number; rain: number;
   sunAngle: number; glint: number; sunTransmission: number; depthTint: number; haze: number;
@@ -12,6 +13,7 @@ type WaterSettings = {
 };
 
 const initial: WaterSettings = {
+  triangleCount: 1150,
   waveHeight: 38, chop: 26, swell: 48, current: 24, skew: 8, fetch: 44, foam: 22,
   storm: 12, windAngle: 18, gust: 10, rain: 0,
   sunAngle: 36, glint: 58, sunTransmission: 42, depthTint: 34, haze: 8,
@@ -25,8 +27,9 @@ const presets: Array<{ name: string; sky: Sky; values: WaterSettings }> = [
   { name: "Fog bank", sky: "fog", values: { ...initial, waveHeight: 28, chop: 18, swell: 66, current: 16, skew: 4, fetch: 72, foam: 12, storm: 22, windAngle: 145, gust: 8, rain: 2, sunAngle: 12, glint: 8, sunTransmission: 70, depthTint: 52, haze: 92, tilt: 8, zoom: 60, vignette: 28, grain: 12 } },
 ];
 
-const groups: Array<{ title: string; controls: Array<{ key: keyof WaterSettings; label: string; min: number; max: number }> }> = [
+const groups: Array<{ title: string; controls: Array<{ key: keyof WaterSettings; label: string; min: number; max: number; step?: number }> }> = [
   { title: "Surface", controls: [
+    { key: "triangleCount", label: "Triangle budget", min: 360, max: 1900, step: 70 },
     { key: "waveHeight", label: "Wave height", min: 0, max: 100 }, { key: "chop", label: "Chop", min: 0, max: 100 },
     { key: "swell", label: "Swell", min: 0, max: 100 }, { key: "current", label: "Current", min: 0, max: 100 },
     { key: "skew", label: "Skew", min: -55, max: 55 }, { key: "fetch", label: "Fetch", min: 0, max: 100 },
@@ -110,10 +113,11 @@ const fragmentShader = `
   }
 `;
 
-function makeTriangleField() {
+function makeTriangleField(targetTriangles = initial.triangleCount) {
   const geometry = new THREE.BufferGeometry();
   const positions: number[] = []; const barycentric: number[] = []; const centers: number[] = []; const tips: number[] = [];
-  const columns = 56; const rows = 40; const width = .3; const height = .34;
+  const columns = THREE.MathUtils.clamp(Math.round(Math.sqrt(targetTriangles / .364)), 32, 72);
+  const rows = Math.round(columns * .714); const width = 16.8 / columns; const height = 13.6 / rows;
   for (let row = 0; row < rows; row += 1) for (let column = 0; column < columns; column += 1) {
     const cx = (column - columns / 2) * width * .91 + (row % 2) * width * .45;
     const cz = (row - rows / 2) * height * .78; const flip = (row + column) % 2 === 0 ? 1 : -1;
@@ -136,6 +140,7 @@ export function WaterStudy() {
   const mountRef = useRef<HTMLDivElement>(null);
   const uniformsRef = useRef<Record<string, THREE.IUniform> | null>(null);
   const sceneRef = useRef<{ field: THREE.Mesh; camera: THREE.PerspectiveCamera } | null>(null);
+  const triangleCountRef = useRef(initial.triangleCount);
   const baseTiltRef = useRef(THREE.MathUtils.degToRad(-4-initial.tilt*.28));
   const baseCameraRef = useRef(new THREE.Vector2(13.4-initial.zoom*.065,8.4+initial.tilt*.055));
   const rotationTargetRef = useRef(new THREE.Vector2(0,0));
@@ -172,7 +177,7 @@ export function WaterStudy() {
       uResolution:{value:new THREE.Vector2(1,1)},uPointer:{value:new THREE.Vector2(0,0)},
     };
     uniformsRef.current=uniforms;
-    const geometry=makeTriangleField(); const material=new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:false,depthWrite:true,side:THREE.DoubleSide});
+    const geometry=makeTriangleField(initial.triangleCount); const material=new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:false,depthWrite:true,side:THREE.DoubleSide});
     const field=new THREE.Mesh(geometry,material); scene.add(field); sceneRef.current={field,camera};
     const pointer=new THREE.Vector2(0,0);
     const rotationCurrent=new THREE.Vector2(0,0);
@@ -189,11 +194,12 @@ export function WaterStudy() {
     const clock=new THREE.Clock(); let animation=0;
     const draw=()=>{uniforms.uTime.value=clock.getElapsedTime();(uniforms.uPointer.value as THREE.Vector2).lerp(pointer,.075);rotationCurrent.lerp(rotationTargetRef.current,.085);panCurrent.lerp(panTargetRef.current,.09);zoomCurrent+=(zoomTargetRef.current-zoomCurrent)*.09;field.rotation.x=baseTiltRef.current+rotationCurrent.x;field.rotation.y=rotationCurrent.y;field.position.x=panCurrent.x;field.position.y=panCurrent.y;camera.position.z=baseCameraRef.current.x+zoomCurrent;camera.position.y=baseCameraRef.current.y;camera.lookAt(0,-.18,0);renderer.render(scene,camera);animation=requestAnimationFrame(draw);};
     animation=requestAnimationFrame(draw);
-    return()=>{cancelAnimationFrame(animation);mount.removeEventListener("pointerdown",onPointerDown);mount.removeEventListener("pointermove",onPointerMove);mount.removeEventListener("pointerup",endDrag);mount.removeEventListener("pointercancel",endDrag);mount.removeEventListener("pointerleave",onLeave);mount.removeEventListener("wheel",onWheel);window.removeEventListener("resize",resize);geometry.dispose();material.dispose();renderer.dispose();renderer.domElement.remove();uniformsRef.current=null;sceneRef.current=null;};
+    return()=>{cancelAnimationFrame(animation);mount.removeEventListener("pointerdown",onPointerDown);mount.removeEventListener("pointermove",onPointerMove);mount.removeEventListener("pointerup",endDrag);mount.removeEventListener("pointercancel",endDrag);mount.removeEventListener("pointerleave",onLeave);mount.removeEventListener("wheel",onWheel);window.removeEventListener("resize",resize);field.geometry.dispose();material.dispose();renderer.dispose();renderer.domElement.remove();uniformsRef.current=null;sceneRef.current=null;};
   }, []);
 
   useEffect(() => {
     const uniforms=uniformsRef.current; const sceneState=sceneRef.current; if(!uniforms||!sceneState) return;
+    if(settings.triangleCount!==triangleCountRef.current){const nextGeometry=makeTriangleField(settings.triangleCount);sceneState.field.geometry.dispose();sceneState.field.geometry=nextGeometry;triangleCountRef.current=settings.triangleCount;}
     Object.entries(settings).forEach(([key,value])=>{
       const uniformName=`u${key.charAt(0).toUpperCase()}${key.slice(1)}`;
       if(uniforms[uniformName]) uniforms[uniformName].value = key === "skew" ? value/55 : key === "windAngle" || key === "sunAngle" ? value/180 : value/100;
@@ -212,12 +218,10 @@ export function WaterStudy() {
   return (
     <div className="study-tool study-tool--water">
       <div className={`study-canvas study-canvas--${sky}`} ref={mountRef} role="img" aria-label="An organic field of isosceles triangles deformed by live water, weather, light, and camera parameters"><div className="study-vignette" /></div>
-      <p className="study-interaction-cue" aria-hidden="true">Drag to rotate · shift-drag to pan · scroll to zoom ↗</p>
       <button className="study-controls-toggle" onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button">{panelOpen?"Close":"Open"}</button>
       {panelOpen && <aside className="study-controls">
-        <p className="micro">PLAY</p>
         <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>
-        {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} type="range" min={control.min} max={control.max} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}{group.title==="Weather"&&<div className="study-sky-switch" role="group" aria-label="Sky condition">{(["clear","cloud","fog"] as Sky[]).map((condition)=><button className={sky===condition?"is-active":""} key={condition} onClick={()=>setSky(condition)} type="button">{condition}</button>)}</div>}</section>)}
+        {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}{group.title==="Weather"&&<div className="study-sky-switch" role="group" aria-label="Sky condition">{(["clear","cloud","fog"] as Sky[]).map((condition)=><button className={sky===condition?"is-active":""} key={condition} onClick={()=>setSky(condition)} type="button">{condition}</button>)}</div>}</section>)}
         <div className="study-actions"><button onClick={reset} type="button">Reset</button><button onClick={capture} type="button">Capture PNG</button></div>
         <p className="study-shortcuts"><span>H</span> controls <span>R</span> reset <span>1–4</span> presets</p>
       </aside>}

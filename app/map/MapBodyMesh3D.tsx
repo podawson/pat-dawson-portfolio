@@ -139,6 +139,7 @@ const fragmentShader = `
     vec3 fillDirection = normalize(vec3(0.70, -0.12, 0.42));
     float key = max(dot(normal, keyDirection), 0.0);
     float fill = max(dot(normal, fillDirection), 0.0);
+    float wrappedLight = (key + fill) * 0.5;
     float fresnel = pow(1.0 - max(dot(normal, viewDirection), 0.0), 2.7);
     float depthTone = clamp(vLocalPosition.z * 0.27 + vLocalPosition.y * 0.09 + 0.50, 0.0, 1.0);
 
@@ -149,8 +150,14 @@ const fragmentShader = `
     vec3 pearl = vec3(0.760, 0.875, 0.950);
 
     vec3 color = mix(graphite, deepBlue, 0.56 + depthTone * 0.32);
-    color = mix(color, violet, fill * 0.31);
-    color += pearl * key * 0.24;
+    float longWrinkle = sin(vLocalPosition.x * 18.0 + sin(vLocalPosition.y * 7.0) * 1.8 + vLocalPosition.z * 13.0);
+    float crossWrinkle = sin(vLocalPosition.y * 25.0 - vLocalPosition.z * 11.0 + sin(vLocalPosition.x * 6.0));
+    float textureField = longWrinkle * 0.62 + crossWrinkle * 0.38;
+    float smoothField = smoothstep(-0.35, 0.72, sin(dot(vLocalPosition, vec3(3.7, 5.1, 4.3))));
+    float unifiedTexture = mix(textureField * 0.045, textureField * 0.012, smoothField);
+    color = mix(color, violet, wrappedLight * 0.27);
+    color += pearl * wrappedLight * 0.22;
+    color *= 1.0 + unifiedTexture;
     color += mix(violet, cyan, depthTone) * fresnel * 0.62;
     color = mix(color, cyan, clamp(relatedHeat(vLocalPosition), 0.0, 0.38));
     float filterPresence = mix(uPreviousFilterActive, uFilterActive, smoothstep(0.0, 1.0, uFilterTransition));

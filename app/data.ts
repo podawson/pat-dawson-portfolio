@@ -5,6 +5,7 @@ export type Project = {
   title: string;
   year: string;
   eyebrow: string;
+  descriptor?: [string, string];
   question: string;
   headline: string;
   summary: string;
@@ -242,6 +243,7 @@ export const projects: Project[] = [
     title: "Gymnast CoBot",
     year: "2019–21",
     eyebrow: "Human–robot interaction · XD Lab",
+    descriptor: ["Human–robot interaction", "XD Lab"],
     question: "How much agency should a robot have beside a tired worker?",
     headline: "A UR-10 projected its intent before moving and adjusted handover height and rhythm from live fatigue signals and worker preference.",
     summary: "The NSF-funded prototype combined biosignatures, gesture programming, projection, and physical adaptation so the robot supported the person without hiding its next move.",
@@ -292,6 +294,7 @@ export const projects: Project[] = [
     title: "Release Intelligence",
     year: "2026",
     eyebrow: "Tricky",
+    descriptor: ["AI product", "Independent"],
     question: "How do you turn one release into five honest documents without rewriting it five times?",
     headline: "Deterministic classification replaced a black-box LLM step, cutting the unexplainable custom bucket from 40–60% to under 5%.",
     summary: "The model handles voice and format only. Python owns classification and grouping, verbatim narrative seeds constrain generation, and a proportional review gate routes the PM to the 2–3 items that matter.",
@@ -317,6 +320,7 @@ export const projects: Project[] = [
     title: "Gleanings",
     year: "2025–26",
     eyebrow: "Tricky",
+    descriptor: ["AI product", "Independent"],
     question: "Can an agent read a whole project’s paperwork and tell you what is about to become expensive?",
     headline: "A reasoning agent reads schedules, drawings, budgets, and meeting notes together, then ranks conflicts by anticipated cost and schedule impact.",
     summary: "The interface is built for triage rather than exhaustiveness: a project manager needs the three discrepancies worth acting on, with the evidence chain still attached.",
@@ -342,6 +346,7 @@ export const projects: Project[] = [
     title: "String",
     year: "2024–25",
     eyebrow: "Tricky",
+    descriptor: ["AI product", "Collaboration"],
     question: "Can a signal system improve in public and leave an inspectable record of how?",
     headline: "Product strategy and model operations raised reported hit rate from 40% to 62% while scaling from zero to 5,000+ active traders.",
     summary: "A real-time Solana signal product translated trader behavior into ranked opportunities, improving reported hit rate from 40% to 62% while scaling to 5,000+ active traders and leaving an auditable eight-export model record.",
@@ -367,6 +372,7 @@ export const projects: Project[] = [
     title: "AIntivirus",
     year: "2024–25",
     eyebrow: "Tricky",
+    descriptor: ["AI product", "Collaboration"],
     question: "Can a real person’s archive become a convincing interactive character without becoming a caricature?",
     headline: "A character LLM, voice clone, and automated podcast pipeline moved from private corpus to published episode with minimal human touch.",
     summary: "Public writing, private unreleased material, reply constraints, voice synthesis, and cross-channel publishing formed one operated character system—not a standalone chatbot demo.",
@@ -425,6 +431,11 @@ export const projectConnections: ProjectConnection[] = [
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);
+
+export function projectDescriptor(project: Project) {
+  const parts = project.descriptor ?? [project.eyebrow];
+  return [...parts, project.year].filter(Boolean).join(" · ");
+}
 
 const constellationPhrases: Record<ConnectionKind, string> = {
   handoff: "shares a handoff with",

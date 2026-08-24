@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { projectConnections, projects, type ConnectionKind } from "../data";
+import { projectConnections, projectDescriptor, projects, type ConnectionKind } from "../data";
 import { MapBody3D } from "../map/MapBodyMesh3D";
 
 const relationColor: Record<ConnectionKind, string> = {
@@ -741,7 +741,7 @@ export function Constellation() {
         <aside className="map-selection-band" aria-live="polite">
           <img className="map-selection-band__image" src={active.image} alt="" />
           <div className="map-selection-band__identity">
-            <p>{active.eyebrow} · {active.year}</p>
+            <p>{projectDescriptor(active)}</p>
             <h2>{active.title}</h2>
           </div>
           <div className="map-selection-band__relations" aria-label="Related projects">

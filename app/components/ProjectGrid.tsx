@@ -1,15 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { categories, projects, type Category } from "../data";
-
-const previewEyebrows: Record<string, string> = {
-  "release-intelligence": "AI PRODUCT · INDEPENDENT",
-  gleanings: "AI PRODUCT · INDEPENDENT",
-  string: "AI PRODUCT · COLLABORATION",
-  aintivirus: "AI PRODUCT · COLLABORATION",
-  "gymnast-cobot": "XD LAB",
-};
+import { categories, projectDescriptor, projects, type Category } from "../data";
 
 export function ProjectGrid() {
   const [filter, setFilter] = useState<"All" | Category>("All");
@@ -148,7 +140,7 @@ export function ProjectGrid() {
       <div className="index-preview-wrap">
         <article className={`index-preview${activeIsDiagram ? " index-preview--diagram" : ""}`} ref={cardRef}>
           <div><img key={active.slug} src={active.image} alt="" decoding="async" fetchPriority="high" /></div>
-          <p className="micro">{previewEyebrows[active.slug] ?? active.eyebrow} · {active.year}</p>
+          <p className="micro">{projectDescriptor(active)}</p>
           <h2>{active.title}</h2>
           <p>{active.summary}{active.slug === "string" ? "" : ` ${active.details[0]?.body ?? ""}`}</p>
           <div className="tag-row">{active.categories.map((category) => <span key={category}>{category}</span>)}</div>

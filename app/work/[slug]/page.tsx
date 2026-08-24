@@ -86,12 +86,7 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/release-intelligence/03.webp", caption: "Alternative system structures were tested before implementation." },
     { src: "/work/gallery/release-intelligence/04.webp", caption: "The functional architecture that survived the sketching process." },
   ],
-  gleanings: [
-    { src: "/work/gallery/gleanings/04.webp", caption: "A quiet entry state makes the document set—not the interface—the starting point." },
-    { src: "/work/gallery/gleanings/01.webp", caption: "The reconciliation workspace receives heterogeneous project records." },
-    { src: "/work/gallery/gleanings/02.webp", caption: "Ranked risks keep urgency, evidence, and ownership in the same view." },
-    { src: "/work/gallery/gleanings/03.webp", caption: "The generated output keeps evidence and next actions adjacent." },
-  ],
+  gleanings: [],
   string: [
     { src: "/work/gallery/string/01.webp", caption: "Product-development volume reconstructed from eight Telegram exports." },
     { src: "/work/gallery/string/02.webp", caption: "Model snapshots compared without erasing changes in call volume or precision." },
@@ -119,6 +114,79 @@ function ProjectMedia({ items, label }: { items: GalleryItem[]; label: string })
           <figcaption>{item.caption}</figcaption>
         </figure>
       ))}
+    </section>
+  );
+}
+
+const gleaningsRisks = [
+  {
+    finding: "Fabrication starts before the coordinated drawing release",
+    source: "Schedule + drawing revision",
+    exposure: "Sequence conflict",
+  },
+  {
+    finding: "Permit approval is absent from the critical path",
+    source: "Meeting notes + schedule",
+    exposure: "Approval dependency",
+  },
+  {
+    finding: "Ceiling allowance no longer matches issued scope",
+    source: "Budget + drawing revision",
+    exposure: "Cost variance",
+  },
+];
+
+function GleaningsArtifacts() {
+  return (
+    <section className="gleanings-artifacts" aria-label="Gleanings portfolio reconstruction">
+      <article className="gleanings-artifact">
+        <header className="gleanings-artifact__header">
+          <div>
+            <p>01 · Ranked register</p>
+            <h3>Risk becomes an inspectable queue.</h3>
+          </div>
+          <p>Portfolio reconstruction from the handed-off workflow</p>
+        </header>
+        <div className="gleanings-risk-list">
+          {gleaningsRisks.map((risk, index) => (
+            <div className="gleanings-risk" key={risk.finding}>
+              <span className="gleanings-risk__rank">{String(index + 1).padStart(2, "0")}</span>
+              <strong>{risk.finding}</strong>
+              <span>{risk.source}</span>
+              <span>{risk.exposure}</span>
+            </div>
+          ))}
+        </div>
+        <div className="gleanings-artifacts__legend">
+          <span>Read across</span><span>Rank impact</span><span>Keep source attached</span>
+        </div>
+      </article>
+
+      <article className="gleanings-artifact">
+        <header className="gleanings-artifact__header">
+          <div>
+            <p>02 · Evidence chain</p>
+            <h3>The claim stays attached to its record.</h3>
+          </div>
+        </header>
+        <div className="gleanings-chain">
+          <div className="gleanings-chain__finding">
+            <p>Finding</p>
+            <strong>Fabrication starts before the coordinated drawing release</strong>
+          </div>
+          <div className="gleanings-chain__arrow" aria-hidden="true">↓</div>
+          <div className="gleanings-chain__sources">
+            <div><span>Schedule</span><strong>Start date</strong></div>
+            <div><span>Drawing revision</span><strong>Issue date</strong></div>
+            <div><span>Meeting notes</span><strong>Owner</strong></div>
+          </div>
+          <div className="gleanings-chain__arrow" aria-hidden="true">↓</div>
+          <div>
+            <p className="gleanings-chain__label">Human review gate</p>
+            <div className="gleanings-review"><span>Confirm</span><span>Dismiss</span><span>Investigate</span></div>
+          </div>
+        </div>
+      </article>
     </section>
   );
 }
@@ -186,6 +254,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             </aside>
           </div>
         </section>
+
+        {project.slug === "gleanings" ? <GleaningsArtifacts /> : null}
 
         <ProjectMedia items={narrativeMedia} label={`${project.title} supporting artifacts`} />
 

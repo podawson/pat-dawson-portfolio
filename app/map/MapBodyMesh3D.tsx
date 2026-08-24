@@ -20,6 +20,7 @@ type MapBody3DProps = {
 const MAX_RELATED = 4;
 const MAX_EMPHASIZED = 14;
 const DEFAULT_ROTATION = new THREE.Euler(0, 0, 0, "YXZ");
+const DEFAULT_CORPUS_SCALE = 1.15;
 
 function fieldPosition(index: number) {
   const node = mapNodes3D[index];
@@ -278,7 +279,11 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     });
     body.update();
     body.geometry.computeBoundingSphere();
-    body.scale.set(mobile ? 4.15 : 5.65, mobile ? 4.65 : 3.85, mobile ? 3.5 : 3.8);
+    body.scale.set(
+      (mobile ? 4.15 : 5.65) * DEFAULT_CORPUS_SCALE,
+      (mobile ? 4.65 : 3.85) * DEFAULT_CORPUS_SCALE,
+      (mobile ? 3.5 : 3.8) * DEFAULT_CORPUS_SCALE,
+    );
     body.rotation.copy(DEFAULT_ROTATION);
     body.position.set(mobile ? 0 : 0.28, mobile ? -0.32 : 0.02, 0);
     scene.add(body);

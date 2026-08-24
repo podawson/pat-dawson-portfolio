@@ -127,12 +127,14 @@ export function WaterStudy() {
   const mountRef = useRef<HTMLDivElement>(null);
   const uniformsRef = useRef<Record<string, THREE.IUniform> | null>(null);
   const sceneRef = useRef<{ field: THREE.Mesh; camera: THREE.PerspectiveCamera } | null>(null);
+  const baseTiltRef = useRef(THREE.MathUtils.degToRad(-4-initial.tilt*.28));
+  const rotationTargetRef = useRef(new THREE.Vector2(0,0));
   const [settings, setSettings] = useState(initial);
   const [sky, setSky] = useState<Sky>("clear");
   const [panelOpen, setPanelOpen] = useState(true);
 
   const applyPreset = (index: number) => { setSettings(presets[index].values); setSky(presets[index].sky); };
-  const reset = () => { setSettings(initial); setSky("clear"); };
+  const reset = () => { setSettings(initial); setSky("clear"); rotationTargetRef.current.set(0,0); };
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -161,14 +163,19 @@ export function WaterStudy() {
     const geometry=makeTriangleField(); const material=new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:false,depthWrite:true,side:THREE.DoubleSide});
     const field=new THREE.Mesh(geometry,material); scene.add(field); sceneRef.current={field,camera};
     const pointer=new THREE.Vector2(0,0);
-    const onPointer=(event:PointerEvent)=>{const rect=mount.getBoundingClientRect();pointer.set(((event.clientX-rect.left)/rect.width-.5)*2,((event.clientY-rect.top)/rect.height-.5)*2);mount.classList.add("is-engaged");};
-    const onLeave=()=>mount.classList.remove("is-engaged");
+    const rotationCurrent=new THREE.Vector2(0,0);
+    const drag={active:false,pointerId:-1,x:0,y:0,pitch:0,yaw:0};
+    const updatePointer=(event:PointerEvent)=>{const rect=mount.getBoundingClientRect();pointer.set(((event.clientX-rect.left)/rect.width-.5)*2,((event.clientY-rect.top)/rect.height-.5)*2);mount.classList.add("is-engaged");};
+    const onPointerDown=(event:PointerEvent)=>{if(event.button!==0)return;updatePointer(event);drag.active=true;drag.pointerId=event.pointerId;drag.x=event.clientX;drag.y=event.clientY;drag.pitch=rotationTargetRef.current.x;drag.yaw=rotationTargetRef.current.y;mount.setPointerCapture(event.pointerId);mount.classList.add("is-dragging");};
+    const onPointerMove=(event:PointerEvent)=>{updatePointer(event);if(!drag.active||event.pointerId!==drag.pointerId)return;rotationTargetRef.current.set(drag.pitch+(event.clientY-drag.y)*.007,drag.yaw+(event.clientX-drag.x)*.007);};
+    const endDrag=(event:PointerEvent)=>{if(!drag.active||event.pointerId!==drag.pointerId)return;drag.active=false;mount.classList.remove("is-dragging");if(mount.hasPointerCapture(event.pointerId))mount.releasePointerCapture(event.pointerId);};
+    const onLeave=()=>{if(!drag.active)mount.classList.remove("is-engaged");};
     const resize=()=>{const width=mount.clientWidth,height=mount.clientHeight;renderer.setSize(width,height,false);camera.aspect=width/Math.max(height,1);camera.updateProjectionMatrix();uniforms.uResolution.value.set(width,height);};
-    resize(); mount.addEventListener("pointermove",onPointer); mount.addEventListener("pointerleave",onLeave); window.addEventListener("resize",resize);
+    resize(); mount.addEventListener("pointerdown",onPointerDown); mount.addEventListener("pointermove",onPointerMove); mount.addEventListener("pointerup",endDrag); mount.addEventListener("pointercancel",endDrag); mount.addEventListener("pointerleave",onLeave); window.addEventListener("resize",resize);
     const clock=new THREE.Clock(); let animation=0;
-    const draw=()=>{uniforms.uTime.value=clock.getElapsedTime();(uniforms.uPointer.value as THREE.Vector2).lerp(pointer,.075);field.rotation.y+=(pointer.x*.07-field.rotation.y)*.025;renderer.render(scene,camera);animation=requestAnimationFrame(draw);};
+    const draw=()=>{uniforms.uTime.value=clock.getElapsedTime();(uniforms.uPointer.value as THREE.Vector2).lerp(pointer,.075);rotationCurrent.lerp(rotationTargetRef.current,.085);field.rotation.x=baseTiltRef.current+rotationCurrent.x;field.rotation.y=rotationCurrent.y;renderer.render(scene,camera);animation=requestAnimationFrame(draw);};
     animation=requestAnimationFrame(draw);
-    return()=>{cancelAnimationFrame(animation);mount.removeEventListener("pointermove",onPointer);mount.removeEventListener("pointerleave",onLeave);window.removeEventListener("resize",resize);geometry.dispose();material.dispose();renderer.dispose();renderer.domElement.remove();uniformsRef.current=null;sceneRef.current=null;};
+    return()=>{cancelAnimationFrame(animation);mount.removeEventListener("pointerdown",onPointerDown);mount.removeEventListener("pointermove",onPointerMove);mount.removeEventListener("pointerup",endDrag);mount.removeEventListener("pointercancel",endDrag);mount.removeEventListener("pointerleave",onLeave);window.removeEventListener("resize",resize);geometry.dispose();material.dispose();renderer.dispose();renderer.domElement.remove();uniformsRef.current=null;sceneRef.current=null;};
   }, []);
 
   useEffect(() => {
@@ -178,7 +185,7 @@ export function WaterStudy() {
       if(uniforms[uniformName]) uniforms[uniformName].value = key === "skew" ? value/55 : key === "windAngle" || key === "sunAngle" ? value/180 : value/100;
     });
     uniforms.uCloud.value=sky==="cloud"?.58:sky==="fog"?.38:0; uniforms.uFog.value=sky==="fog"?.94:0;
-    sceneState.field.rotation.x=THREE.MathUtils.degToRad(-4-settings.tilt*.28); sceneState.camera.position.z=13.4-settings.zoom*.065; sceneState.camera.position.y=8.4+settings.tilt*.055; sceneState.camera.lookAt(0,-.18,0);
+    baseTiltRef.current=THREE.MathUtils.degToRad(-4-settings.tilt*.28); sceneState.camera.position.z=13.4-settings.zoom*.065; sceneState.camera.position.y=8.4+settings.tilt*.055; sceneState.camera.lookAt(0,-.18,0);
     mountRef.current?.style.setProperty("--study-vignette",String(settings.vignette/100));
     mountRef.current?.style.setProperty("--study-haze",String(settings.haze/100));
   },[settings,sky]);
@@ -191,10 +198,9 @@ export function WaterStudy() {
   return (
     <div className="study-tool study-tool--water">
       <div className={`study-canvas study-canvas--${sky}`} ref={mountRef} role="img" aria-label="A dimensional field of isosceles triangles deformed by nineteen live water, weather, light, and lens parameters"><div className="study-vignette" /></div>
-      <p className="study-interaction-cue" aria-hidden="true">Move across the water ↗</p>
-      {!panelOpen && <button className="study-controls-reopen" onClick={()=>setPanelOpen(true)} type="button">Open controls</button>}
+      <p className="study-interaction-cue" aria-hidden="true">Move to disturb · drag to rotate ↗</p>
+      <button className="study-controls-toggle" onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close flow controls":"Open flow controls"} type="button">{panelOpen?"Close":"Open"}</button>
       {panelOpen && <aside className="study-controls">
-        <button className="study-controls-close" onClick={()=>setPanelOpen(false)} aria-label="Hide controls" type="button">×</button>
         <p className="micro">Water / Field 01</p><h2>Flow controls</h2>
         <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>
         {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} type="range" min={control.min} max={control.max} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}{group.title==="Weather"&&<div className="study-sky-switch" role="group" aria-label="Sky condition">{(["clear","cloud","fog"] as Sky[]).map((condition)=><button className={sky===condition?"is-active":""} key={condition} onClick={()=>setSky(condition)} type="button">{condition}</button>)}</div>}</section>)}

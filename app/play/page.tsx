@@ -5,9 +5,9 @@ export default function PlayPage() {
   return (
     <main className="studies-page">
       <SiteHeader inverse />
-      <section className="studies-intro">
-        <p className="kicker kicker--light">Play / Water 01</p>
-        <h1>One triangle, many seas.</h1>
+      <section className="studies-intro page-intro page-intro--work route-intro">
+        <p className="kicker">PLAY</p>
+        <h1>we are too much like oysters observing the sun through the water, and thinking that thick water the thinnest of air</h1>
         <p>A minimal water study built from one repeated isosceles triangle—change the field, then watch calm geometry move toward storm, cloud, and fog.</p>
       </section>
       <WaterStudy />

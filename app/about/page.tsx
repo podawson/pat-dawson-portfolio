@@ -23,9 +23,9 @@ export default function AboutPage() {
     <main className="about-page">
       <SiteHeader inverse />
       <section className="about-hero">
-        <div>
-          <p className="kicker">About / Pat Dawson</p>
-          <h1>I do my best where it comes crashing together.</h1>
+        <div className="route-intro">
+          <p className="kicker">ABOUT</p>
+          <h1>Be protean</h1>
           <p className="about-lede">I work where architecture, atmosphere, storytelling, and computation have to become one deliverable.</p>
           <p>My background begins in physical space and extends through fabrication, experiential systems, product management, AI workflows, and cultural experiments. The throughline is a fondness for existing conditions—and for making the reasoning visible enough that someone else can carry it forward.</p>
         </div>

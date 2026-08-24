@@ -43,6 +43,7 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
   const hoverTargetRef = useRef(0);
   const hoverStartedRef = useRef(0);
   const hoverFromRef = useRef(0);
+  const hoverLeaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const frameRef = useRef(0);
   const drawFrameRef = useRef<(now?: number) => void>(() => undefined);
   const reducedMotionRef = useRef(false);
@@ -66,7 +67,7 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
     const delayedProgress = Math.max(0, Math.min(1, (transitProgress - 0.25) / 0.75));
     const toAmount = transiting ? 1 - Math.pow(1 - delayedProgress, 3) : 1;
 
-    const hoverDuration = hoverTargetRef.current > hoverFromRef.current ? CORPUS_MOTION.navHoverIn : CORPUS_MOTION.navHoverOut;
+    const hoverDuration = CORPUS_MOTION.navHoverOut;
     const hoverProgress = reducedMotionRef.current ? 1 : Math.max(0, Math.min(1, (now - hoverStartedRef.current) / hoverDuration));
     hoverAmountRef.current = hoverFromRef.current + (hoverTargetRef.current - hoverFromRef.current) * corpusEase(hoverProgress);
     const hovering = hoverProgress < 1 || Math.abs(hoverAmountRef.current - hoverTargetRef.current) > 0.002;
@@ -75,7 +76,7 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
     const toCapsule = capsules[activeRef.current];
     const hoverTargetCapsule = capsules[hoverIndexRef.current] ?? toCapsule;
     const hoverShapeFrom = hoverShapeFromRef.current ?? toCapsule;
-    const hoverMoveProgress = reducedMotionRef.current ? 1 : Math.max(0, Math.min(1, (now - hoverMoveStartedRef.current) / CORPUS_MOTION.navHoverIn));
+    const hoverMoveProgress = reducedMotionRef.current ? 1 : Math.max(0, Math.min(1, (now - hoverMoveStartedRef.current) / hoverDuration));
     const hoverMoveAmount = corpusEase(hoverMoveProgress);
     const hoverCapsule: Capsule = {
       ax: hoverShapeFrom.ax + (hoverTargetCapsule.ax - hoverShapeFrom.ax) * hoverMoveAmount,
@@ -183,6 +184,7 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
       media.removeEventListener("change", updateMotion);
       window.removeEventListener("resize", measure);
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      if (hoverLeaveTimerRef.current) clearTimeout(hoverLeaveTimerRef.current);
     };
   }, [measure]);
 
@@ -218,8 +220,20 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
     if (!nav) return;
     const links = Array.from(nav.querySelectorAll<HTMLElement>("[data-nav-item]"));
     const cleanups = links.map((link, index) => {
-      const enter = () => { if (index !== activeRef.current) setHover(index, 1); };
-      const leave = () => setHover(index, 0);
+      const enter = () => {
+        if (hoverLeaveTimerRef.current) {
+          clearTimeout(hoverLeaveTimerRef.current);
+          hoverLeaveTimerRef.current = null;
+        }
+        setHover(index, index === activeRef.current ? 0 : 1);
+      };
+      const leave = () => {
+        if (hoverLeaveTimerRef.current) clearTimeout(hoverLeaveTimerRef.current);
+        hoverLeaveTimerRef.current = setTimeout(() => {
+          setHover(index, 0);
+          hoverLeaveTimerRef.current = null;
+        }, 36);
+      };
       link.addEventListener("pointerenter", enter);
       link.addEventListener("pointerleave", leave);
       link.addEventListener("focus", enter);
@@ -231,7 +245,10 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
         link.removeEventListener("blur", leave);
       };
     });
-    return () => cleanups.forEach((cleanup) => cleanup());
+    return () => {
+      if (hoverLeaveTimerRef.current) clearTimeout(hoverLeaveTimerRef.current);
+      cleanups.forEach((cleanup) => cleanup());
+    };
   }, [navRef, setHover]);
 
   return <canvas aria-hidden="true" className="nav-metaball" ref={canvasRef} />;

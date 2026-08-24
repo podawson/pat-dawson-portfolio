@@ -63,9 +63,6 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
     const transitElapsed = now - transitStartRef.current;
     const transitProgress = reducedMotionRef.current ? 1 : Math.max(0, Math.min(1, transitElapsed / CORPUS_MOTION.navTransit));
     const transiting = fromRef.current !== activeRef.current && transitProgress < 1;
-    const fromAmount = transiting ? 1 - transitProgress * transitProgress : 0;
-    const delayedProgress = Math.max(0, Math.min(1, (transitProgress - 0.25) / 0.75));
-    const toAmount = transiting ? 1 - Math.pow(1 - delayedProgress, 3) : 1;
 
     const hoverDuration = CORPUS_MOTION.navHoverOut;
     const hoverProgress = reducedMotionRef.current ? 1 : Math.max(0, Math.min(1, (now - hoverStartedRef.current) / hoverDuration));
@@ -74,6 +71,14 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
 
     const fromCapsule = capsules[fromRef.current] ?? capsules[activeRef.current];
     const toCapsule = capsules[activeRef.current];
+    const transitAmount = corpusEase(transitProgress);
+    const movingCapsule: Capsule = {
+      ax: fromCapsule.ax + (toCapsule.ax - fromCapsule.ax) * transitAmount,
+      ay: fromCapsule.ay + (toCapsule.ay - fromCapsule.ay) * transitAmount,
+      bx: fromCapsule.bx + (toCapsule.bx - fromCapsule.bx) * transitAmount,
+      by: fromCapsule.by + (toCapsule.by - fromCapsule.by) * transitAmount,
+      radius: fromCapsule.radius + (toCapsule.radius - fromCapsule.radius) * transitAmount,
+    };
     const hoverTargetCapsule = capsules[hoverIndexRef.current] ?? toCapsule;
     const hoverShapeFrom = hoverShapeFromRef.current ?? toCapsule;
     const hoverMoveProgress = reducedMotionRef.current ? 1 : Math.max(0, Math.min(1, (now - hoverMoveStartedRef.current) / hoverDuration));
@@ -90,21 +95,10 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
       x: (capsule.ax + capsule.bx) * 0.5,
       y: (capsule.ay + capsule.by) * 0.5,
     });
-    const fromCenter = centerOf(fromCapsule);
     const toCenter = centerOf(toCapsule);
     const hoverCenter = centerOf(hoverCapsule);
-    const centerGap = Math.abs((fromCapsule.ax + fromCapsule.bx - toCapsule.ax - toCapsule.bx) * 0.5);
-    const bridge = transiting ? Math.pow(Math.sin(Math.PI * transitProgress), 0.72) : 0;
-    const blend = CORPUS_MOTION.smoothMinRest + centerGap * 1.8 * bridge;
     const hoverGap = Math.abs((hoverCapsule.ax + hoverCapsule.bx - toCapsule.ax - toCapsule.bx) * 0.5);
     const hoverBlend = CORPUS_MOTION.smoothMinRest + hoverGap * 0.08 * hoverAmountRef.current;
-    const transitBridgeCapsule: Capsule = {
-      ax: fromCenter.x,
-      ay: fromCenter.y,
-      bx: toCenter.x,
-      by: toCenter.y,
-      radius: Math.min(fromCapsule.radius, toCapsule.radius) * (0.18 + bridge * 0.82),
-    };
     const hoverBridgeCapsule: Capsule = {
       ax: toCenter.x,
       ay: toCenter.y,
@@ -118,13 +112,9 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
       const y = py / ratio;
       for (let px = 0; px < width; px += 1) {
         const x = px / ratio;
-        const distanceFrom = capsuleDistance(x, y, fromCapsule, fromAmount);
-        const distanceTo = capsuleDistance(x, y, toCapsule, toAmount);
-        const distanceTransitBridge = capsuleDistance(x, y, transitBridgeCapsule, transiting ? bridge : 0);
+        const activeDistance = capsuleDistance(x, y, movingCapsule, 1);
         const distanceHoverBridge = capsuleDistance(x, y, hoverBridgeCapsule, Math.sqrt(hoverAmountRef.current));
         const distanceHover = capsuleDistance(x, y, hoverCapsule, hoverAmountRef.current);
-        const activeCapsules = corpusSmoothMin(distanceFrom, distanceTo, blend);
-        const activeDistance = corpusSmoothMin(activeCapsules, distanceTransitBridge, CORPUS_MOTION.smoothMinRest);
         const hoverDistance = corpusSmoothMin(distanceHoverBridge, distanceHover, hoverBlend);
         const antialias = 0.9 / ratio;
         const activeFill = 1 - Math.max(0, Math.min(1, (activeDistance + antialias) / (antialias * 2)));
@@ -168,11 +158,11 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
       const box = link.getBoundingClientRect();
       const centerY = box.top - bounds.top + box.height / 2;
       return {
-        ax: box.left - bounds.left + 12,
+        ax: box.left - bounds.left + 15,
         ay: centerY,
-        bx: box.right - bounds.left - 12,
+        bx: box.right - bounds.left - 15,
         by: centerY,
-        radius: Math.min(18, box.height / 2 + 2),
+        radius: Math.min(14, Math.max(11, box.height / 2 - 3)),
       };
     });
     schedule();

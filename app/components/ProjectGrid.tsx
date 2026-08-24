@@ -3,6 +3,14 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { categories, projects, type Category } from "../data";
 
+const previewEyebrows: Record<string, string> = {
+  "release-intelligence": "AI PRODUCT · INDEPENDENT",
+  gleanings: "AI PRODUCT · INDEPENDENT",
+  string: "AI PRODUCT · COLLABORATION",
+  aintivirus: "AI PRODUCT · COLLABORATION",
+  "gymnast-cobot": "XD LAB",
+};
+
 export function ProjectGrid() {
   const [filter, setFilter] = useState<"All" | Category>("All");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -10,8 +18,8 @@ export function ProjectGrid() {
   const shellRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const cardRef = useRef<HTMLDivElement>(null);
-  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const active = projects[activeIndex];
+  const activeIsDiagram = active.slug === "release-intelligence" || active.slug === "gleanings";
   const isVisible = (index: number) => filter === "All" || projects[index].categories.includes(filter);
 
   useEffect(() => {
@@ -35,24 +43,11 @@ export function ProjectGrid() {
       const image = new Image();
       image.src = project.image;
     });
-    return () => {
-      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-    };
+    return undefined;
   }, []);
 
-  const clearHoverIntent = () => {
-    if (!hoverTimerRef.current) return;
-    clearTimeout(hoverTimerRef.current);
-    hoverTimerRef.current = null;
-  };
-
-  const queueHoverIntent = (index: number) => {
-    clearHoverIntent();
-    if (!isVisible(index) || index === activeIndex) return;
-    hoverTimerRef.current = setTimeout(() => {
-      setActiveIndex(index);
-      hoverTimerRef.current = null;
-    }, 28);
+  const selectPreview = (index: number) => {
+    if (isVisible(index) && index !== activeIndex) setActiveIndex(index);
   };
 
   const selectFilter = (item: "All" | Category) => {
@@ -108,7 +103,7 @@ export function ProjectGrid() {
       <div className="index-filters" role="group" aria-label="Project filters">
         {categories.map((item) => (
           <button className={filter === item ? "is-active" : ""} key={item} onClick={() => selectFilter(item)} type="button">
-            {item}<sup>{item === "All" ? projects.length : projects.filter((project) => project.categories.includes(item)).length}</sup>
+            {item}
           </button>
         ))}
       </div>
@@ -125,15 +120,13 @@ export function ProjectGrid() {
           <li
             className={index === activeIndex ? "is-active" : ""}
             key={project.slug}
-            onPointerEnter={() => queueHoverIntent(index)}
-            onPointerLeave={clearHoverIntent}
+            onPointerEnter={() => selectPreview(index)}
           >
             <span>{String(index + 1).padStart(2, "0")}</span>
             <a
               href={`/work/${project.slug}`}
               ref={(element) => { itemRefs.current[index] = element; }}
               onFocus={() => {
-                clearHoverIntent();
                 if (isVisible(index)) setActiveIndex(index);
               }}
               onKeyDown={(event) => {
@@ -159,9 +152,9 @@ export function ProjectGrid() {
       </ol>
 
       <div className="index-preview-wrap">
-        <article className="index-preview" ref={cardRef}>
-          <div><img src={active.image} alt="" /></div>
-          <p className="micro">{active.eyebrow} · {active.year}</p>
+        <article className={`index-preview${activeIsDiagram ? " index-preview--diagram" : ""}`} ref={cardRef}>
+          <div><img key={active.slug} src={active.image} alt="" decoding="async" fetchPriority="high" /></div>
+          <p className="micro">{previewEyebrows[active.slug] ?? active.eyebrow} · {active.year}</p>
           <h2>{active.title}</h2>
           <p>{active.summary} {active.details[0]?.body}</p>
           <div className="tag-row">{active.categories.map((category) => <span key={category}>{category}</span>)}</div>

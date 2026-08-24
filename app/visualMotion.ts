@@ -1,7 +1,7 @@
 export const CORPUS_MOTION = {
   navHoverIn: 180,
   navHoverOut: 240,
-  navTransit: 420,
+  navTransit: 480,
   selection: 1500,
   smoothMinRest: 10,
 } as const;

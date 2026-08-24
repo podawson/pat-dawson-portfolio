@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1660 680" width="1660" height="680" font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif">
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1660" height="680" fill="#f6f6f4"/>
+
+  <!-- ═══ INPUTS ═══ -->
+  <rect x="8" y="148" rx="22" width="140" height="48" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="78" y="167" text-anchor="middle" font-size="9.5" fill="#444">Product / Engineering</text>
+  <text x="78" y="181" text-anchor="middle" font-size="9.5" fill="#444">Linear Tickets</text>
+
+  <rect x="22" y="325" rx="18" width="108" height="36" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="76" y="347" text-anchor="middle" font-size="9.5" fill="#444">Linked PRs</text>
+
+  <rect x="14" y="416" rx="18" width="122" height="36" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="75" y="438" text-anchor="middle" font-size="9.5" fill="#444">Attached Specs</text>
+
+  <!-- Inputs → Validation -->
+  <path d="M148 172 C163 172 163 113 178 113" stroke="#aaa" stroke-width="1" fill="none" marker-end="url(#arr)"/>
+  <path d="M130 343 C157 343 157 119 178 119" stroke="#aaa" stroke-width="1" fill="none" marker-end="url(#arr)"/>
+  <path d="M136 434 C161 434 161 125 178 125" stroke="#aaa" stroke-width="1" fill="none" marker-end="url(#arr)"/>
+
+  <!-- ═══ TICKET INTAKE GROUP ═══ -->
+  <rect x="160" y="65" rx="4" width="270" height="540" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="295" y="83" text-anchor="middle" font-size="10" fill="#888" font-style="italic">Ticket Intake</text>
+
+  <!-- Validation box -->
+  <rect x="178" y="97" rx="3" width="234" height="44" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="295" y="123" text-anchor="middle" font-size="10" font-weight="500" fill="#333">Validation</text>
+
+  <line x1="295" y1="141" x2="295" y2="158" stroke="#aaa" stroke-width=".9" marker-end="url(#arr)"/>
+
+  <!-- Classification box -->
+  <rect x="178" y="158" rx="3" width="234" height="432" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="295" y="178" text-anchor="middle" font-size="10" font-weight="500" fill="#333">Classification</text>
+  <line x1="186" y1="185" x2="404" y2="185" stroke="#d0d0d0" stroke-width=".6"/>
+
+  <text x="186" y="202" font-size="9.5" fill="#555">Ticket ID</text>
+  <text x="186" y="218" font-size="9.5" fill="#555">Title</text>
+  <text x="186" y="234" font-size="9.5" fill="#555">Type</text>
+  <text x="186" y="250" font-size="9.5" fill="#555">Product Area</text>
+  <line x1="186" y1="258" x2="404" y2="258" stroke="#ddd" stroke-width=".5"/>
+
+  <text x="186" y="274" font-size="9.5" fill="#888" font-style="italic">Customer</text>
+  <text x="198" y="290" font-size="9" fill="#666">Facing</text>
+  <text x="198" y="305" font-size="9" fill="#666">Impact</text>
+  <text x="198" y="320" font-size="9" fill="#666">Persona</text>
+  <text x="198" y="335" font-size="9" fill="#666">Name</text>
+  <line x1="186" y1="343" x2="404" y2="343" stroke="#ddd" stroke-width=".5"/>
+
+  <text x="186" y="359" font-size="9.5" fill="#555">Document Updates</text>
+  <text x="186" y="375" font-size="9.5" fill="#555">Urgency</text>
+  <line x1="186" y1="383" x2="404" y2="383" stroke="#ddd" stroke-width=".5"/>
+
+  <text x="186" y="399" font-size="9.5" fill="#888" font-style="italic">Flags</text>
+  <text x="198" y="415" font-size="9" fill="#666">Partial Change</text>
+  <text x="198" y="430" font-size="9" fill="#666">Breaking Change</text>
+  <text x="198" y="445" font-size="9" fill="#666">Ambiguity</text>
+  <text x="198" y="460" font-size="9" fill="#666">Confidence</text>
+  <text x="198" y="475" font-size="9" fill="#666">Blocked</text>
+
+  <!-- ═══ ARROW: Ticket Intake → Post-Classification Validation ═══ -->
+  <line x1="430" y1="350" x2="444" y2="350" stroke="#aaa" stroke-width=".9" marker-end="url(#arr)"/>
+
+  <!-- ═══ POST-CLASSIFICATION VALIDATION ═══ -->
+  <rect x="444" y="143" rx="4" width="172" height="392" fill="white" stroke="#b8b8b8" stroke-width="1.1"/>
+  <text x="530" y="163" text-anchor="middle" font-size="10" font-weight="500" fill="#333">Post-Classification</text>
+  <text x="530" y="178" text-anchor="middle" font-size="10" font-weight="500" fill="#333">Validation</text>
+  <line x1="452" y1="186" x2="608" y2="186" stroke="#ddd" stroke-width=".6"/>
+
+  <circle cx="458" cy="203" r="2.5" fill="#b0b0b0"/>
+  <text x="466" y="207" font-size="8.5" fill="#666">Customer-facing accuracy</text>
+  <text x="466" y="220" font-size="8.5" fill="#666">weighed against original</text>
+  <text x="466" y="233" font-size="8.5" fill="#666">ticket description + flag</text>
+  <text x="466" y="246" font-size="8.5" fill="#666">for ambiguity</text>
+  <line x1="452" y1="255" x2="608" y2="255" stroke="#eee" stroke-width=".5"/>
+
+  <circle cx="458" cy="271" r="2.5" fill="#b0b0b0"/>
+  <text x="466" y="275" font-size="8.5" fill="#666">Customer Name w/r/t ticket</text>
+  <text x="466" y="288" font-size="8.5" fill="#666">description checked against</text>
+  <text x="466" y="301" font-size="8.5" fill="#666">Salesforce history</text>
+  <line x1="452" y1="311" x2="608" y2="311" stroke="#eee" stroke-width=".5"/>
+
+  <circle cx="458" cy="327" r="2.5" fill="#b0b0b0"/>
+  <text x="466" y="331" font-size="8.5" fill="#666">Generative ticket title</text>
+  <text x="466" y="344" font-size="8.5" fill="#666">matches Linear-provided</text>
+  <text x="466" y="357" font-size="8.5" fill="#666">description</text>
+
+  <!-- ═══ ARROW: Post-Validation → Themes+Grouping ═══ -->
+  <line x1="616" y1="338" x2="630" y2="338" stroke="#aaa" stroke-width=".9" marker-end="url(#arr)"/>
+
+  <!-- ═══ THEMES + GROUPING GROUP ═══ -->
+  <rect x="630" y="65" rx="4" width="330" height="540" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="795" y="83" text-anchor="middle" font-size="10" fill="#888" font-style="italic">Themes + Grouping</text>
+
+  <!-- Themes box -->
+  <rect x="646" y="97" rx="3" width="297" height="274" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="794" y="117" text-anchor="middle" font-size="10" font-weight="500" fill="#333">Themes</text>
+  <line x1="654" y1="124" x2="935" y2="124" stroke="#d0d0d0" stroke-width=".6"/>
+
+  <text x="655" y="139" font-size="9" fill="#888" font-style="italic">Timesheets</text>
+  <text x="655" y="153" font-size="8.5" fill="#666">  Timekeeping · Narratives · Classification</text>
+  <text x="655" y="166" font-size="8.5" fill="#666">  Compliance · Capture · Integrations</text>
+  <text x="655" y="179" font-size="8.5" fill="#666">  Governance · Security · Onboarding</text>
+  <text x="655" y="192" font-size="8.5" fill="#666">  Performance · Platform · Custom</text>
+
+  <text x="655" y="208" font-size="9" fill="#888" font-style="italic">Signal</text>
+  <text x="655" y="222" font-size="8.5" fill="#666">  Profitability · Workforce · Forecasting</text>
+  <text x="655" y="235" font-size="8.5" fill="#666">  AI Impact · Custom</text>
+
+  <text x="655" y="251" font-size="9" fill="#888" font-style="italic">Operations</text>
+  <text x="655" y="265" font-size="8.5" fill="#666">  Platform · Security · Performance · Custom</text>
+
+  <text x="655" y="281" font-size="9" fill="#888" font-style="italic">Undefined</text>
+  <text x="655" y="295" font-size="8.5" fill="#666">  Custom</text>
+
+  <!-- Split arrow: Themes → Narrative Seeds + Validation Layer -->
+  <line x1="794" y1="371" x2="794" y2="387" stroke="#aaa" stroke-width=".9"/>
+  <line x1="718" y1="387" x2="868" y2="387" stroke="#aaa" stroke-width=".9"/>
+  <line x1="718" y1="387" x2="718" y2="397" stroke="#aaa" stroke-width=".9" marker-end="url(#arr)"/>
+  <line x1="868" y1="387" x2="868" y2="397" stroke="#aaa" stroke-width=".9" marker-end="url(#arr)"/>
+
+  <!-- Narrative Seeds box -->
+  <rect x="646" y="397" rx="3" width="142" height="192" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="717" y="415" text-anchor="middle" font-size="9.5" font-weight="500" fill="#333">Narrative Seeds</text>
+  <line x1="654" y1="422" x2="780" y2="422" stroke="#d0d0d0" stroke-width=".6"/>
+
+  <text x="654" y="436" font-size="8.5" fill="#666">Verbatim from tickets —</text>
+  <text x="654" y="449" font-size="8.5" fill="#666">factual, neutral source</text>
+  <line x1="654" y1="457" x2="780" y2="457" stroke="#e8e8e8" stroke-width=".5"/>
+
+  <text x="654" y="471" font-size="8.5" fill="#666">Transformed by prompts</text>
+  <text x="654" y="484" font-size="8.5" fill="#666">for 5 distinct audiences</text>
+  <line x1="654" y1="492" x2="780" y2="492" stroke="#e8e8e8" stroke-width=".5"/>
+
+  <text x="654" y="506" font-size="8.5" fill="#666">Cannot be hallucinated</text>
+  <text x="654" y="519" font-size="8.5" fill="#666">— sourced only from</text>
+  <text x="654" y="532" font-size="8.5" fill="#666">ticket content</text>
+
+  <!-- Validation Layer box -->
+  <rect x="798" y="397" rx="3" width="150" height="192" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="873" y="415" text-anchor="middle" font-size="9.5" font-weight="500" fill="#333">Validation Layer</text>
+  <line x1="806" y1="422" x2="940" y2="422" stroke="#d0d0d0" stroke-width=".6"/>
+
+  <text x="806" y="436" font-size="8.5" fill="#666">Applied to:</text>
+  <text x="818" y="451" font-size="8.5" fill="#888" font-style="italic">Release Notes</text>
+  <text x="818" y="464" font-size="8.5" fill="#888" font-style="italic">Sales Brief</text>
+  <line x1="806" y1="472" x2="940" y2="472" stroke="#e8e8e8" stroke-width=".5"/>
+
+  <text x="806" y="486" font-size="8.5" fill="#666">Filters out tags:</text>
+  <text x="818" y="501" font-size="8.5" fill="#666">Partial Change</text>
+  <text x="818" y="515" font-size="8.5" fill="#666">Breaking Change</text>
+  <text x="818" y="529" font-size="8.5" fill="#666">Internal Only</text>
+
+  <!-- ═══ ARROW: Themes+Grouping → Generation ═══ -->
+  <line x1="960" y1="360" x2="974" y2="360" stroke="#aaa" stroke-width=".9" marker-end="url(#arr)"/>
+
+  <!-- ═══ GENERATION GROUP ═══ -->
+  <rect x="974" y="65" rx="4" width="282" height="540" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="1115" y="83" text-anchor="middle" font-size="10" fill="#888" font-style="italic">Generation</text>
+
+  <!-- Output boxes -->
+  <rect x="1152" y="97" rx="3" width="86" height="36" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="1195" y="119" text-anchor="middle" font-size="9" font-weight="500" fill="#333">Release Notes</text>
+
+  <rect x="1152" y="185" rx="3" width="86" height="36" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="1195" y="207" text-anchor="middle" font-size="9" font-weight="500" fill="#333">Sales Brief</text>
+
+  <rect x="1152" y="273" rx="3" width="86" height="36" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="1195" y="295" text-anchor="middle" font-size="9" font-weight="500" fill="#333">CS FAQ</text>
+
+  <rect x="1152" y="388" rx="3" width="86" height="36" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="1195" y="410" text-anchor="middle" font-size="9" font-weight="500" fill="#333">Changelog</text>
+
+  <rect x="1152" y="466" rx="3" width="86" height="36" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="1195" y="488" text-anchor="middle" font-size="9" font-weight="500" fill="#333">Slack Updates</text>
+
+  <!-- LLM Input box -->
+  <rect x="992" y="330" rx="3" width="110" height="44" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="1047" y="356" text-anchor="middle" font-size="10" font-weight="500" fill="#333">LLM Input</text>
+
+  <!-- LLM Input → Outputs (fan out) -->
+  <path d="M1102 342 C1127 342 1127 115 1152 115" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1102 347 C1127 347 1127 203 1152 203" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1102 352 C1127 352 1127 291 1152 291" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1102 357 C1127 357 1127 406 1152 406" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1102 362 C1127 362 1127 484 1152 484" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+
+  <!-- ═══ OUTPUTS → HUMAN REVIEW GATE (fan in) ═══ -->
+  <path d="M1238 115 C1256 115 1256 349 1276 349" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1238 203 C1256 203 1256 353 1276 353" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1238 291 C1256 291 1256 357 1276 357" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1238 406 C1256 406 1256 361 1276 361" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1238 484 C1256 484 1256 365 1276 365" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+
+  <!-- ═══ HUMAN REVIEW GATE ═══ -->
+  <rect x="1276" y="333" rx="3" width="114" height="48" fill="#e6e6e6" stroke="#bbb" stroke-width=".9"/>
+  <text x="1333" y="353" text-anchor="middle" font-size="9.5" font-weight="500" fill="#333">Human</text>
+  <text x="1333" y="368" text-anchor="middle" font-size="9.5" font-weight="500" fill="#333">Review Gate</text>
+
+  <!-- HRG → Distribution -->
+  <line x1="1390" y1="357" x2="1406" y2="357" stroke="#aaa" stroke-width=".9" marker-end="url(#arr)"/>
+
+  <!-- ═══ DISTRIBUTION ═══ -->
+  <rect x="1406" y="333" rx="3" width="98" height="48" fill="#efefef" stroke="#ccc" stroke-width=".7"/>
+  <text x="1455" y="362" text-anchor="middle" font-size="9.5" font-weight="500" fill="#333">Distribution</text>
+
+  <!-- Distribution → Destinations (fan out) -->
+  <path d="M1504 348 C1514 348 1514 115 1524 115" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1504 352 C1514 352 1514 203 1524 203" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1504 357 C1514 357 1514 305 1524 305" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1504 362 C1514 362 1514 407 1524 407" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+  <path d="M1504 366 C1514 366 1514 499 1524 499" stroke="#aaa" stroke-width=".9" fill="none" marker-end="url(#arr)"/>
+
+  <!-- ═══ DESTINATIONS ═══ -->
+  <rect x="1524" y="97" rx="3" width="92" height="36" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="1570" y="119" text-anchor="middle" font-size="9.5" fill="#444">Slack</text>
+
+  <rect x="1524" y="185" rx="3" width="92" height="36" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="1570" y="207" text-anchor="middle" font-size="9.5" fill="#444">Google</text>
+
+  <rect x="1524" y="287" rx="3" width="92" height="36" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="1570" y="309" text-anchor="middle" font-size="9.5" fill="#444">Notion</text>
+
+  <rect x="1524" y="389" rx="3" width="92" height="36" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="1570" y="411" text-anchor="middle" font-size="9.5" fill="#444">Intercom</text>
+
+  <rect x="1524" y="481" rx="3" width="92" height="36" fill="white" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="1570" y="503" text-anchor="middle" font-size="9.5" fill="#444">Salesforce</text>
+
+</svg>

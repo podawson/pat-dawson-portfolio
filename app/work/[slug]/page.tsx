@@ -10,6 +10,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const project = getProject(slug) ?? projects[0];
   const current = projects.findIndex((item) => item.slug === project.slug);
   const next = projects[(current + 1) % projects.length];
+  const isSystemDiagram = project.slug === "release-intelligence" || project.slug === "gleanings";
 
   return (
     <main className="project-page-shell">
@@ -25,7 +26,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               {project.categories.map((category) => <span key={category}>{category}</span>)}
             </div>
           </div>
-          <div className="project-hero__image"><img src={project.image} alt="" /></div>
+          <div className={`project-hero__image${isSystemDiagram ? " project-hero__image--diagram" : ""}`}><img src={project.image} alt="" /></div>
         </header>
 
         <section className="project-facts">
@@ -68,7 +69,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           ))}
         </section>
 
-        <section className="project-image-break"><img src={project.image} alt="" /></section>
+        <section className={`project-image-break${isSystemDiagram ? " project-image-break--diagram" : ""}`}><img src={project.artifactImage ?? project.image} alt="" /></section>
 
         <nav className="next-project" aria-label="Next project">
           <a href={`/work/${next.slug}`}>{next.title} <span>↗</span></a>

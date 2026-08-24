@@ -373,6 +373,77 @@ img { display: block; width: 100%; }
   .selected-project__image img, .work-card__image img { transition: none; }
 }
 
+/* Authoritative media and Corpus controls: preserve source framing everywhere. */
+.project-hero__image {
+  align-items: center;
+  background: #050709;
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  overflow: visible;
+}
+.project-hero__image img,
+.project-image-break img,
+.project-gallery img,
+.project-gallery--single img {
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
+}
+.project-image-break {
+  align-items: center;
+  background: #050709;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  min-height: 0;
+  overflow: visible;
+}
+.project-gallery figure { align-self: start; }
+.project-hero__image--diagram,
+.project-image-break--diagram { overflow: hidden; }
+
+.map-corpus-tools,
+.field.is-constellation .map-corpus-tools {
+  bottom: auto;
+  right: 4.2vw;
+  top: 92px;
+}
+.field.show-node-names .field-node > strong {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.map-selection-band__image {
+  aspect-ratio: 1;
+  background: #050709;
+  border: 1px solid rgba(255,255,255,.24);
+  height: 54px;
+  object-fit: contain;
+  width: 54px;
+}
+.map-selection-band__identity { min-width: 0; }
+.map-selection-band__identity p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 580px) {
+  .project-hero__image,
+  .project-image-break { min-height: 0; }
+  .project-hero__image img,
+  .project-image-break img,
+  .project-gallery img,
+  .project-gallery--single img { height: auto; max-height: none; object-fit: contain; }
+  .map-corpus-tools,
+  .field.is-constellation .map-corpus-tools { bottom: auto; right: 14px; top: 64px; }
+  .map-selection-band__image { grid-row: 1; height: 30px; width: 30px; }
+  .map-selection-band__identity p { font-size: 6px; letter-spacing: .055em; }
+}
+
 /* Mobile layout pass — desktop composition remains untouched. */
 @media (max-width: 580px) {
   html, body { max-width: 100%; overflow-x: clip; }
@@ -449,6 +520,33 @@ img { display: block; width: 100%; }
   .study-controls-toggle, .study-controls.is-collapsed .study-controls-toggle { height: 44px; right: 2px; top: 1px; }
   .study-presets--collapsed { display: flex; gap: 4px; margin: 0 72px 0 6px; }
   .study-presets--collapsed button { align-items: center; display: flex; height: 38px; justify-content: center; min-width: 38px; padding: 0; }
+}
+
+/* Final cascade guard: later responsive sections must not reintroduce cropping. */
+.project-hero__image { align-items: center; background: #050709; display: flex; justify-content: center; min-height: 0; overflow: visible; }
+.project-image-break { align-items: center; background: #050709; display: flex; height: auto; justify-content: center; min-height: 0; overflow: visible; }
+.project-hero__image img,
+.project-image-break img,
+.project-gallery img,
+.project-gallery--single img { height: auto; max-height: none; object-fit: contain; object-position: center; width: 100%; }
+.map-corpus-tools,
+.field.is-constellation .map-corpus-tools { bottom: auto; right: 4.2vw; top: 92px; }
+.field.show-node-names .field-node > strong { display: block !important; opacity: 1 !important; visibility: visible !important; }
+.map-selection-band__image { aspect-ratio: 1; background: #050709; border: 1px solid rgba(255,255,255,.24); height: 54px; object-fit: contain; width: 54px; }
+.map-selection-band__identity { min-width: 0; }
+.map-selection-band__identity p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+@media (max-width: 580px) {
+  .project-hero__image,
+  .project-image-break { min-height: 0; }
+  .project-hero__image img,
+  .project-image-break img,
+  .project-gallery img,
+  .project-gallery--single img { height: auto; max-height: none; object-fit: contain; }
+  .map-corpus-tools,
+  .field.is-constellation .map-corpus-tools { bottom: auto; right: 14px; top: 64px; }
+  .map-selection-band__image { grid-row: 1; height: 30px; width: 30px; }
+  .map-selection-band__identity p { font-size: 6px; letter-spacing: .055em; }
 }
 
 /* v8 — Field */

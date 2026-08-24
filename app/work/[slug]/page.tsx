@@ -13,7 +13,7 @@ const projectAccents: Record<string, string> = {
   "confidential-client": "#6ebee8",
   "vanderbilt-passage": "#d5b46e",
   "gymnast-cobot": "#dfc959",
-  "civic-investment-map": "#ed8b5d",
+  "mapping-investments": "#ed8b5d",
   "release-intelligence": "#ef935c",
   gleanings: "#a58bd4",
   string: "#9dd6dc",
@@ -25,6 +25,8 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/charlesgate-park/01.webp", caption: "Ecological repair begins with the site already there." },
     { src: "/work/gallery/charlesgate-park/02.webp", caption: "Survey, archival geometry, and the infrastructural site model." },
     { src: "/work/gallery/charlesgate-park/04.webp", caption: "A proposal to daylight the Muddy River and reconnect the park." },
+    { src: "/work/gallery/charlesgate-park/05.webp", caption: "The inherited landscape before intervention." },
+    { src: "/work/gallery/charlesgate-park/06.webp", caption: "The same view reworked as ecological and civic repair." },
   ],
   "88-east-broadway": [
     { src: "/work/gallery/88-east-broadway/01.webp", caption: "The building beneath the Manhattan Bridge." },
@@ -34,23 +36,32 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   "ouellette-bridge": [
     { src: "/work/gallery/ouellette-bridge/01.webp", caption: "The reversible mounting system installed on the historic truss." },
     { src: "/work/gallery/ouellette-bridge/02.webp", caption: "Fabrication details for housings that required no drilling or welding." },
+    { src: "/work/gallery/ouellette-bridge/03.webp", caption: "Installed housings carried light without altering the historic truss." },
+    { src: "/work/gallery/ouellette-bridge/04.webp", caption: "Construction geometry translated a singular bridge into repeatable parts." },
+    { src: "/work/gallery/ouellette-bridge/05.webp", caption: "Assembly studies resolved reversible attachments before fabrication." },
   ],
   "flower-tower": [
     { src: "/work/gallery/flower-tower/01.webp", caption: "A full-scale cardboard prototype tested before the event." },
     { src: "/work/gallery/flower-tower/02.webp", caption: "Flower Tower in operation at Rockefeller Center." },
     { src: "/work/gallery/flower-tower/03.webp", caption: "One of thousands of biodegradable plant-and-poem exchanges." },
     { src: "/work/gallery/flower-tower/04.webp", caption: "Public participation was the structure's working material." },
+    { src: "/work/gallery/flower-tower/05.webp", caption: "Visitors depleted and rewrote the installation over the course of the festival." },
+    { src: "/work/gallery/flower-tower/06.webp", caption: "A detail study worked through the plant-and-poem exchange." },
+    { src: "/work/gallery/flower-tower/07.webp", caption: "The assembly drawing treated disappearance as a construction requirement." },
   ],
   caleta: [
     { src: "/work/gallery/caleta/01.webp", caption: "The completed interior: black tile, custom bar, and warm light." },
     { src: "/work/gallery/caleta/02.webp", caption: "Construction, inspection, and opening assembled as one delivery record." },
     { src: "/work/gallery/caleta/03.webp", caption: "Permit-set detail linking design intent to field execution." },
     { src: "/work/gallery/caleta/04.webp", caption: "Caleta and Bad Habit at opening." },
+    { src: "/work/gallery/caleta/05.webp", caption: "Red light, black tile, and mirrored surfaces carried the concept into the dining room." },
+    { src: "/work/gallery/caleta/06.webp", caption: "Bad Habit extended the project from architecture into product and atmosphere." },
   ],
   "wework-conversions": [
     { src: "/work/gallery/wework-conversions/02.webp", caption: "A floor-plan analysis translated into repeatable conversion logic." },
     { src: "/work/gallery/wework-conversions/03.webp", caption: "A completed conversion using the shared playbook." },
     { src: "/work/gallery/wework-conversions/04.webp", caption: "Regional plan study across a distributed portfolio." },
+    { src: "/work/gallery/wework-conversions/05.webp", caption: "A converted shared space operating inside one of the portfolio's inherited buildings." },
   ],
   "confidential-client": [
     { src: "/work/gallery/confidential-client/01.webp", caption: "A responsive textile threshold for an enterprise physical-AI environment." },
@@ -69,7 +80,7 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/gymnast-cobot/03.webp", caption: "The gesture-to-adjustment interaction model." },
     { src: "/work/gallery/gymnast-cobot/05.webp", caption: "Full-scale testing with workers and observers." },
   ],
-  "civic-investment-map": [
+  "mapping-investments": [
     { src: "/work/gallery/mapping-investments/01.webp", caption: "The interactive neighborhood model and project evidence pane." },
     { src: "/work/gallery/mapping-investments/02.webp", caption: "History, ownership, investment, and impact layered in one spatial record." },
   ],

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { projectConnections, projects, type ConnectionKind } from "../data";
 import { MapBody3D } from "../map/MapBodyMesh3D";
-import { ProjectGlyph } from "./ProjectGlyph";
 
 const relationColor: Record<ConnectionKind, string> = {
   handoff: "#f58a61",
@@ -697,7 +696,7 @@ export function Constellation() {
             const fromIndex = projects.findIndex((project) => project.slug === active.slug);
             const toIndex = projects.findIndex((project) => project.slug === connection.neighbor?.slug);
             return (
-              <g key={`${connection.from}-${connection.to}`} style={{ "--relation-color": relationColor[connection.kind] } as CSSProperties}>
+              <g key={`${connection.from}-${connection.to}-${connection.kind}`} style={{ "--relation-color": relationColor[connection.kind] } as CSSProperties}>
                 <line className="field-active-connection-glow" data-from-index={fromIndex} data-to-index={toIndex} />
                 <line className="field-active-connection-dash" data-from-index={fromIndex} data-to-index={toIndex} />
               </g>
@@ -740,14 +739,14 @@ export function Constellation() {
 
       {active && (
         <aside className="map-selection-band" aria-live="polite">
-          <ProjectGlyph slug={active.slug} />
+          <img className="map-selection-band__image" src={active.image} alt="" />
           <div className="map-selection-band__identity">
             <p>{active.eyebrow} · {active.year}</p>
             <h2>{active.title}</h2>
           </div>
           <div className="map-selection-band__relations" aria-label="Related projects">
-            {activeConnections.length ? activeConnections.slice(0, 4).map((connection) => (
-              <button key={`${connection.from}-${connection.to}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
+            {activeConnections.length ? activeConnections.map((connection) => (
+              <button key={`${connection.from}-${connection.to}-${connection.kind}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
                 <i style={{ background: relationColor[connection.kind] }} />
                 <span><small>{relationLabel[connection.kind]}</small>{connection.neighbor?.title}</span>
               </button>

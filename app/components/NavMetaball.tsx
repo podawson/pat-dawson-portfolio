@@ -99,12 +99,19 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
     const hoverCenter = centerOf(hoverCapsule);
     const hoverGap = Math.abs((hoverCapsule.ax + hoverCapsule.bx - toCapsule.ax - toCapsule.bx) * 0.5);
     const hoverBlend = CORPUS_MOTION.smoothMinRest + hoverGap * 0.08 * hoverAmountRef.current;
+    const hoverToRight = hoverCenter.x >= toCenter.x;
+    const activeEdge = hoverToRight
+      ? toCapsule.bx + toCapsule.radius
+      : toCapsule.ax - toCapsule.radius;
+    const hoverEdge = hoverToRight
+      ? hoverCapsule.ax - hoverCapsule.radius
+      : hoverCapsule.bx + hoverCapsule.radius;
     const hoverBridgeCapsule: Capsule = {
-      ax: toCenter.x,
+      ax: activeEdge,
       ay: toCenter.y,
-      bx: hoverCenter.x,
+      bx: hoverEdge,
       by: hoverCenter.y,
-      radius: Math.min(toCapsule.radius, hoverCapsule.radius) * 0.23,
+      radius: Math.min(toCapsule.radius, hoverCapsule.radius) * 0.28,
     };
     const color = inverse ? [224, 226, 222] : [62, 67, 65];
 
@@ -124,8 +131,8 @@ export function NavMetaball({ activeIndex, inverse, navRef }: NavMetaballProps) 
         const alpha = Math.max(0, Math.min(255, Math.round((
           activeFill * 0.88
           + activeRim * 0.11
-          + hoverFill * 0.17 * hoverAmountRef.current
-          + hoverRim * 0.04 * hoverAmountRef.current
+          + hoverFill * 0.30 * hoverAmountRef.current
+          + hoverRim * 0.07 * hoverAmountRef.current
         ) * 255)));
         const offset = (py * width + px) * 4;
         image.data[offset] = color[0];

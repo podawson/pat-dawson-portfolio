@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import "@fontsource-variable/instrument-sans";
 import "@fontsource-variable/martian-mono";
 import "./globals.css";
+import "./overrides.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();

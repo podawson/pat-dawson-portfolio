@@ -54,6 +54,8 @@ const vertexShader = `
   uniform float uPreviousEmphasizedCount;
   uniform float uFilterActive;
   uniform float uPreviousFilterActive;
+  uniform vec3 uFilterColor;
+  uniform vec3 uPreviousFilterColor;
   uniform float uFilterTransition;
   uniform float uSelection;
   uniform float uSelectionBloom;
@@ -98,7 +100,9 @@ const vertexShader = `
     float filterSwell = smoothstep(0.32, 0.78, filterHeat);
     float filterAura = smoothstep(0.05, 0.50, filterHeat);
     float filterBaseline = mix(uPreviousFilterActive, uFilterActive, smoothstep(0.0, 1.0, uFilterTransition));
-    transformed += normalize(normal) * (filterBaseline * 0.026 + filterSwell * 0.060 + filterAura * 0.012 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
+    vec3 filterDirection = normalize(mix(uPreviousFilterColor, uFilterColor, smoothstep(0.0, 1.0, uFilterTransition)) * 2.0 - 1.0 + vec3(0.21, -0.12, 0.17));
+    float filterMorph = filterBaseline * (sin(dot(position, filterDirection) * 8.0) * 0.007 + dot(normalize(position + vec3(0.001)), filterDirection) * 0.005);
+    transformed += normalize(normal) * (filterBaseline * 0.026 + filterMorph + filterSwell * 0.060 + filterAura * 0.012 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
 
     vec4 viewPosition = modelViewMatrix * vec4(transformed, 1.0);
     vLocalPosition = transformed;
@@ -338,6 +342,9 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     let pitchVelocity = 0;
     let resetRequested = false;
     let rotationFlag = false;
+    let projectionDirty = true;
+    let projectionsReady = false;
+    const lastProjectedQuaternion = new THREE.Quaternion();
 
     const schedule = () => {
       if (!scheduledFrame && inViewport && !document.hidden) scheduledFrame = requestAnimationFrame(draw);
@@ -355,6 +362,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       fitCorpusToViewport(width, height);
+      projectionDirty = true;
       wake(250);
     };
     resize();
@@ -425,7 +433,10 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     function updateSelection(now: number) {
       const active = activeSlugRef.current;
       const activeIndex = active ? nodeBySlug.get(active) : undefined;
-      const relationKey = highlightedNeighborsRef.current.join(",");
+      // Keying the projected relation field by both source and destinations prevents
+      // a shared neighbor set from leaving the previous source (notably Vanderbilt)
+      // visually latched after the active project changes.
+      const relationKey = `${active ?? "none"}:${highlightedNeighborsRef.current.join(",")}`;
       if (relationKey !== lastRelationKey) {
         relatedPoints.forEach((point) => point.set(99, 99, 99));
         if (activeIndex !== undefined) {
@@ -439,6 +450,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
           uniforms.uRelatedCount.value = 0;
         }
         lastRelationKey = relationKey;
+        projectionDirty = true;
         wake(700);
       }
       if (activeIndex !== lastActiveIndex) {
@@ -456,6 +468,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
         }
         selectionStarted = now;
         lastActiveIndex = activeIndex;
+        projectionDirty = true;
         wake(selectionDuration + 180);
       }
       const progress = reduceMotion ? 1 : THREE.MathUtils.clamp((now - selectionStarted) / selectionDuration, 0, 1);
@@ -519,20 +532,30 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       body.quaternion.copy(rotationQuaternion);
       updateRotationFlag();
       body.updateMatrixWorld(true);
-      nodeLocals.forEach((node, index) => {
-        projectedPoint.copy(node).applyMatrix4(body.matrixWorld).project(camera);
-        projectedNodes[index].x = (projectedPoint.x * 0.5 + 0.5) * 100;
-        projectedNodes[index].y = (-projectedPoint.y * 0.5 + 0.5) * 100;
-        projectedNodes[index].visible = projectedPoint.z >= -1 && projectedPoint.z <= 1;
-      });
-      onNodePositionsChange?.(projectedNodes);
-      (Object.keys(axisLocals) as Array<keyof typeof axisLocals>).forEach((key) => {
-        projectedPoint.copy(axisLocals[key]).applyMatrix4(body.matrixWorld).project(camera);
-        projectedAxes[key].x = (projectedPoint.x * 0.5 + 0.5) * 100;
-        projectedAxes[key].y = (-projectedPoint.y * 0.5 + 0.5) * 100;
-        projectedAxes[key].visible = projectedPoint.z >= -1 && projectedPoint.z <= 1;
-      });
-      onAxisPositionsChange?.(projectedAxes);
+      // The first projection pass can happen before renderer.render() updates the
+      // camera matrices. Refresh them explicitly so cached DOM node positions are
+      // valid from frame one rather than being projected from an identity camera.
+      camera.updateMatrixWorld(true);
+      const projectionChanged = !projectionsReady || projectionDirty || rotationQuaternion.angleTo(lastProjectedQuaternion) > 0.00005;
+      if (projectionChanged) {
+        nodeLocals.forEach((node, index) => {
+          projectedPoint.copy(node).applyMatrix4(body.matrixWorld).project(camera);
+          projectedNodes[index].x = (projectedPoint.x * 0.5 + 0.5) * 100;
+          projectedNodes[index].y = (-projectedPoint.y * 0.5 + 0.5) * 100;
+          projectedNodes[index].visible = projectedPoint.z >= -1 && projectedPoint.z <= 1;
+        });
+        onNodePositionsChange?.(projectedNodes);
+        (Object.keys(axisLocals) as Array<keyof typeof axisLocals>).forEach((key) => {
+          projectedPoint.copy(axisLocals[key]).applyMatrix4(body.matrixWorld).project(camera);
+          projectedAxes[key].x = (projectedPoint.x * 0.5 + 0.5) * 100;
+          projectedAxes[key].y = (-projectedPoint.y * 0.5 + 0.5) * 100;
+          projectedAxes[key].visible = projectedPoint.z >= -1 && projectedPoint.z <= 1;
+        });
+        onAxisPositionsChange?.(projectedAxes);
+        lastProjectedQuaternion.copy(rotationQuaternion);
+        projectionsReady = true;
+        projectionDirty = false;
+      }
       renderer.render(scene, camera);
       const moving = isDragging || resetRequested || rotationQuaternion.angleTo(targetQuaternion) > 0.00015 || Math.abs(yawVelocity) > 0.00004 || Math.abs(pitchVelocity) > 0.00004;
       if (moving || selectionChanging || now < renderUntil) schedule();

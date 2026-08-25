@@ -84,9 +84,9 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/mapping-investments/02.webp", caption: "History, ownership, investment, and impact layered in one spatial record." },
   ],
   "release-intelligence": [
+    { src: "/work/gallery/release-intelligence/04.webp", caption: "The functional architecture that survived the sketching process." },
     { src: "/work/gallery/release-intelligence/02.webp", caption: "Early sketches established the source, comparison, and decision flow." },
     { src: "/work/gallery/release-intelligence/03.webp", caption: "Alternative system structures were tested before implementation." },
-    { src: "/work/gallery/release-intelligence/04.webp", caption: "The functional architecture that survived the sketching process." },
   ],
   gleanings: [],
   string: [

@@ -338,7 +338,7 @@ export const projects: Project[] = [
     agency: "The pipeline classifies and drafts within explicit bounds; a PM reviews high-risk items and publishes the final record.",
     role: "AI systems designer · pipeline architect",
     outcome: "Five consistent outputs per cycle, a deterministic audit trail, and a workflow handed off for non-engineering ownership.",
-    image: "/work/release-intelligence-hero-v2.jpg",
+    image: "/work/release-intelligence-hero-v4.jpg",
     artifactImage: "/work/release-intelligence-pipeline.svg",
     indexPill: "five honest documents",
     categories: ["Systems", "Experience"],

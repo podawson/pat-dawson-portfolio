@@ -385,7 +385,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
 
     const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0) return;
-      if (event.target instanceof Element && event.target.closest(".map-reset-view")) return;
+      if (event.target instanceof Element && event.target.closest(".map-corpus-tools")) return;
       isDragging = true;
       resetRequested = false;
       previousPointerX = event.clientX;

@@ -52,7 +52,19 @@
 .field.show-node-names .field-node > strong {
   display: block !important;
   opacity: 1 !important;
+  pointer-events: auto;
   visibility: visible !important;
+}
+
+.field-node > strong {
+  top: calc(100% + 3px);
+}
+
+.field-node:hover > strong,
+.field-node:focus-visible > strong,
+.field-node.is-active > strong,
+.field-node.is-related > strong {
+  pointer-events: auto;
 }
 
 .map-selection-band__image {
@@ -73,6 +85,8 @@
 }
 
 @media (max-width: 580px) {
+  .field-node > strong { top: 100%; }
+
   .project-hero__image,
   .project-image-break { min-height: 0; }
 

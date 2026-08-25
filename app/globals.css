@@ -1281,4 +1281,8 @@ img { display: block; width: 100%; }
     left: 50%;
     right: auto;
   }
+
+  .field-axes {
+    display: block;
+  }
 }

@@ -244,6 +244,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       ? project.artifactImage
       : null;
   const isEndImageDiagram = endImage?.endsWith(".svg") ?? false;
+  const headerDescriptor = project.descriptor ?? project.eyebrow.split(" · ");
 
   return (
     <main className="project-page-shell" style={{ "--project-accent": projectAccents[project.slug] ?? "#72d9e8" } as CSSProperties}>
@@ -251,12 +252,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <article className="project-page">
         <header className="project-hero">
           <div className="project-hero__copy">
-            {project.slug === "mapping-investments" ? (
-              <p className="kicker project-hero__kicker--stacked">
-                {project.eyebrow.split(" · ").map((part) => <span key={part}>{part}</span>)}
-                <span>{project.year}</span>
-              </p>
-            ) : <p className="kicker">{project.eyebrow} · {project.year}</p>}
+            <p className="kicker project-hero__kicker--stacked">
+              {headerDescriptor.map((part) => <span key={part}>{part}</span>)}
+              <span>{project.year}</span>
+            </p>
             <h1>{project.title}</h1>
             <p className="project-hero__headline">{project.headline}</p>
             <p className="project-hero__summary">{project.summary}</p>

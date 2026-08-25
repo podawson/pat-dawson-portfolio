@@ -208,6 +208,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     if (!mount) return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const mobile = window.matchMedia("(max-width: 700px)").matches;
+    const hideNodeConnections = window.matchMedia("(max-width: 580px)").matches;
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
@@ -277,24 +278,26 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     nodeFields.forEach((point, index) => {
       body.addBall(point.x, point.y, point.z, 0.20 + mapNodes3D[index].radius * 0.055, 12);
     });
-    mapEdges3D.forEach((edge, edgeIndex) => {
-      const fromIndex = nodeBySlug.get(edge.from.slug);
-      const toIndex = nodeBySlug.get(edge.to.slug);
-      if (fromIndex === undefined || toIndex === undefined) return;
-      const a = nodeFields[fromIndex];
-      const b = nodeFields[toIndex];
-      const distance = a.distanceTo(b);
-      const control = a.clone().lerp(b, 0.5);
-      control.z -= 0.025 + distance * 0.055;
-      control.y += (edgeIndex % 2 ? 1 : -1) * Math.min(0.025, distance * 0.04);
-      const samples = THREE.MathUtils.clamp(Math.ceil(distance * 27), 6, 18);
-      for (let sample = 1; sample < samples; sample += 1) {
-        const amount = sample / samples;
-        const point = quadraticPoint(a, control, b, amount);
-        const taper = 1 - Math.abs(amount - 0.5) * 0.34;
-        body.addBall(point.x, point.y, point.z, 0.033 * edge.thickness * taper, 12);
-      }
-    });
+    if (!hideNodeConnections) {
+      mapEdges3D.forEach((edge, edgeIndex) => {
+        const fromIndex = nodeBySlug.get(edge.from.slug);
+        const toIndex = nodeBySlug.get(edge.to.slug);
+        if (fromIndex === undefined || toIndex === undefined) return;
+        const a = nodeFields[fromIndex];
+        const b = nodeFields[toIndex];
+        const distance = a.distanceTo(b);
+        const control = a.clone().lerp(b, 0.5);
+        control.z -= 0.025 + distance * 0.055;
+        control.y += (edgeIndex % 2 ? 1 : -1) * Math.min(0.025, distance * 0.04);
+        const samples = THREE.MathUtils.clamp(Math.ceil(distance * 27), 6, 18);
+        for (let sample = 1; sample < samples; sample += 1) {
+          const amount = sample / samples;
+          const point = quadraticPoint(a, control, b, amount);
+          const taper = 1 - Math.abs(amount - 0.5) * 0.34;
+          body.addBall(point.x, point.y, point.z, 0.033 * edge.thickness * taper, 12);
+        }
+      });
+    }
     body.update();
     body.geometry.computeBoundingSphere();
     const fitCorpusToViewport = (width: number, height: number) => {

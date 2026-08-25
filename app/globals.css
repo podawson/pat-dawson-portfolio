@@ -710,7 +710,7 @@ img { display: block; width: 100%; }
 .index-preview > a { display: block; font-family: var(--mono); font-size: 9px; margin-top: 22px; text-transform: uppercase; width: fit-content; }
 .index-connector { inset: 0; overflow: visible; pointer-events: none; position: absolute; z-index: 2; }
 .index-connector path { animation: index-draw .12s ease both; fill: none; stroke: rgba(163,77,51,.75); stroke-dasharray: 1; stroke-dashoffset: 1; stroke-width: 1; }
-.index-connector__label { fill: rgba(255,255,255,.94); font-family: var(--sans); font-size: 10px; font-weight: 620; letter-spacing: .01em; paint-order: stroke; stroke: rgba(9,11,13,.9); stroke-width: 3px; }
+.index-connector__label { fill: rgba(255,255,255,.94); font-family: var(--sans); font-size: 12px; font-weight: 620; letter-spacing: .01em; paint-order: stroke; stroke: rgba(9,11,13,.9); stroke-width: 3px; }
 @keyframes index-draw { to { stroke-dashoffset: 0; } }
 
 /* Work index — shared Map night system */

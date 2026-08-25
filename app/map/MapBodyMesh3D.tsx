@@ -605,7 +605,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
           onClick={(event) => { event.stopPropagation(); onToggleNodeNames?.(); }}
           onPointerDown={(event) => event.stopPropagation()}
           type="button"
-        >{showNodeNames ? "Hide names" : "Show names"}</button>
+        >{showNodeNames ? "Hide names" : "Show Names"}</button>
         <button
           className={`map-reset-view ${rotated ? "is-rotated" : ""}`}
           onClick={(event) => { event.stopPropagation(); resetRef.current?.(); onResetMap?.(); }}

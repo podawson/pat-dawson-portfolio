@@ -1,4 +1,5 @@
 import { SiteHeader } from "../components/SiteHeader";
+import { WaterStudy } from "../components/WaterStudy";
 
 const focusAreas = [
   "Experiential & media architecture",
@@ -30,14 +31,9 @@ export default function AboutPage() {
           <p>My background begins in physical space and extends through fabrication, experiential systems, product management, AI workflows, and cultural experiments.</p>
           <p>A fondness for pre-existing conditions flows through all of my endeavors as does transparency regarding the motivating design drivers of each and every output.</p>
         </div>
-        <figure className="plus-figure">
-          <div className="plus-map" aria-label="A plus sign mapping Patrick’s practice">
-            <span className="plus-arm plus-arm--top">Atmosphere</span>
-            <span className="plus-arm plus-arm--right">Computation</span>
-            <span className="plus-arm plus-arm--bottom">Architecture</span>
-            <span className="plus-arm plus-arm--left">Storytelling</span>
-          </div>
-        </figure>
+        <div className="about-play-interactive">
+          <WaterStudy embedded />
+        </div>
       </section>
 
       <section className="about-grid" aria-label="Practice principles">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { projectConnections, projectDescriptor, projects, type ConnectionKind } from "../data";
+import { projectConnections, projects, type ConnectionKind } from "../data";
 import { MapBody3D } from "../map/MapBodyMesh3D";
 
 const relationColor: Record<ConnectionKind, string> = {
@@ -717,7 +717,11 @@ export function Constellation() {
               key={project.slug}
               onClick={() => {
                 if (relationFilter !== "all" && !matchesFilter) setRelationFilter("all");
-                setActiveSlug((current) => current === project.slug ? null : project.slug);
+                if (activeSlug === project.slug) {
+                  window.location.assign(`/work/${project.slug}`);
+                  return;
+                }
+                setActiveSlug(project.slug);
               }}
               ref={(element) => { nodeRefs.current[index] = element; }}
               style={{
@@ -728,7 +732,7 @@ export function Constellation() {
                 "--node-order": index,
               } as CSSProperties}
               type="button"
-              aria-label={`${isActive ? "Deselect" : "Select"} ${project.title}${relationFilter !== "all" && matchesFilter ? `, connected by ${relationLabel[relationFilter].toLowerCase()}` : ""}`}
+              aria-label={`${isActive ? "Open" : "Select"} ${project.title}${relationFilter !== "all" && matchesFilter ? `, connected by ${relationLabel[relationFilter].toLowerCase()}` : ""}`}
             >
               <span className="field-node__mobile-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
               <strong>{project.title}</strong>
@@ -741,7 +745,6 @@ export function Constellation() {
         <aside className="map-selection-band" aria-live="polite">
           <img className="map-selection-band__image" src={active.image} alt="" />
           <div className="map-selection-band__identity">
-            <p>{projectDescriptor(active)}</p>
             <h2>{active.title}</h2>
           </div>
           <div className="map-selection-band__relations" aria-label="Related projects">
@@ -752,7 +755,7 @@ export function Constellation() {
               </button>
             )) : <p className="map-selection-band__empty">No {relationFilter === "all" ? "related" : relationLabel[relationFilter].toLowerCase()} links recorded.</p>}
           </div>
-          <a className="map-selection-band__open" href={`/work/${active.slug}`}>Open project ↗</a>
+          <a className="map-selection-band__open project-open-pill" href={`/work/${active.slug}`}><span>Open project ↗</span></a>
         </aside>
       )}
 

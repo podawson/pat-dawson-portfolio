@@ -136,7 +136,7 @@ function makeTriangleField(targetTriangles = initial.triangleCount) {
   geometry.setAttribute("aTip",new THREE.Float32BufferAttribute(tips,1)); geometry.computeBoundingSphere(); return geometry;
 }
 
-export function WaterStudy() {
+export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
   const mountRef = useRef<HTMLDivElement>(null);
   const uniformsRef = useRef<Record<string, THREE.IUniform> | null>(null);
   const sceneRef = useRef<{ field: THREE.Mesh; camera: THREE.PerspectiveCamera } | null>(null);
@@ -148,7 +148,7 @@ export function WaterStudy() {
   const zoomTargetRef = useRef(0);
   const [settings, setSettings] = useState(initial);
   const [sky, setSky] = useState<Sky>("clear");
-  const [panelOpen, setPanelOpen] = useState(true);
+  const [panelOpen, setPanelOpen] = useState(false);
 
   useEffect(() => {
     if (!window.matchMedia("(max-width: 580px)").matches) return;
@@ -229,8 +229,12 @@ export function WaterStudy() {
   };
 
   return (
-    <div className="study-tool study-tool--water">
+    <div className={`study-tool study-tool--water${embedded ? " study-tool--embedded" : ""}`}>
       <div className={`study-canvas study-canvas--${sky}`} ref={mountRef} role="img" aria-label="An organic field of isosceles triangles deformed by live water, weather, light, and camera parameters"><div className="study-vignette" /></div>
+      <div className="study-window-copy">
+        <h2>Stay a while</h2>
+        <p>We are too much like oysters observing the sun through the water, and thinking that thick water the thinnest of air</p>
+      </div>
       <aside className={`study-controls${panelOpen ? "" : " is-collapsed"}`}>
         {panelOpen && <div className="study-controls__content">
           <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>

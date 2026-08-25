@@ -13,7 +13,7 @@ const projectAccents: Record<string, string> = {
   "confidential-client": "#6ebee8",
   "vanderbilt-passage": "#d5b46e",
   "gymnast-cobot": "#dfc959",
-  "mapping-investments": "#ed8b5d",
+  "mapping-investments": "#3f7255",
   "release-intelligence": "#ef935c",
   gleanings: "#a58bd4",
   string: "#9dd6dc",
@@ -81,7 +81,7 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/gymnast-cobot/05.webp", caption: "Full-scale testing with workers and observers." },
   ],
   "mapping-investments": [
-    { src: "/work/gallery/mapping-investments/02.webp", caption: "History, ownership, investment, and impact layered in one spatial record." },
+    { src: "/work/gallery/mapping-investments/02-crop.jpg", caption: "History, ownership, investment, and impact layered in one spatial record." },
   ],
   "release-intelligence": [
     { src: "/work/gallery/release-intelligence/04.webp", caption: "The functional architecture that survived the sketching process." },
@@ -251,7 +251,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <article className="project-page">
         <header className="project-hero">
           <div className="project-hero__copy">
-            <p className="kicker">{project.eyebrow} · {project.year}</p>
+            {project.slug === "mapping-investments" ? (
+              <p className="kicker project-hero__kicker--stacked">
+                {project.eyebrow.split(" · ").map((part) => <span key={part}>{part}</span>)}
+                <span>{project.year}</span>
+              </p>
+            ) : <p className="kicker">{project.eyebrow} · {project.year}</p>}
             <h1>{project.title}</h1>
             <p className="project-hero__headline">{project.headline}</p>
             <p className="project-hero__summary">{project.summary}</p>
@@ -325,7 +330,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         ) : null}
 
         <nav className="next-project" aria-label="Next project">
-          <a href={`/work/${next.slug}`}>{next.title} <span>↗</span></a>
+          <a href={`/work/${next.slug}`}>{next.title}</a>
           <p>{next.question}</p>
         </nav>
       </article>

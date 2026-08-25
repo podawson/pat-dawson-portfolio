@@ -309,7 +309,7 @@ export const projects: Project[] = [
     agency: "AI agents accelerated implementation; Patrick retained visual direction, regression review, and responsibility for the public experience.",
     role: "UX and interaction designer · AI-directed frontend builder",
     outcome: "A production 3D civic narrative delivered for a live investor event on a hard deadline.",
-    image: "/work/gallery/mapping-investments/01.webp",
+    image: "/work/mapping-investments-hero-crop.jpg",
     artifactImage: "/work/mapping-investments.svg",
     indexPill: "history you can navigate",
     categories: ["Systems", "Place", "Culture"],

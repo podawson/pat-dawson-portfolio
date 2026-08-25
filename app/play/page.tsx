@@ -3,13 +3,8 @@ import { WaterStudy } from "../components/WaterStudy";
 
 export default function PlayPage() {
   return (
-    <main className="studies-page">
+    <main className="studies-page studies-page--immersive">
       <SiteHeader inverse />
-      <section className="studies-intro page-intro page-intro--work route-intro">
-        <p className="kicker">PLAY</p>
-        <h1>Stay a while</h1>
-        <p>We are too much like oysters observing the sun through the water, and thinking that thick water the thinnest of air</p>
-      </section>
       <WaterStudy />
     </main>
   );

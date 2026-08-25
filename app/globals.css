@@ -1287,7 +1287,6 @@ img { display: block; width: 100%; }
   }
 
   .field-node__mobile-index,
-  .field-resting-connections,
   .field-active-connections {
     display: none;
   }

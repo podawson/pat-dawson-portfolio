@@ -2,7 +2,7 @@ import { SiteHeader } from "../components/SiteHeader";
 
 const focusAreas = [
   "Experiential & media architecture",
-  "AI systems, corpora & agent workflows",
+  "AI systems & agent workflows",
   "Fabrication, permitting & delivery",
   "Real-time spatial systems",
   "Product strategy & operating models",

@@ -1249,3 +1249,36 @@ img { display: block; width: 100%; }
 @media (max-width: 580px) {
   .study-tool--embedded .study-controls:not(.is-collapsed) { height: calc(100% - 20px); }
 }
+
+/* Keep the closed preset bar compact, concentric, and centered in the study. */
+.study-tool--embedded .study-controls.is-collapsed {
+  align-items: center;
+  bottom: 18px;
+  box-sizing: border-box;
+  display: flex;
+  gap: 6px;
+  height: 52px;
+  left: 50%;
+  padding: 5px;
+  right: auto;
+  top: auto;
+  transform: translateX(-50%);
+  width: 258px;
+}
+.study-tool--embedded .study-controls.is-collapsed .study-presets--collapsed {
+  flex: 0 0 178px;
+}
+.study-tool--embedded .study-controls.is-collapsed .study-controls-toggle {
+  flex: 0 0 64px;
+  height: 40px;
+  position: static;
+  width: 64px;
+}
+
+@media (max-width: 580px) {
+  .study-tool--embedded .study-controls.is-collapsed {
+    bottom: 12px;
+    left: 50%;
+    right: auto;
+  }
+}

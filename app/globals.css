@@ -1082,6 +1082,12 @@ img { display: block; width: 100%; }
 }
 
 /* Final component overrides. */
+.about-intro-note { font-size: 13px !important; font-style: italic; margin: 0 0 30px; }
+.about-hero__body p { color: rgba(245,241,232,.6); font-size: 15px; line-height: 1.5; margin: 0; max-width: 610px; }
+.about-hero__body p + p { margin-top: 16px; }
+.about-grid p:last-child,
+.experience-list article div > p:last-child,
+.education-list p { font-size: 18px; }
 .page-intro--work { min-height: 210px; padding-bottom: 12px; }
 .index-preview > h2:first-of-type { margin-top: 18px; }
 .project-open-pill { align-items: center; border: 1px solid rgba(245,241,232,.3); border-radius: 999px; display: inline-flex !important; isolation: isolate; justify-content: center; min-height: 36px; overflow: hidden; padding: 0 14px; position: relative; transition: border-color .24s ease, color .24s ease; }
@@ -1097,13 +1103,15 @@ img { display: block; width: 100%; }
 .project-hero__kicker--stacked span { display: block; }
 .studies-page--immersive .study-tool { height: 100dvh; min-height: 720px; }
 .studies-page--immersive .study-controls { bottom: auto; top: 88px; }
-.study-window-copy { bottom: 28px; color: rgba(245,241,232,.72); left: 3vw; max-width: 620px; pointer-events: none; position: absolute; text-shadow: 0 2px 20px rgba(0,0,0,.82); z-index: 4; }
+.study-window-copy { bottom: 28px; color: rgba(245,241,232,.72); left: 50%; max-width: none; pointer-events: none; position: absolute; text-align: center; text-shadow: 0 2px 20px rgba(0,0,0,.82); transform: translateX(-50%); width: calc(100% - 48px); z-index: 4; }
 .study-window-copy h2 { font-family: var(--display); font-size: clamp(26px,3vw,44px); font-style: italic; font-weight: 400; letter-spacing: -.035em; margin: 0 0 8px; }
-.study-window-copy p { font-size: 12px; font-style: italic; line-height: 1.45; margin: 0; max-width: 620px; }
-.study-controls.is-collapsed { align-items: center; background: rgba(12,16,18,.78); border-color: rgba(221,243,242,.2); display: flex; height: 48px; overflow: hidden; width: 318px; }
-.study-controls.is-collapsed .study-controls-toggle { height: 44px; right: 2px; top: 1px; }
-.study-presets--collapsed { display: flex; gap: 4px; margin: 0 70px 0 6px; }
-.study-presets--collapsed button { align-items: center; display: flex; height: 38px; justify-content: center; min-width: 38px; padding: 0; }
+.study-window-copy p { font-size: 12px; font-style: italic; line-height: 1.45; margin: 0 auto; max-width: none; }
+.study-window-copy p span { display: block; }
+.study-controls.is-collapsed { align-items: center; background: rgba(12,16,18,.78); border-color: rgba(221,243,242,.2); display: flex; height: 48px; overflow: hidden; padding-left: 6px; width: 238px; }
+.study-controls.is-collapsed .study-controls-toggle { height: 44px; padding: 0; right: 0; top: 1px; width: 54px; }
+.study-presets--collapsed { display: grid; gap: 6px; grid-template-columns: repeat(4,38px); margin: 0; }
+.study-presets--collapsed button { align-items: center; color: #273159; display: flex; height: 38px; justify-content: center; min-width: 38px; padding: 0; }
+.study-presets b { color: #273159; }
 .study-control-section input { accent-color: var(--corpus-blue); }
 
 @media (max-width: 580px) {
@@ -1116,11 +1124,13 @@ img { display: block; width: 100%; }
   .study-tool--embedded .study-controls__content { max-height: calc(100% - 2px); }
   .studies-page--immersive .study-tool { height: 100dvh; min-height: 620px; }
   .studies-page--immersive .study-controls { bottom: auto; top: 72px; }
-  .study-window-copy { bottom: 18px; left: 18px; max-width: calc(100% - 36px); }
+  .study-window-copy { bottom: 18px; left: 50%; max-width: none; transform: translateX(-50%); width: calc(100% - 36px); }
   .study-window-copy h2 { font-size: 26px; }
   .study-window-copy p { font-size: 9px; max-width: 330px; }
-  .study-tool--embedded .study-window-copy { bottom: 14px; left: 14px; max-width: calc(100% - 28px); }
-  .study-tool--embedded .study-window-copy p { max-width: 250px; }
+  .study-tool--embedded .study-window-copy { bottom: 14px; left: 50%; max-width: none; transform: translateX(-50%); width: calc(100% - 28px); }
+  .study-tool--embedded .study-window-copy p { max-width: none; }
+  .study-controls.is-collapsed { left: auto; right: 14px; width: 238px; }
+  .study-tool--embedded .study-controls.is-collapsed { left: auto; right: 10px; width: 238px; }
 }
 
 @media (prefers-reduced-motion: reduce) { .project-open-pill::before { transition: none; } }

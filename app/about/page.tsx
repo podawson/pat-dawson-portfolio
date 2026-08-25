@@ -11,13 +11,13 @@ const focusAreas = [
 ];
 
 const experience = [
-  { years: "2026", org: "Cairn", role: "Company Brain architect · sole builder", body: "A private, local-first operating system for 345,000 files, 4.5 TB of evidence, and a human-gated vocabulary of 119 projects." },
-  { years: "2024–Present", org: "Tricky", role: "Independent practice · AI product builder & experience designer", body: "Release Intelligence, Gleanings, RFP Automation, Civic Investment Mapping, String, and AIntivirus; independent AI products and agentic infrastructure used by operating teams, 5,000+ traders, and 10,000+ chatbot users across ventures." },
-  { years: "2023–26", org: "Downstream", role: "Experiential strategy · project management · media systems", body: "Vanderbilt Passage, a confidential physical-AI client, Red Hat, and other confidential enterprise programs; $6.9M in scoped budgets with $1.48M in documented savings." },
-  { years: "2020–23", org: "BrineSpace", role: "Co-founder · architecture and fabrication", body: "Caleta & Bad Habit, 88 East Broadway, three cultural pop-ups, and the third-place Nestlé BioDesign proposal Booch Lab." },
+  { years: "2026", org: "Cairn", role: "Company Brain architect · sole builder", body: "A local-first OS and agent-orchestration engine that turns two decades of unstructured work into a memory layer capable of taking a brief and producing the materials to answer it, informed by what its swappable archive suggests." },
+  { years: "2024–Present", org: "Tricky", role: "AI product builder and experience designer", body: "Release Intelligence, Gleanings, RFP Automation, Civic Investment Mapping, String, and AIntivirus; independent AI products and agentic infrastructure used by operating teams, 5,000+ traders, and 10,000+ chatbot users across ventures." },
+  { years: "2023–26", org: "Downstream", role: "Experiential strategy · project management · media systems", body: "Vanderbilt Passage, a confidential physical-AI client, Warner Music, Red Hat, Toronto Reaptor, and other confidential enterprise programs; $6.9M in scoped budgets with $1.48M in documented savings." },
+  { years: "2020–23", org: "BrineSpace", role: "Strategy and concepting and fabrication", body: "Hospitality interiors, cultural programming, fabrication, and materials research. Full-permit bar buildouts (Caleta, Bad Habits), adaptive reuse at 88 East Broadway, three cultural pop-ups, community fridge shed design, precision jewelry, school repairs for a Haitian art institution, and a third-place Nestlé BioDesign proposal for Booch Lab." },
   { years: "2021–22", org: "WeWork", role: "Spatial experience design · portfolio strategy", body: "Conversion logic across 900+ locations, initiating 200+ projects through a playbook distributed teams could run." },
   { years: "2019–21", org: "MassRobotics", role: "NSF-funded HRI research", body: "Gymnast CoBot, developed under NSF Award #1928654." },
-  { years: "2019–20", org: "Landing Studio", role: "Public realm design · research and fabrication", body: "Charlesgate Park, Richardson Plaza, Ouellette Bridge, Covid Food Distribution Hubs, and Marginal Street Community–Industry Seam Improvements." },
+  { years: "2019–20", org: "Landing Studio", role: "Research and design and fabrication", body: "Charlesgate Park, Richardson Plaza, Ouellette Bridge, Covid Food Distribution Hubs, and Marginal Street Community–Industry Seam Improvements." },
   { years: "2018–19", org: "Signify", role: "Experiential design research", body: "Gesture-controlled task lighting, bio-responsive systems, and waterfront experience planning across light, place, and interaction." },
 ];
 
@@ -27,9 +27,14 @@ export default function AboutPage() {
       <SiteHeader inverse />
       <section className="about-hero">
         <div className="route-intro">
-          <p className="about-lede page-intro__lede">I work where architecture, atmosphere, storytelling, and computation fuse to become one deliverable.</p>
-          <p>My background begins in physical space and extends through fabrication, experiential systems, product management, AI workflows, and cultural experiments.</p>
-          <p>A fondness for pre-existing conditions flows through all of my endeavors as does transparency regarding the motivating design drivers of each and every output.</p>
+          <p className="kicker">ABOUT</p>
+          <h1>First Person</h1>
+          <p className="about-intro-note page-intro__lede"><em>I wrote this part</em></p>
+          <div className="about-hero__body">
+            <p>I work where a lot of different things fuse together and become one deliverable.</p>
+            <p>My background begins in physical space and extends through fabrication, product management, experiential systems, AI workflows, and cultural experiments.</p>
+            <p>A fondness for the pre-existing flows through all my endeavors as does a transparency of my motivating design drivers for each and every output.</p>
+          </div>
         </div>
         <div className="about-play-interactive">
           <WaterStudy embedded />

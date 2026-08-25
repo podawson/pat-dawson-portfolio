@@ -402,6 +402,7 @@ export const projectConnections: ProjectConnection[] = [
   { from: "confidential-client", to: "vanderbilt-passage", kind: "handoff", reason: "First-of-kind systems pass into construction, compliance, and public operation." },
   { from: "mapping-investments", to: "gleanings", kind: "handoff", reason: "A structured decision surface lets operating teams continue the work after delivery." },
   { from: "release-intelligence", to: "gleanings", kind: "handoff", reason: "Both workflows preserve the evidence and reasoning another operator needs to act." },
+  { from: "caleta", to: "ouellette-bridge", kind: "handoff", reason: "Design intent becomes a coordinated package that fabricators and field teams can execute without its author present." },
 
   // Cede — consequential choice is deliberately given to someone else.
   { from: "charlesgate-park", to: "flower-tower", kind: "cede", reason: "The project sets conditions for public authorship instead of treating participation as validation." },
@@ -416,6 +417,7 @@ export const projectConnections: ProjectConnection[] = [
   { from: "vanderbilt-passage", to: "mapping-investments", kind: "uphold", reason: "The archive is a design authority rather than raw material to overwrite." },
   { from: "gymnast-cobot", to: "mapping-investments", kind: "uphold", reason: "Evidence and constraints remain visible while a new system is introduced." },
   { from: "mapping-investments", to: "aintivirus", kind: "uphold", reason: "A source record bounds what the new interpretive layer is allowed to claim." },
+  { from: "88-east-broadway", to: "aintivirus", kind: "uphold", reason: "An inherited source record constrains what the project is allowed to propose or claim." },
 
   // Quorum — independent parties could each have stopped the work.
   { from: "charlesgate-park", to: "caleta", kind: "quorum", reason: "Public, regulatory, ownership, and technical constituencies define the design envelope together." },

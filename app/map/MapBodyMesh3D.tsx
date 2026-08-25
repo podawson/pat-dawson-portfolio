@@ -312,7 +312,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     };
     fitCorpusToViewport(mount.clientWidth, mount.clientHeight);
     body.rotation.copy(DEFAULT_ROTATION);
-    body.position.set(0, 0, 0);
+    body.position.set(0, mobile ? 0.34 : 0, 0);
     scene.add(body);
 
     let scheduledFrame = 0;

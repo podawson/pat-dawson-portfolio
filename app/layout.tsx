@@ -11,25 +11,22 @@ export async function generateMetadata(): Promise<Metadata> {
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const base = new URL(`${protocol}://${host}`);
   const description = "Patrick Dawson is a New York-based designer and product lead working across architecture, fabrication, experiential systems, and independent AI products.";
-  const preview = new URL("/og.png", base).toString();
+  const preview = new URL("/og-mobile.png", base).toString();
 
   return {
     metadataBase: base,
-    title: {
-      default: "Pat Dawson · Places, stories, systems",
-      template: "%s · Pat Dawson",
-    },
+    title: "Pat Dawson · Corpus",
     description,
     icons: { icon: "/icon.png", shortcut: "/icon.png" },
     openGraph: {
-      title: "Pat Dawson · It Grows",
+      title: "Pat Dawson · Corpus",
       description,
       type: "website",
-      images: [{ url: preview, width: 1800, height: 942, alt: "Pat Dawson · It Grows. Places, stories, systems." }],
+      images: [{ url: preview, width: 970, height: 656, alt: "Pat Dawson Corpus in blue." }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Pat Dawson · It Grows",
+      title: "Pat Dawson · Corpus",
       description,
       images: [preview],
     },

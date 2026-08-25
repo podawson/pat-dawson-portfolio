@@ -653,7 +653,7 @@ export function Constellation() {
       </div>
 
       <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
-        <span>Emphasize relationship</span>
+        <span>Filter by</span>
         <div>
           <button aria-pressed={relationFilter === "all"} className={relationFilter === "all" ? "is-active" : ""} onClick={() => selectRelationFilter("all")} type="button">
             All

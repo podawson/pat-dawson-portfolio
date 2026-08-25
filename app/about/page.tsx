@@ -11,12 +11,12 @@ const focusAreas = [
 ];
 
 const experience = [
-  { years: "2026", org: "Cairn", role: "Company Brain architect · sole builder", body: "A local-first OS and agent-orchestration engine that turns two decades of unstructured work into a memory layer capable of taking a brief and producing the materials to answer it, informed by what its swappable archive suggests." },
+  { years: "2026–Present", org: "Cairn", role: "Company Brain architect · sole builder", body: "A local-first OS and agent-orchestration engine that turns two decades of unstructured work into a memory layer capable of taking a brief and producing the materials to answer it, informed by what the archive itself suggests." },
   { years: "2024–Present", org: "Tricky", role: "AI product builder and experience designer", body: "Release Intelligence, Gleanings, RFP Automation, Civic Investment Mapping, String, and AIntivirus; independent AI products and agentic infrastructure used by operating teams, 5,000+ traders, and 10,000+ chatbot users across ventures." },
-  { years: "2023–26", org: "Downstream", role: "Experiential strategy · project management · media systems", body: "Vanderbilt Passage, a confidential physical-AI client, Warner Music, Red Hat, Toronto Reaptor, and other confidential enterprise programs; $6.9M in scoped budgets with $1.48M in documented savings." },
-  { years: "2020–23", org: "BrineSpace", role: "Strategy and concepting and fabrication", body: "Hospitality interiors, cultural programming, fabrication, and materials research. Full-permit bar buildouts (Caleta, Bad Habits), adaptive reuse at 88 East Broadway, three cultural pop-ups, community fridge shed design, precision jewelry, school repairs for a Haitian art institution, and a third-place Nestlé BioDesign proposal for Booch Lab." },
+  { years: "2023–26", org: "Downstream", role: "Experiential strategy · project management · media systems", body: "Vanderbilt Passage, a confidential physical-AI client, Warner Music, Red Hat, Toronto Raptors, and other confidential enterprise programs; $6.9M in scoped budgets with $1.48M in documented savings." },
+  { years: "2020–23", org: "BrineSpace", role: "Strategy and architecture and fabrication", body: "Hospitality interiors, cultural programming, fabrication, and materials research. Full-permit bar buildouts (Caleta & Bad Habit), adaptive reuse at 88 East Broadway, three cultural pop-ups, community fridge shed design, precision jewelry, school repairs for a Haitian art institution, and a third-place Nestlé BioDesign proposal for Booch Lab." },
   { years: "2021–22", org: "WeWork", role: "Spatial experience design · portfolio strategy", body: "Conversion logic across 900+ locations, initiating 200+ projects through a playbook distributed teams could run." },
-  { years: "2019–21", org: "MassRobotics", role: "NSF-funded HRI research", body: "Gymnast CoBot, developed under NSF Award #1928654." },
+  { years: "2019–21", org: "XD Lab", role: "NSF-funded HRI research", body: "Gymnast CoBot, developed under NSF Award #1928654." },
   { years: "2019–20", org: "Landing Studio", role: "Research and design and fabrication", body: "Charlesgate Park, Richardson Plaza, Ouellette Bridge, Covid Food Distribution Hubs, and Marginal Street Community–Industry Seam Improvements." },
   { years: "2018–19", org: "Signify", role: "Experiential design research", body: "Gesture-controlled task lighting, bio-responsive systems, and waterfront experience planning across light, place, and interaction." },
 ];
@@ -55,7 +55,7 @@ export default function AboutPage() {
         <div className="about-resume__heading"><h2><em>What that looks like in practice.</em></h2></div>
         <div className="experience-list">{experience.map((item)=><article key={`${item.years}-${item.org}`}><time>{item.years}</time><div><h3>{item.org}</h3><p className="micro">{item.role}</p>{"lines" in item ? <div className="experience-lines">{item.lines?.map((line)=><p key={line}>{line}</p>)}</div> : <p>{item.body}</p>}</div></article>)}</div>
 
-        <div className="about-resume__heading"><h2><em>Appreciate you.</em></h2></div>
+        <div className="about-resume__heading"><h2><em>I appreciate you.</em></h2></div>
         <div className="about-closing-note">
           <p>At the end of the day I just want to be making good work.</p>
           <p>I&apos;ve spent all my years trying to stay ahead of the next one by being a sponge.</p>

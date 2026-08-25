@@ -37,7 +37,6 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/88-east-broadway/03.webp", caption: "A reuse concept organized inside the building's operating constraints." },
   ],
   "ouellette-bridge": [
-    { src: "/work/gallery/ouellette-bridge/01.webp", caption: "The reversible mounting system installed on the historic truss." },
     { src: "/work/gallery/ouellette-bridge/02.webp", caption: "Fabrication details for housings that required no drilling or welding." },
     { src: "/work/gallery/ouellette-bridge/03.webp", caption: "Installed housings carried light without altering the historic truss." },
     { src: "/work/gallery/ouellette-bridge/04.webp", caption: "Construction geometry translated a singular bridge into repeatable parts." },
@@ -45,13 +44,12 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   ],
   "flower-tower": [
     { src: "/work/gallery/flower-tower/08.webp", caption: "A flower and seed packet left the tower as a wearable exchange." },
-    { src: "/work/gallery/flower-tower/09.webp", caption: "Visitors took from and added to the installation throughout the festival." },
     { src: "/work/gallery/flower-tower/06.webp", caption: "A detail study worked through the plant-and-poem exchange." },
     { src: "/work/gallery/flower-tower/07.webp", caption: "The assembly drawing treated disappearance as a construction requirement." },
   ],
   caleta: [
     { src: "/work/gallery/caleta/01.webp", caption: "The completed interior: black tile, custom bar, and warm light." },
-    { src: "/work/gallery/caleta/02.webp", caption: "Construction, inspection, and opening assembled as one delivery record." },
+    { src: "/work/gallery/caleta/07.webp", caption: "The two rooms moved from permitted interior to lived-in atmosphere." },
     { src: "/work/gallery/caleta/03.webp", caption: "Permit-set detail linking design intent to field execution." },
     { src: "/work/gallery/caleta/04.webp", caption: "Caleta and Bad Habit at opening." },
     { src: "/work/gallery/caleta/05.webp", caption: "Red light, black tile, and mirrored surfaces carried the concept into the dining room." },
@@ -60,7 +58,6 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   "wework-conversions": [
     { src: "/work/gallery/wework-conversions/02.webp", caption: "A floor-plan analysis translated into repeatable conversion logic." },
     { src: "/work/gallery/wework-conversions/03.webp", caption: "A completed conversion using the shared playbook." },
-    { src: "/work/gallery/wework-conversions/05.webp", caption: "A converted shared space operating inside one of the portfolio's inherited buildings." },
   ],
   "confidential-client": [
     { src: "/work/gallery/confidential-client/01.webp", caption: "A responsive textile threshold for an enterprise physical-AI environment." },
@@ -75,14 +72,12 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   ],
   "gymnast-cobot": [
     { src: "/work/gallery/gymnast-cobot/01.webp", caption: "Human-robot interaction testing in the lab." },
-    { src: "/work/gallery/gymnast-cobot/02.webp", caption: "Foundational research assembled across fatigue, gesture, and safety." },
     { src: "/work/gallery/gymnast-cobot/05.webp", caption: "Full-scale testing with workers and observers." },
   ],
   "mapping-investments": [
     { src: "/work/gallery/mapping-investments/02-crop.jpg", caption: "History, ownership, investment, and impact layered in one spatial record." },
   ],
   "release-intelligence": [
-    { src: "/work/gallery/release-intelligence/04.webp", caption: "The functional architecture that survived the sketching process." },
     { src: "/work/gallery/release-intelligence/02.webp", caption: "Early sketches established the source, comparison, and decision flow." },
     { src: "/work/gallery/release-intelligence/03.webp", caption: "Alternative system structures were tested before implementation." },
   ],
@@ -117,7 +112,7 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   ],
   quaranzine: [
     { src: "/work/gallery/quaranzine/01.jpg", caption: "Quaranzine's visual language treated each edition as an event rather than an archive entry." },
-    { src: "/work/gallery/quaranzine/02.jpg", caption: "One edition from the 21-issue run." },
+    { src: "/work/gallery/quaranzine/02.jpg", caption: "One edition from the 25-issue run." },
     { src: "/work/gallery/quaranzine/03.jpg", caption: "The live series extended the same editorial scene into performance." },
     { src: "/work/gallery/quaranzine/04.jpg", caption: "Alone together became both the pandemic condition and the publishing premise." },
   ],
@@ -125,7 +120,7 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
 
 type GalleryItem = { src: string; caption: string };
 
-function ProjectMedia({ items, label, sideBySide = false, matched = false }: { items: GalleryItem[]; label: string; sideBySide?: boolean; matched?: boolean }) {
+function ProjectMedia({ items, label, sideBySide = false, matched = false, hideCaptions = false }: { items: GalleryItem[]; label: string; sideBySide?: boolean; matched?: boolean; hideCaptions?: boolean }) {
   if (items.length === 0) return null;
 
   return (
@@ -140,20 +135,34 @@ function ProjectMedia({ items, label, sideBySide = false, matched = false }: { i
           ) : (
             <img src={item.src} alt={item.caption} loading="lazy" decoding="async" />
           )}
-          <figcaption>{item.caption}</figcaption>
+          {!hideCaptions ? <figcaption>{item.caption}</figcaption> : null}
         </figure>
       ))}
     </section>
   );
 }
 
-function ProjectVideo({ src, poster, caption, label }: { src: string; poster: string; caption: string; label: string }) {
+function ProjectVideo({ src, poster, caption, label }: { src: string; poster: string; caption?: string; label: string }) {
   return (
     <section className="project-video" aria-label={label}>
       <figure>
         <video src={src} poster={poster} controls autoPlay muted loop playsInline preload="metadata" />
-        <figcaption>{caption}</figcaption>
+        {caption ? <figcaption>{caption}</figcaption> : null}
       </figure>
+    </section>
+  );
+}
+
+const bodegaCollage = [4, 5, 6, 7, 8, 9].map(
+  (index) => `/work/gallery/bodega/collage/${String(index).padStart(2, "0")}.webp`,
+);
+
+function BodegaCollage() {
+  return (
+    <section className="bodega-collage" aria-label="Bodega installations, events, and communities">
+      {bodegaCollage.map((src, index) => (
+        <img key={src} src={src} alt={`Bodega project archive ${index + 1}`} loading="lazy" decoding="async" />
+      ))}
     </section>
   );
 }
@@ -252,16 +261,21 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       item.src !== project.image &&
       items.findIndex((candidate) => candidate.src === item.src) === index,
   );
-  const openingMedia = gallery.slice(0, 1);
+  const openingMedia = project.slug === "ouellette-bridge" ? [] : gallery.slice(0, 1);
   const narrativeMedia =
-    project.slug === "charlesgate-park" || project.slug === "flower-tower"
+    project.slug === "ouellette-bridge"
+      ? gallery.slice(0, 2)
+      : project.slug === "charlesgate-park" || project.slug === "flower-tower"
       ? gallery.slice(1, 2)
       : gallery.slice(1, 3);
   const evidenceMedia =
-    project.slug === "charlesgate-park" || project.slug === "flower-tower"
+    project.slug === "ouellette-bridge"
+      ? gallery.slice(2)
+      : project.slug === "charlesgate-park" || project.slug === "flower-tower"
       ? gallery.slice(2)
       : gallery.slice(3);
   const endImage =
+    project.slug !== "gleanings" &&
     project.artifactImage &&
     project.artifactImage !== project.image &&
     !gallery.some((item) => item.src === project.artifactImage)
@@ -271,7 +285,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const headerDescriptor = project.descriptor ?? project.eyebrow.split(" · ");
 
   return (
-    <main className="project-page-shell" style={{ "--project-accent": projectAccents[project.slug] ?? "#72d9e8" } as CSSProperties}>
+    <main className="project-page-shell" data-project={project.slug} style={{ "--project-accent": projectAccents[project.slug] ?? "#72d9e8" } as CSSProperties}>
       <SiteHeader inverse />
       <article className="project-page">
         <header className="project-hero">
@@ -295,7 +309,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div><p className="micro">Outcome</p><p>{project.outcome}</p></div>
         </section>
 
-        <ProjectMedia items={openingMedia} label={`${project.title} opening artifact`} />
+        <ProjectMedia items={openingMedia} label={`${project.title} opening artifact`} hideCaptions={project.slug === "string"} />
 
         <section className="project-narrative">
           <div className="project-narrative__title">
@@ -317,7 +331,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           items={narrativeMedia}
           label={`${project.title} supporting artifacts`}
           sideBySide={project.slug === "release-intelligence"}
-          matched={project.slug === "richardson-plaza"}
+          matched={["88-east-broadway", "ouellette-bridge", "caleta", "bodega", "quaranzine", "richardson-plaza"].includes(project.slug)}
+          hideCaptions={project.slug === "string"}
         />
 
         {project.slug === "flower-tower" ? (
@@ -326,7 +341,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <ProjectVideo
               src="/work/gallery/flower-tower/flower-tower-dance.mp4"
               poster="/work/gallery/flower-tower/flower-tower-dance-poster.webp"
-              caption="The installation became a backdrop, partner, and stage."
               label="Flower Tower in motion"
             />
           </>
@@ -347,6 +361,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           items={evidenceMedia}
           label={`${project.title} additional evidence`}
           sideBySide={project.slug === "charlesgate-park"}
+          hideCaptions={project.slug === "string"}
         />
 
         <section className="project-details">
@@ -358,6 +373,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             </article>
           ))}
         </section>
+
+        {project.slug === "bodega" ? <BodegaCollage /> : null}
 
         {endImage ? (
           <section className={`project-image-break${isEndImageDiagram ? " project-image-break--diagram" : ""}`}>

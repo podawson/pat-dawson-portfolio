@@ -1134,3 +1134,19 @@ img { display: block; width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) { .project-open-pill::before { transition: none; } }
+
+.about-closing-note { max-width: 860px; }
+.about-closing-note p { color: rgba(245,241,232,.72); font-size: 18px; line-height: 1.55; margin: 0; }
+.about-closing-note p + p { margin-top: 18px; }
+.about-closing-note p:last-child { font-style: italic; }
+.footer-linkedin { align-items: center; display: inline-flex; justify-content: center; }
+.footer-linkedin svg { height: 15px; width: 15px; }
+.footer-linkedin svg rect { fill: currentColor; }
+.footer-linkedin svg circle,
+.footer-linkedin svg path { fill: var(--night); }
+.footer-linkedin:hover,
+.footer-linkedin:focus-visible { color: var(--cream); outline: none; }
+
+@media (max-width: 580px) {
+  .about-page .site-footer { align-items: center; flex-direction: row; width: 100%; }
+}

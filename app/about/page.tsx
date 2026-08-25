@@ -52,14 +52,24 @@ export default function AboutPage() {
         <div className="about-resume__heading"><h2><em>Disciplines kept in productive collision.</em></h2></div>
         <ol className="focus-list">{focusAreas.map((area,index)=><li key={area}><span>{String(index+1).padStart(2,"0")}</span>{area}</li>)}</ol>
 
-        <div className="about-resume__heading"><h2><em>Ten years making rooms, systems, and handoffs hold together.</em></h2></div>
+        <div className="about-resume__heading"><h2><em>What that looks like in practice.</em></h2></div>
         <div className="experience-list">{experience.map((item)=><article key={`${item.years}-${item.org}`}><time>{item.years}</time><div><h3>{item.org}</h3><p className="micro">{item.role}</p>{"lines" in item ? <div className="experience-lines">{item.lines?.map((line)=><p key={line}>{line}</p>)}</div> : <p>{item.body}</p>}</div></article>)}</div>
 
-        <div className="about-resume__heading"><h2><em>Northeastern University.</em></h2></div>
-        <div className="education-list"><article><span>2021</span><div><h3>Master of Architecture</h3><p>Graduate study in architecture, technology, research, and delivery.</p></div></article><article><span>2019</span><div><h3>Bachelor of Science in Architecture</h3><p>Five-year co-op program integrating practice with studio education.</p></div></article></div>
+        <div className="about-resume__heading"><h2><em>Appreciate you.</em></h2></div>
+        <div className="about-closing-note">
+          <p>At the end of the day I just want to be making good work.</p>
+          <p>I&apos;ve spent all my years trying to stay ahead of the next one by being a sponge.</p>
+          <p>Everyone&apos;s a great teacher if you&apos;re a good listener.</p>
+          <p>Hope this finds you well.</p>
+        </div>
       </section>
 
-      <footer className="site-footer"><a href="mailto:patrickdawsono@gmail.com">contact: patrickdawsono@gmail.com</a></footer>
+      <footer className="site-footer">
+        <a href="mailto:patrickdawsono@gmail.com">contact: patrickdawsono@gmail.com</a>
+        <a className="footer-linkedin" href="https://www.linkedin.com/in/patrick-dawson/" target="_blank" rel="noreferrer" aria-label="Patrick Dawson on LinkedIn">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><rect width="24" height="24" rx="2"/><circle cx="6.5" cy="7" r="1.5"/><path d="M5 10h3v9H5zm5 0h2.8v1.25h.04c.39-.74 1.35-1.52 2.78-1.52 2.98 0 3.53 1.96 3.53 4.51V19h-3v-4.22c0-1.01-.02-2.3-1.4-2.3-1.4 0-1.62 1.1-1.62 2.23V19h-3z"/></svg>
+        </a>
+      </footer>
     </main>
   );
 }

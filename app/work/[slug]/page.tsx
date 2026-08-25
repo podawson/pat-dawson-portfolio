@@ -44,10 +44,8 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/ouellette-bridge/05.webp", caption: "Assembly studies resolved reversible attachments before fabrication." },
   ],
   "flower-tower": [
-    { src: "/work/gallery/flower-tower/02.webp", caption: "Flower Tower in operation at Rockefeller Center." },
     { src: "/work/gallery/flower-tower/03.webp", caption: "One of thousands of biodegradable plant-and-poem exchanges." },
     { src: "/work/gallery/flower-tower/04.webp", caption: "Public participation was the structure's working material." },
-    { src: "/work/gallery/flower-tower/05.webp", caption: "Visitors depleted and rewrote the installation over the course of the festival." },
     { src: "/work/gallery/flower-tower/06.webp", caption: "A detail study worked through the plant-and-poem exchange." },
     { src: "/work/gallery/flower-tower/07.webp", caption: "The assembly drawing treated disappearance as a construction requirement." },
   ],
@@ -235,8 +233,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       items.findIndex((candidate) => candidate.src === item.src) === index,
   );
   const openingMedia = gallery.slice(0, 1);
-  const narrativeMedia = project.slug === "charlesgate-park" ? gallery.slice(1, 2) : gallery.slice(1, 3);
-  const evidenceMedia = project.slug === "charlesgate-park" ? gallery.slice(2) : gallery.slice(3);
+  const narrativeMedia =
+    project.slug === "charlesgate-park" || project.slug === "flower-tower"
+      ? gallery.slice(1, 2)
+      : gallery.slice(1, 3);
+  const evidenceMedia =
+    project.slug === "charlesgate-park" || project.slug === "flower-tower"
+      ? gallery.slice(2)
+      : gallery.slice(3);
   const endImage =
     project.artifactImage &&
     project.artifactImage !== project.image &&

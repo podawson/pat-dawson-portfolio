@@ -10,8 +10,9 @@ export function ProjectGrid() {
   const shellRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const cardRef = useRef<HTMLDivElement>(null);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const active = projects[activeIndex];
-  const activeIsDiagram = active.slug === "release-intelligence" || active.slug === "gleanings";
+  const activeIsDiagram = active.image.endsWith(".svg");
   const isVisible = (index: number) => filter === "All" || projects[index].categories.includes(filter);
 
   useEffect(() => {
@@ -41,6 +42,19 @@ export function ProjectGrid() {
   const selectPreview = (index: number) => {
     if (isVisible(index) && index !== activeIndex) setActiveIndex(index);
   };
+
+  const queuePreview = (index: number) => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = setTimeout(() => selectPreview(index), 90);
+  };
+
+  const cancelQueuedPreview = () => {
+    if (!hoverTimerRef.current) return;
+    clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = null;
+  };
+
+  useEffect(() => cancelQueuedPreview, []);
 
   const selectFilter = (item: "All" | Category) => {
     setFilter(item);
@@ -110,12 +124,12 @@ export function ProjectGrid() {
         </text>
       </svg>
 
-      <ol className="index-list" aria-label="Project Index">
+      <ol className="index-list" aria-label="Project Index" onPointerLeave={cancelQueuedPreview}>
         {projects.map((project, index) => isVisible(index) ? (
           <li
             className={index === activeIndex ? "is-active" : ""}
             key={project.slug}
-            onPointerEnter={() => selectPreview(index)}
+            onPointerEnter={() => queuePreview(index)}
           >
             <span>{String(index + 1).padStart(2, "0")}</span>
             <a

@@ -100,12 +100,12 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
 
 type GalleryItem = { src: string; caption: string };
 
-function ProjectMedia({ items, label }: { items: GalleryItem[]; label: string }) {
+function ProjectMedia({ items, label, sideBySide = false }: { items: GalleryItem[]; label: string; sideBySide?: boolean }) {
   if (items.length === 0) return null;
 
   return (
     <section
-      className={`project-gallery${items.length === 1 ? " project-gallery--single" : ""}`}
+      className={`project-gallery${items.length === 1 ? " project-gallery--single" : ""}${sideBySide ? " project-gallery--side-by-side" : ""}`}
       aria-label={label}
     >
       {items.map((item) => (
@@ -201,7 +201,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const project = getProject(slug) ?? projects[0];
   const current = projects.findIndex((item) => item.slug === project.slug);
   const next = projects[(current + 1) % projects.length];
-  const isSystemDiagram = project.slug === "release-intelligence" || project.slug === "gleanings";
+  const isHeroDiagram = project.image.endsWith(".svg");
   const gallery = (projectGalleries[project.slug] ?? []).filter(
     (item, index, items) =>
       item.src !== project.image &&
@@ -216,6 +216,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     !gallery.some((item) => item.src === project.artifactImage)
       ? project.artifactImage
       : null;
+  const isEndImageDiagram = endImage?.endsWith(".svg") ?? false;
 
   return (
     <main className="project-page-shell" style={{ "--project-accent": projectAccents[project.slug] ?? "#72d9e8" } as CSSProperties}>
@@ -231,7 +232,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               {project.categories.map((category) => <span key={category}>{category}</span>)}
             </div>
           </div>
-          <div className={`project-hero__image${isSystemDiagram ? " project-hero__image--diagram" : ""}`}><img src={project.image} alt="" /></div>
+          <div className={`project-hero__image${isHeroDiagram ? " project-hero__image--diagram" : ""}`}><img src={project.image} alt="" /></div>
         </header>
 
         <section className="project-facts">
@@ -257,7 +258,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         {project.slug === "gleanings" ? <GleaningsArtifacts /> : null}
 
-        <ProjectMedia items={narrativeMedia} label={`${project.title} supporting artifacts`} />
+        <ProjectMedia
+          items={narrativeMedia}
+          label={`${project.title} supporting artifacts`}
+          sideBySide={project.slug === "release-intelligence"}
+        />
 
         <section className="project-evidence" aria-label="Evidence and recommended artifacts">
           <div>
@@ -283,7 +288,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
 
         {endImage ? (
-          <section className={`project-image-break${isSystemDiagram ? " project-image-break--diagram" : ""}`}>
+          <section className={`project-image-break${isEndImageDiagram ? " project-image-break--diagram" : ""}`}>
             <img src={endImage} alt={`${project.title} supporting artifact`} />
           </section>
         ) : null}

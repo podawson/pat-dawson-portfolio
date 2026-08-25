@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import * as THREE from "three";
 
 type Sky = "clear" | "cloud" | "fog";
@@ -239,7 +240,7 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
       <aside className={`study-controls${panelOpen ? "" : " is-collapsed"}`}>
         {panelOpen && <div className="study-controls__content">
           <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>
-          {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} style={{ accentColor: "#273159" }} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
+          {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} style={{ "--range-progress": `${((settings[control.key]-control.min)/(control.max-control.min))*100}%` } as CSSProperties} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
           <div className="study-actions"><button onClick={reset} type="button">Reset</button><button onClick={capture} type="button">Capture PNG</button></div>
           <p className="study-shortcuts"><span>H</span> controls <span>R</span> reset <span>1–4</span> presets</p>
         </div>}

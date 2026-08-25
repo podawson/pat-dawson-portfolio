@@ -9,7 +9,6 @@ export function SiteHeader({ inverse = false }: { inverse?: boolean }) {
   const items = [
     { href: "/", label: "Corpus", active: pathname === "/" },
     { href: "/work", label: "Work", active: pathname.startsWith("/work") },
-    { href: "/play", label: "Play", active: pathname === "/play" || pathname === "/studies" || pathname === "/playground" },
     { href: "/about", label: "About", active: pathname === "/about" },
   ];
   const activeIndex = Math.max(0, items.findIndex((item) => item.active));

@@ -44,8 +44,8 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/ouellette-bridge/05.webp", caption: "Assembly studies resolved reversible attachments before fabrication." },
   ],
   "flower-tower": [
-    { src: "/work/gallery/flower-tower/03.webp", caption: "One of thousands of biodegradable plant-and-poem exchanges." },
-    { src: "/work/gallery/flower-tower/04.webp", caption: "Public participation was the structure's working material." },
+    { src: "/work/gallery/flower-tower/08.webp", caption: "A flower and seed packet left the tower as a wearable exchange." },
+    { src: "/work/gallery/flower-tower/09.webp", caption: "Visitors took from and added to the installation throughout the festival." },
     { src: "/work/gallery/flower-tower/06.webp", caption: "A detail study worked through the plant-and-poem exchange." },
     { src: "/work/gallery/flower-tower/07.webp", caption: "The assembly drawing treated disappearance as a construction requirement." },
   ],
@@ -110,10 +110,10 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   ],
   "richardson-plaza": [
     { src: "/work/gallery/richardson-plaza/01.jpg", caption: "The completed plaza in use on Northeastern's campus." },
-    { src: "/work/gallery/richardson-plaza/02.jpg", caption: "The built public realm joined movable planters, new seating, and inherited campus infrastructure." },
+    { src: "/work/gallery/richardson-plaza/05.jpg", caption: "Repeated components carried the coordinated drawing set into daily campus use." },
     { src: "/work/gallery/richardson-plaza/03.jpg", caption: "A modular seating study translated scattered occupation into a repeatable kit of parts." },
     { src: "/work/gallery/richardson-plaza/04.jpg", caption: "The completed stair seating gathered around the plaza's existing clock structure." },
-    { src: "/work/gallery/richardson-plaza/05.jpg", caption: "Repeated components carried the coordinated drawing set into daily campus use." },
+    { src: "/work/gallery/richardson-plaza/02.jpg", caption: "The built public realm joined movable planters, new seating, and inherited campus infrastructure." },
   ],
   quaranzine: [
     { src: "/work/gallery/quaranzine/01.jpg", caption: "Quaranzine's visual language treated each edition as an event rather than an archive entry." },
@@ -125,23 +125,43 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
 
 type GalleryItem = { src: string; caption: string };
 
-function ProjectMedia({ items, label, sideBySide = false }: { items: GalleryItem[]; label: string; sideBySide?: boolean }) {
+function ProjectMedia({ items, label, sideBySide = false, matched = false }: { items: GalleryItem[]; label: string; sideBySide?: boolean; matched?: boolean }) {
   if (items.length === 0) return null;
 
   return (
     <section
-      className={`project-gallery${items.length === 1 ? " project-gallery--single" : ""}${sideBySide ? " project-gallery--side-by-side" : ""}`}
+      className={`project-gallery${items.length === 1 ? " project-gallery--single" : ""}${sideBySide ? " project-gallery--side-by-side" : ""}${matched ? " project-gallery--matched" : ""}`}
       aria-label={label}
     >
       {items.map((item) => (
         <figure key={item.src}>
-          <img src={item.src} alt={item.caption} loading="lazy" decoding="async" />
+          {matched ? (
+            <div className="project-gallery__media"><img src={item.src} alt={item.caption} loading="lazy" decoding="async" /></div>
+          ) : (
+            <img src={item.src} alt={item.caption} loading="lazy" decoding="async" />
+          )}
           <figcaption>{item.caption}</figcaption>
         </figure>
       ))}
     </section>
   );
 }
+
+function ProjectVideo({ src, poster, caption, label }: { src: string; poster: string; caption: string; label: string }) {
+  return (
+    <section className="project-video" aria-label={label}>
+      <figure>
+        <video src={src} poster={poster} controls autoPlay muted loop playsInline preload="metadata" />
+        <figcaption>{caption}</figcaption>
+      </figure>
+    </section>
+  );
+}
+
+const flowerTowerStructureMedia: GalleryItem[] = [
+  { src: "/work/gallery/flower-tower/10.webp", caption: "The temporary cardboard shell held the exchange from the inside." },
+  { src: "/work/gallery/flower-tower/11.webp", caption: "Flowers, poems, and seed packets accumulated across the structure." },
+];
 
 const gleaningsRisks = [
   {
@@ -297,7 +317,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           items={narrativeMedia}
           label={`${project.title} supporting artifacts`}
           sideBySide={project.slug === "release-intelligence"}
+          matched={project.slug === "richardson-plaza"}
         />
+
+        {project.slug === "flower-tower" ? (
+          <>
+            <ProjectMedia items={flowerTowerStructureMedia} label="Flower Tower structural views" sideBySide />
+            <ProjectVideo
+              src="/work/gallery/flower-tower/flower-tower-dance.mp4"
+              poster="/work/gallery/flower-tower/flower-tower-dance-poster.webp"
+              caption="The installation became a backdrop, partner, and stage."
+              label="Flower Tower in motion"
+            />
+          </>
+        ) : null}
 
         <section className="project-evidence" aria-label="Evidence and recommended artifacts">
           <div>

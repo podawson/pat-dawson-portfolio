@@ -16,6 +16,7 @@
   --rust: #a34d33;
   --magenta: #b44178;
   --blue: #2948ff;
+  --corpus-blue: #273159;
   --acid: #00e63b;
   --line: rgba(23, 32, 27, 0.18);
   --muted: #6d756f;
@@ -1103,7 +1104,7 @@ img { display: block; width: 100%; }
 .study-controls.is-collapsed .study-controls-toggle { height: 44px; right: 2px; top: 1px; }
 .study-presets--collapsed { display: flex; gap: 4px; margin: 0 70px 0 6px; }
 .study-presets--collapsed button { align-items: center; display: flex; height: 38px; justify-content: center; min-width: 38px; padding: 0; }
-.study-control-section input { accent-color: var(--blue); }
+.study-control-section input { accent-color: var(--corpus-blue); }
 
 @media (max-width: 580px) {
   .field-axes { display: none; }

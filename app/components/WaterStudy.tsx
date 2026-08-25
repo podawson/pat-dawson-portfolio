@@ -97,7 +97,7 @@ const fragmentShader = `
   float edgeFactor(){ vec3 d=fwidth(vBarycentric); vec3 a3=smoothstep(vec3(0.0),d*1.25,vBarycentric); return min(min(a3.x,a3.y),a3.z); }
   float noise(vec2 p){ return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453); }
   void main(){
-    vec3 robin=vec3(.50,.88,.91); vec3 sky=vec3(.39,.70,.94); vec3 peri=vec3(.45,.48,.83); vec3 corpusBlue=vec3(.161,.282,1.0);
+    vec3 robin=vec3(.50,.88,.91); vec3 sky=vec3(.39,.70,.94); vec3 peri=vec3(.45,.48,.83); vec3 corpusBlue=vec3(.153,.192,.349);
     vec3 deep=vec3(.025,.065,.095); vec3 graphite=vec3(.025,.032,.04); vec3 foam=vec3(.94,.98,.97);
     float depth=clamp((1.0-vElevation*.34)*.55+vDistance*.34,0.0,1.0);
     vec3 calm=mix(robin,sky,clamp(vElevation*.36+.45,0.0,1.0)); calm=mix(calm,peri,vDistance*.76);
@@ -238,7 +238,7 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
       <aside className={`study-controls${panelOpen ? "" : " is-collapsed"}`}>
         {panelOpen && <div className="study-controls__content">
           <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>
-          {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
+          {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} style={{ accentColor: "#273159" }} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
           <div className="study-actions"><button onClick={reset} type="button">Reset</button><button onClick={capture} type="button">Capture PNG</button></div>
           <p className="study-shortcuts"><span>H</span> controls <span>R</span> reset <span>1–5</span> presets</p>
         </div>}

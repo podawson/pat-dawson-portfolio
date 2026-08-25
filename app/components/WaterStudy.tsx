@@ -9,7 +9,7 @@ type WaterSettings = {
   waveHeight: number; chop: number; swell: number; current: number; skew: number; fetch: number; foam: number;
   storm: number; windAngle: number; gust: number; rain: number;
   sunAngle: number; glint: number; sunTransmission: number; depthTint: number; haze: number;
-  tilt: number; zoom: number; vignette: number; grain: number;
+  tilt: number; zoom: number; vignette: number; grain: number; corpusBlue: number;
 };
 
 const initial: WaterSettings = {
@@ -17,14 +17,15 @@ const initial: WaterSettings = {
   waveHeight: 38, chop: 26, swell: 48, current: 24, skew: 8, fetch: 44, foam: 22,
   storm: 12, windAngle: 18, gust: 10, rain: 0,
   sunAngle: 36, glint: 58, sunTransmission: 42, depthTint: 34, haze: 8,
-  tilt: 17, zoom: 48, vignette: 14, grain: 4,
+  tilt: 17, zoom: 48, vignette: 14, grain: 4, corpusBlue: 100,
 };
 
 const presets: Array<{ name: string; sky: Sky; values: WaterSettings }> = [
   { name: "Glass calm", sky: "clear", values: { ...initial, waveHeight: 15, chop: 4, swell: 24, current: 10, skew: 0, fetch: 78, foam: 2, storm: 0, windAngle: 0, gust: 0, rain: 0, sunAngle: 28, glint: 76, sunTransmission: 62, depthTint: 18, haze: 0, tilt: 10, zoom: 56, vignette: 6, grain: 0 } },
-  { name: "Short chop", sky: "cloud", values: { ...initial, waveHeight: 43, chop: 82, swell: 18, current: 48, skew: 22, fetch: 16, foam: 46, storm: 28, windAngle: 62, gust: 34, rain: 8, sunAngle: 54, glint: 38, sunTransmission: 34, depthTint: 46, haze: 16, tilt: 25, zoom: 43, vignette: 18, grain: 7 } },
-  { name: "Squall", sky: "cloud", values: { ...initial, waveHeight: 86, chop: 91, swell: 70, current: 76, skew: -32, fetch: 28, foam: 78, storm: 92, windAngle: 116, gust: 88, rain: 74, sunAngle: 78, glint: 24, sunTransmission: 18, depthTint: 90, haze: 48, tilt: 33, zoom: 37, vignette: 46, grain: 22 } },
-  { name: "Fog bank", sky: "fog", values: { ...initial, waveHeight: 28, chop: 18, swell: 66, current: 16, skew: 4, fetch: 72, foam: 12, storm: 22, windAngle: 145, gust: 8, rain: 2, sunAngle: 12, glint: 8, sunTransmission: 70, depthTint: 52, haze: 92, tilt: 8, zoom: 60, vignette: 28, grain: 12 } },
+  { name: "Short chop", sky: "cloud", values: { ...initial, waveHeight: 43, chop: 82, swell: 18, current: 48, skew: 22, fetch: 16, foam: 46, storm: 28, windAngle: 62, gust: 34, rain: 8, sunAngle: 54, glint: 38, sunTransmission: 34, depthTint: 46, haze: 16, tilt: 25, zoom: 43, vignette: 18, grain: 7, corpusBlue: 18 } },
+  { name: "Squall", sky: "cloud", values: { ...initial, waveHeight: 86, chop: 91, swell: 70, current: 76, skew: -32, fetch: 28, foam: 78, storm: 92, windAngle: 116, gust: 88, rain: 74, sunAngle: 78, glint: 24, sunTransmission: 18, depthTint: 90, haze: 48, tilt: 33, zoom: 37, vignette: 46, grain: 22, corpusBlue: 8 } },
+  { name: "Fog bank", sky: "fog", values: { ...initial, waveHeight: 28, chop: 18, swell: 66, current: 16, skew: 4, fetch: 72, foam: 12, storm: 22, windAngle: 145, gust: 8, rain: 2, sunAngle: 12, glint: 8, sunTransmission: 70, depthTint: 52, haze: 92, tilt: 8, zoom: 60, vignette: 28, grain: 12, corpusBlue: 12 } },
+  { name: "Blue current", sky: "clear", values: { ...initial, waveHeight: 54, chop: 36, swell: 82, current: 62, skew: -12, fetch: 58, foam: 18, storm: 8, windAngle: 98, gust: 22, rain: 0, sunAngle: 106, glint: 48, sunTransmission: 46, depthTint: 62, haze: 6, tilt: 21, zoom: 46, vignette: 22, grain: 5, corpusBlue: 72 } },
 ];
 
 const groups: Array<{ title: string; controls: Array<{ key: keyof WaterSettings; label: string; min: number; max: number; step?: number }> }> = [
@@ -90,17 +91,17 @@ const vertexShader = `
 
 const fragmentShader = `
   uniform float uTime; uniform float uFoam; uniform float uStorm; uniform float uCloud; uniform float uFog;
-  uniform float uSunAngle; uniform float uGlint; uniform float uSunTransmission; uniform float uDepthTint; uniform float uHaze; uniform float uGrain;
+  uniform float uSunAngle; uniform float uGlint; uniform float uSunTransmission; uniform float uDepthTint; uniform float uHaze; uniform float uGrain; uniform float uCorpusBlue;
   uniform vec2 uResolution;
   varying vec3 vBarycentric; varying vec3 vWorldPosition; varying float vElevation; varying float vCrest; varying float vDistance;
   float edgeFactor(){ vec3 d=fwidth(vBarycentric); vec3 a3=smoothstep(vec3(0.0),d*1.25,vBarycentric); return min(min(a3.x,a3.y),a3.z); }
   float noise(vec2 p){ return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453); }
   void main(){
-    vec3 robin=vec3(.50,.88,.91); vec3 sky=vec3(.39,.70,.94); vec3 peri=vec3(.45,.48,.83);
+    vec3 robin=vec3(.50,.88,.91); vec3 sky=vec3(.39,.70,.94); vec3 peri=vec3(.45,.48,.83); vec3 corpusBlue=vec3(.161,.282,1.0);
     vec3 deep=vec3(.025,.065,.095); vec3 graphite=vec3(.025,.032,.04); vec3 foam=vec3(.94,.98,.97);
     float depth=clamp((1.0-vElevation*.34)*.55+vDistance*.34,0.0,1.0);
     vec3 calm=mix(robin,sky,clamp(vElevation*.36+.45,0.0,1.0)); calm=mix(calm,peri,vDistance*.76);
-    calm=mix(calm,deep,uDepthTint*depth); vec3 color=mix(calm,mix(deep,graphite,depth),uStorm);
+    calm=mix(calm,corpusBlue,uCorpusBlue*(.82-vDistance*.22)); calm=mix(calm,deep,uDepthTint*depth); vec3 color=mix(calm,mix(deep,graphite,depth),uStorm);
     vec3 normal=normalize(cross(dFdx(vWorldPosition),dFdy(vWorldPosition))); vec3 viewDirection=normalize(cameraPosition-vWorldPosition);
     vec3 sunDirection=normalize(vec3(cos(uSunAngle*6.28318),.62,sin(uSunAngle*6.28318)));
     float spec=pow(max(dot(reflect(-sunDirection,normal),viewDirection),0.0),mix(26.0,3.0,uGlint))*uGlint;
@@ -169,7 +170,7 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
       if (event.key.toLowerCase() === "h") setPanelOpen((open) => !open);
       if (event.key.toLowerCase() === "r") reset();
       const number = Number(event.key);
-      if (number >= 1 && number <= 4) applyPreset(number - 1);
+      if (number >= 1 && number <= presets.length) applyPreset(number - 1);
     };
     window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -184,7 +185,7 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
     renderer.setClearColor(0x000000,0); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1,2)); renderer.outputColorSpace=THREE.SRGBColorSpace; mount.appendChild(renderer.domElement);
     const uniforms: Record<string, THREE.IUniform> = {
       uTime:{value:0},uWaveHeight:{value:.38},uChop:{value:.26},uSwell:{value:.48},uCurrent:{value:.24},uSkew:{value:.08},uFetch:{value:.44},uFoam:{value:.22},
-      uStorm:{value:.12},uWindAngle:{value:.1},uGust:{value:.1},uRain:{value:0},uCloud:{value:0},uFog:{value:0},uSunAngle:{value:.2},uGlint:{value:.58},uSunTransmission:{value:.42},uDepthTint:{value:.34},uHaze:{value:.08},uGrain:{value:.04},
+      uStorm:{value:.12},uWindAngle:{value:.1},uGust:{value:.1},uRain:{value:0},uCloud:{value:0},uFog:{value:0},uSunAngle:{value:.2},uGlint:{value:.58},uSunTransmission:{value:.42},uDepthTint:{value:.34},uHaze:{value:.08},uGrain:{value:.04},uCorpusBlue:{value:1},
       uResolution:{value:new THREE.Vector2(1,1)},uPointer:{value:new THREE.Vector2(0,0)},
     };
     uniformsRef.current=uniforms;
@@ -232,7 +233,6 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
     <div className={`study-tool study-tool--water${embedded ? " study-tool--embedded" : ""}`}>
       <div className={`study-canvas study-canvas--${sky}`} ref={mountRef} role="img" aria-label="An organic field of isosceles triangles deformed by live water, weather, light, and camera parameters"><div className="study-vignette" /></div>
       <div className="study-window-copy">
-        <h2>Stay a while</h2>
         <p>We are too much like oysters observing the sun through the water, and thinking that thick water the thinnest of air</p>
       </div>
       <aside className={`study-controls${panelOpen ? "" : " is-collapsed"}`}>
@@ -240,7 +240,7 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
           <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>
           {groups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
           <div className="study-actions"><button onClick={reset} type="button">Reset</button><button onClick={capture} type="button">Capture PNG</button></div>
-          <p className="study-shortcuts"><span>H</span> controls <span>R</span> reset <span>1–4</span> presets</p>
+          <p className="study-shortcuts"><span>H</span> controls <span>R</span> reset <span>1–5</span> presets</p>
         </div>}
         {!panelOpen && <div className="study-presets study-presets--collapsed" aria-label="Water presets">{presets.map((preset,index)=><button aria-label={preset.name} key={preset.name} onClick={()=>applyPreset(index)} type="button">{index+1}</button>)}</div>}
         <button className="study-controls-toggle" onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button">{panelOpen?"Close":"Open"}</button>

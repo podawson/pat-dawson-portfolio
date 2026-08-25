@@ -32,13 +32,15 @@ A hospitality project delivered from schematic design through permitting, constr
 - Fabrication
 - Culture
 
-## Operating story
+## The delivery tension
 
-Caleta & Bad Habit wanted the opposite of the clean white-tiled ice-cream parlor. The work translated that attitude into architecture and carried it through the full arc: concept, client review, permit drawings, construction, inspections, punch, and opening. Black finishes ran from the scooping counter into the lounge; silky plaster, exposed brick, mirrored bars, red light, warped grids, and a disco ball kept the room serious about atmosphere but not about itself. The harder design work sat behind the surfaces. Fire-rated walls had to separate the kitchen, while the experience depended on seeing the operation. Rated glass inserts preserved that sightline without weakening the code strategy. The role crossed 3D visualization, construction documents, fabricator coordination, city review, and field decisions. Design intent and fire/life safety pulled in different directions, and both had to win.
+### Attitude and code both had to win.
 
-## Where authorship stays human
+Caleta & Bad Habit rejected the clean white ice-cream-parlor template, then carried that position from concept through permitting and opening. Black finishes, silky plaster, mirrored bars, red light, warped grids, and a disco ball built the atmosphere. Behind them, rated walls separated the kitchen while rated glass preserved the sightline into its operation. Visualization, construction documents, fabricator coordination, city review, and field decisions kept the concept intact without compromising fire and life safety.
 
-The design team held the concept; fabricators, code consultants, inspectors, and operators each kept control of the conditions they were accountable for.
+## Who held which constraints
+
+The design team protected the concept; fabricators, consultants, inspectors, and operators controlled execution and compliance.
 
 ## By the numbers
 

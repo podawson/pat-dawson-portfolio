@@ -31,13 +31,15 @@ A regulatory and spatial reuse package used by the owner for DOB filing and fund
 - Place
 - Culture
 
-## Operating story
+## The viable envelope
 
-The building sits beneath the Manhattan Bridge in a part of the city where almost every interesting idea collides with a different rule. The work was not a speculative image dropped into an empty shell. Existing structure, historic plans, school setbacks, competing-retail separation, licensing, digital-asset regulation, and floor-area ratio were tested against one another until the proposal had a credible operating envelope. That envelope supported a roughly $5M revitalization study combining food, gathering, work, and neighborhood uses. The project’s value was the translation: an open-ended ambition became a document an owner, regulator, investor, and design team could each interrogate from their own position. The study was used as input for DOB filing and fundraising, with every spatial move tied back to the evidence that made it possible.
+### Ambition had to survive the rules.
 
-## Where authorship stays human
+Beneath the Manhattan Bridge, almost every promising use meets a different constraint. Existing structure, historic plans, school setbacks, retail separation, licensing, digital-asset regulation, and floor-area limits were tested together until a credible operating envelope emerged. That envelope supported a roughly $5M reuse study combining food, gathering, work, and neighborhood uses. The result was not a speculative image but an evidence-backed package the owner could use for DOB filing and fundraising.
 
-The proposal surfaced viable options; the owner, regulators, and operators retained the final say over filing, capital, and use.
+## Who authorizes the outcome
+
+The study established viable options; ownership, regulators, and operators controlled filing, capital, and final use.
 
 ## By the numbers
 

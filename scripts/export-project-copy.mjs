@@ -25,7 +25,7 @@ for (const project of projects) {
   const metrics = project.metrics.map((item) => `- ${item}`).join("\n");
   const artifacts = project.artifacts.map((item) => `- ${item}`).join("\n");
   const categories = project.categories.map((item) => `- ${item}`).join("\n");
-  const markdown = `# ${project.title}\n\n> Editable copy snapshot for the dedicated project page. Send edits back to sync them with \`app/data.ts\`.\n\n## Page label\n\n${project.eyebrow} · ${project.year}\n\n## Question\n\n${project.question}\n\n## Headline\n\n${project.headline}\n\n## Summary\n\n${project.summary}\n\n## Role\n\n${project.role}\n\n## Outcome\n\n${project.outcome}\n\n## Categories\n\n${categories}\n\n## Operating story\n\n${project.narrative}\n\n## Where authorship stays human\n\n${project.agency}\n\n## By the numbers\n\n${metrics}\n\n## Artifacts that carry the case\n\n${artifacts}\n\n## Details\n\n${details}\n`;
+  const markdown = `# ${project.title}\n\n> Editable copy snapshot for the dedicated project page. Send edits back to sync them with \`app/data.ts\`.\n\n## Page label\n\n${project.eyebrow} · ${project.year}\n\n## Question\n\n${project.question}\n\n## Headline\n\n${project.headline}\n\n## Summary\n\n${project.summary}\n\n## Role\n\n${project.role}\n\n## Outcome\n\n${project.outcome}\n\n## Categories\n\n${categories}\n\n## ${project.storyKicker}\n\n### ${project.storyTitle}\n\n${project.narrative}\n\n## ${project.agencyLabel}\n\n${project.agency}\n\n## By the numbers\n\n${metrics}\n\n## Artifacts that carry the case\n\n${artifacts}\n\n## Details\n\n${details}\n`;
   fs.writeFileSync(path.join(outputDirectory, `${project.slug}.md`), markdown);
 }
 

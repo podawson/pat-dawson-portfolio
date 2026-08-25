@@ -16,7 +16,7 @@ A confidential client’s first customer-facing space enabled by physical AI was
 
 ## Summary
 
-Discovery output became structured input for a trained image model—500+ visualizations narrowed to four decision-moving directions—while engineering, fabrication, landlord, and site work advanced in parallel.
+Discovery output became structured input for a trained image model. More than 500 visualizations narrowed to four decision-moving directions while engineering, fabrication, landlord, and site work advanced in parallel.
 
 ## Role
 
@@ -32,13 +32,15 @@ A first-of-kind enterprise physical-AI space advanced through construction witho
 - Place
 - Systems
 
-## Operating story
+## The first-of-kind brief
 
-This confidential engagement delivered the client’s first customer-facing space enabled by physical AI anywhere in its global real-estate portfolio. There was no internal precedent for what the experience should be or how it should be delivered. Futures-workshop output was translated into structured input for a trained image model, producing more than five hundred visualizations. Four were curated because they moved the decision makers; the volume only mattered because a judgment layer made it useful. Meanwhile the permanent storefront was under active construction, and the brand could not disappear from the address. Temporary retail activations ran concurrently, each carrying its own fire/life-safety, landlord, creative, fabrication, and schedule requirements. The work therefore operated as two overlapping projects—one permanent, one disposable—held together by the same public promise.
+### Five hundred images became four decisions.
 
-## Where authorship stays human
+With no internal precedent for a customer-facing physical-AI space, workshop output became structured input for a trained image model. More than five hundred visualizations were narrowed to four directions that could move an actual decision. At the same time, temporary retail activations kept the address public while the permanent storefront advanced through engineering, fabrication, landlord review, and construction. One project established the future experience; the other protected continuity during delivery.
 
-The generative system expanded the option space; the project team curated four directions and remained accountable for the built experience and every site decision.
+## What curation controlled
+
+Generation expanded the option space; the project team selected four directions and remained accountable for the built result.
 
 ## By the numbers
 

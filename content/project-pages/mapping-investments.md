@@ -32,13 +32,15 @@ A production 3D civic narrative delivered for a live investor event on a hard de
 - Place
 - Culture
 
-## Operating story
+## The spatial evidence model
 
-A parcel map is data until it carries a reason for being navigated. This interactive 3D experience connected thirteen sites to three eras and ninety years of neighborhood history, revealing detail progressively as the viewer moved between place, time, and stewardship. The production stack combined MapLibre GL JS, OpenStreetMap building extrusions, AWS DEM terrain, custom WebGL animation layers, two programmatic cartographic systems, and a multi-phase site-selection state machine. The build was directed through structured AI-agent prompting: prompt contracts, regression guards, and iterative visual critique held the interface on-model across dozens of changes. That process resembled design direction more than code generation. The result shipped to a hard live-event deadline while maintaining one evidence chain from historical research to the interaction shown on screen.
+### Ninety years became a navigable argument.
 
-## Where authorship stays human
+The 3D experience connected thirteen sites to three eras and ninety years of neighborhood history, revealing detail as viewers moved between place, time, and stewardship. MapLibre, terrain, building extrusions, custom WebGL layers, and a site-selection state machine were directed through prompt contracts, regression guards, and visual critique. The build met a fixed live-event deadline while preserving one evidence chain from historical research to the public interaction.
 
-AI agents accelerated implementation inside explicit prompt contracts; Patrick retained design direction, regression review, and responsibility for every public interaction.
+## What design direction controlled
+
+AI agents accelerated implementation; Patrick retained visual direction, regression review, and responsibility for the public experience.
 
 ## By the numbers
 

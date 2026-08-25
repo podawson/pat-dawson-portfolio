@@ -32,13 +32,15 @@ An NSF-funded live industrial prototype joining fatigue estimation, gesture cont
 - Systems
 - Fabrication
 
-## Operating story
+## The worker–robot contract
 
-The Gymnast CoBot explored collaborative automation in a physically demanding industrial setting. A biosignature pipeline combined heart rate and movement with worker attributes to estimate fatigue live. That estimate fed the UR-10’s handover height and rhythm, but it did not set a universal level of assistance. Workers selected how much support they wanted along a range, from strain reduction to something closer to exercise, and the robot micro-adjusted within that preference. Wristband-tracked arm gestures kept control hands-free. A projected interface cast the robot’s intended path and next action onto the work surface before it moved, making automation legible to the person beside it. Months of industry research—labor conditions, species trends, fishing grounds, and embodied carbon—preceded the interface. The system architecture, projection flow, and physical box had to be designed together because none of them could explain the robot alone.
+### Assistance stayed legible and adjustable.
 
-## Where authorship stays human
+Heart rate, movement, and worker attributes fed a live fatigue estimate that adjusted the UR-10’s handover height and rhythm. The estimate did not dictate one level of assistance: workers selected a range from strain reduction to exercise, and the robot adapted within it. Wristband gestures kept control hands-free, while projection showed the robot’s intended path before it moved. Biosignatures, interface, and physical adaptation worked as one support system the person beside it could understand.
 
-The robot could adapt within a bounded support range; the worker set that range and could see the system’s intent before motion occurred.
+## What the worker controlled
+
+The robot adapted inside a bounded range; the worker chose that range and could see its intent before motion.
 
 ## By the numbers
 

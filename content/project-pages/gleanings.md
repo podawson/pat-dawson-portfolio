@@ -4,7 +4,7 @@
 
 ## Page label
 
-Tricky · 2025–26
+Tricky · 2026
 
 ## Question
 
@@ -31,13 +31,15 @@ A handed-off project-reasoning workflow that turns cross-document conflict into 
 - Systems
 - Experience
 
-## Operating story
+## The triage model
 
-Project risk rarely sits inside one document. It appears between a schedule and a drawing set, a budget and a field note, an RFI and the decision it is waiting on. Gleanings ingests those heterogeneous records together and surfaces the conflicts between them: scope drift, budget-to-actuals gaps, unresolved dependencies, and downstream cost that only becomes visible when several sources are read against one another. The ranking is the product. An unranked list of every discrepancy simply creates another coordination burden, so findings are ordered by anticipated cost and schedule impact and returned with their source trail intact. The system does not make the project decision. It routes scarce reviewer attention to the conflicts most likely to compound into change orders, preserving enough evidence for the accountable project manager to agree, reject, or investigate. The agent was handed off and put into use.
+### Find the three conflicts worth acting on.
 
-## Where authorship stays human
+Project risk appears between documents: a schedule and drawing set, a budget and field note, an RFI and the decision it awaits. Gleanings reads those records together, surfaces scope drift and unresolved dependencies, then ranks findings by anticipated cost and schedule impact. Every issue keeps its source trail attached. The system replaces an exhaustive discrepancy list with a short, evidence-backed queue a project manager can confirm, reject, or investigate.
 
-The agent ranks evidence-backed conflicts; the project manager remains responsible for interpreting context and authorizing action.
+## Who authorizes action
+
+The agent ranks evidence-backed conflicts; the project manager interprets context and decides what happens next.
 
 ## By the numbers
 

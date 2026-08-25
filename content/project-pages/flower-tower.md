@@ -32,13 +32,15 @@ A competition-selected installation dismantled by the public and recycled after 
 - Place
 - Culture
 
-## Operating story
+## The participation model
 
-Flower Tower was selected for the inPublic Festival in Downtown Crossing alongside work by more than sixty artists. It was a six-foot hollow cardboard structure perforated for 800+ cut stems and seed packets. Visitors could take a flower immediately, take seed home for later, and write or draw on the hand-mixed chalkboard surface revealed as the object emptied. By Monday the monument had been depleted and recycled. That disappearance was the project. Instead of asking the public to preserve a completed object, the work redistributed its material and authorship to the people around it. Built for roughly $400, it remains an early version of a question that now runs through the practice: how can a system increase someone’s capability without taking away their sense of authorship?
+### The monument worked by disappearing.
 
-## Where authorship stays human
+Flower Tower was a six-foot cardboard structure carrying more than eight hundred flowers and seed packets. Visitors could take either, then write or draw on the chalkboard surface revealed as the object emptied. By Monday it had been depleted and recycled. That disappearance was the work: instead of preserving a finished monument, the public redistributed its material and completed its visual record. The roughly $400 structure used subtraction (not permanence) as its measure of participation.
 
-The structure set the conditions; the public decided how it changed, what left the site, and what remained on its surface.
+## What the public controlled
+
+The structure set the exchange; visitors decided what left, how the object changed, and what remained visible.
 
 ## By the numbers
 

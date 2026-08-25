@@ -18,13 +18,16 @@ const projectAccents: Record<string, string> = {
   gleanings: "#a58bd4",
   string: "#9dd6dc",
   aintivirus: "#7185ff",
+  bodega: "#f2c74f",
+  hyperstructures: "#ef6e45",
+  "richardson-plaza": "#8fbf7b",
+  quaranzine: "#ee4ec0",
 };
 
 const projectGalleries: Record<string, { src: string; caption: string }[]> = {
   "charlesgate-park": [
     { src: "/work/gallery/charlesgate-park/01.webp", caption: "Ecological repair begins with the site already there." },
     { src: "/work/gallery/charlesgate-park/02.webp", caption: "Survey, archival geometry, and the infrastructural site model." },
-    { src: "/work/gallery/charlesgate-park/04.webp", caption: "A proposal to daylight the Muddy River and reconnect the park." },
     { src: "/work/gallery/charlesgate-park/05.webp", caption: "The inherited landscape before intervention." },
     { src: "/work/gallery/charlesgate-park/06.webp", caption: "The same view reworked as ecological and civic repair." },
   ],
@@ -81,7 +84,6 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/mapping-investments/02.webp", caption: "History, ownership, investment, and impact layered in one spatial record." },
   ],
   "release-intelligence": [
-    { src: "/work/gallery/release-intelligence/01.webp", caption: "The deployed interface compares release notes against an operating method." },
     { src: "/work/gallery/release-intelligence/02.webp", caption: "Early sketches established the source, comparison, and decision flow." },
     { src: "/work/gallery/release-intelligence/03.webp", caption: "Alternative system structures were tested before implementation." },
     { src: "/work/gallery/release-intelligence/04.webp", caption: "The functional architecture that survived the sketching process." },
@@ -95,6 +97,31 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/aintivirus/02.webp", caption: "A live JohnBot conversation grounded in the private corpus." },
     { src: "/work/gallery/aintivirus/03.webp", caption: "The character system became the project's public product surface." },
     { src: "/work/gallery/aintivirus/04.webp", caption: "A privacy-service interface extended the character into utility." },
+  ],
+  bodega: [
+    { src: "/work/gallery/bodega/01.jpg", caption: "The Bodega activation operating on the floor at ComplexCon LA." },
+    { src: "/work/gallery/bodega/02.jpg", caption: "The same corner-store identity rebuilt as a complete event footprint." },
+    { src: "/work/gallery/bodega/03.jpg", caption: "An activation-wide rendering coordinated storefronts, fixtures, circulation, and venue conditions." },
+    { src: "/work/gallery/bodega/04.jpg", caption: "Art Basel Miami carried the identity into a different fair-floor format." },
+  ],
+  hyperstructures: [
+    { src: "/work/gallery/hyperstructures/01.jpg", caption: "A resolved higher-dimensional form held together across surface, structure, and mathematical trace." },
+    { src: "/work/gallery/hyperstructures/02.jpg", caption: "Iteration within a named series tested the same premise at a different scale." },
+    { src: "/work/gallery/hyperstructures/03.jpg", caption: "A generated geometry with no physical precedent to compare it to." },
+    { src: "/work/gallery/hyperstructures/04.jpg", caption: "The pipeline's exploratory volume remained visible behind the forms selected to keep." },
+  ],
+  "richardson-plaza": [
+    { src: "/work/gallery/richardson-plaza/01.jpg", caption: "The completed plaza in use on Northeastern's campus." },
+    { src: "/work/gallery/richardson-plaza/02.jpg", caption: "The built public realm joined movable planters, new seating, and inherited campus infrastructure." },
+    { src: "/work/gallery/richardson-plaza/03.jpg", caption: "A modular seating study translated scattered occupation into a repeatable kit of parts." },
+    { src: "/work/gallery/richardson-plaza/04.jpg", caption: "The completed stair seating gathered around the plaza's existing clock structure." },
+    { src: "/work/gallery/richardson-plaza/05.jpg", caption: "Repeated components carried the coordinated drawing set into daily campus use." },
+  ],
+  quaranzine: [
+    { src: "/work/gallery/quaranzine/01.jpg", caption: "Quaranzine's visual language treated each edition as an event rather than an archive entry." },
+    { src: "/work/gallery/quaranzine/02.jpg", caption: "One edition from the 21-issue run." },
+    { src: "/work/gallery/quaranzine/03.jpg", caption: "The live series extended the same editorial scene into performance." },
+    { src: "/work/gallery/quaranzine/04.jpg", caption: "Alone together became both the pandemic condition and the publishing premise." },
   ],
 };
 
@@ -208,8 +235,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       items.findIndex((candidate) => candidate.src === item.src) === index,
   );
   const openingMedia = gallery.slice(0, 1);
-  const narrativeMedia = gallery.slice(1, 3);
-  const evidenceMedia = gallery.slice(3);
+  const narrativeMedia = project.slug === "charlesgate-park" ? gallery.slice(1, 2) : gallery.slice(1, 3);
+  const evidenceMedia = project.slug === "charlesgate-park" ? gallery.slice(2) : gallery.slice(3);
   const endImage =
     project.artifactImage &&
     project.artifactImage !== project.image &&
@@ -244,13 +271,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <section className="project-narrative">
           <div className="project-narrative__title">
-            <p className="kicker">The operating story</p>
-            <h2>What the system held,<br />and what it left human.</h2>
+            <p className="kicker">{project.storyKicker}</p>
+            <h2>{project.storyTitle}</h2>
           </div>
           <div className="project-narrative__body">
             <p>{project.narrative}</p>
             <aside>
-              <p className="micro">Where authorship stays human</p>
+              <p className="micro">{project.agencyLabel}</p>
               <p>{project.agency}</p>
             </aside>
           </div>
@@ -275,7 +302,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
 
-        <ProjectMedia items={evidenceMedia} label={`${project.title} additional evidence`} />
+        <ProjectMedia
+          items={evidenceMedia}
+          label={`${project.title} additional evidence`}
+          sideBySide={project.slug === "charlesgate-park"}
+        />
 
         <section className="project-details">
           {project.details.map((detail, index) => (

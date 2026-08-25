@@ -31,13 +31,15 @@ A 0→5,000+ trader product with an auditable model-development archive and meas
 - Systems
 - Culture
 
-## Operating story
+## The signal discipline
 
-String was a real-time Solana intelligence product for identifying high-potential projects early. The product problem was not access to more calls; it was deciding which behavioral symptoms inside noisy on-chain activity were worth surfacing, and how much control an automated system should hold once it found them. Product strategy worked backward from the tools and routines used by high-value traders, translating research into model features, opportunity ranking, and a fee model. Reported hit rate rose from 40% to 62% as signal quality took priority over volume, and the platform scaled to more than five thousand active traders and roughly $250K in revenue. The durable artifact is now the development record: eight Telegram exports normalized into calls, contract addresses, timestamps, model labels, leaderboard snapshots, and reported outcomes. That record can compare precision, average maximum-X, call volume, and tail exposure without letting one flattering metric hide another.
+### Better ranking beat more calls.
 
-## Where authorship stays human
+String worked backward from the routines of high-value traders to decide which symptoms in noisy on-chain activity deserved attention. Research became model features, opportunity ranking, and a fee model. As signal quality took priority over volume, reported hit rate rose from 40% to 62%, the platform reached 5,000+ active traders, and revenue reached roughly $250K. Eight normalized exports preserve calls, contracts, timestamps, model labels, and outcomes so precision can be assessed without one flattering metric hiding another.
 
-The system surfaced and ranked candidates; confirmation and execution remained with traders, and performance claims stay tied to timestamped evidence.
+## What traders controlled
+
+The system ranked candidates; traders retained confirmation and execution, with claims tied to timestamped evidence.
 
 ## By the numbers
 

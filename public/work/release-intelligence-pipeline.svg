@@ -130,7 +130,7 @@
   <text x="717" y="415" text-anchor="middle" font-size="9.5" font-weight="500" fill="#333">Narrative Seeds</text>
   <line x1="654" y1="422" x2="780" y2="422" stroke="#d0d0d0" stroke-width=".6"/>
 
-  <text x="654" y="436" font-size="8.5" fill="#666">Verbatim from tickets —</text>
+  <text x="654" y="436" font-size="8.5" fill="#666">Verbatim from tickets:</text>
   <text x="654" y="449" font-size="8.5" fill="#666">factual, neutral source</text>
   <line x1="654" y1="457" x2="780" y2="457" stroke="#e8e8e8" stroke-width=".5"/>
 
@@ -139,7 +139,7 @@
   <line x1="654" y1="492" x2="780" y2="492" stroke="#e8e8e8" stroke-width=".5"/>
 
   <text x="654" y="506" font-size="8.5" fill="#666">Cannot be hallucinated</text>
-  <text x="654" y="519" font-size="8.5" fill="#666">— sourced only from</text>
+  <text x="654" y="519" font-size="8.5" fill="#666">sourced only from</text>
   <text x="654" y="532" font-size="8.5" fill="#666">ticket content</text>
 
   <!-- Validation Layer box -->

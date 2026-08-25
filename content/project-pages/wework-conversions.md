@@ -32,13 +32,15 @@ Spatial experience design lead · systems and playbook author
 - Experience
 - Systems
 
-## Operating story
+## The portfolio logic
 
-The assignment began as a portfolio problem: find locations where underperforming space could become a higher-revenue configuration without making the member experience worse. Data from real estate, product, leasing, engineering, and MEP was organized into a matrix across more than nine hundred locations. A custom Revit script flagged non-revenue space over-allocated relative to offices; the matrix identified where conversion was feasible; an operational playbook governed furniture, materials, finishes, electrical, ventilation, accessibility, and recurring building conditions. That sequence initiated more than two hundred conversions across offices ranging from two-person suites to 150-person floor plates. The playbook was the product. It let distributed teams make consistent decisions while preserving the cases that truly required local judgment, and it reduced the need to solve the same problem from zero in every building.
+### Standardize the repeatable. Protect the exception.
 
-## Where authorship stays human
+Real-estate, product, leasing, engineering, and MEP data were organized across more than nine hundred locations. A custom Revit script flagged over-allocated non-revenue space; a matrix identified viable conversions; and a playbook governed recurring furniture, material, electrical, ventilation, and accessibility decisions. That sequence initiated more than two hundred conversions, from two-person suites to 150-person floor plates. The playbook let distributed teams move consistently without forcing unlike buildings into one universal answer.
 
-The analysis ranked opportunities and bounded repeatable decisions; local project teams retained judgment where building, code, or member conditions diverged.
+## Where local judgment remained
+
+The playbook bounded repeatable choices; local teams owned exceptions created by each building, code, and member condition.
 
 ## By the numbers
 

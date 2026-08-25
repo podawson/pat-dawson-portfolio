@@ -31,13 +31,15 @@ Five consistent outputs per cycle, a deterministic audit trail, and a workflow h
 - Systems
 - Experience
 
-## Operating story
+## The workflow correction
 
-One release cycle required the same Linear tickets to be rewritten for five audiences: customer release notes, internal changelog, sales brief, support FAQ, and Slack. A first all-LLM approach failed in the useful way—tickets classified differently across runs, 40–60% fell into an unexplainable custom bucket, and nobody could see why. The fix was architectural, not another prompt. Classification and grouping moved into deterministic Python; the model became responsible only for voice and format. Six stages and a sixteen-field schema feed five audience-specific prompt contracts. Verbatim narrative seeds prevent unsupported feature claims. Three validation passes each target a failure the model had actually made. Across 12+ batches and 100+ tickets, the custom bucket fell below 5% and PM work dropped from 3–5 hours to 20–40 minutes. A review gate concentrates attention on the 2–3 high-risk items instead of pretending the system no longer needs an owner.
+### Facts left the model. Voice stayed.
 
-## Where authorship stays human
+The same Linear tickets had to become five different release documents. An all-LLM approach classified them inconsistently and hid 40–60% inside a custom bucket. The fix moved classification and grouping into deterministic Python while the model kept only voice and format. Verbatim seeds constrained claims, validation targeted known failures, and the custom bucket fell below 5%. Across 100+ tickets, PM work dropped from 3–5 hours to 20–40 minutes, with review focused on the 2–3 risky items.
 
-The pipeline classifies and drafts inside explicit bounds; a PM reviews the high-risk items and remains the publisher of record.
+## Where publication authority stays
+
+The pipeline classifies and drafts within explicit bounds; a PM reviews high-risk items and publishes the final record.
 
 ## By the numbers
 

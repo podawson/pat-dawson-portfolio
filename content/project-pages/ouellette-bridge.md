@@ -32,13 +32,15 @@ Five trusses and 100+ addressable lights installed with zero drilling or welding
 - Place
 - Experience
 
-## Operating story
+## The fabrication handoff
 
-Ouellette Bridge dates to the 1880s, remains fully functional, and is the longest lenticular truss bridge in the country. The lighting brief therefore came with one defining constraint: alter none of the original ironwork. Drilling and welding were ruled out. A family of reversible clamps and small legs instead supported custom light housings along the road barriers, casting warm light across the lattice without leaving a mark. The project was developed as a fabrication problem, not only a lighting concept. Details, dimensions, tolerances, cable paths, and repeatable parts were organized so a single local steel fabricator could build and install the system across five trusses and more than one hundred addressable lights. The drawings were the handoff: if they failed, the design failed in the field.
+### Reversibility was the design.
 
-## Where authorship stays human
+The 1880s bridge could be illuminated only if none of its original ironwork was drilled or welded. Reversible clamps and small legs supported custom housings along the road barriers, carrying warm light across five trusses without leaving a mark. Dimensions, tolerances, cable paths, and repeatable parts were resolved as one fabrication package so a single local steel fabricator could build and install more than one hundred addressable lights. The drawings had to make preservation executable in the field.
 
-The drawing set defined a reversible system; the fabricator and preservation constraints governed every final attachment in the field.
+## What governed the field
+
+Preservation rules set the limit; the fabricator controlled how each reversible attachment was executed on site.
 
 ## By the numbers
 

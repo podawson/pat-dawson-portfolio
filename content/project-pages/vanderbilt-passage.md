@@ -16,7 +16,7 @@ Five hardware zones and fifteen generative modes landed inside a live enterprise
 
 ## Summary
 
-Unreal Engine, TouchDesigner, live data, generative audio, directional sound, custom playout, and a 150-year archive were coordinated as one permanent passage—not separate technical scopes.
+Unreal Engine, TouchDesigner, live data, generative audio, directional sound, custom playout, and a 150-year archive were coordinated as one permanent passage, not separate technical scopes.
 
 ## Role
 
@@ -32,13 +32,15 @@ A permanent audiovisual passage delivered on schedule inside an active 1,388-foo
 - Systems
 - Place
 
-## Operating story
+## The operational media system
 
-Vanderbilt Passage is a real-time media environment at the base of JPMorgan Chase’s new global headquarters. Five hardware zones run fifteen generative modes across Unreal Engine and TouchDesigner, with live data feeds, generative audio, directional sound, and a custom playout interface. A 150-year corporate archive was read and sorted into a working taxonomy so each mode had an intentional content language rather than a folder of available images. Some scenes exposed the mechanics of their particles; others used quiet local-time parallax. Live market APIs had to clear enterprise security review. The directional-audio workstream was the first the studio had attempted. The creative system was only half the problem: the team arrived downstream of the GC, electrical, AV, enclosure, finishes, and FF&E. Every upstream delay compressed commissioning. The installation still had to open as one calm, continuous experience rather than reveal the coordination stack underneath it.
+### Complexity had to open as calm.
 
-## Where authorship stays human
+Five hardware zones run fifteen generative modes across Unreal Engine, TouchDesigner, live data, generative audio, directional sound, and a custom playout interface. A 150-year archive became a working content taxonomy rather than a folder of images. The installation also arrived downstream of the GC, electrical, AV, enclosure, finishes, and FF&E, so every delay compressed commissioning. All of that coordination had to disappear into one continuous public passage.
 
-The media system transformed approved data and archive content; operators retained a custom playout interface and the institution governed live feeds, security, and publication.
+## Who governs the live system
+
+Operators control playout; the institution governs archive use, live feeds, security, and publication.
 
 ## By the numbers
 

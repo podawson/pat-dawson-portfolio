@@ -1312,7 +1312,8 @@ img { display: block; width: 100%; }
   }
 
   .field-node.is-related > strong {
-    opacity: 0;
+    color: rgba(245,241,232,.68);
+    opacity: 1;
   }
 
   .field-axis--story {

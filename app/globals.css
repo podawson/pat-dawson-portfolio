@@ -852,9 +852,10 @@ img { display: block; width: 100%; }
 .index-preview--diagram > div:first-child { background: #f3f1eb !important; }
 .index-preview--diagram img { object-fit: contain; }
 .index-preview > .micro { color: var(--muted); margin-top: 18px; }
-.index-preview h2 { font-family: var(--display); font-size: 29px; font-weight: 400; letter-spacing: -.035em; margin: 8px 0; }
-.index-preview > p:not(.micro) { color: var(--muted); font-size: 11px; line-height: 1.45; margin-bottom: 20px; max-width: 540px; }
-.index-preview > a { display: block; font-family: var(--mono); font-size: 9px; margin-top: 22px; text-transform: uppercase; width: fit-content; }
+.index-preview h2 { font-family: var(--display); font-size: 31px; font-weight: 400; letter-spacing: -.035em; margin: 8px 0; }
+.index-preview > p:not(.micro) { color: var(--muted); font-size: 12px; line-height: 1.5; margin-bottom: 20px; max-width: 540px; }
+.index-preview .tag-row span { font-size: 10px; }
+.index-preview > a { display: block; font-family: var(--mono); font-size: 10px; margin-top: 22px; text-transform: uppercase; width: fit-content; }
 .index-connector { inset: 0; overflow: visible; pointer-events: none; position: absolute; z-index: 2; }
 .index-connector path { animation: index-draw .12s ease both; fill: none; stroke: rgba(163,77,51,.75); stroke-dasharray: 1; stroke-dashoffset: 1; stroke-width: 1; }
 .index-connector__label { fill: rgba(255,255,255,.94); font-family: var(--sans); font-size: 12px; font-weight: 620; letter-spacing: .01em; paint-order: stroke; stroke: rgba(9,11,13,.9); stroke-width: 3px; }

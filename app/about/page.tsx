@@ -55,12 +55,13 @@ export default function AboutPage() {
         <div className="about-resume__heading"><h2><em>What that looks like in practice.</em></h2></div>
         <div className="experience-list">{experience.map((item)=><article key={`${item.years}-${item.org}`}><time>{item.years}</time><div><h3>{item.org}</h3><p className="micro">{item.role}</p>{"lines" in item ? <div className="experience-lines">{item.lines?.map((line)=><p key={line}>{line}</p>)}</div> : <p>{item.body}</p>}</div></article>)}</div>
 
-        <div className="about-resume__heading"><h2><em>I appreciate you.</em></h2></div>
+        <div className="about-resume__heading about-resume__heading--closing"><h2><em>Hope this finds you well.</em></h2></div>
         <div className="about-closing-note">
-          <p>At the end of the day I just want to be making good work.</p>
-          <p>I&apos;ve spent all my years trying to stay ahead of the next one by being a sponge.</p>
+          <p>At the end of the day, I want to be making excellent work.</p>
+          <p>I&apos;ve spent my years trying to stay ahead of the next one by being a sponge.</p>
           <p>Everyone&apos;s a great teacher if you&apos;re a good listener.</p>
-          <p>Hope this finds you well.</p>
+          <p><em>Thank you!</em></p>
+          <p><em>Take care!</em></p>
         </div>
       </section>
 

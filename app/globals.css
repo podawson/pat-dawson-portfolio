@@ -1141,7 +1141,9 @@ img { display: block; width: 100%; }
 
 @media (prefers-reduced-motion: reduce) { .project-open-pill::before { transition: none; } }
 
-.about-closing-note { max-width: 860px; }
+.about-resume__heading--closing { text-align: center; }
+.about-resume__heading--closing > h2:only-child { margin-inline: auto; }
+.about-closing-note { margin-inline: auto; max-width: 860px; text-align: center; }
 .about-closing-note p { color: rgba(245,241,232,.72); font-size: 18px; line-height: 1.55; margin: 0; }
 .about-closing-note p + p { margin-top: 18px; }
 .about-closing-note p:last-child { font-style: italic; }

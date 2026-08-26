@@ -1147,6 +1147,11 @@ img { display: block; width: 100%; }
 .about-hero { align-items: start; padding-bottom: 148px; }
 .about-hero__body { margin-top: 330px; }
 .about-play-interactive { margin: 189px auto 0; }
+@media (min-width: 901px) {
+  .about-hero .route-intro { align-self: stretch; position: relative; }
+  .about-hero__body { margin-top: 0; position: absolute; top: 50%; transform: translateY(-50%); width: 100%; }
+  .about-play-interactive { margin: 0 auto; }
+}
 .work-page--dark { background: radial-gradient(circle at 78% 8%,rgba(90,98,194,.12),transparent 34%),var(--night); }
 .work-page--dark .page-intro--work,
 .work-page--dark .work-index { background: transparent; }
@@ -1285,6 +1290,19 @@ img { display: block; width: 100%; }
 
   .field-axes {
     display: block;
+    inset: 13% 6%;
+  }
+
+  .field-body-3d,
+  .field-nodes,
+  .field-axes {
+    transform: translateY(28px);
+  }
+
+  .field.is-constellation .field-body-3d,
+  .field.is-constellation .field-nodes,
+  .field.is-constellation .field-axes {
+    transform: translateY(-44px);
   }
 
   .field-node__mobile-index,
@@ -1316,7 +1334,7 @@ img { display: block; width: 100%; }
 
   .field-axis--architecture {
     left: 50% !important;
-    top: 100% !important;
+    top: calc(100% - 48px) !important;
     transform: translate(-50%, -100%) !important;
   }
 }

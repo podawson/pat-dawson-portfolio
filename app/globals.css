@@ -1309,7 +1309,7 @@ img { display: block; width: 100%; }
 
   .field-axis--atmosphere {
     left: 50% !important;
-    top: 0 !important;
+    top: 48px !important;
     transform: translate(-50%, 0) !important;
   }
 

@@ -1291,6 +1291,10 @@ img { display: block; width: 100%; }
     display: none;
   }
 
+  .field-node.is-related > strong {
+    opacity: 0;
+  }
+
   .field-axis--story {
     left: 0 !important;
     top: 50% !important;

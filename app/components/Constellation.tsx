@@ -734,7 +734,6 @@ export function Constellation() {
               type="button"
               aria-label={`${isActive ? "Open" : "Select"} ${project.title}${relationFilter !== "all" && matchesFilter ? `, connected by ${relationLabel[relationFilter].toLowerCase()}` : ""}`}
             >
-              <span className="field-node__mobile-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
               <strong>{project.title}</strong>
             </button>
           );

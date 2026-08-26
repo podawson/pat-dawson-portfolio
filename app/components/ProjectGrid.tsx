@@ -153,7 +153,19 @@ export function ProjectGrid() {
 
       <div className="index-preview-wrap">
         <article className={`index-preview${activeIsDiagram ? " index-preview--diagram" : ""}`} ref={cardRef}>
-          <div><img key={active.slug} src={active.image} alt="" decoding="async" fetchPriority="high" /></div>
+          <div>
+            <img
+              key={active.slug}
+              src={active.image}
+              alt=""
+              decoding="async"
+              fetchPriority="high"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = "/corpus-icon-20260825.png";
+              }}
+            />
+          </div>
           <h2>{active.title}</h2>
           <p>{active.summary}{active.slug === "string" ? "" : ` ${active.details[0]?.body ?? ""}`}</p>
           <div className="tag-row">{active.categories.map((category) => <span key={category}>{category}</span>)}</div>

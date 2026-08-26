@@ -383,7 +383,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         ) : null}
 
         <nav className="next-project" aria-label="Next project">
-          <a href={`/work/${next.slug}`}>{next.title}</a>
+          <a href={`/work/${next.slug}`}>{`${next.title} -->`}</a>
           <p>{next.question}</p>
         </nav>
       </article>

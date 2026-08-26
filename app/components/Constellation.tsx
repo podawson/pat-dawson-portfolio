@@ -742,7 +742,15 @@ export function Constellation() {
 
       {active && (
         <aside className="map-selection-band" aria-live="polite">
-          <img className="map-selection-band__image" src={active.image} alt="" />
+          <img
+            className="map-selection-band__image"
+            src={active.image}
+            alt=""
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = "/corpus-icon-20260825.png";
+            }}
+          />
           <div className="map-selection-band__identity">
             <h2>{active.title}</h2>
           </div>

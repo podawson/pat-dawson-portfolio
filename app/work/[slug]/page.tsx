@@ -348,7 +348,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <section className="project-evidence" aria-label="Evidence and recommended artifacts">
           <div>
-            <p className="kicker">By the numbers</p>
+            <p className="kicker">At a glance</p>
             <ul>{project.metrics.map((metric) => <li key={metric}>{metric}</li>)}</ul>
           </div>
           <div>
@@ -383,7 +383,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         ) : null}
 
         <nav className="next-project" aria-label="Next project">
-          <a href={`/work/${next.slug}`}>{`${next.title} -->`}</a>
+          <a href={`/work/${next.slug}`}>{`${next.title} →`}</a>
           <p>{next.question}</p>
         </nav>
       </article>

@@ -116,4 +116,20 @@
     font-size: 6px;
     letter-spacing: .055em;
   }
+
+  .field-node.is-related {
+    color: rgba(245,241,232,.8);
+    opacity: 1;
+  }
+
+  .field-node.is-related::before {
+    background: rgba(245,241,232,.17);
+    transform: translate(-50%,-50%);
+  }
+
+  .field-node.is-related > strong {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
 }

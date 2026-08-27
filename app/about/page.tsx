@@ -12,12 +12,12 @@ const focusAreas = [
 
 const experience = [
   { years: "2026–Present", org: "Cairn", role: "Company Brain architect · sole builder", body: "A local-first OS and agent-orchestration engine that turns two decades of unstructured work into a memory layer capable of taking a brief and producing the materials to answer it, informed by what the archive itself suggests." },
-  { years: "2024–Present", org: "Tricky", role: "AI product builder and experience designer", body: "Release Intelligence, Gleanings, RFP Automation, Civic Investment Mapping, String, and AIntivirus; independent AI products and agentic infrastructure used by operating teams, 5,000+ traders, and 10,000+ chatbot users across ventures." },
+  { years: "2024–Present", org: "Tricky", role: "AI product builder · experience designer", body: "Release Intelligence, Gleanings, RFP Automation, Civic Investment Mapping, String, and AIntivirus; independent AI products and agentic infrastructure used by operating teams, 5,000+ traders, and 10,000+ chatbot users across ventures." },
   { years: "2023–26", org: "Downstream", role: "Experiential strategy · project management · media systems", body: "Vanderbilt Passage, a confidential physical-AI client, Warner Music, Red Hat, Toronto Raptors, and other confidential enterprise programs; $6.9M in scoped budgets with $1.48M in documented savings." },
-  { years: "2020–23", org: "BrineSpace", role: "Strategy and architecture and fabrication", body: "Hospitality interiors, cultural programming, fabrication, and materials research. Full-permit bar buildouts (Caleta & Bad Habit), adaptive reuse at 88 East Broadway, three cultural pop-ups, community fridge shed design, precision jewelry, school repairs for a Haitian art institution, and a third-place Nestlé BioDesign proposal for Booch Lab." },
+  { years: "2020–23", org: "BrineSpace", role: "Strategy · architecture · fabrication", body: "Hospitality interiors, cultural programming, fabrication, and materials research. Full-permit bar buildouts (Caleta & Bad Habit), adaptive reuse at 88 East Broadway, three cultural pop-ups, community fridge shed design, precision jewelry, school repairs for a Haitian art institution, and a third-place Nestlé BioDesign proposal for Booch Lab." },
   { years: "2021–22", org: "WeWork", role: "Spatial experience design · portfolio strategy", body: "Conversion logic across 900+ locations, initiating 200+ projects through a playbook distributed teams could run." },
   { years: "2019–21", org: "XD Lab", role: "NSF-funded HRI research", body: "Gymnast CoBot, developed under NSF Award #1928654." },
-  { years: "2019–20", org: "Landing Studio", role: "Research and design and fabrication", body: "Charlesgate Park, Richardson Plaza, Ouellette Bridge, Covid Food Distribution Hubs, and Marginal Street Community–Industry Seam Improvements." },
+  { years: "2019–20", org: "Landing Studio", role: "Research · design · fabrication", body: "Charlesgate Park, Richardson Plaza, Ouellette Bridge, Covid Food Distribution Hubs, and Marginal Street Community–Industry Seam Improvements." },
   { years: "2018–19", org: "Signify", role: "Experiential design research", body: "Gesture-controlled task lighting, bio-responsive systems, and waterfront experience planning across light, place, and interaction." },
 ];
 
@@ -56,16 +56,15 @@ export default function AboutPage() {
 
         <div className="about-resume__heading about-resume__heading--closing"><h2><em>Hope this finds you well.</em></h2></div>
         <div className="about-closing-note">
-          <p>At the end of the day, I want to be making excellent work.</p>
+          <p>I want to be make excellent work.</p>
           <p>I&apos;ve spent my years trying to stay ahead of the next one by being a sponge.</p>
           <p>Everyone&apos;s a great teacher if you&apos;re a good listener.</p>
-          <p><em>Thank you!</em></p>
-          <p><em>Take care!</em></p>
+          <p><em>Thank you!</em><br /><em>Take care!</em></p>
         </div>
       </section>
 
       <footer className="site-footer">
-        <a href="mailto:patrickdawsono@gmail.com">contact: patrickdawsono@gmail.com</a>
+        <a href="mailto:patrickdawsono@gmail.com">patrickdawsono@gmail.com</a>
         <a className="footer-linkedin" href="https://www.linkedin.com/in/patrick-dawson/" target="_blank" rel="noreferrer" aria-label="Patrick Dawson on LinkedIn">
           <svg aria-hidden="true" viewBox="0 0 24 24"><rect width="24" height="24" rx="2"/><circle cx="6.5" cy="7" r="1.5"/><path d="M5 10h3v9H5zm5 0h2.8v1.25h.04c.39-.74 1.35-1.52 2.78-1.52 2.98 0 3.53 1.96 3.53 4.51V19h-3v-4.22c0-1.01-.02-2.3-1.4-2.3-1.4 0-1.62 1.1-1.62 2.23V19h-3z"/></svg>
         </a>

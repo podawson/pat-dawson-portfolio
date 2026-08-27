@@ -118,6 +118,8 @@
   }
 
   .field-node.is-related {
+    background: transparent !important;
+    box-shadow: none !important;
     color: rgba(245,241,232,.8);
     opacity: 1;
   }

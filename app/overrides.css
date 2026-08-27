@@ -132,4 +132,10 @@
     opacity: 0 !important;
     visibility: hidden !important;
   }
+
+  .field.is-constellation .field-body-3d,
+  .field.is-constellation .field-nodes,
+  .field.is-constellation .field-axes {
+    transform: translateY(28px);
+  }
 }

@@ -117,6 +117,12 @@
     letter-spacing: .055em;
   }
 
+  .field-axis--atmosphere,
+  .field-axis--architecture {
+    transform: translate(-50%, -50%) rotate(var(--axis-angle, -90deg)) !important;
+    transform-origin: center;
+  }
+
   .field-node.is-related {
     background: transparent !important;
     box-shadow: none !important;

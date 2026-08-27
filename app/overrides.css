@@ -138,4 +138,40 @@
   .field.is-constellation .field-axes {
     transform: translateY(28px);
   }
+
+  .field.is-constellation .field-relation-filter {
+    display: none;
+  }
+
+  .map-selection-band {
+    align-content: center;
+    gap: 8px 10px;
+    grid-template-columns: 38px minmax(0,1fr);
+    grid-template-rows: 38px 40px;
+    height: 110px;
+    min-height: 110px;
+    padding: 12px 14px;
+  }
+
+  .map-selection-band__image {
+    grid-column: 1;
+    grid-row: 1;
+    height: 38px;
+    width: 38px;
+  }
+
+  .map-selection-band__identity {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .map-selection-band__relations {
+    display: none;
+  }
+
+  .map-selection-band__open {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+  }
 }

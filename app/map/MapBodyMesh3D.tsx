@@ -433,14 +433,17 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     function updateSelection(now: number) {
       const active = activeSlugRef.current;
       const activeIndex = active ? nodeBySlug.get(active) : undefined;
+      const relatedHighlights = window.matchMedia("(max-width: 580px)").matches
+        ? []
+        : highlightedNeighborsRef.current;
       // Keying the projected relation field by both source and destinations prevents
       // a shared neighbor set from leaving the previous source (notably Vanderbilt)
       // visually latched after the active project changes.
-      const relationKey = `${active ?? "none"}:${highlightedNeighborsRef.current.join(",")}`;
+      const relationKey = `${active ?? "none"}:${relatedHighlights.join(",")}`;
       if (relationKey !== lastRelationKey) {
         relatedPoints.forEach((point) => point.set(99, 99, 99));
         if (activeIndex !== undefined) {
-          const neighbors = new Set<number>(highlightedNeighborsRef.current.flatMap((slug) => {
+          const neighbors = new Set<number>(relatedHighlights.flatMap((slug) => {
             const index = nodeBySlug.get(slug);
             return index === undefined ? [] : [index];
           }));

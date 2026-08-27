@@ -31,9 +31,10 @@ export default function AboutPage() {
           <h1>First Person</h1>
         </div>
         <div className="about-hero__body">
-          <p>I work where a lot of different things fuse together and become one deliverable.</p>
-          <p>My background begins in physical space and extends through fabrication, product management, experiential systems, AI workflows, and cultural experiments.</p>
-          <p>A fondness for the pre-existing flows through all my endeavors as does a transparency of my motivating design drivers for each and every output.</p>
+          <p>I live where many different things fuse into one deliverable.</p>
+          <p>My background begins in physical space and extends through fabrication, cultural experiments, product management, experiential systems, AI workflows, and agentic orchestration.</p>
+          <p>People read these as different practices. They are one method meeting different constraints.</p>
+          <p>The method that builds an AI character is the method that draws the light housings for a historic bridge, cuts a music video, and delivers a generative system inside a Manhattan tower. I don&apos;t see a difference.</p>
         </div>
         <div className="about-play-interactive">
           <WaterStudy embedded />
@@ -41,7 +42,7 @@ export default function AboutPage() {
       </section>
 
       <section className="about-grid" aria-label="Practice principles">
-        <article><p className="micro">01 · Practice</p><h2>Work from what already exists.</h2><p>A site, archive, behavior, or half-working tool is never empty. I begin by making its existing conditions usable.</p></article>
+        <article><p className="micro">01 · Salvage</p><h2>Work from what already exists.</h2><p>A site, archive, behavior, or half-working tool is never empty. I begin by making its existing conditions usable.</p></article>
         <article><p className="micro">02 · Figure</p><h2>Reason through the artifact.</h2><p>The drawing, model, deck, or diagram is where the problem gets worked out, not where the finished idea is announced.</p></article>
         <article><p className="micro">03 · Broker</p><h2>Build a shared language.</h2><p>I construct the terms and intermediary artifacts that let separate disciplines understand one another and act together.</p></article>
         <article><p className="micro">04 · Temper</p><h2>Design beyond the handoff.</h2><p>The work meets unanticipated conditions and untrained hands. What survives becomes more useful while its decisions remain legible.</p></article>
@@ -56,7 +57,7 @@ export default function AboutPage() {
 
         <div className="about-resume__heading about-resume__heading--closing"><h2><em>Hope this finds you well.</em></h2></div>
         <div className="about-closing-note">
-          <p>I want to be make excellent work.</p>
+          <p>I want to make excellent work.</p>
           <p>I&apos;ve spent my years trying to stay ahead of the next one by being a sponge.</p>
           <p>Everyone&apos;s a great teacher if you&apos;re a good listener.</p>
           <p><em>Thank you!</em><br /><em>Take care!</em></p>

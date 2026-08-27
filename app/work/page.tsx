@@ -8,7 +8,6 @@ export default function WorkPage() {
       <section className="page-intro page-intro--work route-intro">
         <p className="kicker">WORK</p>
         <h1>Selected curation</h1>
-        <p className="page-intro__lede">Filter or don&apos;t</p>
       </section>
       <section className="work-index" aria-label="Project Index">
         <ProjectGrid />

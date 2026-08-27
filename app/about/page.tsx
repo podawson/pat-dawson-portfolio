@@ -26,15 +26,14 @@ export default function AboutPage() {
     <main className="about-page">
       <SiteHeader inverse />
       <section className="about-hero">
-        <div className="route-intro">
+        <div className="route-intro about-hero__heading">
           <p className="kicker">ABOUT</p>
           <h1>First Person</h1>
-          <p className="about-intro-note page-intro__lede"><em>I wrote this part</em></p>
-          <div className="about-hero__body">
-            <p>I work where a lot of different things fuse together and become one deliverable.</p>
-            <p>My background begins in physical space and extends through fabrication, product management, experiential systems, AI workflows, and cultural experiments.</p>
-            <p>A fondness for the pre-existing flows through all my endeavors as does a transparency of my motivating design drivers for each and every output.</p>
-          </div>
+        </div>
+        <div className="about-hero__body">
+          <p>I work where a lot of different things fuse together and become one deliverable.</p>
+          <p>My background begins in physical space and extends through fabrication, product management, experiential systems, AI workflows, and cultural experiments.</p>
+          <p>A fondness for the pre-existing flows through all my endeavors as does a transparency of my motivating design drivers for each and every output.</p>
         </div>
         <div className="about-play-interactive">
           <WaterStudy embedded />

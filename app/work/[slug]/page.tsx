@@ -261,9 +261,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       item.src !== project.image &&
       items.findIndex((candidate) => candidate.src === item.src) === index,
   );
-  const openingMedia = project.slug === "ouellette-bridge" ? [] : gallery.slice(0, 1);
+  const openingMedia = ["ouellette-bridge", "release-intelligence"].includes(project.slug) ? [] : gallery.slice(0, 1);
   const narrativeMedia =
     project.slug === "ouellette-bridge"
+      ? gallery.slice(0, 2)
+      : project.slug === "release-intelligence"
       ? gallery.slice(0, 2)
       : project.slug === "charlesgate-park" || project.slug === "flower-tower"
       ? gallery.slice(1, 2)

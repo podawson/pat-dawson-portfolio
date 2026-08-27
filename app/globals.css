@@ -854,7 +854,7 @@ img { display: block; width: 100%; }
 .index-preview--diagram img { object-fit: contain; }
 .index-preview > .micro { color: var(--muted); margin-top: 18px; }
 .index-preview h2 { font-family: var(--display); font-size: 31px; font-weight: 400; letter-spacing: -.035em; margin: 8px 0; }
-.index-preview > p:not(.micro) { color: var(--muted); font-size: 12px; line-height: 1.5; margin-bottom: 20px; max-width: 540px; }
+.index-preview > p:not(.micro) { color: var(--muted); font-size: 13px; line-height: 1.5; margin-bottom: 20px; max-width: 540px; }
 .index-preview .tag-row span { font-size: 10px; }
 .index-preview > a { display: block; font-family: var(--mono); font-size: 10px; margin-top: 22px; text-transform: uppercase; width: fit-content; }
 .index-connector { inset: 0; overflow: visible; pointer-events: none; position: absolute; z-index: 2; }

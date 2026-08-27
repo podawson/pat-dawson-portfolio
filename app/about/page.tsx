@@ -33,7 +33,7 @@ export default function AboutPage() {
         <div className="about-hero__body">
           <p>I live where many different things fuse into one deliverable.</p>
           <p>My background begins in physical space and extends through fabrication, cultural experiments, product management, experiential systems, AI workflows, and agentic orchestration.</p>
-          <p>People read these as different practices. They are one method meeting different constraints.</p>
+          <p>People read these as unrelated. They are one method meeting various constraints.</p>
           <p>The method that builds an AI character is the method that draws the light housings for a historic bridge, cuts a music video, and delivers a generative system inside a Manhattan tower. I don&apos;t see a difference.</p>
         </div>
         <div className="about-play-interactive">

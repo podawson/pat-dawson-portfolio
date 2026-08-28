@@ -554,6 +554,7 @@ export const projectConnections: ProjectConnection[] = [
   { from: "wework-conversions", to: "release-intelligence", kind: "handoff", reason: "Expert judgment becomes an auditable playbook another team can operate." },
   { from: "confidential-client", to: "vanderbilt-passage", kind: "handoff", reason: "First-of-kind systems pass into construction, compliance, and public operation." },
   { from: "release-intelligence", to: "gleanings", kind: "handoff", reason: "Both workflows preserve the evidence and reasoning another operator needs to act." },
+  { from: "gymnast-cobot", to: "release-intelligence", kind: "handoff", reason: "A coordinated motion and safety system has to function for performers and operators without its authors present." },
   { from: "caleta", to: "ouellette-bridge", kind: "handoff", reason: "Design intent becomes a coordinated package that fabricators and field teams can execute without its author present." },
   { from: "bodega", to: "caleta", kind: "handoff", reason: "A finish and fixture package has to reach an install crew that can execute it without the designer on site." },
   { from: "richardson-plaza", to: "ouellette-bridge", kind: "handoff", reason: "A coordinated drawing set has to survive years of revision and still reach a contractor able to build from it directly." },
@@ -564,17 +565,17 @@ export const projectConnections: ProjectConnection[] = [
   { from: "gymnast-cobot", to: "release-intelligence", kind: "cede", reason: "Automation proposes; an accountable person confirms the consequential action." },
   { from: "gymnast-cobot", to: "gleanings", kind: "cede", reason: "Machine intelligence routes attention while judgment remains with the worker." },
   { from: "gleanings", to: "aintivirus", kind: "cede", reason: "A bounded corpus shapes behavior while live users determine the conversation." },
-  { from: "hyperstructures", to: "confidential-client", kind: "cede", reason: "Generative volume only becomes meaningful once human judgment decides what to keep." },
+  { from: "wework-conversions", to: "confidential-client", kind: "cede", reason: "The playbook sets shared constraints while local teams decide how they are applied." },
+  { from: "string", to: "aintivirus", kind: "cede", reason: "The system surfaces opportunity while each trader decides whether capital moves." },
   { from: "quaranzine", to: "flower-tower", kind: "cede", reason: "An open call sets the frame; contributors determine what actually fills it." },
 
   // Uphold: a prior record had authority and could not simply be rewritten.
   { from: "charlesgate-park", to: "ouellette-bridge", kind: "uphold", reason: "Both answer to physical and historical records that predate the brief." },
   { from: "ouellette-bridge", to: "vanderbilt-passage", kind: "uphold", reason: "New work remains accountable to an inherited architectural record." },
+  { from: "richardson-plaza", to: "ouellette-bridge", kind: "uphold", reason: "New public work remains accountable to inherited civic fabric and historical records." },
   { from: "vanderbilt-passage", to: "mapping-investments", kind: "uphold", reason: "The archive is a design authority rather than raw material to overwrite." },
-  { from: "gymnast-cobot", to: "mapping-investments", kind: "uphold", reason: "Evidence and constraints remain visible while a new system is introduced." },
   { from: "mapping-investments", to: "aintivirus", kind: "uphold", reason: "A source record bounds what the new interpretive layer is allowed to claim." },
   { from: "88-east-broadway", to: "aintivirus", kind: "uphold", reason: "An inherited source record constrains what the project is allowed to propose or claim." },
-  { from: "hyperstructures", to: "mapping-investments", kind: "uphold", reason: "A prior formal record (archival or mathematical) is treated as an authority, not material free to overwrite." },
 
   // Quorum: independent parties could each have stopped the work.
   { from: "charlesgate-park", to: "caleta", kind: "quorum", reason: "Public, regulatory, ownership, and technical constituencies define the design envelope together." },
@@ -585,6 +586,7 @@ export const projectConnections: ProjectConnection[] = [
 
   // Graft: new work enters a system that is already operating.
   { from: "charlesgate-park", to: "88-east-broadway", kind: "graft", reason: "The intervention enters a living civic or residential condition without suspending it." },
+  { from: "richardson-plaza", to: "charlesgate-park", kind: "graft", reason: "A new public intervention is inserted into a civic condition that remains active around it." },
   { from: "charlesgate-park", to: "mapping-investments", kind: "graft", reason: "New decision infrastructure is attached to an existing public record." },
   { from: "mapping-investments", to: "string", kind: "graft", reason: "A live stream of evidence gains a new interpretive layer without stopping the underlying system." },
   { from: "string", to: "aintivirus", kind: "graft", reason: "Both products entered fast-moving public communities that were already operating." },

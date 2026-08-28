@@ -588,6 +588,7 @@ export const projectConnections: ProjectConnection[] = [
   { from: "charlesgate-park", to: "88-east-broadway", kind: "graft", reason: "The intervention enters a living civic or residential condition without suspending it." },
   { from: "richardson-plaza", to: "charlesgate-park", kind: "graft", reason: "A new public intervention is inserted into a civic condition that remains active around it." },
   { from: "charlesgate-park", to: "mapping-investments", kind: "graft", reason: "New decision infrastructure is attached to an existing public record." },
+  { from: "hyperstructures", to: "string", kind: "graft", reason: "Generative logic is attached to an information system already moving at full speed." },
   { from: "mapping-investments", to: "string", kind: "graft", reason: "A live stream of evidence gains a new interpretive layer without stopping the underlying system." },
   { from: "string", to: "aintivirus", kind: "graft", reason: "Both products entered fast-moving public communities that were already operating." },
   { from: "bodega", to: "88-east-broadway", kind: "graft", reason: "Each activation enters a convention floor or art fair that is already running, without pausing it to make room." },

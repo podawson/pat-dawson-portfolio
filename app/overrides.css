@@ -119,8 +119,15 @@
 
   .field-axis--atmosphere,
   .field-axis--architecture {
-    transform: translate(-50%, -50%) rotate(var(--axis-angle, -90deg)) !important;
     transform-origin: center;
+  }
+
+  .field-axis--atmosphere {
+    transform: translate(-50%, -115%) rotate(var(--axis-angle, -90deg)) !important;
+  }
+
+  .field-axis--architecture {
+    transform: translate(-50%, 15%) rotate(var(--axis-angle, -90deg)) !important;
   }
 
   .field-node.is-related {

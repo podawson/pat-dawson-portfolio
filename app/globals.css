@@ -1318,24 +1318,18 @@ img { display: block; width: 100%; }
   }
 
   .field-axis--story {
-    left: 0 !important;
-    transform: translate(0, -50%) !important;
+    transform: translate(-105%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--compute {
-    left: 100% !important;
-    transform: translate(-100%, -50%) !important;
+    transform: translate(5%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--atmosphere {
-    left: 50% !important;
-    top: 48px !important;
-    transform: translate(-50%, 0) !important;
+    transform: translate(-50%, -115%) rotate(var(--axis-angle, -90deg)) !important;
   }
 
   .field-axis--architecture {
-    left: 50% !important;
-    top: calc(100% - 48px) !important;
-    transform: translate(-50%, -100%) !important;
+    transform: translate(-50%, 15%) rotate(var(--axis-angle, -90deg)) !important;
   }
 }

@@ -1318,11 +1318,11 @@ img { display: block; width: 100%; }
   }
 
   .field-axis--story {
-    transform: translate(-105%, -50%) rotate(var(--axis-angle, 0deg)) !important;
+    transform: translate(-50%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--compute {
-    transform: translate(5%, -50%) rotate(var(--axis-angle, 0deg)) !important;
+    transform: translate(-50%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--atmosphere {

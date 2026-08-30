@@ -175,10 +175,14 @@ const fragmentShader = `
     vec3 quietColor = color * 0.34;
     color = mix(color, quietColor, (1.0 - filterMask) * filterPresence * 0.56);
     color = mix(color, relationshipHue, filterMask * filterPresence * 0.46);
-    vec3 baseSelectionHighlight = min(color * 1.90, vec3(1.0));
+    float selectionPresence = smoothstep(0.02, 0.98, uSelection);
+    float localSelection = clamp(vSelectionHeat, 0.0, 1.0);
+    float farField = (1.0 - smoothstep(0.01, 0.35, localSelection)) * selectionPresence;
+    color *= 1.0 - farField * 0.22;
+    vec3 baseSelectionHighlight = min(color * 6.00, vec3(1.0));
     vec3 filterSelectionHighlight = mix(relationshipHue, vec3(1.0), 0.35);
     vec3 selectionHighlight = mix(baseSelectionHighlight, filterSelectionHighlight, filterPresence);
-    float selectionAmount = clamp(vSelectionHeat * 0.68 + uSelectionBloom * vSelectionHeat * 0.18, 0.0, 0.48);
+    float selectionAmount = clamp(localSelection * 0.92 + uSelectionBloom * localSelection * 0.12, 0.0, 0.78);
     color = mix(color, selectionHighlight, selectionAmount);
 
     gl_FragColor = vec4(color, 1.0);

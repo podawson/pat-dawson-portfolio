@@ -754,7 +754,7 @@ img { display: block; width: 100%; }
 .field-active-connections { height: 100%; inset: 0; overflow: visible; pointer-events: none; position: absolute; width: 100%; z-index: 4; }
 .field-active-connections line { vector-effect: non-scaling-stroke; }
 .field-active-connection-glow { opacity: .12; stroke: var(--relation-color); stroke-linecap: round; stroke-width: 7px; }
-.field-active-connection-dash { animation: relation-drift 3.2s linear infinite; filter: drop-shadow(0 0 6px var(--relation-color)); opacity: .72; stroke: var(--relation-color); stroke-dasharray: .01px 30px; stroke-linecap: round; stroke-width: 6px; }
+.field-active-connection-dash { animation: relation-drift 3.2s linear infinite; filter: drop-shadow(0 0 4px var(--relation-color)); opacity: .72; stroke: var(--relation-color); stroke-dasharray: .01px 30px; stroke-linecap: round; stroke-width: 4px; }
 @keyframes relation-drift { to { stroke-dashoffset: -30px; } }
 .field-selected-geometry { height: 100%; inset: 0; pointer-events: none; position: absolute; width: 100%; z-index: 3; }
 .field-copy { left: 4.2vw; max-width: 255px; pointer-events: none; position: absolute; top: 104px; z-index: 8; }

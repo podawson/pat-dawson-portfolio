@@ -698,7 +698,6 @@ export function Constellation() {
             const toIndex = projects.findIndex((project) => project.slug === connection.neighbor?.slug);
             return (
               <g key={`${connection.from}-${connection.to}-${connection.kind}`} style={{ "--relation-color": relationColor[connection.kind] } as CSSProperties}>
-                <line className="field-active-connection-glow" data-from-index={fromIndex} data-to-index={toIndex} />
                 <line className="field-active-connection-dash" data-from-index={fromIndex} data-to-index={toIndex} />
               </g>
             );

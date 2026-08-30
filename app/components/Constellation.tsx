@@ -5,11 +5,11 @@ import { projectConnections, projects, type ConnectionKind } from "../data";
 import { MapBody3D } from "../map/MapBodyMesh3D";
 
 const relationColor: Record<ConnectionKind, string> = {
-  handoff: "#f58a61",
-  cede: "#72d9e8",
-  uphold: "#a6a7ff",
-  quorum: "#e4c85d",
-  graft: "#63c99a",
+  handoff: "#D63C49",
+  cede: "#B85C91",
+  uphold: "#5445A3",
+  quorum: "#E0B036",
+  graft: "#3A9971",
 };
 
 const relationLabel: Record<ConnectionKind, string> = {

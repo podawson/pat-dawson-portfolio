@@ -189,6 +189,7 @@ const fragmentShader = `
     color = mix(color, pearl, clamp(vSelectionHeat * 0.68 + uSelectionBloom * vSelectionHeat * 0.18, 0.0, 0.78));
 
     gl_FragColor = vec4(color, 1.0);
+    #include <colorspace_fragment>
   }
 `;
 

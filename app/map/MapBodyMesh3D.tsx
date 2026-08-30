@@ -143,6 +143,12 @@ const fragmentShader = `
     return heat * uSelection;
   }
 
+  vec3 sRGBToLinear(vec3 srgbColor) {
+    vec3 higher = pow((srgbColor + 0.055) / 1.055, vec3(2.4));
+    vec3 lower = srgbColor / 12.92;
+    return mix(higher, lower, vec3(lessThanEqual(srgbColor, vec3(0.04045))));
+  }
+
   void main() {
     vec3 normal = normalize(vWorldNormal);
     vec3 viewDirection = normalize(vViewPosition);
@@ -154,13 +160,13 @@ const fragmentShader = `
     float fresnel = pow(1.0 - max(dot(normal, viewDirection), 0.0), 2.7);
     float depthTone = clamp(vLocalPosition.z * 0.27 + vLocalPosition.y * 0.09 + 0.50, 0.0, 1.0);
 
-    vec3 graphite = vec3(0.018, 0.029, 0.070);
-    vec3 deepBlue = vec3(0.052, 0.082, 0.205);
-    vec3 indigo = vec3(0.105, 0.150, 0.360);
-    vec3 facetBlue = vec3(0.105, 0.355, 0.650);
-    vec3 violet = vec3(0.215, 0.225, 0.540);
-    vec3 cyan = vec3(0.245, 0.790, 0.940);
-    vec3 pearl = vec3(0.760, 0.875, 0.950);
+    vec3 graphite = sRGBToLinear(vec3(0.018, 0.029, 0.070));
+    vec3 deepBlue = sRGBToLinear(vec3(0.052, 0.082, 0.205));
+    vec3 indigo = sRGBToLinear(vec3(0.105, 0.150, 0.360));
+    vec3 facetBlue = sRGBToLinear(vec3(0.105, 0.355, 0.650));
+    vec3 violet = sRGBToLinear(vec3(0.215, 0.225, 0.540));
+    vec3 cyan = sRGBToLinear(vec3(0.245, 0.790, 0.940));
+    vec3 pearl = sRGBToLinear(vec3(0.760, 0.875, 0.950));
 
     vec3 color = mix(graphite, deepBlue, 0.42 + depthTone * 0.34);
     float longWrinkle = sin(vLocalPosition.x * 18.0 + sin(vLocalPosition.y * 7.0) * 1.8 + vLocalPosition.z * 13.0);
@@ -182,11 +188,13 @@ const fragmentShader = `
     float filterPresence = mix(uPreviousFilterActive, uFilterActive, smoothstep(0.0, 1.0, uFilterTransition));
     float filterMask = smoothstep(0.06, 0.66, vFilterHeat);
     vec3 relationshipHue = mix(uPreviousFilterColor, uFilterColor, smoothstep(0.0, 1.0, uFilterTransition));
-    float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
-    vec3 quietColor = mix(vec3(luminance), graphite, 0.42);
+    vec3 quietColor = color * 0.34;
     color = mix(color, quietColor, (1.0 - filterMask) * filterPresence * 0.56);
     color = mix(color, relationshipHue, filterMask * filterPresence * 0.46);
-    color = mix(color, pearl, clamp(vSelectionHeat * 0.68 + uSelectionBloom * vSelectionHeat * 0.18, 0.0, 0.78));
+    vec3 selectionBase = mix(indigo, relationshipHue, filterPresence);
+    vec3 selectionHighlight = mix(selectionBase, vec3(1.0), 0.35);
+    float selectionAmount = clamp(vSelectionHeat * 0.68 + uSelectionBloom * vSelectionHeat * 0.18, 0.0, 0.48);
+    color = mix(color, selectionHighlight, selectionAmount);
 
     gl_FragColor = vec4(color, 1.0);
     #include <colorspace_fragment>

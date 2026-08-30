@@ -504,7 +504,7 @@ img { display: block; width: 100%; }
   .field-body-3d, .field-nodes, .field-axes,
   .field.is-constellation .field-body-3d, .field.is-constellation .field-nodes, .field.is-constellation .field-axes { transform: none; }
   .field-node, .field-node:hover, .field-node:focus-visible, .field-node.is-active { background: transparent; min-height: 44px; min-width: 44px; transform: translate(-50%,-50%); }
-  .field-node::before { background: rgba(245,241,232,.17); border-radius: 50%; content: ""; height: 25px; inset: 50% auto auto 50%; position: absolute; transform: translate(-50%,-50%); transition: background .2s ease, transform .2s ease; width: 25px; }
+  .field-node::before { background: rgba(245,241,232,.17); border-radius: 50%; content: ""; height: 20px; inset: 50% auto auto 50%; position: absolute; transform: translate(-50%,-50%); transition: background .2s ease, transform .2s ease; width: 20px; }
   .field-node:hover::before, .field-node:focus-visible::before, .field-node.is-related::before { background: rgba(166,205,255,.3); transform: translate(-50%,-50%) scale(1.1); }
   .field-node.is-active::before { background: rgba(245,241,232,.42); transform: translate(-50%,-50%) scale(1.18); }
   .field-node__mobile-index { display: block; font-family: var(--mono); font-size: 7px; pointer-events: none; position: relative; z-index: 1; }
@@ -1035,7 +1035,7 @@ img { display: block; width: 100%; }
   .field-axis--atmosphere { transform: translate(-50%,-94%) rotate(var(--axis-angle,-90deg)); }
   .field-axis--architecture { transform: translate(-50%,-6%) rotate(var(--axis-angle,-90deg)); }
   .field-node, .field-node:hover, .field-node:focus-visible, .field-node.is-active { background: transparent; min-height: 44px; min-width: 44px; transform: translate(-50%,-50%); }
-  .field-node::before { background: rgba(245,241,232,.17); border-radius: 50%; content: ""; height: 25px; inset: 50% auto auto 50%; position: absolute; transform: translate(-50%,-50%); transition: background .2s ease, transform .2s ease; width: 25px; }
+  .field-node::before { background: rgba(245,241,232,.17); border-radius: 50%; content: ""; height: 20px; inset: 50% auto auto 50%; position: absolute; transform: translate(-50%,-50%); transition: background .2s ease, transform .2s ease; width: 20px; }
   .field-node:hover::before, .field-node:focus-visible::before, .field-node.is-related::before { background: rgba(166,205,255,.3); transform: translate(-50%,-50%) scale(1.1); }
   .field-node.is-active::before { background: rgba(245,241,232,.42); transform: translate(-50%,-50%) scale(1.18); }
   .field-node__mobile-index { display: block; font-family: var(--mono); font-size: 7px; pointer-events: none; position: relative; z-index: 1; }

@@ -89,20 +89,20 @@ const vertexShader = `
     float previousDistance = length(position - uPreviousPoint);
     float transitionIn = smoothstep(0.02, 0.96, uSelectionTransition);
     float transitionOut = 1.0 - smoothstep(0.04, 0.90, uSelectionTransition);
-    float broadHeat = (exp(-selectedDistance * selectedDistance * 2.35) * transitionIn + exp(-previousDistance * previousDistance * 2.35) * transitionOut) * smoothstep(0.0, 0.72, uSelection);
-    float localHeat = (exp(-selectedDistance * selectedDistance * 7.2) * transitionIn + exp(-previousDistance * previousDistance * 7.2) * transitionOut) * smoothstep(0.24, 1.0, uSelection);
+    float broadHeat = (exp(-selectedDistance * selectedDistance * 12.0) * transitionIn + exp(-previousDistance * previousDistance * 12.0) * transitionOut) * smoothstep(0.0, 0.72, uSelection);
+    float localHeat = (exp(-selectedDistance * selectedDistance * 28.0) * transitionIn + exp(-previousDistance * previousDistance * 28.0) * transitionOut) * smoothstep(0.24, 1.0, uSelection);
     float waveRadius = mix(0.78, 0.18, uSelection);
     float travellingWave = exp(-pow(selectedDistance - waveRadius, 2.0) * 46.0) * uSelectionBloom;
     float previousFilterHeat = emphasizedField(position, true);
     float nextFilterHeat = emphasizedField(position, false);
     float filterHeat = mix(previousFilterHeat, nextFilterHeat, smoothstep(0.0, 1.0, uFilterTransition));
-    float selectionHeat = 1.0 - corpusSmoothMin(1.0 - broadHeat * 0.42, 1.0 - localHeat, 0.08);
+    float selectionHeat = clamp(localHeat, 0.0, 1.0);
     float filterSwell = smoothstep(0.32, 0.78, filterHeat);
     float filterAura = smoothstep(0.05, 0.50, filterHeat);
     float filterBaseline = mix(uPreviousFilterActive, uFilterActive, smoothstep(0.0, 1.0, uFilterTransition));
     vec3 filterDirection = normalize(mix(uPreviousFilterColor, uFilterColor, smoothstep(0.0, 1.0, uFilterTransition)) * 2.0 - 1.0 + vec3(0.21, -0.12, 0.17));
     float filterMorph = filterBaseline * (sin(dot(position, filterDirection) * 8.0) * 0.007 + dot(normalize(position + vec3(0.001)), filterDirection) * 0.005);
-    transformed += normalize(normal) * (filterBaseline * 0.026 + filterMorph + filterSwell * 0.060 + filterAura * 0.012 + broadHeat * 0.026 + localHeat * 0.073 + travellingWave * 0.018);
+    transformed += normalize(normal) * (filterBaseline * 0.026 + filterMorph + filterSwell * 0.060 + filterAura * 0.012 + broadHeat * 0.012 + localHeat * 0.055 + travellingWave * 0.018);
 
     vec4 viewPosition = modelViewMatrix * vec4(transformed, 1.0);
     vLocalPosition = transformed;
@@ -116,10 +116,6 @@ const vertexShader = `
 
 const fragmentShader = `
   precision highp float;
-  #define MAX_RELATED ${MAX_RELATED}
-
-  uniform vec3 uRelatedPoints[MAX_RELATED];
-  uniform float uRelatedCount;
   uniform float uSelection;
   uniform float uSelectionBloom;
   uniform vec3 uFilterColor;
@@ -132,16 +128,6 @@ const fragmentShader = `
   varying vec3 vViewPosition;
   varying float vSelectionHeat;
   varying float vFilterHeat;
-
-  float relatedHeat(vec3 point) {
-    float heat = 0.0;
-    for (int index = 0; index < MAX_RELATED; index++) {
-      if (float(index) >= uRelatedCount) break;
-      float distanceToPoint = length(point - uRelatedPoints[index]);
-      heat += exp(-distanceToPoint * distanceToPoint * 10.0) * 0.38;
-    }
-    return heat * uSelection;
-  }
 
   vec3 sRGBToLinear(vec3 srgbColor) {
     vec3 higher = pow((srgbColor + 0.055) / 1.055, vec3(2.4));
@@ -165,7 +151,6 @@ const fragmentShader = `
     vec3 indigo = sRGBToLinear(vec3(0.105, 0.150, 0.360));
     vec3 facetBlue = sRGBToLinear(vec3(0.105, 0.355, 0.650));
     vec3 violet = sRGBToLinear(vec3(0.215, 0.225, 0.540));
-    vec3 cyan = sRGBToLinear(vec3(0.245, 0.790, 0.940));
     vec3 pearl = sRGBToLinear(vec3(0.760, 0.875, 0.950));
 
     vec3 color = mix(graphite, deepBlue, 0.42 + depthTone * 0.34);
@@ -184,15 +169,15 @@ const fragmentShader = `
     color += pearl * wrappedLight * 0.10;
     color *= 1.0 + unifiedTexture;
     color += mix(violet, facetBlue, depthTone) * fresnel * 0.46;
-    color = mix(color, cyan, clamp(relatedHeat(vLocalPosition), 0.0, 0.38));
     float filterPresence = mix(uPreviousFilterActive, uFilterActive, smoothstep(0.0, 1.0, uFilterTransition));
     float filterMask = smoothstep(0.06, 0.66, vFilterHeat);
     vec3 relationshipHue = mix(uPreviousFilterColor, uFilterColor, smoothstep(0.0, 1.0, uFilterTransition));
     vec3 quietColor = color * 0.34;
     color = mix(color, quietColor, (1.0 - filterMask) * filterPresence * 0.56);
     color = mix(color, relationshipHue, filterMask * filterPresence * 0.46);
-    vec3 selectionBase = mix(indigo, relationshipHue, filterPresence);
-    vec3 selectionHighlight = mix(selectionBase, vec3(1.0), 0.35);
+    vec3 baseSelectionHighlight = min(color * 1.90, vec3(1.0));
+    vec3 filterSelectionHighlight = mix(relationshipHue, vec3(1.0), 0.35);
+    vec3 selectionHighlight = mix(baseSelectionHighlight, filterSelectionHighlight, filterPresence);
     float selectionAmount = clamp(vSelectionHeat * 0.68 + uSelectionBloom * vSelectionHeat * 0.18, 0.0, 0.48);
     color = mix(color, selectionHighlight, selectionAmount);
 

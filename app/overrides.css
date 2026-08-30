@@ -67,6 +67,11 @@
   pointer-events: auto;
 }
 
+.field-axis--story,
+.field-axis--compute {
+  transform: translate(-50%, -50%) rotate(var(--axis-angle, 0deg)) !important;
+}
+
 .map-selection-band__image {
   aspect-ratio: 1;
   background: #050709;

@@ -552,11 +552,11 @@ export function Constellation() {
       const label = layer.querySelector<HTMLElement>(`[data-axis-label="${key}"]`);
       if (!label) return;
       const horizontal = key === "story" || key === "compute";
-      const safeX = mobile ? positions[key].x : horizontal
-        ? Math.max(12, Math.min(88, positions[key].x))
+      const safeX = mobile || horizontal
+        ? positions[key].x
         : Math.max(6, Math.min(94, positions[key].x));
-      const safeY = mobile ? positions[key].y : horizontal
-        ? Math.max(10, Math.min(90, positions[key].y))
+      const safeY = mobile || horizontal
+        ? positions[key].y
         : Math.max(9, Math.min(91, positions[key].y));
       label.style.left = `${safeX}%`;
       label.style.top = `${safeY}%`;

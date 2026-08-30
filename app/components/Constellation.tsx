@@ -7,8 +7,8 @@ import { MapBody3D } from "../map/MapBodyMesh3D";
 const relationColor: Record<ConnectionKind, string> = {
   handoff: "#D63C49",
   cede: "#B85C91",
-  uphold: "#5445A3",
-  quorum: "#E0B036",
+  uphold: "#7A3FAE",
+  quorum: "#FFC94D",
   graft: "#3A9971",
 };
 

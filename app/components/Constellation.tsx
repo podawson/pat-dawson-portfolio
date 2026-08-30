@@ -754,6 +754,7 @@ export function Constellation() {
           />
           <div className="map-selection-band__identity">
             <h2>{active.title}</h2>
+            <p className="map-selection-band__one-liner">{active.indexPill}</p>
           </div>
           <div className="map-selection-band__relations" aria-label="Related projects">
             {activeConnections.length ? activeConnections.map((connection) => (

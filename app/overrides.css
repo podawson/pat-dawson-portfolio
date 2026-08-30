@@ -46,7 +46,8 @@
 .field.is-constellation .map-corpus-tools {
   bottom: auto;
   right: 4.2vw;
-  top: 92px;
+  top: 148px;
+  transform: translateY(-50%);
 }
 
 .field.show-node-names .field-node > strong {
@@ -90,6 +91,10 @@
   white-space: nowrap;
 }
 
+.map-selection-band__one-liner {
+  display: none;
+}
+
 @media (max-width: 580px) {
   .field-node > strong { top: 100%; }
 
@@ -109,7 +114,7 @@
   .field.is-constellation .map-corpus-tools {
     bottom: auto;
     right: 14px;
-    top: 64px;
+    top: 99px;
   }
 
   .map-selection-band__image {
@@ -182,8 +187,31 @@
   }
 
   .map-selection-band__identity {
+    align-items: center;
+    display: grid;
+    gap: 10px;
     grid-column: 2;
     grid-row: 1;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  }
+
+  .map-selection-band__identity h2 {
+    font-size: 14px;
+  }
+
+  .map-selection-band__identity .map-selection-band__one-liner {
+    color: rgba(245,241,232,.56);
+    display: -webkit-box;
+    font-size: 7px;
+    letter-spacing: .025em;
+    line-height: 1.25;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: none;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .map-selection-band__relations {

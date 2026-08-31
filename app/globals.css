@@ -45,6 +45,7 @@
 
   --w-regular: 400;
   --w-medium: 500;
+  --w-semibold: 600;
   --w-bold: 700;
 
   --track-caps-sm: .12em;
@@ -105,7 +106,7 @@ img { display: block; width: 100%; }
   .site-header nav a { transition: none; }
 }
 
-.kicker, .micro { font-family: var(--mono); font-size: var(--t-300); font-weight: var(--w-bold); letter-spacing: var(--track-caps-lg); margin: 0; text-transform: uppercase; }
+.kicker, .micro { font-family: var(--mono); font-size: var(--t-300); font-weight: var(--w-semibold); letter-spacing: var(--track-caps-lg); margin: 0; text-transform: uppercase; }
 .kicker--light { color: rgba(245, 241, 232, .62); }
 .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag-row span { border: 1px solid currentColor; border-radius: 999px; font-family: var(--mono); font-size: var(--t-100); padding: 5px 8px; text-transform: uppercase; }
@@ -161,7 +162,7 @@ img { display: block; width: 100%; }
 .constellation-relations > p { margin-bottom: 5px; }
 .constellation-relations button { align-items: start; background: transparent; border: 0; color: inherit; cursor: pointer; display: grid; gap: 8px; grid-template-columns: 7px 1fr; padding: 7px 0; text-align: left; width: 100%; }
 .constellation-relations button i { border-radius: 50%; box-shadow: 0 0 8px currentColor; height: 5px; margin-top: 5px; width: 5px; }
-.constellation-relations button strong { display: block; font-size: var(--t-300); font-weight: var(--w-bold); margin-bottom: 2px; }
+.constellation-relations button strong { display: block; font-size: var(--t-300); font-weight: var(--w-semibold); margin-bottom: 2px; }
 .constellation-relations button small { color: rgba(245,241,232,.52); display: block; font-size: var(--t-100); line-height: var(--lh-label); }
 .constellation-card a { border-top: 1px solid rgba(245, 241, 232, .18); display: flex; font-size: var(--t-200); justify-content: space-between; margin-top: 15px; padding-top: 12px; text-transform: uppercase; }
 .constellation-scroll { bottom: 17px; color: rgba(245,241,232,.38); font-size: var(--t-100); left: 50%; position: absolute; transform: translateX(-50%); z-index: 10; }
@@ -214,7 +215,7 @@ img { display: block; width: 100%; }
 .project-hero__copy { align-self: center; padding: 80px 6vw; }
 .project-hero h1 { font-size: var(--t-display-md); margin: 30px 0 24px; }
 .project-hero__question { color: var(--rust); line-height: var(--lh-body); max-width: 620px; }
-.constellation-line { font-size: var(--t-200) !important; font-style: normal !important; font-weight: var(--w-bold); letter-spacing: var(--track-caps-sm); text-transform: uppercase; }
+.constellation-line { font-size: var(--t-200) !important; font-style: normal !important; font-weight: var(--w-semibold); letter-spacing: var(--track-caps-sm); text-transform: uppercase; }
 .project-hero__headline { font-size: var(--t-600); font-weight: var(--w-bold); line-height: var(--lh-body); max-width: 620px; }
 .project-hero__summary { color: var(--muted); line-height: var(--lh-body); max-width: 610px; }
 .project-hero__tags { margin-top: 24px; }
@@ -890,7 +891,7 @@ img { display: block; width: 100%; }
 .index-preview > a { display: block; font-family: var(--mono); font-size: var(--t-200); margin-top: 22px; text-transform: uppercase; width: fit-content; }
 .index-connector { inset: 0; overflow: visible; pointer-events: none; position: absolute; z-index: 2; }
 .index-connector path { animation: index-draw .12s ease both; fill: none; stroke: rgba(163,77,51,.75); stroke-dasharray: 1; stroke-dashoffset: 1; stroke-width: 1; }
-.index-connector__label { fill: rgba(255,255,255,.94); font-family: var(--sans); font-size: var(--t-400); font-weight: var(--w-bold); letter-spacing: var(--track-mixed); paint-order: stroke; stroke: rgba(9,11,13,.9); stroke-width: 3px; }
+.index-connector__label { fill: rgba(255,255,255,.94); font-family: var(--sans); font-size: var(--t-400); font-weight: var(--w-semibold); letter-spacing: var(--track-mixed); paint-order: stroke; stroke: rgba(9,11,13,.9); stroke-width: 3px; }
 @keyframes index-draw { to { stroke-dashoffset: 0; } }
 
 /* Work index: shared Map night system */

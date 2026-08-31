@@ -28,7 +28,7 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="route-intro about-hero__heading">
           <p className="kicker">About</p>
-          <h1>First Person</h1>
+          <h1>More Information</h1>
         </div>
         <div className="about-hero__body">
           <p>I live where many different things fuse into one deliverable.</p>

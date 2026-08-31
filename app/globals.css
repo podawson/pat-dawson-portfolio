@@ -26,6 +26,38 @@
   --display: var(--sans);
   --editorial: var(--sans);
   --serif: var(--display);
+
+  /* chrome */
+  --t-100: 9px;
+  --t-200: 10px;
+  --t-300: 11px;
+  /* prose */
+  --t-400: 13px;
+  --t-500: 15px;
+  --t-600: 18px;
+  /* subhead */
+  --t-700: 22px;
+  --t-800: 28px;
+  --t-900: 36px;
+  /* display */
+  --t-display-sm: clamp(31px, 3vw, 46px);
+  --t-display-md: clamp(42px, 5vw, 72px);
+  --t-display-lg: clamp(60px, 8vw, 112px);
+
+  --w-regular: 400;
+  --w-medium: 500;
+  --w-bold: 700;
+
+  --track-caps-sm: .12em;
+  --track-caps-lg: .08em;
+  --track-mixed: .02em;
+  --track-display: -.035em;
+
+  --lh-flat: 1;
+  --lh-tight: .95;
+  --lh-body: 1.55;
+  --lh-label: 1.5;
+
   --text-on-dark: #c9c9c4;
   --muted-on-dark: #858986;
 }

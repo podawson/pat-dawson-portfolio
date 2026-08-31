@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import "@fontsource-variable/instrument-sans";
-import "@fontsource-variable/instrument-sans/wght-italic.css";
-import "@fontsource-variable/martian-mono";
+import "@fontsource-variable/fraunces/full.css";
+import "@fontsource-variable/fraunces/full-italic.css";
+import "@fontsource-variable/archivo/standard.css";
+import frauncesLatin from "@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2?url";
+import frauncesLatinItalic from "@fontsource-variable/fraunces/files/fraunces-latin-full-italic.woff2?url";
+import archivoLatin from "@fontsource-variable/archivo/files/archivo-latin-standard-normal.woff2?url";
 import "./globals.css";
 import "./overrides.css";
 
@@ -39,6 +42,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preload" href={frauncesLatin} as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href={frauncesLatinItalic} as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
       <body>{children}</body>
     </html>
   );

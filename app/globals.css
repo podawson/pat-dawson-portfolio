@@ -632,7 +632,7 @@ img { display: block; width: 100%; }
   .field-copy .kicker { font-size: var(--t-100); }
   .field-copy > p:last-child { display: none; }
   .field-axes { inset: 13% 6% 19%; opacity: .34; }
-  .field-axis { font-size: var(--t-100); letter-spacing: var(--track-caps-sm); }
+  .field-axis { font-size: var(--t-100); letter-spacing: .06em; }
   .field-axis--story { transform: translate(-88%,-50%) rotate(var(--axis-angle,0deg)); }
   .field-axis--compute { transform: translate(-12%,-50%) rotate(var(--axis-angle,0deg)); }
   .field-axis--atmosphere { transform: translate(-50%,-94%) rotate(var(--axis-angle,-90deg)); }
@@ -910,7 +910,7 @@ img { display: block; width: 100%; }
 .field-axes svg { height: 100%; inset: 0; overflow: visible; position: absolute; width: 100%; }
 .field-axes line { stroke: rgba(235,241,241,.19); stroke-width: .72px; vector-effect: non-scaling-stroke; }
 .field-axes i { border: 1px solid rgba(235,241,241,.3); border-radius: 50%; height: 7px; position: absolute; transform: translate(-50%,-50%); width: 7px; }
-.field-axis { color: rgba(245,241,232,.58); font-family: var(--mono); font-size: var(--t-200); font-weight: var(--w-regular); letter-spacing: var(--track-caps-sm); position: absolute; text-transform: uppercase; transform: translate(-50%,-50%) rotate(var(--axis-angle,0deg)); white-space: nowrap; }
+.field-axis { color: rgba(245,241,232,.58); font-family: var(--mono); font-size: var(--t-200); font-weight: var(--w-regular); letter-spacing: .06em; position: absolute; text-transform: uppercase; transform: translate(-50%,-50%) rotate(var(--axis-angle,0deg)); white-space: nowrap; }
 .field-axis--story { transform: translate(-105%,-50%) rotate(var(--axis-angle,0deg)); }
 .field-axis--compute { transform: translate(5%,-50%) rotate(var(--axis-angle,0deg)); }
 .field-axis--atmosphere { transform: translate(-50%,-115%) rotate(var(--axis-angle,-90deg)); }
@@ -1166,7 +1166,7 @@ img { display: block; width: 100%; }
   .field-copy h1 { font-size: var(--t-900); margin: 7px 0 0; }
   .field-copy > p:last-child { display: none; }
   .field-axes { inset: 13% 6% 19%; opacity: .34; }
-  .field-axis { font-size: var(--t-100); letter-spacing: var(--track-caps-sm); }
+  .field-axis { font-size: var(--t-100); letter-spacing: .06em; }
   .field-axis--story { transform: translate(-88%,-50%) rotate(var(--axis-angle,0deg)); }
   .field-axis--compute { transform: translate(-12%,-50%) rotate(var(--axis-angle,0deg)); }
   .field-axis--atmosphere { transform: translate(-50%,-94%) rotate(var(--axis-angle,-90deg)); }

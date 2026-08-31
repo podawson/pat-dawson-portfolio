@@ -85,41 +85,91 @@ img { display: block; width: 100%; }
 .focus-list li,
 .experience-list h3, .education-list h3 { font-variation-settings: "opsz" 96; }
 
-/* Archivo is intentionally wide to retain the prior annotation-like character. */
-.kicker, .micro,
-.tag-row span,
-.site-footer,
-.project-evidence ol li::before,
-.project-details span,
-.project-gallery figcaption,
-.project-video figcaption,
-.gleanings-artifact__header p, .gleanings-chain__label,
-.gleanings-risk__rank,
-.gleanings-risk span:not(.gleanings-risk__rank),
-.gleanings-chain__finding p,
-.gleanings-chain__sources span,
-.gleanings-chain__arrow,
-.gleanings-review span,
-.gleanings-artifacts__legend,
-.map-corpus-tools button,
-.field-relation-filter > span,
-.field-relation-filter button,
-.field-axis,
-.field-node > strong,
-.map-selection-band__identity p,
-.map-selection-band__relations small,
-.map-selection-band__empty,
-.map-selection-band__open,
-.index-filters button,
-.index-list li > span,
-.index-preview > a,
-.study-controls-toggle,
-.study-presets button, .study-actions button,
-.study-control-section > p,
-.study-control-section label,
-.focus-list span,
-.experience-list time,
-.study-randomize { font-variation-settings: "wdth" 112; }
+/* Semantic chrome owns its family explicitly so editorial swaps cannot affect it. */
+:where(
+  button,
+  input,
+  .site-header nav a,
+  .wordmark-mark,
+  .kicker,
+  .micro,
+  .tag-row,
+  .tag-row span,
+  .relationship-legend span,
+  .surface-index,
+  .axis,
+  .project-node__index,
+  .project-node__name,
+  .project-node__count,
+  .constellation-card a,
+  .constellation-scroll,
+  .selected-project__index,
+  .text-link,
+  .archive-cta a,
+  .site-footer,
+  .work-filters sup,
+  .work-card__image span,
+  .constellation-line,
+  .project-evidence ol li::before,
+  .project-details span,
+  .project-gallery figcaption,
+  .project-video figcaption,
+  .gleanings-artifact__header p,
+  .gleanings-chain__label,
+  .gleanings-risk__rank,
+  .gleanings-risk span:not(.gleanings-risk__rank),
+  .gleanings-chain__finding p,
+  .gleanings-chain__sources span,
+  .gleanings-chain__arrow,
+  .gleanings-review span,
+  .gleanings-artifacts__legend,
+  .plus-arm,
+  .proteus-note a,
+  .control-section > p,
+  .playground-controls label,
+  .playground-interaction-cue,
+  .wave-readout span,
+  .wave-caption,
+  .playground-footnote a,
+  .field-node__mobile-index,
+  .map-rotation-hint,
+  .map-corpus-tools button,
+  .field-relation-filter > span,
+  .field-filter-announcement,
+  .field-axis,
+  .field-node > strong,
+  .map-selection-band__identity p,
+  .map-selection-band__relations button,
+  .map-selection-band__relations small,
+  .map-selection-band__empty,
+  .map-selection-band__open,
+  .constellation-artifact > p,
+  .constellation-artifact a,
+  .constellation-key small,
+  .constellation-taxonomy span,
+  .field-caption,
+  .index-filters button,
+  .index-list li > span,
+  .index-preview > a,
+  .index-connector__label,
+  .project-open-pill,
+  .study-controls-toggle,
+  .study-presets button,
+  .study-actions button,
+  .study-control-section > p,
+  .study-control-section label,
+  .study-shortcuts,
+  .studies-footnote a,
+  .plus-figure figcaption,
+  .focus-list span,
+  .experience-list time,
+  .education-list span,
+  .study-randomize,
+  .study-window-copy cite
+) {
+  font-family: var(--mono);
+  font-variation-settings: "wdth" 112;
+}
 
 .index-list li > span,
 .focus-list span,
@@ -860,11 +910,12 @@ img { display: block; width: 100%; }
 .field-axes svg { height: 100%; inset: 0; overflow: visible; position: absolute; width: 100%; }
 .field-axes line { stroke: rgba(235,241,241,.19); stroke-width: .72px; vector-effect: non-scaling-stroke; }
 .field-axes i { border: 1px solid rgba(235,241,241,.3); border-radius: 50%; height: 7px; position: absolute; transform: translate(-50%,-50%); width: 7px; }
-.field-axis { color: rgba(245,241,232,.58); font-family: var(--mono); font-size: var(--t-200); letter-spacing: var(--track-caps-sm); position: absolute; text-transform: uppercase; transform: translate(-50%,-50%) rotate(var(--axis-angle,0deg)); white-space: nowrap; }
+.field-axis { color: rgba(245,241,232,.58); font-family: var(--mono); font-size: var(--t-200); font-weight: var(--w-regular); letter-spacing: var(--track-caps-sm); position: absolute; text-transform: uppercase; transform: translate(-50%,-50%) rotate(var(--axis-angle,0deg)); white-space: nowrap; }
 .field-axis--story { transform: translate(-105%,-50%) rotate(var(--axis-angle,0deg)); }
 .field-axis--compute { transform: translate(5%,-50%) rotate(var(--axis-angle,0deg)); }
 .field-axis--atmosphere { transform: translate(-50%,-115%) rotate(var(--axis-angle,-90deg)); }
 .field-axis--architecture { transform: translate(-50%,15%) rotate(var(--axis-angle,-90deg)); }
+.field-axis--atmosphere, .field-axis--architecture { font-weight: var(--w-medium); }
 .field-nodes { inset: 0; pointer-events: none; position: absolute; z-index: 5; }
 .field-node { align-items: center; background: rgba(245,241,232,.13); border: 0; border-radius: 50%; box-shadow: none; color: rgba(245,241,232,.8); cursor: pointer; display: flex; justify-content: center; padding: 0; pointer-events: auto; position: absolute; transform: translate(-50%,-50%); transition: background .25s ease, opacity .25s ease, transform .25s ease; }
 .field-node__mobile-index { display: none; }
@@ -945,7 +996,7 @@ img { display: block; width: 100%; }
 .index-preview > a { display: block; font-family: var(--mono); font-size: var(--t-200); margin-top: 22px; text-transform: uppercase; width: fit-content; }
 .index-connector { inset: 0; overflow: visible; pointer-events: none; position: absolute; z-index: 2; }
 .index-connector path { animation: index-draw .12s ease both; fill: none; stroke: rgba(163,77,51,.75); stroke-dasharray: 1; stroke-dashoffset: 1; stroke-width: 1; }
-.index-connector__label { fill: rgba(255,255,255,.94); font-family: var(--editorial); font-size: var(--t-400); font-weight: var(--w-semibold); letter-spacing: var(--track-mixed); paint-order: stroke; stroke: rgba(9,11,13,.9); stroke-width: 3px; }
+.index-connector__label { fill: rgba(255,255,255,.94); font-family: var(--mono); font-size: var(--t-400); font-weight: var(--w-semibold); letter-spacing: var(--track-mixed); paint-order: stroke; stroke: rgba(9,11,13,.9); stroke-width: 3px; }
 @keyframes index-draw { to { stroke-dashoffset: 0; } }
 
 /* Work index: shared Map night system */

@@ -463,8 +463,6 @@ function SelectedGeometry({ activeSlug }: { activeSlug: string }) {
         context.rotate(angle);
         context.fillStyle = color;
         context.globalAlpha = 0.92;
-        context.font = "600 11px ui-monospace, SFMono-Regular, Menlo, monospace";
-        context.letterSpacing = "1px";
         const label = relationLabel[connection.kind].toUpperCase();
         const measure = context.measureText(label);
         context.fillStyle = "rgba(8,11,13,.88)";

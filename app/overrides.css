@@ -124,8 +124,8 @@
   }
 
   .map-selection-band__identity p {
-    font-size: 6px;
-    letter-spacing: .055em;
+    font-size: var(--t-100);
+    letter-spacing: var(--track-caps-sm);
   }
 
   .field-axis--atmosphere,
@@ -196,15 +196,15 @@
   }
 
   .map-selection-band__identity h2 {
-    font-size: 14px;
+    font-size: var(--t-500);
   }
 
   .map-selection-band__identity .map-selection-band__one-liner {
     color: rgba(245,241,232,.56);
     display: -webkit-box;
-    font-size: 7px;
-    letter-spacing: .025em;
-    line-height: 1.25;
+    font-size: var(--t-100);
+    letter-spacing: var(--track-mixed);
+    line-height: var(--lh-label);
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;

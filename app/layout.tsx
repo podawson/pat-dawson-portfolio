@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/instrument-sans";
+import "@fontsource-variable/instrument-sans/wght-italic.css";
 import "@fontsource-variable/martian-mono";
 import "./globals.css";
 import "./overrides.css";

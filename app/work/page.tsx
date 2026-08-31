@@ -6,7 +6,7 @@ export default function WorkPage() {
     <main className="work-page work-page--dark">
       <SiteHeader inverse />
       <section className="page-intro page-intro--work route-intro">
-        <p className="kicker">WORK</p>
+        <p className="kicker">Work</p>
         <h1>Selected curation</h1>
       </section>
       <section className="work-index" aria-label="Project Index">

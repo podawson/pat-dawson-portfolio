@@ -125,7 +125,7 @@
 
   .map-selection-band__identity p {
     font-size: var(--t-100);
-    letter-spacing: var(--track-caps-sm);
+    letter-spacing: var(--track-mixed);
   }
 
   .field-axis--atmosphere,
@@ -152,7 +152,7 @@
   .field-node.is-related {
     background: transparent !important;
     box-shadow: none !important;
-    color: rgba(245,241,232,.8);
+    color: var(--ink-500);
     opacity: 1;
   }
 
@@ -208,7 +208,7 @@
   }
 
   .map-selection-band__identity .map-selection-band__one-liner {
-    color: rgba(245,241,232,.56);
+    color: var(--ink-400);
     display: -webkit-box;
     font-size: var(--t-100);
     letter-spacing: var(--track-mixed);

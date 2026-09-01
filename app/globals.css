@@ -1400,7 +1400,7 @@ img { display: block; width: 100%; }
 .field-relation-filter > span { font-size: var(--t-100); }
 .field-relation-filter button,
 .map-corpus-tools button { font-size: var(--t-200); }
-.field-axis { font-size: var(--t-100); }
+.field-axis { font-size: var(--t-200); }
 
 @media (max-width: 680px) {
   .bodega-collage { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -1426,7 +1426,7 @@ img { display: block; width: 100%; }
 @media (max-width: 580px) {
   .about-hero { padding-bottom: 74px; padding-top: 70px; }
   .field-axes { opacity: 1; }
-  .field-axis { color: var(--ink-500); font-size: var(--t-100); }
+  .field-axis { color: var(--ink-500); font-size: var(--t-200); }
   .about-page .site-footer { align-items: center; flex-direction: row; width: 100%; }
 }
 

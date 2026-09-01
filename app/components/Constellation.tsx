@@ -526,17 +526,6 @@ export function Constellation() {
   const handleAxisPositions = useCallback((positions: Readonly<Record<"story" | "compute" | "atmosphere" | "architecture" | "center", { x: number; y: number; visible: boolean }>>) => {
     const layer = axisLayerRef.current;
     if (!layer) return;
-    const setLine = (name: string, from: typeof positions.story, to: typeof positions.story) => {
-      const line = layer.querySelector<SVGLineElement>(`line[data-axis-line="${name}"]`);
-      if (!line) return;
-      line.setAttribute("x1", String(from.x));
-      line.setAttribute("y1", String(from.y));
-      line.setAttribute("x2", String(to.x));
-      line.setAttribute("y2", String(to.y));
-      line.style.visibility = from.visible && to.visible ? "visible" : "hidden";
-    };
-    setLine("horizontal", positions.story, positions.compute);
-    setLine("vertical", positions.atmosphere, positions.architecture);
     const readableAngle = (from: typeof positions.story, to: typeof positions.story) => {
       let angle = Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI;
       if (angle > 90) angle -= 180;
@@ -561,6 +550,61 @@ export function Constellation() {
       label.style.visibility = positions[key].visible ? "visible" : "hidden";
       label.style.setProperty("--axis-angle", `${key === "story" || key === "compute" ? horizontalAngle : verticalAngle}deg`);
     });
+    const setTrimmedLine = (
+      name: "horizontal" | "vertical",
+      fromKey: "story" | "atmosphere",
+      toKey: "compute" | "architecture",
+    ) => {
+      const line = layer.querySelector<SVGLineElement>(`line[data-axis-line="${name}"]`);
+      const fromLabel = layer.querySelector<HTMLElement>(`[data-axis-label="${fromKey}"]`);
+      const toLabel = layer.querySelector<HTMLElement>(`[data-axis-label="${toKey}"]`);
+      if (!line || !fromLabel || !toLabel) return;
+      const from = positions[fromKey];
+      const to = positions[toKey];
+      line.style.visibility = from.visible && to.visible ? "visible" : "hidden";
+      if (!from.visible || !to.visible) return;
+
+      const layerRect = layer.getBoundingClientRect();
+      if (!layerRect.width || !layerRect.height) return;
+      const fromPoint = {
+        x: layerRect.left + (from.x / 100) * layerRect.width,
+        y: layerRect.top + (from.y / 100) * layerRect.height,
+      };
+      const toPoint = {
+        x: layerRect.left + (to.x / 100) * layerRect.width,
+        y: layerRect.top + (to.y / 100) * layerRect.height,
+      };
+      const distance = Math.hypot(toPoint.x - fromPoint.x, toPoint.y - fromPoint.y);
+      if (!distance) return;
+      const unit = {
+        x: (toPoint.x - fromPoint.x) / distance,
+        y: (toPoint.y - fromPoint.y) / distance,
+      };
+      const projectionBounds = (rect: DOMRect) => {
+        const values = [
+          { x: rect.left, y: rect.top },
+          { x: rect.right, y: rect.top },
+          { x: rect.left, y: rect.bottom },
+          { x: rect.right, y: rect.bottom },
+        ].map((point) => point.x * unit.x + point.y * unit.y);
+        return { min: Math.min(...values), max: Math.max(...values) };
+      };
+      const fromBounds = projectionBounds(fromLabel.getBoundingClientRect());
+      const toBounds = projectionBounds(toLabel.getBoundingClientRect());
+      const fromProjection = fromPoint.x * unit.x + fromPoint.y * unit.y;
+      const toProjection = toPoint.x * unit.x + toPoint.y * unit.y;
+      const gap = 7;
+      const fromTrim = Math.max(0, fromBounds.max - fromProjection + gap);
+      const toTrim = Math.max(0, toProjection - toBounds.min + gap);
+      const start = { x: fromPoint.x + unit.x * fromTrim, y: fromPoint.y + unit.y * fromTrim };
+      const end = { x: toPoint.x - unit.x * toTrim, y: toPoint.y - unit.y * toTrim };
+      line.setAttribute("x1", String(((start.x - layerRect.left) / layerRect.width) * 100));
+      line.setAttribute("y1", String(((start.y - layerRect.top) / layerRect.height) * 100));
+      line.setAttribute("x2", String(((end.x - layerRect.left) / layerRect.width) * 100));
+      line.setAttribute("y2", String(((end.y - layerRect.top) / layerRect.height) * 100));
+    };
+    setTrimmedLine("horizontal", "story", "compute");
+    setTrimmedLine("vertical", "atmosphere", "architecture");
     const center = layer.querySelector<HTMLElement>("[data-axis-center]");
     if (center) {
       center.style.left = `${positions.center.x}%`;

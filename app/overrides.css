@@ -209,8 +209,12 @@
   .field-axis--architecture {
     background: #090b0d;
     border-radius: 999px;
-    box-shadow: 0 0 14px 14px #090b0d;
+    box-shadow: 0 0 3px 2px #090b0d;
     transform-origin: center;
+  }
+
+  .field-axis {
+    font-size: var(--t-100);
   }
 
   .field-axis--atmosphere {
@@ -221,19 +225,19 @@
   .field-axis--compute {
     background: #090b0d;
     border-radius: 999px;
-    box-shadow: 0 0 14px 14px #090b0d;
+    box-shadow: 0 0 3px 2px #090b0d;
     left: auto !important;
     right: calc(-6vw + 4px);
-    text-shadow: 0 0 4px var(--night), 0 0 10px var(--night);
+    text-shadow: 0 0 2px var(--night);
     transform: translateY(-50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--story {
     background: #090b0d;
     border-radius: 999px;
-    box-shadow: 0 0 14px 14px #090b0d;
+    box-shadow: 0 0 3px 2px #090b0d;
     left: calc(-6vw + 4px) !important;
-    text-shadow: 0 0 4px var(--night), 0 0 10px var(--night);
+    text-shadow: 0 0 2px var(--night);
     transform: translateY(-50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 

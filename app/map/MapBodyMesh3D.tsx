@@ -618,13 +618,13 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
           onClick={(event) => { event.stopPropagation(); onToggleNodeNames?.(); }}
           onPointerDown={(event) => event.stopPropagation()}
           type="button"
-        ><span className="control-pill__content">{showNodeNames ? "Hide names" : "Show Names"}</span></button>
+        ><span className="control-pill__content">Names</span></button>
         <button
           className={`map-reset-view control-pill ${rotated ? "is-rotated" : ""}`}
           onClick={(event) => { event.stopPropagation(); resetRef.current?.(); onResetMap?.(); }}
           onPointerDown={(event) => event.stopPropagation()}
           type="button"
-        ><span className="control-pill__content">Reset Corpus</span></button>
+        ><span className="control-pill__content">Reset</span></button>
       </div>
     </div>
   );

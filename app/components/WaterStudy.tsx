@@ -245,13 +245,13 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
     <div className={`study-tool study-tool--water${embedded ? " study-tool--embedded" : ""}`}>
       <div className={`study-canvas study-canvas--${sky}`} ref={mountRef} role="img" aria-label="An organic field of isosceles triangles deformed by live water, weather, light, and camera parameters"><div className="study-vignette" /></div>
       <aside className={`study-controls${panelOpen ? "" : " is-collapsed"}`}>
-        {panelOpen ? <button className="study-randomize" onClick={randomize} type="button">Randomize</button> : null}
+        {panelOpen ? <button className={`study-randomize${embedded ? " control-pill" : ""}`} onClick={randomize} type="button"><span className="control-pill__content">Randomize</span></button> : null}
         {panelOpen && <div className="study-controls__content">
-          <div className="study-presets">{presets.map((preset,index)=><button key={preset.name} onClick={()=>applyPreset(index)} type="button"><b>{index+1}</b>{preset.name}</button>)}</div>
+          <div className="study-presets">{presets.map((preset,index)=><button className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content"><b>{index+1}</b>{preset.name}</span></button>)}</div>
           {groups.slice(0, 2).map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} style={{ "--range-progress": `${((settings[control.key]-control.min)/(control.max-control.min))*100}%` } as CSSProperties} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
         </div>}
-        {!panelOpen && <div className="study-presets study-presets--collapsed" aria-label="Water presets">{presets.map((preset,index)=><button aria-label={preset.name} key={preset.name} onClick={()=>applyPreset(index)} type="button">{index+1}</button>)}</div>}
-        <button className="study-controls-toggle" onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button">{panelOpen?"Close":"Open"}</button>
+        {!panelOpen && <div className="study-presets study-presets--collapsed" aria-label="Water presets">{presets.map((preset,index)=><button aria-label={preset.name} className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content">{index+1}</span></button>)}</div>}
+        <button className={`study-controls-toggle${embedded ? " control-pill" : ""}`} onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button"><span className="control-pill__content">{panelOpen?"Close":"Open"}</span></button>
       </aside>
     </div>
   );

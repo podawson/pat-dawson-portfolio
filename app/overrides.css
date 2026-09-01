@@ -49,6 +49,9 @@
 .map-corpus-tools button.control-pill:focus-visible,
 .work-page--dark .index-filters button.control-pill:focus-visible,
 .map-selection-band__relations button.control-pill:focus-visible,
+.study-tool--embedded .study-controls-toggle.control-pill:focus-visible,
+.study-tool--embedded .study-randomize.control-pill:focus-visible,
+.study-tool--embedded .study-presets button.control-pill:focus-visible,
 .project-open-pill.control-pill:focus-visible {
   border-color: var(--cream);
   color: var(--night) !important;
@@ -71,6 +74,9 @@
   .map-corpus-tools button.control-pill:hover,
   .work-page--dark .index-filters button.control-pill:hover,
   .map-selection-band__relations button.control-pill:hover,
+  .study-tool--embedded .study-controls-toggle.control-pill:hover,
+  .study-tool--embedded .study-randomize.control-pill:hover,
+  .study-tool--embedded .study-presets button.control-pill:hover,
   .project-open-pill.control-pill:hover {
     border-color: var(--cream);
     color: var(--night) !important;
@@ -80,6 +86,64 @@
   .control-pill:hover::before {
     opacity: 1;
     transform: scaleX(1);
+  }
+}
+
+/* About introduction: title, copy, and instrument share the site's normal cadence. */
+.about-hero {
+  align-items: start;
+  column-gap: 7vw;
+  grid-template-areas: "heading heading" "body interactive";
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 620px);
+  grid-template-rows: auto auto;
+  min-height: 0;
+  row-gap: clamp(40px, 4vw, 56px);
+}
+
+.about-hero__body,
+.about-play-interactive {
+  align-self: start;
+  margin-top: 0;
+}
+
+.study-tool--embedded .control-pill:hover,
+.study-tool--embedded .control-pill:focus-visible {
+  background: rgba(5,8,11,.62);
+}
+
+/* Work filters are controls; preview classifications are quieter metadata. */
+.work-page--dark .index-filters button.control-pill {
+  font-size: var(--t-200);
+  min-height: 38px;
+  padding: 0 14px;
+}
+
+.work-page--dark .index-preview .tag-row span {
+  font-size: var(--t-100);
+  font-style: italic;
+  padding: 4px 7px;
+}
+
+@media (max-width: 900px) {
+  .about-hero {
+    grid-template-areas: "heading" "body" "interactive";
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 40px;
+  }
+
+  .about-hero__body,
+  .about-play-interactive {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 580px) {
+  .about-hero { row-gap: 32px; }
+
+  .work-page--dark .index-filters button.control-pill {
+    font-size: var(--t-100);
+    min-height: 32px;
+    padding: 0 10px;
   }
 }
 

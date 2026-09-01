@@ -315,7 +315,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <section className="project-narrative">
           <div className="project-narrative__title">
             <p className="kicker">{project.storyKicker}</p>
-            <h2>{project.storyTitle}</h2>
+            <h2>
+              {project.storyTitle.split(/(?<=\.)\s+/).map((sentence) => <span key={sentence}>{sentence}</span>)}
+            </h2>
             <aside>
               <p className="micro">{project.agencyLabel}</p>
               <p>{project.agency}</p>
@@ -365,7 +367,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               <p className="kicker">Artifacts that carry the case</p>
               <p className="project-evidence__artifacts-copy">
                 {project.artifacts.map((artifact, index) => (
-                  <span key={artifact}>{artifact}{index < project.artifacts.length - 1 ? <i aria-hidden="true"> / </i> : null}</span>
+                  <span key={artifact}>{artifact}{index < project.artifacts.length - 1 ? <i aria-hidden="true"> · </i> : null}</span>
                 ))}
               </p>
             </div>

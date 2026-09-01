@@ -94,6 +94,174 @@
   .control-pill::before { transition: none; }
 }
 
+/* Dedicated project pages: one closed role system across all 18 records. */
+:root {
+  --project-title: clamp(48px, 6vw, 78px);
+  --project-section-head: clamp(38px, 4.2vw, 54px);
+  --project-stat: clamp(28px, 2.8vw, 36px);
+  --project-deck: clamp(24px, 2.25vw, 29px);
+  --project-subhead: clamp(21px, 1.875vw, 24px);
+  --project-body: 17px;
+  --project-meta: 13px;
+  --project-caption: 13px;
+  --project-numeral: 11px;
+  --project-rule-structural: rgba(255,255,255,.09);
+  --project-rule-emphatic: rgba(255,255,255,.22);
+}
+
+.project-page-shell {
+  --line: var(--project-rule-structural);
+}
+
+.project-page-shell .project-hero h1 {
+  color: var(--ink-100);
+  font-size: var(--project-title);
+  font-weight: var(--w-regular);
+  line-height: .94;
+}
+
+.project-page-shell .project-hero__headline {
+  color: var(--ink-200);
+  font-size: var(--project-deck);
+  font-weight: var(--w-regular);
+  line-height: 1.32;
+  max-width: 28ch;
+}
+
+.project-page-shell .project-hero__summary,
+.project-page-shell .project-facts p:last-child,
+.project-page-shell .project-narrative__body > p,
+.project-page-shell .project-evidence__artifacts-copy,
+.project-page-shell .project-details p,
+.project-page-shell .next-project > p:last-child {
+  color: var(--ink-300);
+  font-size: var(--project-body);
+  font-weight: var(--w-regular);
+  line-height: 1.65;
+  max-width: 64ch;
+}
+
+.project-page-shell .project-hero__meta,
+.project-page-shell .kicker,
+.project-page-shell .micro {
+  color: var(--ink-400);
+  font-family: var(--mono);
+  font-size: var(--project-meta);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--track-mixed);
+  line-height: var(--lh-label);
+  text-transform: none;
+}
+
+.project-page-shell .project-narrative__title {
+  border-bottom: 1px solid var(--project-rule-emphatic);
+  padding-bottom: 24px;
+}
+
+.project-page-shell .project-narrative__title h2 {
+  color: var(--ink-100);
+  font-size: var(--project-section-head);
+  font-weight: var(--w-regular);
+  line-height: 1.06;
+}
+
+.project-page-shell .project-narrative__body aside {
+  background: transparent;
+  border: 0;
+  margin: 64px 0 64px clamp(24px, 5vw, 64px);
+  padding: 0;
+}
+
+.project-page-shell .project-narrative__body aside p:last-child {
+  color: var(--ink-200);
+  font-size: var(--project-deck);
+  font-weight: var(--w-regular);
+  line-height: 1.32;
+  margin: 16px 0 0;
+  max-width: 28ch;
+}
+
+.project-page-shell .project-evidence__metrics {
+  color: var(--ink-100);
+  font-size: var(--project-stat);
+  font-variant-numeric: lining-nums;
+  font-weight: var(--w-regular);
+  line-height: 1.2;
+}
+
+.project-page-shell .project-evidence__metrics i {
+  color: var(--ink-400);
+}
+
+.project-page-shell .project-details h2 {
+  color: var(--ink-300);
+  font-size: var(--project-subhead);
+  font-weight: var(--w-regular);
+  line-height: 1.25;
+}
+
+.project-page-shell .project-details span {
+  color: var(--project-accent);
+  font-size: var(--project-numeral);
+  font-weight: var(--w-regular);
+}
+
+.project-page-shell .next-project {
+  color: var(--ink-200);
+}
+
+.project-page-shell .next-project a {
+  color: var(--ink-200);
+  font-size: var(--project-deck);
+  font-weight: var(--w-regular);
+  line-height: 1.32;
+}
+
+.project-page-shell .project-gallery,
+.project-page-shell .project-gallery--side-by-side {
+  background: transparent;
+  border-bottom: 0;
+  gap: clamp(24px, 3vw, 48px);
+}
+
+.project-page-shell .project-gallery figcaption,
+.project-page-shell .project-video figcaption,
+.project-page-shell .gleanings-interface-frame > figcaption {
+  color: var(--ink-500);
+  font-family: var(--mono);
+  font-size: var(--project-caption);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--track-mixed);
+  line-height: 1.45;
+  min-height: 0;
+  padding: 10px 0 0;
+  text-transform: none;
+}
+
+.project-page-shell .project-video {
+  background: transparent;
+  border-bottom: 0;
+}
+
+.project-page-shell .project-video video {
+  border: 1px solid var(--project-rule-emphatic);
+}
+
+.project-page-shell .gleanings-interface-frame {
+  background: #080b0e;
+  border: 1px solid var(--project-rule-emphatic);
+  margin: 0;
+}
+
+.project-page-shell .gleanings-interface-frame .gleanings-artifacts {
+  border: 0;
+}
+
+.project-page-shell .gleanings-interface-frame > figcaption {
+  border-top: 1px solid var(--project-rule-structural);
+  padding: 12px 14px;
+}
+
 .project-image-break {
   align-items: center;
   background: #050709;

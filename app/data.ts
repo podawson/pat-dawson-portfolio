@@ -66,7 +66,7 @@ export const projects: Project[] = [
     categories: ["Place"],
     featured: true,
     node: { x: 25.3, y: 43.5, size: 32 },
-    metrics: ["Point-cloud survey → highway mesh", "Grasshopper-automated tree placement", "Phased public-realm delivery"],
+    metrics: ["Point-cloud highway survey", "Grasshopper tree-placement system", "Phased public-realm delivery"],
     artifacts: ["Historical river overlays", "Point-cloud / mesh comparison", "Public-hearing and phasing diagrams"],
     details: [
       { title: "Recover the record", body: "Historical plans and environmental research located the culverted river and made the site’s political history part of the design brief." },
@@ -93,7 +93,7 @@ export const projects: Project[] = [
     indexPill: "a delirious Chinatown building",
     categories: ["Place", "Culture"],
     node: { x: 36.7, y: 75.2, size: 28 },
-    metrics: ["~$5M revitalization study", "Zoning + licensing + operating model", "Existing FAR verified"],
+    metrics: ["~$5M revitalization study", "Zoning, licensing, and operating model", "Verified existing FAR"],
     artifacts: ["Historic-plan comparison", "Regulatory constraint matrix", "Filing and fundraising package"],
     details: [
       { title: "Find the envelope", body: "Structure, use, setbacks, licensing, and FAR were tested together so the concept began inside a defensible set of limits." },
@@ -120,7 +120,7 @@ export const projects: Project[] = [
     indexPill: "one fabricator, zero shortcuts",
     categories: ["Fabrication", "Place", "Experience"],
     node: { x: 46.2, y: 80.6, size: 26 },
-    metrics: ["5 historic trusses", "100+ addressable lights", "0 original components modified"],
+    metrics: ["5 historic trusses", "100+ addressable lights", "Zero modified original components"],
     artifacts: ["Clamp family and tolerance studies", "Fabrication sheets", "Installed night sequence"],
     details: [
       { title: "Respect the artifact", body: "The attachment logic preserved every original 1880s component and made reversibility a design requirement." },
@@ -175,7 +175,7 @@ export const projects: Project[] = [
     categories: ["Place", "Fabrication", "Culture"],
     featured: true,
     node: { x: 34.8, y: 56.5, size: 32 },
-    metrics: ["Concept → permit → opening", "Rated kitchen separation", "ADA + fire/life safety coordination"],
+    metrics: ["Concept-to-opening delivery", "Rated kitchen separation", "ADA and life-safety coordination"],
     artifacts: ["Material and lighting studies", "Permit / construction set", "Rated-glass field detail"],
     details: [
       { title: "Translate attitude", body: "A black, reflective, red-lit palette rejected the expected genre without giving up hospitality or operational clarity." },
@@ -202,7 +202,7 @@ export const projects: Project[] = [
     indexPill: "a playbook for 900 buildings",
     categories: ["Place", "Experience", "Systems"],
     node: { x: 69, y: 69.8, size: 27 },
-    metrics: ["900+ locations analyzed", "200+ conversions initiated", "2–150 person floor plates"],
+    metrics: ["900+ analyzed locations", "200+ initiated conversions", "2–150-person floor plates"],
     artifacts: ["Portfolio opportunity matrix", "Custom Revit analysis", "Operational conversion playbook"],
     details: [
       { title: "See the portfolio", body: "Cross-department data made underperformance and viable conversion opportunities visible at the same scale." },
@@ -229,7 +229,7 @@ export const projects: Project[] = [
     indexPill: "enterprise physical AI",
     categories: ["Experience", "Place", "Fabrication", "Systems"],
     node: { x: 54.8, y: 61.5, size: 29 },
-    metrics: ["500+ generated visualizations", "4 curated decision-moving images", "1st physical-AI customer space in portfolio"],
+    metrics: ["500+ generated visualizations", "4 curated design directions", "Portfolio’s first physical-AI customer space"],
     artifacts: ["Workshop-to-prompt translation", "500→4 curation funnel", "Temporary / permanent delivery timeline"],
     details: [
       { title: "Structure the discovery", body: "Workshop language, references, and constraints became a repeatable input system rather than an open-ended image prompt." },
@@ -286,7 +286,7 @@ export const projects: Project[] = [
     categories: ["Experience", "Systems", "Fabrication"],
     featured: true,
     node: { x: 72.8, y: 59.5, size: 30 },
-    metrics: ["NSF Award #1928654", "UR-10 live prototype", "Closed fatigue-to-adjustment loop"],
+    metrics: ["NSF Award #1928654", "UR-10 live prototype", "Closed fatigue-adjustment loop"],
     artifacts: ["Fatigue-to-adjustment flowchart", "Gesture-programming studies", "Projected interface on physical box"],
     details: [
       { title: "Make intent legible", body: "Projection showed where the robot planned to move before that motion affected the worker beside it." },
@@ -343,7 +343,7 @@ export const projects: Project[] = [
     indexPill: "five honest documents",
     categories: ["Systems"],
     node: { x: 77.2, y: 51.2, size: 28 },
-    metrics: ["40–60% → <5% custom bucket", "3–5 hr → 20–40 min per cycle", "12+ batches / 100+ tickets"],
+    metrics: ["Sub-5% custom bucket", "20–40-minute cycle", "12+ batches across 100+ tickets"],
     artifacts: ["Pencil architecture → functional system", "Six-stage pipeline diagram", "Batch-by-batch error table"],
     details: [
       { title: "Move facts out of the model", body: "Deterministic Python owns classification and grouping, so identical tickets produce identical, auditable results." },
@@ -372,7 +372,7 @@ export const projects: Project[] = [
     indexPill: "conflicts before they compound",
     categories: ["Systems"],
     node: { x: 80.4, y: 66.2, size: 26 },
-    metrics: ["4+ heterogeneous source classes", "Conflicts ranked by cost + schedule", "Human review before action"],
+    metrics: ["4+ heterogeneous source classes", "Cost-and-schedule conflict ranking", "Human review gate"],
     artifacts: ["File-ingestion and reconciliation map", "Ranked discrepancy interface", "Finding-to-source evidence trail"],
     details: [
       { title: "Read across the project", body: "Schedules, drawings, budgets, RFIs, and notes stay distinct while the system searches for consequential disagreement between them." },
@@ -401,7 +401,7 @@ export const projects: Project[] = [
     categories: ["Systems", "Culture"],
     featured: true,
     node: { x: 84.2, y: 41, size: 32 },
-    metrics: ["0 → 5,000+ active traders", "40% → 62% reported hit rate", "~$250K revenue"],
+    metrics: ["5,000+ active traders", "62% reported hit rate", "~$250K revenue"],
     artifacts: ["Model-version performance table", "Maximum-X distribution + denominator", "Call / leaderboard evidence ledger"],
     details: [
       { title: "Preserve the development record", body: "Eight exports were normalized into calls, contracts, model labels, timestamps, leaderboards, and outcome observations." },
@@ -419,7 +419,7 @@ export const projects: Project[] = [
     headline: "A character LLM, voice clone, and automated podcast pipeline moved from private corpus to published episode with minimal human touch.",
     summary: "Public writing, private unreleased material, reply constraints, voice synthesis, and cross-channel publishing formed one operated character system, not a standalone chatbot demo.",
     storyKicker: "The character runtime",
-    storyTitle: "A voice needed a corpus and an operating system.",
+    storyTitle: "A voice needed a corpus and operating system.",
     narrative: "AIntivirus used public writing and private unreleased material to ground an interactive John McAfee character in a specific source record. Reply selection, constraints, interaction history, and deployment connected the model across X, Telegram, and the web. A voice clone and podcast pipeline moved from script to published audio with minimal human touch. The product reached roughly 10,000 chatbot users in front of an inherited 1.2M-follower audience, while keeping product use and distribution reach distinct.",
     agencyLabel: "What operators governed",
     agency: "The character generated inside bounded sources; operators controlled selection, safety, and release across every channel.",
@@ -430,7 +430,7 @@ export const projects: Project[] = [
     categories: ["Systems", "Culture"],
     featured: true,
     node: { x: 54.2, y: 28.5, size: 34 },
-    metrics: ["~10,000 active chatbot users", "1.2M X followers (audience)", "Script → voice → published episode"],
+    metrics: ["~10,000 active chatbot users", "1.2M-follower X audience", "Script-to-publication content system"],
     artifacts: ["Private/public corpus boundary map", "Character runtime + channel architecture", "Podcast automation sequence"],
     details: [
       { title: "Ground the character", body: "Public work and private unreleased material formed a source corpus specific enough to produce a voice rather than an impression." },
@@ -457,7 +457,7 @@ export const projects: Project[] = [
     indexPill: "a corner store that toured",
     categories: ["Place", "Experience", "Culture"],
     node: { x: 27.8, y: 53, size: 29 },
-    metrics: ["ComplexCon LA + Shanghai + Art Basel Miami", "2018–21 activation run", "Construction-ready package per venue"],
+    metrics: ["ComplexCon LA, Shanghai, and Art Basel Miami", "2018–21 activation run", "Venue-specific construction packages"],
     artifacts: ["Existing-condition survey photography", "Interior / exterior axonometrics", "Finish, fixture, and detail drawing sets"],
     details: [
       { title: "Read the venue as found", body: "Circulation, occupancy, accessibility, and venue-specific constraints were documented before any design move, activation to activation." },
@@ -484,7 +484,7 @@ export const projects: Project[] = [
     indexPill: "shapes that don't exist yet",
     categories: ["Systems"],
     node: { x: 70.5, y: 23.5, size: 29 },
-    metrics: ["~8,987 working files", "Trained GPT + Midjourney + Stable Diffusion", "2023–24 named series"],
+    metrics: ["~8,987 working files", "GPT, Midjourney, and Stable Diffusion pipeline", "2023–24 named series"],
     artifacts: ["Minimal-surface and Calabi–Yau studies", "Layered generative-AI source files", "Named-series groupings of resolved forms"],
     details: [
       { title: "Start from real math", body: "Triply periodic minimal surfaces and Calabi–Yau manifolds gave every series a defined, if unbuildable, mathematical starting point." },
@@ -501,7 +501,7 @@ export const projects: Project[] = [
     headline: "A modular public-realm intervention softened Richardson Plaza with seating, planting, and infrastructure designed to establish trees for Northeastern's arboretum.",
     summary: "Movable planters, new seating, and coordinated site elements turned a hard urban campus space into a more hospitable public room and a working nursery for the arboretum.",
     storyKicker: "A softer public realm",
-    storyTitle: "The plaza became a place to gather and grow.",
+    storyTitle: "A plaza built for gathering and growth.",
     narrative: "Richardson Plaza began as a hard, exposed campus space. The project introduced a modular family of seating, wave-form benches, movable planters, bollard caps, and tree elements to create places to pause while supporting young trees for Northeastern's arboretum. Existing-condition, demolition, electrical, and production drawings coordinated the kit with the infrastructure already on site. The result was a more hospitable public room that could support everyday campus use while functioning as a nursery for the arboretum.",
     agencyLabel: "Who carries the landscape forward",
     agency: "The university and arboretum guide long-term planting and care; the built kit gives trees and people room to establish themselves.",
@@ -511,7 +511,7 @@ export const projects: Project[] = [
     indexPill: "concrete made livable",
     categories: ["Place", "Fabrication"],
     node: { x: 56, y: 83.5, size: 27 },
-    metrics: ["Built campus public realm", "Nursery landscape for the arboretum", "Opened in 2021"],
+    metrics: ["Built campus public realm", "Arboretum nursery landscape", "2021 opening"],
     artifacts: ["Existing-condition and demolition documentation", "Modular seating and planter kit", "Coordinated planting and electrical drawings"],
     details: [
       { title: "Read the hardscape", body: "Existing-condition and demolition documentation established the plaza's exposed surfaces, circulation, and infrastructure before new work was placed." },
@@ -528,7 +528,7 @@ export const projects: Project[] = [
     headline: "A COVID-era internet scene brought isolated artists together into a recurring, contributor-curated publication and full live concert series across 25 editions.",
     summary: "Launched in the first months of the pandemic to centralize art being made in isolation around the world, Quaranzine grew from a publication into a recurring editorial and live-concert platform across 25 editions.",
     storyKicker: "The distributed scene",
-    storyTitle: "An open call became twenty-five editions and a stage.",
+    storyTitle: "Twenty-five editions grew from one open call.",
     narrative: "When studios, galleries, and venues closed, Quaranzine created a shared destination for work made in isolation. A standing global open call became a repeatable cycle of submission, curation, layout, and publication across twenty-five editions. The project then extended into a live concert series, giving the same distributed scene a performance format without requiring a physical venue. Source submissions and finished issues preserve both the working layer and the editorial result.",
     agencyLabel: "What contributors authored",
     agency: "Contributors supplied each edition and performance; editorial curation shaped how that work became a shared scene.",
@@ -538,7 +538,7 @@ export const projects: Project[] = [
     indexPill: "a zine for a scene with no venue",
     categories: ["Culture", "Experience"],
     node: { x: 28.8, y: 22.8, size: 30 },
-    metrics: ["25 published editions", "Continuous open-call program", "Publication + live concert series"],
+    metrics: ["25 published editions", "Continuous open-call program", "Publication and live-concert series"],
     artifacts: ["Contributor submission archive", "Volume / edition organization system", "Quaranzine live concert series"],
     details: [
       { title: "Centralize the isolation", body: "A standing open call gathered art being made around the world with no shared venue to land in." },

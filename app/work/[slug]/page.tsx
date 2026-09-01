@@ -296,11 +296,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <p className="project-hero__headline">{project.headline}</p>
             <p className="project-hero__summary">{project.summary}</p>
             <p className="kicker project-hero__meta">
-              {[...headerDescriptor, project.year].map((part) => <span key={part}>{part}</span>)}
+              {[...headerDescriptor, project.year, ...project.categories].map((part) => <span key={part}>{part}</span>)}
             </p>
-            <div className="tag-row project-hero__tags" aria-label="Project categories">
-              {project.categories.map((category) => <span key={category}>{category}</span>)}
-            </div>
           </div>
           <div className={`project-hero__image${isHeroDiagram ? " project-hero__image--diagram" : ""}`}><img src={project.image} alt="" /></div>
         </header>
@@ -326,7 +323,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
 
-        {project.slug === "gleanings" ? <GleaningsArtifacts /> : null}
+        {project.slug === "gleanings" ? (
+          <figure className="gleanings-interface-frame">
+            <GleaningsArtifacts />
+            <figcaption>Actual product interface · Gleanings evidence workflow</figcaption>
+          </figure>
+        ) : null}
 
         <ProjectMedia
           items={narrativeMedia}
@@ -343,6 +345,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               src="/work/gallery/flower-tower/flower-tower-dance.mp4"
               poster="/work/gallery/flower-tower/flower-tower-dance-poster.webp"
               label="Flower Tower in motion"
+              caption="Actual project video · Flower Tower in motion"
             />
           </>
         ) : null}

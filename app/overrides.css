@@ -171,8 +171,6 @@
 }
 
 @media (max-width: 580px) {
-  :root { --mobile-axis-clearance: 24px; }
-
   .field-node > strong { top: 100%; }
 
   .project-hero__image,
@@ -207,9 +205,6 @@
 
   .field-axis--atmosphere,
   .field-axis--architecture {
-    background: #090b0d;
-    border-radius: 999px;
-    box-shadow: 0 0 3px 2px #090b0d;
     transform-origin: center;
   }
 
@@ -218,31 +213,18 @@
   }
 
   .field-axis--atmosphere {
-    margin-top: calc(-1 * var(--mobile-axis-clearance));
     transform: translate(-50%, -115%) rotate(var(--axis-angle, -90deg)) !important;
   }
 
   .field-axis--compute {
-    background: #090b0d;
-    border-radius: 999px;
-    box-shadow: 0 0 3px 2px #090b0d;
-    left: auto !important;
-    right: calc(-6vw + 4px);
-    text-shadow: 0 0 2px var(--night);
-    transform: translateY(-50%) rotate(var(--axis-angle, 0deg)) !important;
+    transform: translate(5%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--story {
-    background: #090b0d;
-    border-radius: 999px;
-    box-shadow: 0 0 3px 2px #090b0d;
-    left: calc(-6vw + 4px) !important;
-    text-shadow: 0 0 2px var(--night);
-    transform: translateY(-50%) rotate(var(--axis-angle, 0deg)) !important;
+    transform: translate(-105%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--architecture {
-    margin-top: var(--mobile-axis-clearance);
     transform: translate(-50%, 15%) rotate(var(--axis-angle, -90deg)) !important;
   }
 

@@ -9,7 +9,7 @@ import "./globals.css";
 import "./overrides.css";
 
 const base = new URL("https://patrick-dawson.com");
-const description = "Patrick Dawson is a New York-based designer and product lead working across architecture, fabrication, experiential systems, and independent AI products.";
+const description = "A New York-based design practice spanning architecture, fabrication, experiential systems, and independent AI products.";
 const preview = new URL("/corpus-preview-20260825.png", base).toString();
 
 export const metadata: Metadata = {

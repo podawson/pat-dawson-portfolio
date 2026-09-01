@@ -830,7 +830,7 @@ export function Constellation() {
           </div>
           <div className="map-selection-band__relations" aria-label="Related projects">
             {activeConnections.length ? activeConnections.map((connection) => (
-              <button key={`${connection.from}-${connection.to}-${connection.kind}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
+              <button className="control-pill" key={`${connection.from}-${connection.to}-${connection.kind}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
                 <i style={{ background: relationColor[connection.kind] }} />
                 <span><small>{relationLabel[connection.kind]}</small>{connection.neighbor?.title}</span>
               </button>

@@ -51,11 +51,19 @@
 .map-corpus-tools button.control-pill:focus-visible,
 .work-page--dark .index-filters button.control-pill:hover,
 .work-page--dark .index-filters button.control-pill:focus-visible,
+.map-selection-band__relations button.control-pill:hover,
+.map-selection-band__relations button.control-pill:focus-visible,
 .project-open-pill.control-pill:hover,
 .project-open-pill.control-pill:focus-visible {
   border-color: var(--cream);
   color: var(--night) !important;
   outline: none;
+}
+
+.map-selection-band__relations button.control-pill > i,
+.map-selection-band__relations button.control-pill > span {
+  position: relative;
+  z-index: 1;
 }
 
 .control-pill:hover::before,

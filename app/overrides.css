@@ -138,17 +138,34 @@
   }
 
   .field-axis--compute {
+    background: #090b0d;
+    border-radius: 999px;
+    box-shadow: 0 0 14px 14px #090b0d;
+    left: auto !important;
+    right: calc(-6vw + 4px);
     text-shadow: 0 0 4px var(--night), 0 0 10px var(--night);
-    transform: translate(-108%, -50%) rotate(var(--axis-angle, 0deg)) !important;
+    transform: translateY(-50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--story {
+    background: #090b0d;
+    border-radius: 999px;
+    box-shadow: 0 0 14px 14px #090b0d;
+    left: calc(-6vw + 4px) !important;
     text-shadow: 0 0 4px var(--night), 0 0 10px var(--night);
-    transform: translate(14%, -50%) rotate(var(--axis-angle, 0deg)) !important;
+    transform: translateY(-50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--architecture {
     transform: translate(-50%, 15%) rotate(var(--axis-angle, -90deg)) !important;
+  }
+
+  .field::after {
+    background:
+      radial-gradient(ellipse 130px 42px at 0 51%, #090b0d 0 70%, transparent 100%),
+      radial-gradient(ellipse 130px 42px at 100% 51%, #090b0d 0 70%, transparent 100%),
+      radial-gradient(ellipse 31% 37% at 10% 12%, rgba(9,11,13,.76), transparent 86%),
+      linear-gradient(180deg, rgba(9,11,13,.03), rgba(9,11,13,.2));
   }
 
   .field-node.is-related {
@@ -156,6 +173,11 @@
     box-shadow: none !important;
     color: var(--ink-500);
     opacity: 1;
+  }
+
+  .field-node::before {
+    height: 17.6px;
+    width: 17.6px;
   }
 
   .field-node.is-related::before {

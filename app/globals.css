@@ -4,7 +4,7 @@
   font-family: "IDAF";
   src: url("/fonts/idaf-regular.otf") format("opentype");
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 :root {
@@ -927,12 +927,12 @@ img { display: block; width: 100%; }
 .field.is-constellation .field-resting-image { filter: saturate(.35) brightness(.52); opacity: .48; }
 .field-resting-geometry { filter: saturate(1.12); height: 100%; inset: 0; opacity: .94; pointer-events: none; position: absolute; transition: filter .35s ease, opacity .35s ease; width: 100%; z-index: 2; }
 .field.is-constellation .field-resting-geometry { filter: saturate(.82) brightness(.82); opacity: .56; }
-.field-resting-connections { height: 100%; inset: 0; pointer-events: none; position: absolute; width: 100%; z-index: 3; }
+.field-resting-connections { height: 100%; inset: 0; opacity: 0; pointer-events: none; position: absolute; visibility: hidden; width: 100%; z-index: 3; }
 .field-resting-connections path { fill: none; opacity: .18; stroke: rgba(198,220,229,.42); stroke-linecap: round; stroke-width: .54px; vector-effect: non-scaling-stroke; }
 .field-resting-connections g:nth-child(5n + 1) path { stroke: rgba(114,217,232,.46); }
 .field-resting-connections g:nth-child(5n + 3) path { stroke: rgba(166,167,255,.42); }
 .field-resting-connections path:first-child, .field-resting-connections path:last-child { opacity: .09; }
-.field.is-constellation .field-resting-connections { filter: saturate(.72); opacity: .26; }
+.field.is-constellation .field-resting-connections { filter: saturate(.72); opacity: 0; }
 .field-active-connections { height: 100%; inset: 0; overflow: visible; pointer-events: none; position: absolute; width: 100%; z-index: 4; }
 .field-active-connections line { vector-effect: non-scaling-stroke; }
 .field-active-connection-glow { opacity: .12; stroke: var(--relation-color); stroke-linecap: round; stroke-width: 7px; }

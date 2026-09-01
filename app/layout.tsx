@@ -43,6 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="preload" href="/fonts/idaf-regular.otf" as="font" type="font/otf" crossOrigin="anonymous" />
         <link rel="preload" href={frauncesLatin} as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href={frauncesLatinItalic} as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossOrigin="anonymous" />

@@ -213,19 +213,19 @@
   }
 
   .field-axis--atmosphere {
-    transform: translate(-50%, -115%) rotate(var(--axis-angle, -90deg)) !important;
+    transform: translate(-50%, -50%) rotate(var(--axis-angle, -90deg)) !important;
   }
 
   .field-axis--compute {
-    transform: translate(5%, -50%) rotate(var(--axis-angle, 0deg)) !important;
+    transform: translate(-50%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--story {
-    transform: translate(-105%, -50%) rotate(var(--axis-angle, 0deg)) !important;
+    transform: translate(-50%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--architecture {
-    transform: translate(-50%, 15%) rotate(var(--axis-angle, -90deg)) !important;
+    transform: translate(-50%, -50%) rotate(var(--axis-angle, -90deg)) !important;
   }
 
   .field-node.is-related {

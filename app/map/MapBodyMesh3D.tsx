@@ -230,7 +230,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(mobile ? 42 : 36, 1, 0.1, 100);
-    camera.position.set(0, 0, mobile ? 13.8 : 14.8);
+    camera.position.set(0, 0, mobile ? 13.4 : 14.8);
     const nodeFields = mapNodes3D.map((_, index) => fieldPosition(index));
     const nodeLocals = nodeFields.map(localPosition);
     const projectedNodes = nodeLocals.map(() => ({ x: 0, y: 0, visible: true }));

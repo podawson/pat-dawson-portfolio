@@ -607,6 +607,18 @@ export function Constellation() {
     const horizontalAngle = readableAngle(positions.story, positions.compute);
     const verticalAngle = readableAngle(positions.architecture, positions.atmosphere);
     const mobile = window.matchMedia("(max-width: 580px)").matches;
+    const layerRect = layer.getBoundingClientRect();
+    const axisUnit = (from: typeof positions.story, to: typeof positions.story) => {
+      const dx = (to.x - from.x) * layerRect.width / 100;
+      const dy = (to.y - from.y) * layerRect.height / 100;
+      const distance = Math.hypot(dx, dy) || 1;
+      return { x: dx / distance, y: dy / distance };
+    };
+    const horizontalUnit = axisUnit(positions.story, positions.compute);
+    const verticalUnit = axisUnit(positions.architecture, positions.atmosphere);
+    const defaultMobileView = mobile
+      && Math.abs(horizontalAngle) < 0.75
+      && Math.abs(Math.abs(verticalAngle) - 90) < 0.75;
     (["story", "compute", "atmosphere", "architecture"] as const).forEach((key) => {
       const label = layer.querySelector<HTMLElement>(`[data-axis-label="${key}"]`);
       if (!label) return;
@@ -621,10 +633,40 @@ export function Constellation() {
       label.style.top = `${safeY}%`;
       label.style.visibility = positions[key].visible ? "visible" : "hidden";
       label.style.setProperty("--axis-angle", `${key === "story" || key === "compute" ? horizontalAngle : verticalAngle}deg`);
+      if (mobile) {
+        const unit = horizontal ? horizontalUnit : verticalUnit;
+        const direction = key === "story" || key === "architecture" ? -1 : 1;
+        const offset = label.offsetWidth / 2 + 4;
+        label.style.marginLeft = `${unit.x * offset * direction}px`;
+        label.style.marginTop = `${unit.y * offset * direction}px`;
+      } else {
+        label.style.marginLeft = "0px";
+        label.style.marginTop = "0px";
+      }
     });
     trimAxisLines(layer, positions);
     if (axisTrimFrameRef.current !== null) cancelAnimationFrame(axisTrimFrameRef.current);
     axisTrimFrameRef.current = requestAnimationFrame(() => {
+      if (defaultMobileView) {
+        const fieldRect = layer.closest<HTMLElement>(".field")?.getBoundingClientRect();
+        if (fieldRect) {
+          layer.querySelectorAll<HTMLElement>("[data-axis-label]").forEach((label) => {
+            const rect = label.getBoundingClientRect();
+            const nudgeX = rect.left < fieldRect.left + 6
+              ? fieldRect.left + 6 - rect.left
+              : rect.right > fieldRect.right - 6
+                ? fieldRect.right - 6 - rect.right
+                : 0;
+            const nudgeY = rect.top < fieldRect.top + 6
+              ? fieldRect.top + 6 - rect.top
+              : rect.bottom > fieldRect.bottom - 6
+                ? fieldRect.bottom - 6 - rect.bottom
+                : 0;
+            label.style.marginLeft = `${Number.parseFloat(label.style.marginLeft || "0") + nudgeX}px`;
+            label.style.marginTop = `${Number.parseFloat(label.style.marginTop || "0") + nudgeY}px`;
+          });
+        }
+      }
       trimAxisLines(layer, positions);
       axisTrimFrameRef.current = null;
     });

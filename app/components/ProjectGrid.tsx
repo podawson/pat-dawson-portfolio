@@ -107,8 +107,8 @@ export function ProjectGrid() {
     >
       <div className="index-filters" role="group" aria-label="Project filters">
         {categories.map((item) => (
-          <button className={filter === item ? "is-active" : ""} key={item} onClick={() => selectFilter(item)} type="button">
-            {item}
+          <button className={`control-pill ${filter === item ? "is-active" : ""}`} key={item} onClick={() => selectFilter(item)} type="button">
+            <span className="control-pill__content">{item}</span>
           </button>
         ))}
       </div>
@@ -169,7 +169,7 @@ export function ProjectGrid() {
           <h2>{active.title}</h2>
           <p>{active.summary}{active.slug === "string" ? "" : ` ${active.details[0]?.body ?? ""}`}</p>
           <div className="tag-row">{active.categories.map((category) => <span key={category}>{category}</span>)}</div>
-          <a className="project-open-pill" href={`/work/${active.slug}`}><span>Open project ↗</span></a>
+          <a className="project-open-pill control-pill" href={`/work/${active.slug}`}><span className="control-pill__content">Open project ↗</span></a>
         </article>
       </div>
     </div>

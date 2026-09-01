@@ -560,6 +560,7 @@ export function Constellation() {
   const [showNodeNames, setShowNodeNames] = useState(false);
   const [relationFilter, setRelationFilter] = useState<ConnectionKind | "all">("all");
   const [bodyReady, setBodyReady] = useState(false);
+  const [fontsReady, setFontsReady] = useState(false);
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const connectionLayerRef = useRef<SVGSVGElement | null>(null);
   const axisLayerRef = useRef<HTMLDivElement | null>(null);
@@ -567,6 +568,13 @@ export function Constellation() {
   const axisTrimFrameRef = useRef<number | null>(null);
   const backgroundPointerRef = useRef({ x: 0, y: 0 });
   const handleBodyReady = useCallback((ready: boolean) => setBodyReady(ready), []);
+  useEffect(() => {
+    let cancelled = false;
+    void document.fonts.ready.then(() => {
+      if (!cancelled) setFontsReady(true);
+    });
+    return () => { cancelled = true; };
+  }, []);
   const handleNodePositions = useCallback((positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => {
     positions.forEach((position, index) => {
       const element = nodeRefs.current[index];
@@ -693,7 +701,7 @@ export function Constellation() {
     // The full graphical field is one pointer-driven application surface.
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <section
-      className={`field ${active ? "is-constellation" : ""} ${bodyReady ? "has-sculptural-body" : ""} ${showNodeNames ? "show-node-names" : ""}`}
+      className={`field ${active ? "is-constellation" : ""} ${bodyReady && fontsReady ? "has-sculptural-body" : ""} ${showNodeNames ? "show-node-names" : ""}`}
       id="map"
       aria-labelledby="field-title"
       role="application"
@@ -714,16 +722,6 @@ export function Constellation() {
       }}
     >
       <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} onToggleNodeNames={() => setShowNodeNames((current) => !current)} showNodeNames={showNodeNames} />
-      {!bodyReady && <RestingGeometry />}
-      <svg className="field-resting-connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        {visibleConnections.map((connection) => (
-          <g key={`${connection.from}-${connection.to}-${connection.kind}`}>
-            {[-1, 0, 1].map((strand) => (
-              <path key={strand} d={restingPath(connection.from, connection.to, strand)} />
-            ))}
-          </g>
-        ))}
-      </svg>
       <div className="field-copy">
         <h1 id="field-title">It Grows</h1>
       </div>
@@ -731,19 +729,19 @@ export function Constellation() {
       <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
         <span>Filter by</span>
         <div>
-          <button aria-pressed={relationFilter === "all"} className={relationFilter === "all" ? "is-active" : ""} onClick={() => selectRelationFilter("all")} type="button">
-            All
+          <button aria-pressed={relationFilter === "all"} className={`control-pill ${relationFilter === "all" ? "is-active" : ""}`} onClick={() => selectRelationFilter("all")} type="button">
+            <span className="control-pill__content">All</span>
           </button>
           {relationKinds.map((kind) => (
             <button
               aria-pressed={relationFilter === kind}
-              className={relationFilter === kind ? "is-active" : ""}
+              className={`control-pill ${relationFilter === kind ? "is-active" : ""}`}
               key={kind}
               onClick={() => selectRelationFilter(kind)}
               style={{ "--relation-color": relationColor[kind] } as CSSProperties}
               type="button"
             >
-              <i />{relationLabel[kind]}
+              <span className="control-pill__content"><i />{relationLabel[kind]}</span>
             </button>
           ))}
         </div>
@@ -838,7 +836,7 @@ export function Constellation() {
               </button>
             )) : <p className="map-selection-band__empty">No {relationFilter === "all" ? "related" : relationLabel[relationFilter].toLowerCase()} links recorded.</p>}
           </div>
-          <a className="map-selection-band__open project-open-pill" href={`/work/${active.slug}`}><span>Open project ↗</span></a>
+          <a className="map-selection-band__open project-open-pill control-pill" href={`/work/${active.slug}`}><span className="control-pill__content">Open project →</span></a>
         </aside>
       )}
 

@@ -8,6 +8,73 @@
   overflow: visible;
 }
 
+/* Shared interaction primitive for controls; content and metadata do not use it. */
+.control-pill {
+  isolation: isolate;
+  overflow: hidden;
+  position: relative;
+  transition: border-color .24s ease, color .24s ease;
+}
+
+.control-pill::before {
+  background: var(--cream);
+  border-radius: inherit;
+  content: "";
+  inset: 3px;
+  opacity: 0;
+  position: absolute;
+  transform: scaleX(.2);
+  transform-origin: center;
+  transition: opacity .2s ease, transform .34s cubic-bezier(.2,.82,.2,1);
+  z-index: 0;
+}
+
+.control-pill__content {
+  align-items: center;
+  display: inline-flex;
+  gap: inherit;
+  position: relative;
+  z-index: 1;
+}
+
+.field-relation-filter button.control-pill.is-active,
+.map-corpus-tools button.control-pill.is-active,
+.work-page--dark .index-filters button.control-pill.is-active {
+  background: var(--ink-600);
+  border-color: var(--ink-400);
+  color: var(--ink-200);
+}
+
+.field-relation-filter button.control-pill:hover,
+.field-relation-filter button.control-pill:focus-visible,
+.map-corpus-tools button.control-pill:hover,
+.map-corpus-tools button.control-pill:focus-visible,
+.work-page--dark .index-filters button.control-pill:hover,
+.work-page--dark .index-filters button.control-pill:focus-visible,
+.project-open-pill.control-pill:hover,
+.project-open-pill.control-pill:focus-visible {
+  border-color: var(--cream);
+  color: var(--night) !important;
+  outline: none;
+}
+
+.control-pill:hover::before,
+.control-pill:focus-visible::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.field:not(.has-sculptural-body) .field-axes,
+.field:not(.has-sculptural-body) .field-nodes {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control-pill,
+  .control-pill::before { transition: none; }
+}
+
 .project-image-break {
   align-items: center;
   background: #050709;
@@ -96,6 +163,8 @@
 }
 
 @media (max-width: 580px) {
+  :root { --mobile-axis-clearance: 24px; }
+
   .field-node > strong { top: 100%; }
 
   .project-hero__image,
@@ -130,10 +199,14 @@
 
   .field-axis--atmosphere,
   .field-axis--architecture {
+    background: #090b0d;
+    border-radius: 999px;
+    box-shadow: 0 0 14px 14px #090b0d;
     transform-origin: center;
   }
 
   .field-axis--atmosphere {
+    margin-top: calc(-1 * var(--mobile-axis-clearance));
     transform: translate(-50%, -115%) rotate(var(--axis-angle, -90deg)) !important;
   }
 
@@ -157,15 +230,8 @@
   }
 
   .field-axis--architecture {
+    margin-top: var(--mobile-axis-clearance);
     transform: translate(-50%, 15%) rotate(var(--axis-angle, -90deg)) !important;
-  }
-
-  .field::after {
-    background:
-      radial-gradient(ellipse 130px 42px at 0 51%, #090b0d 0 70%, transparent 100%),
-      radial-gradient(ellipse 130px 42px at 100% 51%, #090b0d 0 70%, transparent 100%),
-      radial-gradient(ellipse 31% 37% at 10% 12%, rgba(9,11,13,.76), transparent 86%),
-      linear-gradient(180deg, rgba(9,11,13,.03), rgba(9,11,13,.2));
   }
 
   .field-node.is-related {
@@ -178,6 +244,13 @@
   .field-node::before {
     height: 17.6px;
     width: 17.6px;
+  }
+
+  .field-relation-filter button.control-pill,
+  .map-corpus-tools button.control-pill,
+  .index-filters button.control-pill {
+    min-height: 32px;
+    padding: 0 10px;
   }
 
   .field-node.is-related::before {

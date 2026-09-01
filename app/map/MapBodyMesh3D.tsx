@@ -230,7 +230,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(mobile ? 42 : 36, 1, 0.1, 100);
-    camera.position.set(0, 0, mobile ? 15.8 : 14.8);
+    camera.position.set(0, 0, mobile ? 13.8 : 14.8);
     const nodeFields = mapNodes3D.map((_, index) => fieldPosition(index));
     const nodeLocals = nodeFields.map(localPosition);
     const projectedNodes = nodeLocals.map(() => ({ x: 0, y: 0, visible: true }));
@@ -513,6 +513,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       return progress < 1 || filterProgress < 1;
     }
 
+    let readyNotified = false;
     function draw(now: number) {
       scheduledFrame = 0;
       if (!inViewport || document.hidden) return;
@@ -566,6 +567,10 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
         projectionDirty = false;
       }
       renderer.render(scene, camera);
+      if (!readyNotified) {
+        readyNotified = true;
+        onReadyChange(true);
+      }
       const moving = isDragging || resetRequested || rotationQuaternion.angleTo(targetQuaternion) > 0.00015 || Math.abs(yawVelocity) > 0.00004 || Math.abs(pitchVelocity) > 0.00004;
       if (moving || selectionChanging || now < renderUntil) schedule();
     }
@@ -583,7 +588,6 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       if (!document.hidden) wake(250);
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
-    onReadyChange(true);
     schedule();
 
     return () => {
@@ -610,17 +614,17 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       <div className="map-corpus-tools">
         <button
           aria-pressed={showNodeNames}
-          className={showNodeNames ? "is-active" : ""}
+          className={`control-pill ${showNodeNames ? "is-active" : ""}`}
           onClick={(event) => { event.stopPropagation(); onToggleNodeNames?.(); }}
           onPointerDown={(event) => event.stopPropagation()}
           type="button"
-        >{showNodeNames ? "Hide names" : "Show Names"}</button>
+        ><span className="control-pill__content">{showNodeNames ? "Hide names" : "Show Names"}</span></button>
         <button
-          className={`map-reset-view ${rotated ? "is-rotated" : ""}`}
+          className={`map-reset-view control-pill ${rotated ? "is-rotated" : ""}`}
           onClick={(event) => { event.stopPropagation(); resetRef.current?.(); onResetMap?.(); }}
           onPointerDown={(event) => event.stopPropagation()}
           type="button"
-        >Reset Corpus</button>
+        ><span className="control-pill__content">Reset Corpus</span></button>
       </div>
     </div>
   );

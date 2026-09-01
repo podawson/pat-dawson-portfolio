@@ -1404,7 +1404,7 @@ img { display: block; width: 100%; }
 .field-relation-filter > span { font-size: var(--t-100); }
 .field-relation-filter button,
 .map-corpus-tools button { font-size: var(--t-200); }
-.field-axis { font-size: var(--t-200); }
+.field-axis { font-size: var(--t-300); }
 
 @media (max-width: 680px) {
   .bodega-collage { grid-template-columns: repeat(2,minmax(0,1fr)); }

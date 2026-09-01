@@ -114,7 +114,7 @@
   .field.is-constellation .map-corpus-tools {
     bottom: auto;
     right: 14px;
-    top: 99px;
+    top: 64px;
   }
 
   .map-selection-band__image {
@@ -138,10 +138,12 @@
   }
 
   .field-axis--compute {
-    transform: translate(-116%, -50%) rotate(var(--axis-angle, 0deg)) !important;
+    text-shadow: 0 0 4px var(--night), 0 0 10px var(--night);
+    transform: translate(-108%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 
   .field-axis--story {
+    text-shadow: 0 0 4px var(--night), 0 0 10px var(--night);
     transform: translate(14%, -50%) rotate(var(--axis-angle, 0deg)) !important;
   }
 

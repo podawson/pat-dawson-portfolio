@@ -725,7 +725,6 @@ export function Constellation() {
         ))}
       </svg>
       <div className="field-copy">
-        <p className="kicker kicker--light">Corpus</p>
         <h1 id="field-title">It Grows</h1>
       </div>
 

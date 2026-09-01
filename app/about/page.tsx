@@ -27,7 +27,6 @@ export default function AboutPage() {
       <SiteHeader inverse />
       <section className="about-hero">
         <div className="route-intro about-hero__heading">
-          <p className="kicker">About</p>
           <h1>More Information</h1>
         </div>
         <div className="about-hero__body">

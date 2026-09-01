@@ -217,6 +217,24 @@
   text-transform: none;
 }
 
+.project-page-shell .project-hero__meta {
+  border-top: 1px solid var(--project-rule-structural);
+  display: block;
+  margin-top: 28px;
+  overflow-x: auto;
+  padding-top: 16px;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.project-page-shell .project-hero__meta::-webkit-scrollbar { display: none; }
+
+.project-page-shell .kicker:not(.project-hero__meta),
+.project-page-shell .micro {
+  color: var(--ink-200);
+  font-weight: var(--w-medium);
+}
+
 .project-page-shell .project-narrative__title {
   border-bottom: 1px solid var(--project-rule-emphatic);
   padding-bottom: 24px;
@@ -227,6 +245,7 @@
   font-size: var(--project-section-head);
   font-weight: var(--w-regular);
   line-height: 1.06;
+  margin-top: 16px;
 }
 
 .project-page-shell .project-narrative__body aside {
@@ -330,6 +349,15 @@
   padding: 12px 14px;
 }
 
+/* Project media sits inside the same ground-plane grid as the text. */
+.project-page-shell .project-gallery,
+.project-page-shell .project-video,
+.project-page-shell .project-image-break,
+.project-page-shell .gleanings-interface-frame,
+.project-page-shell .bodega-collage {
+  margin-inline: max(24px, 6vw);
+}
+
 .project-image-break {
   align-items: center;
   background: #050709;
@@ -368,8 +396,8 @@
 .field.is-constellation .map-corpus-tools {
   bottom: auto;
   right: 4.2vw;
-  top: 148px;
-  transform: translateY(-50%);
+  top: 117px;
+  transform: none;
 }
 
 .field.show-node-names .field-node > strong {
@@ -436,7 +464,7 @@
   .field.is-constellation .map-corpus-tools {
     bottom: auto;
     right: 14px;
-    top: 64px;
+    top: 75px;
   }
 
   .map-selection-band__image {

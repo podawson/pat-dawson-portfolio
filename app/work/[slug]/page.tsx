@@ -296,8 +296,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <p className="project-hero__headline">{project.headline}</p>
             <p className="project-hero__summary">{project.summary}</p>
             <p className="kicker project-hero__meta">
-              {[...headerDescriptor, project.year, ...project.categories].join(" / ")}
+              {[...headerDescriptor, project.year].join(" / ")}
             </p>
+            <div className="tag-row project-hero__categories" aria-label="Project classifications">
+              {project.categories.map((category) => <span key={category}>{category}</span>)}
+            </div>
           </div>
           <div className={`project-hero__image${isHeroDiagram ? " project-hero__image--diagram" : ""}`}><img src={project.image} alt="" /></div>
         </header>
@@ -313,13 +316,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div className="project-narrative__title">
             <p className="kicker">{project.storyKicker}</p>
             <h2>{project.storyTitle}</h2>
-          </div>
-          <div className="project-narrative__body">
-            <p>{project.narrative}</p>
             <aside>
               <p className="micro">{project.agencyLabel}</p>
               <p>{project.agency}</p>
             </aside>
+          </div>
+          <div className="project-narrative__body">
+            <p>{project.narrative}</p>
           </div>
         </section>
 

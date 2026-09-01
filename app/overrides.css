@@ -45,15 +45,10 @@
   color: var(--ink-200);
 }
 
-.field-relation-filter button.control-pill:hover,
 .field-relation-filter button.control-pill:focus-visible,
-.map-corpus-tools button.control-pill:hover,
 .map-corpus-tools button.control-pill:focus-visible,
-.work-page--dark .index-filters button.control-pill:hover,
 .work-page--dark .index-filters button.control-pill:focus-visible,
-.map-selection-band__relations button.control-pill:hover,
 .map-selection-band__relations button.control-pill:focus-visible,
-.project-open-pill.control-pill:hover,
 .project-open-pill.control-pill:focus-visible {
   border-color: var(--cream);
   color: var(--night) !important;
@@ -66,10 +61,26 @@
   z-index: 1;
 }
 
-.control-pill:hover::before,
 .control-pill:focus-visible::before {
   opacity: 1;
   transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .field-relation-filter button.control-pill:hover,
+  .map-corpus-tools button.control-pill:hover,
+  .work-page--dark .index-filters button.control-pill:hover,
+  .map-selection-band__relations button.control-pill:hover,
+  .project-open-pill.control-pill:hover {
+    border-color: var(--cream);
+    color: var(--night) !important;
+    outline: none;
+  }
+
+  .control-pill:hover::before {
+    opacity: 1;
+    transform: scaleX(1);
+  }
 }
 
 .field:not(.has-sculptural-body) .field-axes,

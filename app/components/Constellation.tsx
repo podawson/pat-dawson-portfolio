@@ -594,7 +594,7 @@ export function Constellation() {
       line.style.visibility = from.visible && to.visible ? "visible" : "hidden";
     });
   }, []);
-  const handleAxisPositions = useCallback((positions: AxisPositions) => {
+  const handleAxisPositions = useCallback((positions: AxisPositions, rotationAmount: number) => {
     const layer = axisLayerRef.current;
     if (!layer) return;
     axisPositionsRef.current = positions;
@@ -616,9 +616,8 @@ export function Constellation() {
     };
     const horizontalUnit = axisUnit(positions.story, positions.compute);
     const verticalUnit = axisUnit(positions.architecture, positions.atmosphere);
-    const defaultMobileView = mobile
-      && Math.abs(horizontalAngle) < 0.75
-      && Math.abs(Math.abs(verticalAngle) - 90) < 0.75;
+    const restingProgress = mobile ? Math.max(0, Math.min(1, rotationAmount / 0.22)) : 1;
+    const restingViewBlend = mobile ? 1 - restingProgress * restingProgress * (3 - 2 * restingProgress) : 0;
     (["story", "compute", "atmosphere", "architecture"] as const).forEach((key) => {
       const label = layer.querySelector<HTMLElement>(`[data-axis-label="${key}"]`);
       if (!label) return;
@@ -647,7 +646,7 @@ export function Constellation() {
     trimAxisLines(layer, positions);
     if (axisTrimFrameRef.current !== null) cancelAnimationFrame(axisTrimFrameRef.current);
     axisTrimFrameRef.current = requestAnimationFrame(() => {
-      if (defaultMobileView) {
+      if (restingViewBlend > 0) {
         const fieldRect = layer.closest<HTMLElement>(".field")?.getBoundingClientRect();
         if (fieldRect) {
           layer.querySelectorAll<HTMLElement>("[data-axis-label]").forEach((label) => {
@@ -662,8 +661,8 @@ export function Constellation() {
               : rect.bottom > fieldRect.bottom - 6
                 ? fieldRect.bottom - 6 - rect.bottom
                 : 0;
-            label.style.marginLeft = `${Number.parseFloat(label.style.marginLeft || "0") + nudgeX}px`;
-            label.style.marginTop = `${Number.parseFloat(label.style.marginTop || "0") + nudgeY}px`;
+            label.style.marginLeft = `${Number.parseFloat(label.style.marginLeft || "0") + nudgeX * restingViewBlend}px`;
+            label.style.marginTop = `${Number.parseFloat(label.style.marginTop || "0") + nudgeY * restingViewBlend}px`;
           });
         }
       }

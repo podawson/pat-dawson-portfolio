@@ -11,7 +11,7 @@ type MapBody3DProps = {
   emphasizedSlugs?: readonly string[];
   filterColor?: string | null;
   highlightedNeighbors?: readonly string[];
-  onAxisPositionsChange?: (positions: Readonly<Record<"story" | "compute" | "atmosphere" | "architecture" | "center", { x: number; y: number; visible: boolean }>>) => void;
+  onAxisPositionsChange?: (positions: Readonly<Record<"story" | "compute" | "atmosphere" | "architecture" | "center", { x: number; y: number; visible: boolean }>>, rotationAmount: number) => void;
   onReadyChange: (ready: boolean) => void;
   onNodePositionsChange?: (positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => void;
   onResetMap?: () => void;
@@ -561,7 +561,7 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
           projectedAxes[key].y = (-projectedPoint.y * 0.5 + 0.5) * 100;
           projectedAxes[key].visible = projectedPoint.z >= -1 && projectedPoint.z <= 1;
         });
-        onAxisPositionsChange?.(projectedAxes);
+        onAxisPositionsChange?.(projectedAxes, rotationQuaternion.angleTo(defaultQuaternion));
         lastProjectedQuaternion.copy(rotationQuaternion);
         projectionsReady = true;
         projectionDirty = false;

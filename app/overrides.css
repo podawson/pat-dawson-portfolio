@@ -291,7 +291,9 @@
 .project-page-shell .project-gallery figcaption,
 .project-page-shell .project-video figcaption,
 .project-page-shell .gleanings-interface-frame > figcaption {
+  box-sizing: border-box;
   color: var(--ink-500);
+  display: block;
   font-family: var(--mono);
   font-size: var(--project-caption);
   font-weight: var(--w-regular);
@@ -299,7 +301,9 @@
   line-height: 1.45;
   min-height: 0;
   padding: 10px 0 0;
+  text-align: center;
   text-transform: none;
+  width: 100%;
 }
 
 .project-page-shell .project-video {

@@ -290,14 +290,23 @@
 }
 
 .project-page-shell .next-project {
-  color: var(--ink-200);
+  color: var(--ink-100);
 }
 
 .project-page-shell .next-project a {
-  color: var(--ink-200);
-  font-size: var(--project-deck);
+  color: var(--ink-100);
+  font-size: var(--t-display-lg);
   font-weight: var(--w-regular);
-  line-height: 1.32;
+  line-height: var(--lh-tight);
+}
+
+.project-page-shell .next-project > p:last-child {
+  color: var(--ink-400);
+  font-size: var(--t-600);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .project-page-shell .project-gallery,
@@ -446,6 +455,8 @@
 }
 
 @media (max-width: 580px) {
+  .project-page-shell .next-project a { font-size: var(--t-display-md); }
+
   .field-node > strong { top: 100%; }
 
   .project-hero__image,

@@ -347,14 +347,22 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </>
         ) : null}
 
-        <section className="project-evidence" aria-label="Evidence and recommended artifacts">
-          <div>
-            <p className="kicker">At a glance</p>
-            <ul>{project.metrics.map((metric) => <li key={metric}>{metric}</li>)}</ul>
-          </div>
-          <div>
-            <p className="kicker">Artifacts that carry the case</p>
-            <ol>{project.artifacts.map((artifact) => <li key={artifact}>{artifact}</li>)}</ol>
+        <section className="project-evidence" aria-label="Project evidence at a glance">
+          <header><p className="kicker">At a glance</p></header>
+          <div className="project-evidence__body">
+            <p className="project-evidence__metrics">
+              {project.metrics.map((metric, index) => (
+                <span key={metric}>{metric}{index < project.metrics.length - 1 ? <i aria-hidden="true"> · </i> : null}</span>
+              ))}
+            </p>
+            <div className="project-evidence__artifacts">
+              <p className="kicker">Artifacts that carry the case</p>
+              <p className="project-evidence__artifacts-copy">
+                {project.artifacts.map((artifact, index) => (
+                  <span key={artifact}>{artifact}{index < project.artifacts.length - 1 ? <i aria-hidden="true"> / </i> : null}</span>
+                ))}
+              </p>
+            </div>
           </div>
         </section>
 

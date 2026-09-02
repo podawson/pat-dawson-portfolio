@@ -1416,3 +1416,45 @@
 @media (max-width: 580px) {
   .about-page .site-footer { justify-content: center; }
 }
+
+/* The LinkedIn mark belongs to the sign-off, two lines beneath Take care. */
+.about-closing-note .footer-linkedin {
+  display: flex;
+  margin: calc(2 * var(--t-600)) auto 0;
+  width: fit-content;
+}
+.about-closing-note .footer-linkedin svg {
+  height: 30px;
+  width: 30px;
+}
+
+/* Embedded controls: one compact-button centerline and protected slider rows. */
+.study-tool--embedded .study-controls.is-collapsed {
+  align-items: center;
+}
+.study-tool--embedded .study-controls.is-collapsed .study-presets--collapsed {
+  align-items: center;
+  display: flex;
+  height: 34px;
+}
+.study-tool--embedded .study-controls.is-collapsed .study-presets--collapsed button,
+.study-tool--embedded .study-controls.is-collapsed .study-controls-toggle {
+  align-self: center;
+  margin-block: 0;
+}
+.study-tool--embedded .study-controls:not(.is-collapsed) {
+  height: min(570px, calc(100% - 24px));
+}
+.study-tool--embedded .study-control-section label {
+  line-height: 1.2;
+  padding: 6px 0 8px;
+  row-gap: 5px;
+}
+.study-tool--embedded .study-control-section input[type="range"] {
+  display: block;
+  height: 16px;
+  margin: 0;
+}
+
+/* Dedicated-page classifications remain plain, upright control pills. */
+.project-page-shell .project-hero__categories span { font-style: normal; }

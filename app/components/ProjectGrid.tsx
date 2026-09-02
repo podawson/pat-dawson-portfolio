@@ -113,7 +113,7 @@ export function ProjectGrid() {
         ))}
       </div>
 
-      <svg className="index-connector" width={connector.width} height={connector.height} aria-hidden="true">
+      {connector.width > 1 && connector.height > 1 ? <svg className="index-connector" width={connector.width} height={connector.height} aria-hidden="true">
         <path
           id="index-leader-path"
           pathLength="1"
@@ -122,7 +122,7 @@ export function ProjectGrid() {
         <text className="index-connector__label" textAnchor="middle">
           <textPath href="#index-leader-path" startOffset="50%">{active.indexPill}</textPath>
         </text>
-      </svg>
+      </svg> : null}
 
       <ol className="index-list" aria-label="Project Index" onPointerLeave={cancelQueuedPreview}>
         {projects.map((project, index) => isVisible(index) ? (
@@ -168,7 +168,6 @@ export function ProjectGrid() {
           </div>
           <h2>{active.title}</h2>
           <p>{active.summary}{active.slug === "string" ? "" : ` ${active.details[0]?.body ?? ""}`}</p>
-          <div className="tag-row">{active.categories.map((category) => <span key={category}>{category}</span>)}</div>
           <a className="project-open-pill control-pill" href={`/work/${active.slug}`}><span className="control-pill__content">Open project ↗</span></a>
         </article>
       </div>

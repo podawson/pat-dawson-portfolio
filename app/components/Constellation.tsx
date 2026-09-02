@@ -780,11 +780,7 @@ export function Constellation() {
       </div>
 
       <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
-        <span>Filter by</span>
         <div>
-          <button aria-pressed={relationFilter === "all"} className={`control-pill ${relationFilter === "all" ? "is-active" : ""}`} onClick={() => selectRelationFilter("all")} type="button">
-            <span className="control-pill__content">All</span>
-          </button>
           {relationKinds.map((kind) => (
             <span className="field-filter-option" key={kind}>
               <button

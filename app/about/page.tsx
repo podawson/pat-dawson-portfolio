@@ -61,14 +61,11 @@ export default function AboutPage() {
           <p>I&apos;ve spent my years trying to stay ahead of the next one by being a sponge.</p>
           <p>Everyone&apos;s a great teacher if you&apos;re a good listener.</p>
           <p><em>Thank you!</em><br /><em>Take care!</em></p>
+          <a className="footer-linkedin" href="https://www.linkedin.com/in/patrick-dawson/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><rect width="24" height="24" rx="2"/><circle cx="6.5" cy="7" r="1.5"/><path d="M5 10h3v9H5zm5 0h2.8v1.25h.04c.39-.74 1.35-1.52 2.78-1.52 2.98 0 3.53 1.96 3.53 4.51V19h-3v-4.22c0-1.01-.02-2.3-1.4-2.3-1.4 0-1.62 1.1-1.62 2.23V19h-3z"/></svg>
+          </a>
         </div>
       </section>
-
-      <footer className="site-footer">
-        <a className="footer-linkedin" href="https://www.linkedin.com/in/patrick-dawson/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
-          <svg aria-hidden="true" viewBox="0 0 24 24"><rect width="24" height="24" rx="2"/><circle cx="6.5" cy="7" r="1.5"/><path d="M5 10h3v9H5zm5 0h2.8v1.25h.04c.39-.74 1.35-1.52 2.78-1.52 2.98 0 3.53 1.96 3.53 4.51V19h-3v-4.22c0-1.01-.02-2.3-1.4-2.3-1.4 0-1.62 1.1-1.62 2.23V19h-3z"/></svg>
-        </a>
-      </footer>
     </main>
   );
 }

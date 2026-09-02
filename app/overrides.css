@@ -1682,3 +1682,67 @@
 
 /* Give the opening About statement a touch more presence without changing rank. */
 .about-hero__body p { font-size: 19px; }
+
+/* Desktop About: the instrument meets the page centerline and reads as landscape. */
+@media (min-width: 901px) {
+  .about-hero {
+    column-gap: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .about-play-interactive {
+    max-width: none;
+    width: 100%;
+  }
+
+  .study-tool--embedded { aspect-ratio: 4 / 3; }
+
+  .study-tool--embedded .study-controls.is-collapsed {
+    left: auto;
+    right: 18px;
+    transform: none;
+  }
+
+  .study-tool--embedded .study-controls:not(.is-collapsed) {
+    left: auto;
+    right: 18px;
+    transform: translateY(-50%);
+  }
+}
+
+/* Mobile Corpus title and display controls share one stable centerline. */
+@media (max-width: 580px) {
+  .field-copy { top: 60px; }
+  .field-copy h1 { margin: 0; }
+  .map-corpus-tools,
+  .field.is-constellation .map-corpus-tools {
+    top: 59px;
+    transform: none;
+  }
+}
+
+/* Dedicated project pages stay inside the mobile viewport at every content rank. */
+@media (max-width: 580px) {
+  .project-page-shell,
+  .project-page,
+  .project-hero,
+  .project-hero__copy,
+  .project-hero__image,
+  .project-facts,
+  .project-narrative,
+  .project-evidence,
+  .project-details,
+  .next-project {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .project-page-shell .project-hero h1 {
+    font-size: clamp(40px, 12vw, 57.6px);
+    overflow-wrap: anywhere;
+  }
+
+  .project-page-shell img,
+  .project-page-shell video { max-width: 100%; }
+}

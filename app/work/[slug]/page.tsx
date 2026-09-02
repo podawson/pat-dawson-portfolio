@@ -306,7 +306,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </header>
 
         <section className="project-facts">
-          <div><p className="micro">Role</p><p>{project.role}</p></div>
+          <div>
+            <p className="micro">Role</p>
+            <p className="project-facts__role">
+              {project.role.split(" · ").map((role) => <span key={role}>{role}</span>)}
+            </p>
+          </div>
           <div><p className="micro">Outcome</p><p>{project.outcome}</p></div>
         </section>
 
@@ -364,7 +369,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               ))}
             </p>
             <div className="project-evidence__artifacts">
-              <p className="kicker">Artifacts that carry the case</p>
+              <p className="kicker">In the record</p>
               <p className="project-evidence__artifacts-copy">
                 {project.artifacts.map((artifact, index) => (
                   <span key={artifact}>{artifact}{index < project.artifacts.length - 1 ? <i aria-hidden="true"> · </i> : null}</span>

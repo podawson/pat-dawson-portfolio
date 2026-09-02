@@ -206,6 +206,10 @@
 
 .project-page-shell .project-hero__summary { margin-top: 0; }
 
+.project-page-shell .project-facts .micro + p { margin-top: 14px; }
+
+.project-page-shell .project-facts__role span { display: block; }
+
 .project-page-shell .project-hero__summary,
 .project-page-shell .project-facts p:last-child,
 .project-page-shell .project-narrative__body > p,
@@ -311,6 +315,8 @@
   font-size: var(--project-stat);
   font-variant-numeric: lining-nums;
   font-weight: var(--w-regular);
+  grid-column: 2;
+  grid-row: 1;
   line-height: 1.2;
 }
 
@@ -318,10 +324,25 @@
   color: var(--ink-400);
 }
 
+.project-page-shell .project-evidence {
+  column-gap: 5vw;
+  row-gap: 42px;
+}
+
+.project-page-shell .project-evidence > header {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.project-page-shell .project-evidence__body { display: contents; }
+
 .project-page-shell .project-evidence__artifacts {
   align-items: start;
-  gap: clamp(32px, 5vw, 72px);
-  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 5vw;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  grid-template-columns: minmax(150px, .38fr) minmax(0, 1.62fr);
+  margin-top: 0;
 }
 
 .project-page-shell .project-evidence__artifacts > .kicker {
@@ -356,6 +377,7 @@
 .project-page-shell .next-project > p:last-child {
   color: var(--ink-400);
   font-size: var(--t-600);
+  margin-top: var(--project-body);
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -365,8 +387,9 @@
 .project-page-shell .project-gallery,
 .project-page-shell .project-gallery--side-by-side {
   background: transparent;
-  border-bottom: 0;
+  border-bottom: 1px solid var(--project-rule-structural);
   gap: clamp(24px, 3vw, 48px);
+  padding-bottom: var(--project-body);
 }
 
 .project-page-shell .project-gallery figcaption,
@@ -389,7 +412,8 @@
 
 .project-page-shell .project-video {
   background: transparent;
-  border-bottom: 0;
+  border-bottom: 1px solid var(--project-rule-structural);
+  padding-bottom: var(--project-body);
 }
 
 .project-page-shell .project-video video {
@@ -409,6 +433,15 @@
 .project-page-shell .gleanings-interface-frame > figcaption {
   border-top: 1px solid var(--project-rule-structural);
   padding: 12px 14px;
+}
+
+/* Preserve media geometry while letting the continuous page ground show through. */
+.project-page-shell .project-hero__image:not(.project-hero__image--diagram),
+.project-page-shell .project-image-break:not(.project-image-break--diagram),
+.project-page-shell .project-gallery figure,
+.project-page-shell .project-gallery img,
+.project-page-shell .project-video video {
+  background: transparent;
 }
 
 /* Project media sits inside the same ground-plane grid as the text. */
@@ -664,6 +697,15 @@
 }
 
 @media (max-width: 900px) {
+  .project-page-shell .project-evidence { row-gap: 28px; }
+
+  .project-page-shell .project-evidence > header,
+  .project-page-shell .project-evidence__metrics,
+  .project-page-shell .project-evidence__artifacts {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
   .project-page-shell .project-evidence__artifacts {
     gap: 12px;
     grid-template-columns: minmax(0, 1fr);

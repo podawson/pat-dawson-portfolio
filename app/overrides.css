@@ -1419,6 +1419,7 @@
 
 /* The LinkedIn mark belongs to the sign-off, two lines beneath Take care. */
 .about-closing-note .footer-linkedin {
+  color: var(--ink-400);
   display: flex;
   margin: calc(2 * var(--t-600)) auto 0;
   width: fit-content;
@@ -1427,6 +1428,8 @@
   height: 30px;
   width: 30px;
 }
+.about-closing-note .footer-linkedin:hover,
+.about-closing-note .footer-linkedin:focus-visible { color: var(--ink-300); }
 
 /* Embedded controls: one compact-button centerline and protected slider rows. */
 .study-tool--embedded .study-controls.is-collapsed {
@@ -1480,4 +1483,54 @@
     min-height: 38px;
     padding-inline: 12px;
   }
+}
+
+/* About CV role descriptors sit beneath practice names in title case. */
+.about-page .experience-list article .micro { text-transform: capitalize; }
+
+/* Mobile display controls counter the transformed Corpus layer to share the title row. */
+@media (max-width: 580px) {
+  .map-corpus-tools,
+  .field.is-constellation .map-corpus-tools { transform: translateY(-28px); }
+}
+
+/* Relationship definitions use the sentence alone; mobile retains the selected one above the row. */
+.field-selected-filter-description { display: none; }
+
+@media (max-width: 580px) {
+  .field-selected-filter-description {
+    color: var(--ink-100);
+    display: block;
+    font-family: var(--mono);
+    font-size: var(--t-100);
+    letter-spacing: var(--track-mixed);
+    line-height: var(--lh-label);
+    margin: 0;
+    max-width: min(100%, 34em);
+    padding-bottom: 15px;
+    position: relative;
+    text-align: left;
+    white-space: normal;
+  }
+
+  .field-selected-filter-description::after {
+    background: var(--ink-600);
+    bottom: 0;
+    content: "";
+    height: 11px;
+    left: 0;
+    position: absolute;
+    width: 1px;
+  }
+}
+
+/* Final header calibration: larger navigation, with a quieter mobile wordmark. */
+@media (min-width: 581px) {
+  .site-header nav a { font-size: 19px; }
+}
+
+@media (max-width: 580px) {
+  .wordmark > span:last-child { font-size: 25.5px; }
+  .wordmark-mark { font-size: 20px; height: 31px; width: 31px; }
+  .site-header nav a { font-size: 13px; }
 }

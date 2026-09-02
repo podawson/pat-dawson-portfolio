@@ -21,7 +21,7 @@ const relationLabel: Record<ConnectionKind, string> = {
 };
 
 const relationDescription: Record<ConnectionKind, string> = {
-  handoff: "The work evolves with its next stakeholder",
+  handoff: "The work evolves with its next stakeholder.",
   cede: "The work gives its outcome to other people.",
   uphold: "The work answers a record that predates it.",
   quorum: "The work pursues stakeholder alignment.",
@@ -780,7 +780,15 @@ export function Constellation() {
       </div>
 
       <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
+        {relationFilter !== "all" ? (
+          <p className="field-selected-filter-description">
+            {relationDescription[relationFilter]}
+          </p>
+        ) : null}
         <div>
+          <button className="control-pill field-reset-control" onClick={resetMap} type="button">
+            <span className="control-pill__content">Reset</span>
+          </button>
           {relationKinds.map((kind) => (
             <span className="field-filter-option" key={kind}>
               <button
@@ -794,13 +802,10 @@ export function Constellation() {
                 <span className="control-pill__content"><i />{relationLabel[kind]}</span>
               </button>
               <span className="field-filter-tooltip" id={`relation-help-${kind}`} role="tooltip">
-                <strong>{relationLabel[kind]}:</strong> {relationDescription[kind]}
+                {relationDescription[kind]}
               </span>
             </span>
           ))}
-          <button className="control-pill field-reset-control" onClick={resetMap} type="button">
-            <span className="control-pill__content">Reset</span>
-          </button>
         </div>
       </div>
       <p className="field-filter-announcement" aria-live="polite">

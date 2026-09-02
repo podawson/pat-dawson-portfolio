@@ -1436,6 +1436,7 @@
   align-items: center;
   display: flex;
   height: 34px;
+  margin: 0;
 }
 .study-tool--embedded .study-controls.is-collapsed .study-presets--collapsed button,
 .study-tool--embedded .study-controls.is-collapsed .study-controls-toggle {
@@ -1454,6 +1455,11 @@
   display: block;
   height: 16px;
   margin: 0;
+}
+
+.study-tool--embedded .study-controls:not(.is-collapsed) .study-controls__header .study-controls-toggle {
+  bottom: auto;
+  top: auto;
 }
 
 /* Dedicated-page classifications remain plain, upright control pills. */

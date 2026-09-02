@@ -1717,8 +1717,9 @@
   .map-corpus-tools,
   .field.is-constellation .map-corpus-tools {
     top: 59px;
-    transform: none;
   }
+  .map-corpus-tools { transform: translateY(-28px); }
+  .field.is-constellation .map-corpus-tools { transform: translateY(44px); }
 }
 
 /* Dedicated project pages stay inside the mobile viewport at every content rank. */

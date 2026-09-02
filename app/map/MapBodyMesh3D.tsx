@@ -14,10 +14,10 @@ type MapBody3DProps = {
   onAxisPositionsChange?: (positions: Readonly<Record<"story" | "compute" | "atmosphere" | "architecture" | "center", { x: number; y: number; visible: boolean }>>, rotationAmount: number) => void;
   onReadyChange: (ready: boolean) => void;
   onNodePositionsChange?: (positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => void;
-  onResetMap?: () => void;
   onToggleAxes?: () => void;
   onToggleNodes?: () => void;
   onToggleNodeNames?: () => void;
+  resetSignal?: number;
   showAxes?: boolean;
   showNodes?: boolean;
   showNodeNames?: boolean;
@@ -194,7 +194,7 @@ const fragmentShader = `
   }
 `;
 
-export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null, highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onResetMap, onToggleAxes, onToggleNodes, onToggleNodeNames, showAxes = true, showNodes = true, showNodeNames = false }: MapBody3DProps) {
+export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null, highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onToggleAxes, onToggleNodes, onToggleNodeNames, resetSignal = 0, showAxes = true, showNodes = true, showNodeNames = false }: MapBody3DProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeSlugRef = useRef(activeSlug);
   const emphasizedSlugsRef = useRef(emphasizedSlugs);
@@ -202,8 +202,8 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
   const highlightedNeighborsRef = useRef(highlightedNeighbors);
   const wakeRef = useRef<(() => void) | null>(null);
   const resetRef = useRef<(() => void) | null>(null);
-  const [rotated, setRotated] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const handledResetSignalRef = useRef(resetSignal);
 
   useEffect(() => {
     activeSlugRef.current = activeSlug;
@@ -212,6 +212,12 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     highlightedNeighborsRef.current = highlightedNeighbors;
     wakeRef.current?.();
   }, [activeSlug, emphasizedSlugs, filterColor, highlightedNeighbors]);
+
+  useEffect(() => {
+    if (handledResetSignalRef.current === resetSignal) return;
+    handledResetSignalRef.current = resetSignal;
+    resetRef.current?.();
+  }, [resetSignal]);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -351,7 +357,6 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     let yawVelocity = 0;
     let pitchVelocity = 0;
     let resetRequested = false;
-    let rotationFlag = false;
     let projectionDirty = true;
     let projectionsReady = false;
     const lastProjectedQuaternion = new THREE.Quaternion();
@@ -378,13 +383,6 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     resize();
     window.addEventListener("resize", resize);
 
-    const updateRotationFlag = () => {
-      const changed = rotationQuaternion.angleTo(defaultQuaternion) > 0.025;
-      if (changed !== rotationFlag) {
-        rotationFlag = changed;
-        setRotated(changed);
-      }
-    };
     resetRef.current = () => {
       resetRequested = true;
       targetQuaternion.copy(defaultQuaternion);
@@ -424,7 +422,6 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
       previousPointerX = event.clientX;
       previousPointerY = event.clientY;
       previousPointerTime = event.timeStamp;
-      updateRotationFlag();
       wake(500);
     };
     const onPointerUp = (event: PointerEvent) => {
@@ -544,7 +541,6 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
         rotationQuaternion.slerp(targetQuaternion, 1 - Math.pow(isDragging ? 0.48 : 0.68, delta));
       }
       body.quaternion.copy(rotationQuaternion);
-      updateRotationFlag();
       body.updateMatrixWorld(true);
       // The first projection pass can happen before renderer.render() updates the
       // camera matrices. Refresh them explicitly so cached DOM node positions are
@@ -617,19 +613,6 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
     <div className={`field-body-3d ${dragging ? "is-dragging" : ""}`} ref={mountRef} aria-label="Drag freely to rotate the project Corpus in three dimensions">
       <div className="map-corpus-tools">
         <button
-          aria-pressed={showNodeNames}
-          className={`control-pill ${showNodeNames ? "is-active" : ""}`}
-          onClick={(event) => { event.stopPropagation(); onToggleNodeNames?.(); }}
-          onPointerDown={(event) => event.stopPropagation()}
-          type="button"
-        ><span className="control-pill__content">Names</span></button>
-        <button
-          className={`map-reset-view control-pill ${rotated ? "is-rotated" : ""}`}
-          onClick={(event) => { event.stopPropagation(); resetRef.current?.(); onResetMap?.(); }}
-          onPointerDown={(event) => event.stopPropagation()}
-          type="button"
-        ><span className="control-pill__content">Reset</span></button>
-        <button
           aria-pressed={showAxes}
           className={`control-pill ${showAxes ? "is-active" : ""}`}
           onClick={(event) => { event.stopPropagation(); onToggleAxes?.(); }}
@@ -643,6 +626,13 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
           onPointerDown={(event) => event.stopPropagation()}
           type="button"
         ><span className="control-pill__content">Nodes</span></button>
+        <button
+          aria-pressed={showNodeNames}
+          className={`control-pill ${showNodeNames ? "is-active" : ""}`}
+          onClick={(event) => { event.stopPropagation(); onToggleNodeNames?.(); }}
+          onPointerDown={(event) => event.stopPropagation()}
+          type="button"
+        ><span className="control-pill__content">Names</span></button>
       </div>
     </div>
   );

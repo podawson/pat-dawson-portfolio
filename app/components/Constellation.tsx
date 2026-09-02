@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { projectConnections, projects, type ConnectionKind } from "../data";
 import { MapBody3D } from "../map/MapBodyMesh3D";
 
@@ -569,6 +569,7 @@ export function Constellation() {
   const [showAxes, setShowAxes] = useState(true);
   const [showNodes, setShowNodes] = useState(true);
   const [relationFilter, setRelationFilter] = useState<ConnectionKind | "all">("all");
+  const [resetSignal, setResetSignal] = useState(0);
   const [bodyReady, setBodyReady] = useState(false);
   const [fontsReady, setFontsReady] = useState(false);
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -577,6 +578,7 @@ export function Constellation() {
   const axisPositionsRef = useRef<AxisPositions | null>(null);
   const axisTrimFrameRef = useRef<number | null>(null);
   const backgroundPointerRef = useRef({ x: 0, y: 0 });
+  const relatedListRef = useRef<HTMLDivElement | null>(null);
   const handleBodyReady = useCallback((ready: boolean) => setBodyReady(ready), []);
   useEffect(() => {
     let cancelled = false;
@@ -707,6 +709,7 @@ export function Constellation() {
   const resetMap = useCallback(() => {
     setActiveSlug(null);
     setRelationFilter("all");
+    setResetSignal((current) => current + 1);
   }, []);
   const selectRelationFilter = useCallback((filter: "all" | ConnectionKind) => {
     setActiveSlug(null);
@@ -738,6 +741,16 @@ export function Constellation() {
       .filter((connection) => connection.kind === kind)
       .flatMap((connection) => [connection.from, connection.to])).size,
   ])) as Record<ConnectionKind, number>, []);
+
+  useLayoutEffect(() => {
+    const list = relatedListRef.current;
+    if (!list) return;
+    const firstTwo = Array.from(list.querySelectorAll<HTMLElement>(":scope > button")).slice(0, 2);
+    if (!firstTwo.length) return;
+    const gap = Number.parseFloat(getComputedStyle(list).columnGap || getComputedStyle(list).gap || "0");
+    const width = firstTwo.reduce((total, item) => total + item.getBoundingClientRect().width, 0) + gap * Math.max(0, firstTwo.length - 1);
+    list.style.setProperty("--related-visible-width", `${Math.ceil(width)}px`);
+  }, [activeSlug, activeConnections]);
 
   useEffect(() => {
     if (!activeSlug) return;
@@ -772,7 +785,7 @@ export function Constellation() {
         if (event.key === "Escape") setActiveSlug(null);
       }}
     >
-      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} onToggleAxes={() => setShowAxes((current) => !current)} onToggleNodes={() => setShowNodes((current) => !current)} onToggleNodeNames={() => setShowNodeNames((current) => !current)} showAxes={showAxes} showNodes={showNodes} showNodeNames={showNodeNames} />
+      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onToggleAxes={() => setShowAxes((current) => !current)} onToggleNodes={() => setShowNodes((current) => !current)} onToggleNodeNames={() => setShowNodeNames((current) => !current)} resetSignal={resetSignal} showAxes={showAxes} showNodes={showNodes} showNodeNames={showNodeNames} />
       <div className="field-copy">
         <h1 id="field-title">It Grows</h1>
       </div>
@@ -800,6 +813,9 @@ export function Constellation() {
               </span>
             </span>
           ))}
+          <button className="control-pill field-reset-control" onClick={resetMap} type="button">
+            <span className="control-pill__content">Reset</span>
+          </button>
         </div>
       </div>
       <p className="field-filter-announcement" aria-live="polite">
@@ -827,6 +843,7 @@ export function Constellation() {
             const toIndex = projects.findIndex((project) => project.slug === connection.neighbor?.slug);
             return (
               <g key={`${connection.from}-${connection.to}-${connection.kind}`} style={{ "--relation-color": relationColor[connection.kind] } as CSSProperties}>
+                <line className="field-active-connection-rail" data-from-index={fromIndex} data-to-index={toIndex} />
                 <line className="field-active-connection-dash" data-from-index={fromIndex} data-to-index={toIndex} />
               </g>
             );
@@ -888,7 +905,7 @@ export function Constellation() {
           </div>
           <div className="map-selection-band__relations" aria-label="Related projects">
             <h3>Related</h3>
-            <div className="map-selection-band__relation-list">
+            <div className="map-selection-band__relation-list" ref={relatedListRef}>
               {activeConnections.length ? activeConnections.map((connection) => (
                 <button className="control-pill" key={`${connection.from}-${connection.to}-${connection.kind}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
                   <i style={{ background: relationColor[connection.kind] }} />

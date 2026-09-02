@@ -480,7 +480,7 @@ export const projects: Project[] = [
     agency: "The pipeline generated variation; human judgment decided which outputs behaved like geometry instead of plausible noise.",
     role: "Concept and AI-pipeline direction · generative geometry practice",
     outcome: "A multi-year body of AI-generated higher-dimensional geometry, produced through a custom-trained GPT, Midjourney, and Stable Diffusion pipeline.",
-    image: "/work/gallery/hyperstructures/01.jpg",
+    image: "/work/gallery/hyperstructures/surfaces/surface-279.webp",
     indexPill: "shapes that don't exist yet",
     categories: ["Systems"],
     node: { x: 70.5, y: 23.5, size: 29 },

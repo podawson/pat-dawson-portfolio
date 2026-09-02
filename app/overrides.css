@@ -136,6 +136,116 @@
   }
 }
 
+/* September scale pass: preserve the established hierarchy while improving legibility. */
+.about-page .about-hero .about-hero__heading .about-hero__stay {
+  color: var(--ink-100);
+}
+
+.work-page--dark .index-preview .tag-row {
+  color: var(--ink-400);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.work-page--dark .index-preview .tag-row span {
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  font-style: normal;
+  padding: 0;
+}
+
+.work-page--dark .index-preview .tag-row span + span::before {
+  color: var(--ink-500);
+  content: " · ";
+  margin-inline: .38em;
+}
+
+.index-connector__label {
+  fill: var(--ink-100);
+  stroke: rgba(5, 8, 11, .98);
+  stroke-width: 4px;
+}
+
+.field-filter-tooltip {
+  color: var(--ink-100);
+  paint-order: stroke;
+  -webkit-text-stroke: 4px rgba(5, 8, 11, .98);
+}
+
+.field-filter-tooltip strong {
+  color: inherit;
+}
+
+/* Hyperstructures: a token-backed image program with no ornamental captions. */
+.hyperstructure-token {
+  background: #f7f7f5;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.hyperstructure-token img {
+  height: 100%;
+  object-fit: contain;
+  transition: filter .18s ease, transform .28s cubic-bezier(.2,.82,.2,1);
+  width: 100%;
+}
+
+.hyperstructure-token:hover img,
+.hyperstructure-token:focus-visible img {
+  filter: saturate(1.08) contrast(1.025);
+  transform: scale(1.015);
+}
+
+.project-page-shell[data-project="hyperstructures"] .project-hero__image .hyperstructure-token {
+  height: 100%;
+  width: 100%;
+}
+
+.hyperstructure-program {
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 1px;
+  margin-inline: max(24px, 6vw);
+}
+
+.hyperstructure-program--facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.hyperstructure-program--facts .hyperstructure-token {
+  aspect-ratio: 1 / 1;
+}
+
+.hyperstructure-program--sequence {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.hyperstructure-program--sequence .hyperstructure-token {
+  aspect-ratio: 1 / 1;
+}
+
+.hyperstructure-program--archive {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.hyperstructure-program--archive .hyperstructure-token {
+  aspect-ratio: 1 / 1;
+}
+
+@media (max-width: 580px) {
+  .project-hero__copy { padding-left: 14px; padding-right: 14px; }
+  .project-page-shell[data-project="hyperstructures"] .project-hero h1 {
+    font-size: 55px;
+    letter-spacing: -.055em;
+  }
+  .hyperstructure-program { margin-inline: 14px; }
+  .hyperstructure-program--archive { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 @media (max-width: 580px) {
   .about-hero { row-gap: 32px; }
 
@@ -1140,4 +1250,101 @@
     height: 38px;
     width: 38px;
   }
+}
+
+/* Final cascade closure for the Corpus overlay and this legibility pass. */
+.about-page .about-hero .about-hero__heading .about-hero__stay { color: var(--ink-100); }
+.field-active-connection-rail {
+  opacity: .34;
+  stroke: color-mix(in srgb, var(--relation-color) 22%, var(--ink-600));
+  stroke-linecap: round;
+  stroke-width: 1px;
+}
+.field-filter-tooltip {
+  color: var(--ink-100);
+  paint-order: stroke;
+  -webkit-text-stroke: 4px rgba(5,8,11,.98);
+}
+.field-filter-tooltip strong { color: inherit; }
+
+@media (min-width: 901px) {
+  .field.is-constellation .field-relation-filter { bottom: 28px; }
+  .map-selection-band { bottom: 84px; }
+  .map-selection-band__relations {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    left: 50%;
+    max-width: min(58vw,820px);
+    overflow: visible;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: max-content;
+  }
+  .map-selection-band__relation-list {
+    flex: 0 1 auto;
+    max-width: min(47vw,var(--related-visible-width,420px));
+    overflow-x: auto;
+    scrollbar-width: none;
+    width: var(--related-visible-width,420px);
+  }
+  .map-selection-band__relation-list::-webkit-scrollbar { display: none; }
+}
+
+@media (min-width: 581px) {
+  .wordmark > span:last-child { font-size: 26.45px; }
+  .wordmark-mark { font-size: 20.7px; height: 32.2px; width: 32.2px; }
+  .site-header nav a { font-size: 17.25px; }
+  .field-copy h1,
+  .page-intro--work h1,
+  .about-hero__heading h1,
+  .about-page .about-hero .about-hero__heading .about-hero__stay { font-size: clamp(35.65px,3.45vw,52.9px); }
+  .field-axis { font-size: 12.65px; }
+  .index-preview > p:not(.micro) { font-size: 16.9px; }
+  .index-preview > .micro,
+  .index-preview > a,
+  .work-page--dark .index-preview .tag-row span,
+  .index-filters button,
+  .field-relation-filter button,
+  .map-corpus-tools button,
+  .field-filter-tooltip { font-size: 13px; }
+  .index-connector__label { font-size: 16.9px; }
+  .index-filters button,
+  .field-relation-filter button,
+  .map-corpus-tools button { min-height: 42px; padding-inline: 14px; }
+}
+
+@media (max-width: 580px) {
+  :root {
+    --t-100: 10.8px;
+    --t-200: 12px;
+    --t-300: 13.2px;
+    --t-400: 15.6px;
+    --t-500: 18px;
+    --t-600: 21.6px;
+    --t-700: 26.4px;
+    --t-800: 33.6px;
+    --t-900: 43.2px;
+    --t-display-sm: clamp(37.2px,3.6vw,55.2px);
+    --t-display-md: clamp(50.4px,6vw,86.4px);
+    --t-display-lg: clamp(72px,9.6vw,134.4px);
+    --project-title: clamp(57.6px,7.2vw,93.6px);
+    --project-section-head: clamp(45.6px,5.04vw,64.8px);
+    --project-stat: clamp(33.6px,3.36vw,43.2px);
+    --project-deck: clamp(28.8px,2.7vw,34.8px);
+    --project-subhead: clamp(25.2px,2.25vw,28.8px);
+    --project-body: 20.4px;
+    --project-meta: 15.6px;
+    --project-caption: 15.6px;
+    --project-numeral: 13.2px;
+  }
+  .wordmark > span:last-child { font-size: 27.6px; }
+  .wordmark-mark { font-size: 21.6px; height: 33.6px; width: 33.6px; }
+  .about-hero__heading h1,
+  .about-page .about-hero .about-hero__heading .about-hero__stay { font-size: 31.2px; }
+  .field-relation-filter button.control-pill,
+  .map-corpus-tools button.control-pill,
+  .index-filters button.control-pill { font-size: var(--t-100); min-height: 38px; padding-inline: 12px; }
 }

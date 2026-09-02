@@ -2,6 +2,7 @@ import { SiteHeader } from "../../components/SiteHeader";
 import { getProject, projects } from "../../data";
 import { redirect } from "next/navigation";
 import type { CSSProperties } from "react";
+import hyperstructuresManifest from "../../../content/hyperstructures-tokens.json";
 
 const projectAccents: Record<string, string> = {
   "charlesgate-park": "#8fc49a",
@@ -97,12 +98,7 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
     { src: "/work/gallery/bodega/03.jpg", caption: "An activation-wide rendering coordinated storefronts, fixtures, circulation, and venue conditions." },
     { src: "/work/gallery/bodega/04.jpg", caption: "Art Basel Miami carried the identity into a different fair-floor format." },
   ],
-  hyperstructures: [
-    { src: "/work/gallery/hyperstructures/01.jpg", caption: "A resolved higher-dimensional form held together across surface, structure, and mathematical trace." },
-    { src: "/work/gallery/hyperstructures/02.jpg", caption: "Iteration within a named series tested the same premise at a different scale." },
-    { src: "/work/gallery/hyperstructures/03.jpg", caption: "A generated geometry with no physical precedent to compare it to." },
-    { src: "/work/gallery/hyperstructures/04.jpg", caption: "The pipeline's exploratory volume remained visible behind the forms selected to keep." },
-  ],
+  hyperstructures: [],
   "richardson-plaza": [
     { src: "/work/gallery/richardson-plaza/01.jpg", caption: "The completed plaza in use on Northeastern's campus." },
     { src: "/work/gallery/richardson-plaza/05.jpg", caption: "Repeated components carried the coordinated drawing set into daily campus use." },
@@ -119,6 +115,47 @@ const projectGalleries: Record<string, { src: string; caption: string }[]> = {
 };
 
 type GalleryItem = { src: string; caption: string };
+
+type HyperstructurePlacement = "hero" | "facts" | "sequence" | "archive";
+type HyperstructureToken = {
+  name: string;
+  tokenId: string;
+  file: string;
+  placement: HyperstructurePlacement;
+};
+
+const hyperstructureTokens = hyperstructuresManifest.tokens as HyperstructureToken[];
+const hyperstructureTokenUrl = (token: HyperstructureToken) =>
+  `https://objkt.com/tokens/${hyperstructuresManifest.contract}/${token.tokenId}`;
+
+function HyperstructureTokenImage({ token, eager = false }: { token: HyperstructureToken; eager?: boolean }) {
+  return (
+    <a
+      className="hyperstructure-token"
+      href={hyperstructureTokenUrl(token)}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`${token.name} on Objkt`}
+    >
+      <img
+        src={`/work/gallery/hyperstructures/surfaces/${token.file}`}
+        alt={token.name}
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
+      />
+    </a>
+  );
+}
+
+function HyperstructureProgram({ placement }: { placement: Exclude<HyperstructurePlacement, "hero"> }) {
+  const tokens = hyperstructureTokens.filter((token) => token.placement === placement);
+  if (!tokens.length) return null;
+  return (
+    <section className={`hyperstructure-program hyperstructure-program--${placement}`} aria-label={`Hyperstructures ${placement} images`}>
+      {tokens.map((token) => <HyperstructureTokenImage token={token} key={token.tokenId} />)}
+    </section>
+  );
+}
 
 function ProjectMedia({ items, label, sideBySide = false, matched = false, hideCaptions = false }: { items: GalleryItem[]; label: string; sideBySide?: boolean; matched?: boolean; hideCaptions?: boolean }) {
   if (items.length === 0) return null;
@@ -256,6 +293,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const current = projects.findIndex((item) => item.slug === project.slug);
   const next = projects[(current + 1) % projects.length];
   const isHeroDiagram = project.image.endsWith(".svg");
+  const hyperstructureHero = project.slug === "hyperstructures"
+    ? hyperstructureTokens.find((token) => token.placement === "hero")
+    : undefined;
   const gallery = (projectGalleries[project.slug] ?? []).filter(
     (item, index, items) =>
       item.src !== project.image &&
@@ -302,7 +342,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               {project.categories.map((category) => <span key={category}>{category}</span>)}
             </div>
           </div>
-          <div className={`project-hero__image${isHeroDiagram ? " project-hero__image--diagram" : ""}`}><img src={project.image} alt="" /></div>
+          <div className={`project-hero__image${isHeroDiagram ? " project-hero__image--diagram" : ""}`}>
+            {hyperstructureHero
+              ? <HyperstructureTokenImage token={hyperstructureHero} eager />
+              : <img src={project.image} alt="" />}
+          </div>
         </header>
 
         <section className="project-facts">
@@ -314,6 +358,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
           <div><p className="micro">Outcome</p><p>{project.outcome}</p></div>
         </section>
+
+        {project.slug === "hyperstructures" ? <HyperstructureProgram placement="facts" /> : null}
 
         <ProjectMedia items={openingMedia} label={`${project.title} opening artifact`} hideCaptions={project.slug === "string"} />
 
@@ -332,6 +378,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <p>{project.narrative}</p>
           </div>
         </section>
+
+        {project.slug === "hyperstructures" ? <HyperstructureProgram placement="sequence" /> : null}
 
         {project.slug === "gleanings" ? (
           <figure className="gleanings-interface-frame">
@@ -395,6 +443,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             </article>
           ))}
         </section>
+
+        {project.slug === "hyperstructures" ? <HyperstructureProgram placement="archive" /> : null}
 
         {project.slug === "bodega" ? <BodegaCollage /> : null}
 

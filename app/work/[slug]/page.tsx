@@ -393,7 +393,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         {project.slug === "gleanings" ? (
           <figure className="gleanings-interface-frame">
             <GleaningsArtifacts />
-            <figcaption>Actual product interface · Gleanings evidence workflow</figcaption>
+            <figcaption>Gleanings evidence workflow</figcaption>
           </figure>
         ) : null}
 

@@ -335,11 +335,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <h1>{project.title}</h1>
             <p className="project-hero__headline">{project.headline}</p>
             <p className="project-hero__summary">{project.summary}</p>
-            <p className="kicker project-hero__meta">
-              {[...headerDescriptor, project.year].join(" · ")}
-            </p>
-            <div className="tag-row project-hero__categories" aria-label="Project classifications">
-              {project.categories.map((category) => <span key={category}>{category}</span>)}
+            <div className="project-hero__classification-line">
+              <div className="tag-row project-hero__categories" aria-label="Project classifications">
+                {project.categories.map((category) => <span key={category}>{category}</span>)}
+              </div>
+              <p className="kicker project-hero__meta">
+                {[...headerDescriptor, project.year].join(" · ")}
+              </p>
             </div>
           </div>
           <div className={`project-hero__image${isHeroDiagram ? " project-hero__image--diagram" : ""}`}>

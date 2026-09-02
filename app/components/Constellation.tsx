@@ -782,7 +782,7 @@ export function Constellation() {
       <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
         {relationFilter !== "all" ? (
           <p className="field-selected-filter-description">
-            {relationDescription[relationFilter]}
+            <strong>{relationLabel[relationFilter]}:</strong> {relationDescription[relationFilter]}
           </p>
         ) : null}
         <div>

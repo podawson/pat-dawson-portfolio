@@ -1499,29 +1499,19 @@
 
 @media (max-width: 580px) {
   .field-selected-filter-description {
-    color: var(--ink-100);
+    color: var(--ink-200);
     display: block;
     font-family: var(--mono);
     font-size: var(--t-100);
     letter-spacing: var(--track-mixed);
     line-height: var(--lh-label);
-    margin: 0;
+    margin: 0 0 8px;
     max-width: min(100%, 34em);
-    padding-bottom: 15px;
-    position: relative;
     text-align: left;
     white-space: normal;
   }
 
-  .field-selected-filter-description::after {
-    background: var(--ink-600);
-    bottom: 0;
-    content: "";
-    height: 11px;
-    left: 0;
-    position: absolute;
-    width: 1px;
-  }
+  .field-selected-filter-description strong { color: inherit; font-weight: var(--w-medium); }
 }
 
 /* Final header calibration: larger navigation, with a quieter mobile wordmark. */
@@ -1534,3 +1524,38 @@
   .wordmark-mark { font-size: 20px; height: 31px; width: 31px; }
   .site-header nav a { font-size: 13px; }
 }
+
+/* Dedicated-page classifications and record metadata form one continuous line. */
+.project-page-shell .project-hero__classification-line {
+  align-items: center;
+  border-top: 1px solid var(--project-rule-structural);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 13px;
+  margin-top: 28px;
+  overflow-x: auto;
+  padding-top: 16px;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.project-page-shell .project-hero__classification-line::-webkit-scrollbar { display: none; }
+
+.project-page-shell .project-hero__categories {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  margin-top: 0;
+}
+
+.project-page-shell .project-hero__meta {
+  border-top: 0;
+  flex: 0 0 auto;
+  font-style: italic;
+  margin: 0;
+  overflow: visible;
+  padding-top: 0;
+  text-transform: capitalize;
+}
+
+/* Expanded About controls share the preset grid's exact outer edges. */
+.study-tool--embedded .study-controls__header { padding-inline: 14px; }

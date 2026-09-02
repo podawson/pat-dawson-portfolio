@@ -1572,22 +1572,51 @@
 
 /* The selected-project thumbnail leads its title; mobile keeps the one-liner on the right. */
 @media (max-width: 580px) {
-  .map-selection-band__identity .map-selection-band__one-liner { text-align: right; }
+  .map-selection-band {
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  }
+
+  .map-selection-band__identity {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .map-selection-band > .map-selection-band__one-liner {
+    align-self: center;
+    color: var(--ink-400);
+    display: -webkit-box;
+    font-size: var(--t-100);
+    grid-column: 2;
+    grid-row: 1;
+    letter-spacing: var(--track-mixed);
+    line-height: var(--lh-label);
+    margin: 0;
+    overflow: hidden;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
 }
 
 /* Desktop selection details sit directly above the filters and include their one-line premise. */
 @media (min-width: 901px) {
   .field.is-constellation .map-selection-band { bottom: 70px; }
 
-  .map-selection-band__identity .map-selection-band__one-liner {
+  .map-selection-band > .map-selection-band__one-liner {
+    align-self: center;
     color: var(--ink-400);
     display: block;
     font-family: var(--mono);
     font-size: 13px;
+    grid-column: 2;
+    justify-self: center;
     letter-spacing: var(--track-mixed);
     line-height: var(--lh-label);
-    margin: 5px 0 0;
-    max-width: 42ch;
-    text-align: left;
+    margin: 0;
+    max-width: 56ch;
+    text-align: center;
   }
 }

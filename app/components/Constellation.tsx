@@ -894,8 +894,8 @@ export function Constellation() {
               />
               <h2>{active.title}</h2>
             </div>
-            <p className="map-selection-band__one-liner">{active.indexPill}</p>
           </div>
+          <p className="map-selection-band__one-liner">{active.indexPill}</p>
           <a className="map-selection-band__open project-open-pill control-pill" href={`/work/${active.slug}`}><span className="control-pill__content">Open</span></a>
         </aside>
       )}

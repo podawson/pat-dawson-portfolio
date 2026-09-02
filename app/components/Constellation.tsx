@@ -745,10 +745,14 @@ export function Constellation() {
   useLayoutEffect(() => {
     const list = relatedListRef.current;
     if (!list) return;
-    const firstTwo = Array.from(list.querySelectorAll<HTMLElement>(":scope > button")).slice(0, 2);
+    const buttons = Array.from(list.querySelectorAll<HTMLElement>(":scope > button"));
+    const firstTwo = buttons.slice(0, 2);
     if (!firstTwo.length) return;
     const gap = Number.parseFloat(getComputedStyle(list).columnGap || getComputedStyle(list).gap || "0");
-    const width = firstTwo.reduce((total, item) => total + item.getBoundingClientRect().width, 0) + gap * Math.max(0, firstTwo.length - 1);
+    const halfThird = buttons[2] ? buttons[2].getBoundingClientRect().width / 2 : 0;
+    const width = firstTwo.reduce((total, item) => total + item.getBoundingClientRect().width, 0)
+      + gap * Math.max(0, firstTwo.length - 1)
+      + (halfThird ? gap + halfThird : 0);
     list.style.setProperty("--related-visible-width", `${Math.ceil(width)}px`);
   }, [activeSlug, activeConnections]);
 

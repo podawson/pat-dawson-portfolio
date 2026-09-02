@@ -67,7 +67,7 @@ export const projects: Project[] = [
     featured: true,
     node: { x: 25.3, y: 43.5, size: 32 },
     metrics: ["Point-cloud highway survey", "Grasshopper tree-placement system", "Phased public-realm delivery"],
-    artifacts: ["Historical river overlays", "Point-cloud / mesh comparison", "Public-hearing and phasing diagrams"],
+    artifacts: ["Historical river overlays", "Point-cloud / mesh comparison", "Public-hearing and phasing diagrams", "Automated tree-placement script", "Meshified highway site model", "Maintenance and access sequencing plan"],
     details: [
       { title: "Recover the record", body: "Historical plans and environmental research located the culverted river and made the site’s political history part of the design brief." },
       { title: "Build the site model", body: "Survey point clouds, a meshified highway, and automated tree placement turned an infrastructurally difficult site into geometry the team could reason with." },
@@ -94,7 +94,7 @@ export const projects: Project[] = [
     categories: ["Place", "Culture"],
     node: { x: 36.7, y: 75.2, size: 28 },
     metrics: ["~$5M revitalization study", "Zoning, licensing, and operating model", "Verified existing FAR"],
-    artifacts: ["Historic-plan comparison", "Regulatory constraint matrix", "Filing and fundraising package"],
+    artifacts: ["Historic-plan comparison", "Regulatory constraint matrix", "Filing and fundraising package", "Use / setback / FAR study", "Operating-program diagram", "Ownership and regulator presentation"],
     details: [
       { title: "Find the envelope", body: "Structure, use, setbacks, licensing, and FAR were tested together so the concept began inside a defensible set of limits." },
       { title: "Reconcile the uses", body: "Food, gathering, work, and neighborhood programming were arranged as an operating model rather than a collage of possible tenants." },
@@ -121,7 +121,7 @@ export const projects: Project[] = [
     categories: ["Fabrication", "Place", "Experience"],
     node: { x: 46.2, y: 80.6, size: 26 },
     metrics: ["5 historic trusses", "100+ addressable lights", "Zero modified original components"],
-    artifacts: ["Clamp family and tolerance studies", "Fabrication sheets", "Installed night sequence"],
+    artifacts: ["Clamp family and tolerance studies", "Fabrication sheets", "Installed night sequence", "Non-invasive attachment mockups", "Custom light-housing details", "Cable-routing and installation sequence"],
     details: [
       { title: "Respect the artifact", body: "The attachment logic preserved every original 1880s component and made reversibility a design requirement." },
       { title: "Draw the assembly", body: "Custom housings, clamps, legs, and cable routes became repeatable local parts rather than bespoke field improvisations." },
@@ -148,7 +148,7 @@ export const projects: Project[] = [
     categories: ["Fabrication", "Place", "Culture"],
     node: { x: 21.5, y: 38, size: 26 },
     metrics: ["800+ stems and seed packets", "6-foot cardboard structure", "~$400 material budget"],
-    artifacts: ["Grant and competition submission", "Perforation / assembly logic", "Time-lapse of public depletion"],
+    artifacts: ["Grant and competition submission", "Perforation / assembly logic", "Time-lapse of public depletion", "Flower and seed-packet inventory", "Writable community surface", "De-installation and reuse plan"],
     details: [
       { title: "Reverse permanence", body: "The object began with its end: every component anticipated removal, reuse, marking, or recycling." },
       { title: "Give something away", body: "Flowers and locally useful seed turned a monument from an image of civic value into a small distribution system." },
@@ -176,7 +176,7 @@ export const projects: Project[] = [
     featured: true,
     node: { x: 34.8, y: 56.5, size: 32 },
     metrics: ["Concept-to-opening delivery", "Rated kitchen separation", "ADA and life-safety coordination"],
-    artifacts: ["Material and lighting studies", "Permit / construction set", "Rated-glass field detail"],
+    artifacts: ["Material and lighting studies", "Permit / construction set", "Rated-glass field detail", "Reflected-ceiling and lighting coordination", "ADA restroom details", "Inspection and punch closeout"],
     details: [
       { title: "Translate attitude", body: "A black, reflective, red-lit palette rejected the expected genre without giving up hospitality or operational clarity." },
       { title: "Resolve the code", body: "Rated glass maintained the design-critical connection to the kitchen while satisfying fire separation." },
@@ -203,7 +203,7 @@ export const projects: Project[] = [
     categories: ["Place", "Experience", "Systems"],
     node: { x: 69, y: 69.8, size: 27 },
     metrics: ["900+ analyzed locations", "200+ initiated conversions", "2–150-person floor plates"],
-    artifacts: ["Portfolio opportunity matrix", "Custom Revit analysis", "Operational conversion playbook"],
+    artifacts: ["Portfolio opportunity matrix", "Custom Revit analysis", "Operational conversion playbook", "Cross-department data model", "MEP and accessibility decision matrix", "Distributed-team handoff standards"],
     details: [
       { title: "See the portfolio", body: "Cross-department data made underperformance and viable conversion opportunities visible at the same scale." },
       { title: "Encode the repeatable", body: "Recurring MEP, material, accessibility, furniture, and amenity decisions became a system another team could own." },
@@ -230,7 +230,7 @@ export const projects: Project[] = [
     categories: ["Experience", "Place", "Fabrication", "Systems"],
     node: { x: 54.8, y: 61.5, size: 29 },
     metrics: ["500+ generated visualizations", "4 curated design directions", "Portfolio’s first physical-AI customer space"],
-    artifacts: ["Workshop-to-prompt translation", "500→4 curation funnel", "Temporary / permanent delivery timeline"],
+    artifacts: ["Workshop-to-prompt translation", "500→4 curation funnel", "Temporary / permanent delivery timeline", "Discovery-workshop synthesis", "Image-model training framework", "Landlord / engineering / fabrication package"],
     details: [
       { title: "Structure the discovery", body: "Workshop language, references, and constraints became a repeatable input system rather than an open-ended image prompt." },
       { title: "Curate the useful four", body: "More than five hundred outputs were judged against the brief until four images could carry an actual stakeholder decision." },
@@ -258,7 +258,7 @@ export const projects: Project[] = [
     featured: true,
     node: { x: 58.8, y: 46, size: 34 },
     metrics: ["5 hardware zones", "15 generative modes", "150-year archive taxonomy"],
-    artifacts: ["Mode and content taxonomy", "Systems / commissioning map", "Directional-audio field study"],
+    artifacts: ["Mode and content taxonomy", "Systems / commissioning map", "Directional-audio field study", "Unreal / TouchDesigner integration specification", "Five-zone hardware layout", "150-year archive content map"],
     details: [
       { title: "Orchestrate the modes", body: "Live feeds, archive content, real-time engines, generative audio, and playout controls behaved as one operational media system." },
       { title: "Make complexity disappear", body: "Security, networks, speakers, hardware, content, enclosure, and maintenance were coordinated so the passage could feel calm." },
@@ -287,7 +287,7 @@ export const projects: Project[] = [
     featured: true,
     node: { x: 72.8, y: 59.5, size: 30 },
     metrics: ["NSF Award #1928654", "UR-10 live prototype", "Closed fatigue-adjustment loop"],
-    artifacts: ["Fatigue-to-adjustment flowchart", "Gesture-programming studies", "Projected interface on physical box"],
+    artifacts: ["Fatigue-to-adjustment flowchart", "Gesture-programming studies", "Projected interface on physical box", "Worker-preference support-range protocol", "Biosignature sensing studies", "UR-10 handover testing record"],
     details: [
       { title: "Make intent legible", body: "Projection showed where the robot planned to move before that motion affected the worker beside it." },
       { title: "Close the loop", body: "Heart rate and movement informed micro-adjustments to height and rhythm inside a worker-selected support range." },
@@ -315,7 +315,7 @@ export const projects: Project[] = [
     categories: ["Systems", "Place", "Culture"],
     node: { x: 61.4, y: 55.2, size: 26 },
     metrics: ["13 sites", "3 eras", "90 years of neighborhood history"],
-    artifacts: ["Prompt contracts + regression guards", "Land-over-time state diagram", "Cartographic system comparison"],
+    artifacts: ["Prompt contracts + regression guards", "Land-over-time state diagram", "Cartographic system comparison", "Thirteen-site / three-era research dataset", "MapLibre terrain and WebGL prototype", "Event-state disclosure sequence"],
     details: [
       { title: "Model the evidence", body: "Sites, eras, actors, terrain, and narrative sources became a spatial data structure rather than a linear report." },
       { title: "Direct the agents", body: "Prompt contracts and visual critique kept an AI-directed build stable across technical and aesthetic iteration." },
@@ -344,7 +344,7 @@ export const projects: Project[] = [
     categories: ["Systems"],
     node: { x: 77.2, y: 51.2, size: 28 },
     metrics: ["Sub-5% custom bucket", "20–40-minute cycle", "12+ batches across 100+ tickets"],
-    artifacts: ["Pencil architecture → functional system", "Six-stage pipeline diagram", "Batch-by-batch error table"],
+    artifacts: ["Pencil architecture → functional system", "Six-stage pipeline diagram", "Batch-by-batch error table", "Deterministic classifier source", "Narrative-seed validation contract", "Proportional review queue"],
     details: [
       { title: "Move facts out of the model", body: "Deterministic Python owns classification and grouping, so identical tickets produce identical, auditable results." },
       { title: "Constrain generation", body: "Each audience has its own contract, but every claim must originate in a verbatim narrative seed from the source ticket." },
@@ -373,7 +373,7 @@ export const projects: Project[] = [
     categories: ["Systems"],
     node: { x: 80.4, y: 66.2, size: 26 },
     metrics: ["4+ heterogeneous source classes", "Cost-and-schedule conflict ranking", "Human review gate"],
-    artifacts: ["File-ingestion and reconciliation map", "Ranked discrepancy interface", "Finding-to-source evidence trail"],
+    artifacts: ["File-ingestion and reconciliation map", "Ranked discrepancy interface", "Finding-to-source evidence trail", "Schedule / drawing / budget cross-checks", "Cost-and-schedule ranking model", "PM confirmation and dismissal states"],
     details: [
       { title: "Read across the project", body: "Schedules, drawings, budgets, RFIs, and notes stay distinct while the system searches for consequential disagreement between them." },
       { title: "Rank what compounds", body: "Findings are ordered by anticipated cost and schedule impact rather than by detection order or document type." },
@@ -402,7 +402,7 @@ export const projects: Project[] = [
     featured: true,
     node: { x: 84.2, y: 41, size: 32 },
     metrics: ["5,000+ active traders", "62% reported hit rate", "~$250K revenue"],
-    artifacts: ["Model-version performance table", "Maximum-X distribution + denominator", "Call / leaderboard evidence ledger"],
+    artifacts: ["Model-version performance table", "Maximum-X distribution + denominator", "Call / leaderboard evidence ledger", "Normalized eight-export dataset", "Precision and call-volume analysis", "Tail-exposure / maximum-X comparison"],
     details: [
       { title: "Preserve the development record", body: "Eight exports were normalized into calls, contracts, model labels, timestamps, leaderboards, and outcome observations." },
       { title: "Compare like with like", body: "Precision, call volume, average maximum-X, and tail exposure sit beside one another so no single metric can carry the story alone." },
@@ -431,7 +431,7 @@ export const projects: Project[] = [
     featured: true,
     node: { x: 54.2, y: 28.5, size: 34 },
     metrics: ["~10,000 active chatbot users", "1.2M-follower X audience", "Script-to-publication content system"],
-    artifacts: ["Private/public corpus boundary map", "Character runtime + channel architecture", "Podcast automation sequence"],
+    artifacts: ["Private/public corpus boundary map", "Character runtime + channel architecture", "Podcast automation sequence", "Source-corpus permissions ledger", "Voice-synthesis publishing workflow", "Interaction-history and safety constraints"],
     details: [
       { title: "Ground the character", body: "Public work and private unreleased material formed a source corpus specific enough to produce a voice rather than an impression." },
       { title: "Operate the runtime", body: "Reply logic, constraints, stored interaction history, safety, and deployment surrounded the model with continuity across channels." },
@@ -458,7 +458,7 @@ export const projects: Project[] = [
     categories: ["Place", "Experience", "Culture"],
     node: { x: 27.8, y: 53, size: 29 },
     metrics: ["ComplexCon LA, Shanghai, and Art Basel Miami", "2018–21 activation run", "Venue-specific construction packages"],
-    artifacts: ["Existing-condition survey photography", "Interior / exterior axonometrics", "Finish, fixture, and detail drawing sets"],
+    artifacts: ["Existing-condition survey photography", "Interior / exterior axonometrics", "Finish, fixture, and detail drawing sets", "Venue circulation / occupancy / accessibility matrix", "Activation renderings", "Install-crew production packages"],
     details: [
       { title: "Read the venue as found", body: "Circulation, occupancy, accessibility, and venue-specific constraints were documented before any design move, activation to activation." },
       { title: "Carry the identity across sites", body: "Renderings and axonometric studies translated Bodega's spatial logic into ComplexCon and Art Basel footprints alike." },
@@ -485,7 +485,7 @@ export const projects: Project[] = [
     categories: ["Systems"],
     node: { x: 70.5, y: 23.5, size: 29 },
     metrics: ["~8,987 working files", "GPT, Midjourney, and Stable Diffusion pipeline", "2023–24 named series"],
-    artifacts: ["Minimal-surface and Calabi–Yau studies", "Layered generative-AI source files", "Named-series groupings of resolved forms"],
+    artifacts: ["Minimal-surface and Calabi–Yau studies", "Layered generative-AI source files", "Named-series groupings of resolved forms", "GPT language and prompt taxonomy", "Midjourney / Stable Diffusion iteration boards", "8,987-file working archive"],
     details: [
       { title: "Start from real math", body: "Triply periodic minimal surfaces and Calabi–Yau manifolds gave every series a defined, if unbuildable, mathematical starting point." },
       { title: "Let the pipeline explore", body: "A trained GPT, Midjourney, and Stable Diffusion worked together to generate forms with no physical precedent to check them against." },
@@ -512,7 +512,7 @@ export const projects: Project[] = [
     categories: ["Place", "Fabrication"],
     node: { x: 56, y: 83.5, size: 27 },
     metrics: ["Built campus public realm", "Arboretum nursery landscape", "2021 opening"],
-    artifacts: ["Existing-condition and demolition documentation", "Modular seating and planter kit", "Coordinated planting and electrical drawings"],
+    artifacts: ["Existing-condition and demolition documentation", "Modular seating and planter kit", "Coordinated planting and electrical drawings", "Campus circulation and utility coordination", "Planter and tree-establishment details", "Construction and as-built photography"],
     details: [
       { title: "Read the hardscape", body: "Existing-condition and demolition documentation established the plaza's exposed surfaces, circulation, and infrastructure before new work was placed." },
       { title: "Make room for occupation", body: "A modular family of seating and site elements created places to pause, gather, and use the plaza throughout the day." },
@@ -539,7 +539,7 @@ export const projects: Project[] = [
     categories: ["Culture", "Experience"],
     node: { x: 28.8, y: 22.8, size: 30 },
     metrics: ["25 published editions", "Continuous open-call program", "Publication and live-concert series"],
-    artifacts: ["Contributor submission archive", "Volume / edition organization system", "Quaranzine live concert series"],
+    artifacts: ["Contributor submission archive", "Volume / edition organization system", "Quaranzine live concert series", "Open-call submission intake", "Contributor and commissioning correspondence", "Performance programs and recordings"],
     details: [
       { title: "Centralize the isolation", body: "A standing open call gathered art being made around the world with no shared venue to land in." },
       { title: "Curate, don't just collect", body: "Diverse commissioned and submitted work was organized into a coherent editorial voice, edition by edition." },

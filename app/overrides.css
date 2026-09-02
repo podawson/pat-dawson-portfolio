@@ -200,8 +200,17 @@
 }
 
 .project-page-shell[data-project="hyperstructures"] .project-hero__image .hyperstructure-token {
+  align-items: center;
+  background: transparent;
+  display: flex;
   height: 100%;
+  justify-content: center;
   width: 100%;
+}
+
+.project-page-shell[data-project="hyperstructures"] .project-hero__image .hyperstructure-token img {
+  height: auto;
+  max-height: 100%;
 }
 
 .hyperstructure-program {
@@ -1254,6 +1263,12 @@
 
 /* Final cascade closure for the Corpus overlay and this legibility pass. */
 .about-page .about-hero .about-hero__heading .about-hero__stay { color: var(--ink-100); }
+.map-selection-band {
+  backdrop-filter: none;
+  background: transparent;
+  border-top: 0;
+  box-shadow: none;
+}
 .field-active-connection-rail {
   opacity: .34;
   stroke: color-mix(in srgb, var(--relation-color) 22%, var(--ink-600));

@@ -15,7 +15,11 @@ type MapBody3DProps = {
   onReadyChange: (ready: boolean) => void;
   onNodePositionsChange?: (positions: ReadonlyArray<{ x: number; y: number; visible: boolean }>) => void;
   onResetMap?: () => void;
+  onToggleAxes?: () => void;
+  onToggleNodes?: () => void;
   onToggleNodeNames?: () => void;
+  showAxes?: boolean;
+  showNodes?: boolean;
   showNodeNames?: boolean;
 };
 
@@ -190,7 +194,7 @@ const fragmentShader = `
   }
 `;
 
-export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null, highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onResetMap, onToggleNodeNames, showNodeNames = false }: MapBody3DProps) {
+export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null, highlightedNeighbors = [], onAxisPositionsChange, onReadyChange, onNodePositionsChange, onResetMap, onToggleAxes, onToggleNodes, onToggleNodeNames, showAxes = true, showNodes = true, showNodeNames = false }: MapBody3DProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeSlugRef = useRef(activeSlug);
   const emphasizedSlugsRef = useRef(emphasizedSlugs);
@@ -625,6 +629,20 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
           onPointerDown={(event) => event.stopPropagation()}
           type="button"
         ><span className="control-pill__content">Reset</span></button>
+        <button
+          aria-pressed={showAxes}
+          className={`control-pill ${showAxes ? "is-active" : ""}`}
+          onClick={(event) => { event.stopPropagation(); onToggleAxes?.(); }}
+          onPointerDown={(event) => event.stopPropagation()}
+          type="button"
+        ><span className="control-pill__content">Axis</span></button>
+        <button
+          aria-pressed={showNodes}
+          className={`control-pill ${showNodes ? "is-active" : ""}`}
+          onClick={(event) => { event.stopPropagation(); onToggleNodes?.(); }}
+          onPointerDown={(event) => event.stopPropagation()}
+          type="button"
+        ><span className="control-pill__content">Nodes</span></button>
       </div>
     </div>
   );

@@ -51,6 +51,11 @@ const groups: Array<{ title: string; controls: Array<{ key: keyof WaterSettings;
   ]},
 ];
 
+const visibleGroups = groups.slice(0, 2).map((group) => ({
+  ...group,
+  controls: group.controls.filter((control) => control.key !== "rain"),
+}));
+
 const vertexShader = `
   uniform float uTime; uniform float uWaveHeight; uniform float uChop; uniform float uSwell;
   uniform float uCurrent; uniform float uSkew; uniform float uFetch; uniform float uGust; uniform float uStorm;
@@ -167,7 +172,7 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
   const reset = () => { setSettings(initial); setSky("clear"); rotationTargetRef.current.set(0,0); panTargetRef.current.set(0,0); zoomTargetRef.current=0; };
   const randomize = () => {
     const randomized = { ...settings };
-    groups.slice(0, 2).flatMap((group) => group.controls).forEach((control) => {
+    visibleGroups.flatMap((group) => group.controls).forEach((control) => {
       const step = control.step ?? 1;
       const steps = Math.floor((control.max - control.min) / step);
       randomized[control.key] = control.min + Math.floor(Math.random() * (steps + 1)) * step;
@@ -179,6 +184,7 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.target instanceof HTMLInputElement) return;
+      if (event.key === "Escape") setPanelOpen(false);
       if (event.key.toLowerCase() === "h") setPanelOpen((open) => !open);
       if (event.key.toLowerCase() === "r") reset();
       const number = Number(event.key);
@@ -248,10 +254,10 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
         {panelOpen ? <button className={`study-randomize${embedded ? " control-pill" : ""}`} onClick={randomize} type="button"><span className="control-pill__content">Randomize</span></button> : null}
         {panelOpen && <div className="study-controls__content">
           <div className="study-presets">{presets.map((preset,index)=><button className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content"><b>{index+1}</b>{preset.name}</span></button>)}</div>
-          {groups.slice(0, 2).map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} style={{ "--range-progress": `${((settings[control.key]-control.min)/(control.max-control.min))*100}%` } as CSSProperties} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
+          {visibleGroups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} style={{ "--range-progress": `${((settings[control.key]-control.min)/(control.max-control.min))*100}%` } as CSSProperties} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
         </div>}
         {!panelOpen && <div className="study-presets study-presets--collapsed" aria-label="Water presets">{presets.map((preset,index)=><button aria-label={preset.name} className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content">{index+1}</span></button>)}</div>}
-        <button className={`study-controls-toggle${embedded ? " control-pill" : ""}`} onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button"><span className="control-pill__content">{panelOpen?"Close":"Open"}</span></button>
+        <button className={`study-controls-toggle${embedded ? " control-pill" : ""}`} onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button"><span className="control-pill__content">{panelOpen?<>Close <b aria-hidden="true">×</b></>:"Open"}</span></button>
       </aside>
     </div>
   );

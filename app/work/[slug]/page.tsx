@@ -309,7 +309,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div>
             <p className="micro">Role</p>
             <p className="project-facts__role">
-              {project.role.split(" · ").map((role) => <span key={role}>{role}</span>)}
+              {project.role.split(" · ").map((role) => <span key={role}>{role.charAt(0).toUpperCase() + role.slice(1)}</span>)}
             </p>
           </div>
           <div><p className="micro">Outcome</p><p>{project.outcome}</p></div>

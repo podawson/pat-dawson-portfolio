@@ -20,6 +20,14 @@ const relationLabel: Record<ConnectionKind, string> = {
   graft: "Graft",
 };
 
+const relationDescription: Record<ConnectionKind, string> = {
+  handoff: "The work evolves with its next stakeholder",
+  cede: "The work gives its outcome to other people.",
+  uphold: "The work answers a record that predates it.",
+  quorum: "The work pursues stakeholder alignment.",
+  graft: "The work merges immediately into the system.",
+};
+
 const relationKinds: ConnectionKind[] = ["handoff", "cede", "uphold", "quorum", "graft"];
 
 type AxisKey = "story" | "compute" | "atmosphere" | "architecture" | "center";
@@ -558,6 +566,8 @@ export function Constellation() {
   void SelectedGeometry;
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [showNodeNames, setShowNodeNames] = useState(false);
+  const [showAxes, setShowAxes] = useState(true);
+  const [showNodes, setShowNodes] = useState(true);
   const [relationFilter, setRelationFilter] = useState<ConnectionKind | "all">("all");
   const [bodyReady, setBodyReady] = useState(false);
   const [fontsReady, setFontsReady] = useState(false);
@@ -742,7 +752,7 @@ export function Constellation() {
     // The full graphical field is one pointer-driven application surface.
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <section
-      className={`field ${active ? "is-constellation" : ""} ${bodyReady && fontsReady ? "has-sculptural-body" : ""} ${showNodeNames ? "show-node-names" : ""}`}
+      className={`field ${active ? "is-constellation" : ""} ${bodyReady && fontsReady ? "has-sculptural-body" : ""} ${showNodeNames ? "show-node-names" : ""} ${showAxes ? "" : "hide-axes"} ${showNodes ? "" : "hide-nodes"}`}
       id="map"
       aria-labelledby="field-title"
       role="application"
@@ -762,7 +772,7 @@ export function Constellation() {
         if (event.key === "Escape") setActiveSlug(null);
       }}
     >
-      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} onToggleNodeNames={() => setShowNodeNames((current) => !current)} showNodeNames={showNodeNames} />
+      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onResetMap={resetMap} onToggleAxes={() => setShowAxes((current) => !current)} onToggleNodes={() => setShowNodes((current) => !current)} onToggleNodeNames={() => setShowNodeNames((current) => !current)} showAxes={showAxes} showNodes={showNodes} showNodeNames={showNodeNames} />
       <div className="field-copy">
         <h1 id="field-title">It Grows</h1>
       </div>
@@ -774,16 +784,21 @@ export function Constellation() {
             <span className="control-pill__content">All</span>
           </button>
           {relationKinds.map((kind) => (
-            <button
-              aria-pressed={relationFilter === kind}
-              className={`control-pill ${relationFilter === kind ? "is-active" : ""}`}
-              key={kind}
-              onClick={() => selectRelationFilter(kind)}
-              style={{ "--relation-color": relationColor[kind] } as CSSProperties}
-              type="button"
-            >
-              <span className="control-pill__content"><i />{relationLabel[kind]}</span>
-            </button>
+            <span className="field-filter-option" key={kind}>
+              <button
+                aria-describedby={`relation-help-${kind}`}
+                aria-pressed={relationFilter === kind}
+                className={`control-pill ${relationFilter === kind ? "is-active" : ""}`}
+                onClick={() => selectRelationFilter(kind)}
+                style={{ "--relation-color": relationColor[kind] } as CSSProperties}
+                type="button"
+              >
+                <span className="control-pill__content"><i />{relationLabel[kind]}</span>
+              </button>
+              <span className="field-filter-tooltip" id={`relation-help-${kind}`} role="tooltip">
+                <strong>{relationLabel[kind]}:</strong> {relationDescription[kind]}
+              </span>
+            </span>
           ))}
         </div>
       </div>
@@ -856,6 +871,10 @@ export function Constellation() {
 
       {active && (
         <aside className="map-selection-band" aria-live="polite">
+          <div className="map-selection-band__identity">
+            <h2>{active.title}</h2>
+            <p className="map-selection-band__one-liner">{active.indexPill}</p>
+          </div>
           <img
             className="map-selection-band__image"
             src={active.image}
@@ -865,17 +884,16 @@ export function Constellation() {
               event.currentTarget.src = "/corpus-icon-20260825.png";
             }}
           />
-          <div className="map-selection-band__identity">
-            <h2>{active.title}</h2>
-            <p className="map-selection-band__one-liner">{active.indexPill}</p>
-          </div>
           <div className="map-selection-band__relations" aria-label="Related projects">
-            {activeConnections.length ? activeConnections.map((connection) => (
-              <button className="control-pill" key={`${connection.from}-${connection.to}-${connection.kind}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
-                <i style={{ background: relationColor[connection.kind] }} />
-                <span><small>{relationLabel[connection.kind]}</small>{connection.neighbor?.title}</span>
-              </button>
-            )) : <p className="map-selection-band__empty">No {relationFilter === "all" ? "related" : relationLabel[relationFilter].toLowerCase()} links recorded.</p>}
+            <h3>Related</h3>
+            <div className="map-selection-band__relation-list">
+              {activeConnections.length ? activeConnections.map((connection) => (
+                <button className="control-pill" key={`${connection.from}-${connection.to}-${connection.kind}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
+                  <i style={{ background: relationColor[connection.kind] }} />
+                  <span><small>{relationLabel[connection.kind]}</small>{connection.neighbor?.title}</span>
+                </button>
+              )) : <p className="map-selection-band__empty">No {relationFilter === "all" ? "related" : relationLabel[relationFilter].toLowerCase()} links recorded.</p>}
+            </div>
           </div>
           <a className="map-selection-band__open project-open-pill control-pill" href={`/work/${active.slug}`}><span className="control-pill__content">Open project →</span></a>
         </aside>

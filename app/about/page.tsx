@@ -28,6 +28,7 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="route-intro about-hero__heading">
           <h1>More Information</h1>
+          <p className="about-hero__stay">Stay A While</p>
         </div>
         <div className="about-hero__body">
           <p>I live where many different things fuse into one deliverable.</p>

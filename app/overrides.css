@@ -1499,10 +1499,11 @@
 
 @media (max-width: 580px) {
   .field-selected-filter-description {
-    color: var(--ink-200);
+    color: var(--ink-400);
     display: block;
     font-family: var(--mono);
     font-size: var(--t-100);
+    font-style: italic;
     letter-spacing: var(--track-mixed);
     line-height: var(--lh-label);
     margin: 0 0 8px;
@@ -1651,7 +1652,7 @@
   }
 
   .map-corpus-tools,
-  .field.is-constellation .map-corpus-tools { top: 64px; }
+  .field.is-constellation .map-corpus-tools { top: 60px; }
   .map-corpus-tools { transform: none; }
   .field.is-constellation .map-corpus-tools { transform: translateY(-28px); }
 }

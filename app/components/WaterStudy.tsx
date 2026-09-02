@@ -254,7 +254,7 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
         {panelOpen ? <>
           <div className="study-controls__header">
             <button className={`study-randomize${embedded ? " control-pill" : ""}`} onClick={randomize} type="button"><span className="control-pill__content">Randomize</span></button>
-            <button className={`study-controls-toggle${embedded ? " control-pill" : ""}`} onClick={()=>setPanelOpen(false)} aria-label="Close controls" type="button"><span className="control-pill__content">Close <b aria-hidden="true">×</b></span></button>
+            <button className={`study-controls-toggle${embedded ? " control-pill" : ""}`} onClick={()=>setPanelOpen(false)} aria-label="Close controls" type="button"><span className="control-pill__content">Close</span></button>
           </div>
           <div className="study-controls__content">
             <div className="study-presets">{presets.map((preset,index)=><button className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content"><b>{index+1}</b>{preset.name}</span></button>)}</div>

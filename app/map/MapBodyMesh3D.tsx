@@ -626,13 +626,15 @@ export function MapBody3D({ activeSlug, emphasizedSlugs = [], filterColor = null
           onPointerDown={(event) => event.stopPropagation()}
           type="button"
         ><span className="control-pill__content">Nodes</span></button>
-        <button
-          aria-pressed={showNodeNames}
-          className={`control-pill ${showNodeNames ? "is-active" : ""}`}
-          onClick={(event) => { event.stopPropagation(); onToggleNodeNames?.(); }}
-          onPointerDown={(event) => event.stopPropagation()}
-          type="button"
-        ><span className="control-pill__content">Names</span></button>
+        {showNodes ? (
+          <button
+            aria-pressed={showNodeNames}
+            className={`control-pill ${showNodeNames ? "is-active" : ""}`}
+            onClick={(event) => { event.stopPropagation(); onToggleNodeNames?.(); }}
+            onPointerDown={(event) => event.stopPropagation()}
+            type="button"
+          ><span className="control-pill__content">Names</span></button>
+        ) : null}
       </div>
     </div>
   );

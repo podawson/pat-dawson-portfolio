@@ -710,6 +710,10 @@ export function Constellation() {
     setRelationFilter("all");
     setResetSignal((current) => current + 1);
   }, []);
+  const toggleNodes = useCallback(() => {
+    setShowNodes((current) => !current);
+    setShowNodeNames(false);
+  }, []);
   const selectRelationFilter = useCallback((filter: "all" | ConnectionKind) => {
     setActiveSlug(null);
     setRelationFilter(filter);
@@ -774,7 +778,7 @@ export function Constellation() {
         if (event.key === "Escape") setActiveSlug(null);
       }}
     >
-      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onToggleAxes={() => setShowAxes((current) => !current)} onToggleNodes={() => setShowNodes((current) => !current)} onToggleNodeNames={() => setShowNodeNames((current) => !current)} resetSignal={resetSignal} showAxes={showAxes} showNodes={showNodes} showNodeNames={showNodeNames} />
+      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onToggleAxes={() => setShowAxes((current) => !current)} onToggleNodes={toggleNodes} onToggleNodeNames={() => setShowNodeNames((current) => !current)} resetSignal={resetSignal} showAxes={showAxes} showNodes={showNodes} showNodeNames={showNodeNames} />
       <div className="field-copy">
         <h1 id="field-title">It Grows</h1>
       </div>

@@ -1,6 +1,7 @@
 import { SiteHeader } from "../../components/SiteHeader";
 import { getProject, projects } from "../../data";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import hyperstructuresManifest from "../../../content/hyperstructures-tokens.json";
 
@@ -284,6 +285,12 @@ function GleaningsArtifacts() {
 
 export function generateStaticParams() {
   return [...projects.map((project) => ({ slug: project.slug })), { slug: "intuit-astor-place" }];
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const project = getProject(slug === "intuit-astor-place" ? "confidential-client" : slug);
+  return { title: project?.title ?? "Work" };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {

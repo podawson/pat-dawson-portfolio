@@ -14,12 +14,12 @@ const preview = new URL("/blank-preview.png", base).toString();
 
 export const metadata: Metadata = {
   metadataBase: base,
-  title: "Pat Dawson · Corpus",
+  title: "Corpus",
   description,
   icons: {
-    icon: [{ url: "/blank-icon.png", type: "image/png", sizes: "512x512" }],
-    shortcut: "/blank-icon.png",
-    apple: "/blank-icon.png",
+    icon: [{ url: "/corpus-tab-icon.png", type: "image/png", sizes: "512x512" }],
+    shortcut: "/corpus-tab-icon.png",
+    apple: "/corpus-tab-icon.png",
   },
   openGraph: {
     title: "Pat Dawson · Corpus",

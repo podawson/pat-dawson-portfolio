@@ -1623,3 +1623,58 @@
     text-align: right;
   }
 }
+
+/* A hidden node layer leaves a stable, blank, non-interactive Names slot. */
+.map-corpus-tools button.is-unavailable {
+  cursor: default;
+  pointer-events: none;
+}
+.map-corpus-tools button.is-unavailable::before { display: none; }
+.map-corpus-tools button.is-unavailable .control-pill__content { visibility: hidden; }
+
+/* Mobile route titles share one compact header line beneath the navigation. */
+@media (max-width: 580px) {
+  .about-page .about-hero .about-hero__heading .about-hero__stay { display: none; }
+
+  .wordmark > span:last-child { font-size: 23px; }
+  .wordmark-mark { font-size: 18px; height: 29px; width: 29px; }
+
+  .field-copy { top: 60px; }
+  .page-intro--work { padding-top: 60px; }
+  .about-hero { padding-top: 60px; }
+
+  .field-copy h1,
+  .page-intro--work h1,
+  .about-hero__heading h1 {
+    font-size: 36px;
+    margin-top: 4px;
+  }
+
+  .map-corpus-tools,
+  .field.is-constellation .map-corpus-tools { top: 64px; }
+  .map-corpus-tools { transform: none; }
+  .field.is-constellation .map-corpus-tools { transform: translateY(-28px); }
+}
+
+/* Desktop Corpus controls share the title's top edge. */
+@media (min-width: 581px) {
+  .field-copy { top: 104px; }
+  .field-copy h1 { margin-top: 13px; }
+  .map-corpus-tools,
+  .field.is-constellation .map-corpus-tools { top: 117px; }
+}
+
+/* The expanded About control header uses the preset grid's full width. */
+.study-tool--embedded .study-controls__header {
+  box-sizing: border-box;
+  width: 100%;
+}
+.study-tool--embedded .study-controls:not(.is-collapsed) .study-controls__header .study-controls-toggle {
+  inset: auto;
+}
+
+/* Media spacing remains, but only the following section draws the divider. */
+.project-page-shell .project-gallery,
+.project-page-shell .project-video {
+  border-bottom: 0;
+}

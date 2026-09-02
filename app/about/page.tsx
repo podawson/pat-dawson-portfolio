@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import { SiteHeader } from "../components/SiteHeader";
 import { WaterStudy } from "../components/WaterStudy";
+
+export const metadata: Metadata = { title: "About" };
 
 const focusAreas = [
   "Experiential & media architecture",

@@ -1458,3 +1458,20 @@
 
 /* Dedicated-page classifications remain plain, upright control pills. */
 .project-page-shell .project-hero__categories span { font-style: normal; }
+
+/* Dedicated-page classification pills use the Work-index control scale. */
+.project-page-shell .project-hero__categories span {
+  align-items: center;
+  display: inline-flex;
+  font-size: 13px;
+  min-height: 42px;
+  padding: 0 14px;
+}
+
+@media (max-width: 580px) {
+  .project-page-shell .project-hero__categories span {
+    font-size: var(--t-100);
+    min-height: 38px;
+    padding-inline: 12px;
+  }
+}

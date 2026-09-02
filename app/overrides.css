@@ -1679,3 +1679,6 @@
 .project-page-shell .project-video {
   border-bottom: 0;
 }
+
+/* Give the opening About statement a touch more presence without changing rank. */
+.about-hero__body p { font-size: 19px; }

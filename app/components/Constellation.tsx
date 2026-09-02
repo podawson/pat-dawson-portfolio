@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { projectConnections, projects, type ConnectionKind } from "../data";
 import { MapBody3D } from "../map/MapBodyMesh3D";
 
@@ -578,7 +578,6 @@ export function Constellation() {
   const axisPositionsRef = useRef<AxisPositions | null>(null);
   const axisTrimFrameRef = useRef<number | null>(null);
   const backgroundPointerRef = useRef({ x: 0, y: 0 });
-  const relatedListRef = useRef<HTMLDivElement | null>(null);
   const handleBodyReady = useCallback((ready: boolean) => setBodyReady(ready), []);
   useEffect(() => {
     let cancelled = false;
@@ -742,20 +741,6 @@ export function Constellation() {
       .flatMap((connection) => [connection.from, connection.to])).size,
   ])) as Record<ConnectionKind, number>, []);
 
-  useLayoutEffect(() => {
-    const list = relatedListRef.current;
-    if (!list) return;
-    const buttons = Array.from(list.querySelectorAll<HTMLElement>(":scope > button"));
-    const firstTwo = buttons.slice(0, 2);
-    if (!firstTwo.length) return;
-    const gap = Number.parseFloat(getComputedStyle(list).columnGap || getComputedStyle(list).gap || "0");
-    const halfThird = buttons[2] ? buttons[2].getBoundingClientRect().width / 2 : 0;
-    const width = firstTwo.reduce((total, item) => total + item.getBoundingClientRect().width, 0)
-      + gap * Math.max(0, firstTwo.length - 1)
-      + (halfThird ? gap + halfThird : 0);
-    list.style.setProperty("--related-visible-width", `${Math.ceil(width)}px`);
-  }, [activeSlug, activeConnections]);
-
   useEffect(() => {
     if (!activeSlug) return;
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -906,17 +891,6 @@ export function Constellation() {
               />
             </div>
             <p className="map-selection-band__one-liner">{active.indexPill}</p>
-          </div>
-          <div className="map-selection-band__relations" aria-label="Related projects">
-            <h3>Related</h3>
-            <div className="map-selection-band__relation-list" ref={relatedListRef}>
-              {activeConnections.length ? activeConnections.map((connection) => (
-                <button className="control-pill" key={`${connection.from}-${connection.to}-${connection.kind}`} onClick={() => connection.neighbor && setActiveSlug(connection.neighbor.slug)} type="button">
-                  <i style={{ background: relationColor[connection.kind] }} />
-                  <span><small>{relationLabel[connection.kind]}</small>{connection.neighbor?.title}</span>
-                </button>
-              )) : <p className="map-selection-band__empty">No {relationFilter === "all" ? "related" : relationLabel[relationFilter].toLowerCase()} links recorded.</p>}
-            </div>
           </div>
           <a className="map-selection-band__open project-open-pill control-pill" href={`/work/${active.slug}`}><span className="control-pill__content">Open project →</span></a>
         </aside>

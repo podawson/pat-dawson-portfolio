@@ -1181,7 +1181,7 @@
   }
 }
 
-/* Corpus selection band: identity and relationships follow one responsive line. */
+/* Corpus selection band: project identity and action follow one responsive line. */
 .field-active-connection-dash {
   filter: drop-shadow(0 0 3px var(--relation-color));
   stroke-width: 3.25px;
@@ -1285,27 +1285,6 @@
 @media (min-width: 901px) {
   .field.is-constellation .field-relation-filter { bottom: 28px; }
   .map-selection-band { bottom: 84px; }
-  .map-selection-band__relations {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    left: 50%;
-    max-width: min(58vw,820px);
-    overflow: visible;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    width: max-content;
-  }
-  .map-selection-band__relation-list {
-    flex: 0 1 auto;
-    max-width: min(47vw,var(--related-visible-width,420px));
-    overflow-x: auto;
-    scrollbar-width: none;
-    width: var(--related-visible-width,420px);
-  }
-  .map-selection-band__relation-list::-webkit-scrollbar { display: none; }
 }
 
 @media (min-width: 581px) {

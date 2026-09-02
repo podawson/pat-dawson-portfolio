@@ -1269,12 +1269,7 @@
   border-top: 0;
   box-shadow: none;
 }
-.field-active-connection-rail {
-  opacity: .34;
-  stroke: color-mix(in srgb, var(--relation-color) 22%, var(--ink-600));
-  stroke-linecap: round;
-  stroke-width: 1px;
-}
+.field-active-connection-dash { stroke-dasharray: .01px 15px; }
 .field-filter-tooltip {
   color: var(--ink-100);
   paint-order: stroke;
@@ -1285,6 +1280,15 @@
 @media (min-width: 901px) {
   .field.is-constellation .field-relation-filter { bottom: 28px; }
   .map-selection-band { bottom: 84px; }
+
+  /* A newly hovered definition always supersedes retained keyboard focus. */
+  .field-relation-filter:has(.field-filter-option:hover)
+  .field-filter-option:focus-within:not(:hover)::before,
+  .field-relation-filter:has(.field-filter-option:hover)
+  .field-filter-option:focus-within:not(:hover) .field-filter-tooltip {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 @media (min-width: 581px) {
@@ -1304,6 +1308,7 @@
   .field-relation-filter button,
   .map-corpus-tools button,
   .field-filter-tooltip { font-size: 13px; }
+  .map-selection-band__open { font-size: 13px; }
   .index-connector__label { font-size: 16.9px; }
   .index-filters button,
   .field-relation-filter button,
@@ -1341,4 +1346,73 @@
   .field-relation-filter button.control-pill,
   .map-corpus-tools button.control-pill,
   .index-filters button.control-pill { font-size: var(--t-100); min-height: 38px; padding-inline: 12px; }
+  .map-selection-band__open { font-size: var(--t-100); }
+}
+
+/* Work preview content may exceed the initial viewport, but is never clipped. */
+.work-page--dark .work-index { overflow: visible; }
+.work-page--dark .index-shell { min-height: max(680px, calc(100vh - 210px)); }
+
+/* The Work and Corpus filter vocabularies share one control scale. */
+.work-page--dark .index-filters button.control-pill,
+.field-relation-filter button.control-pill { font-size: 13px; }
+
+@media (max-width: 580px) {
+  .work-page--dark .index-filters button.control-pill,
+  .field-relation-filter button.control-pill { font-size: var(--t-100); }
+}
+
+/* About instrument: keep the compact preset dock in the site's pill rhythm. */
+.study-tool--embedded .study-controls.is-collapsed {
+  gap: 5px;
+  height: 44px;
+  padding: 5px;
+  width: 226px;
+}
+.study-tool--embedded .study-controls.is-collapsed .study-presets--collapsed {
+  flex: 0 0 154px;
+  gap: 4px;
+  grid-template-columns: repeat(4, 35px);
+}
+.study-tool--embedded .study-controls.is-collapsed .study-presets--collapsed button {
+  height: 34px;
+  min-height: 34px;
+  min-width: 35px;
+  width: 35px;
+}
+.study-tool--embedded .study-controls.is-collapsed .study-controls-toggle {
+  flex-basis: 57px;
+  height: 34px;
+  min-height: 34px;
+  width: 57px;
+}
+
+/* Randomize and Close share an exact header centerline. */
+.study-tool--embedded .study-controls__header {
+  align-items: center;
+}
+.study-tool--embedded .study-controls__header .study-randomize,
+.study-tool--embedded .study-controls__header .study-controls-toggle {
+  align-self: center;
+  inset: auto;
+  margin: 0;
+  position: relative;
+  top: auto;
+  transform: none;
+}
+
+/* About closes with a single, centered LinkedIn mark. */
+.about-page .site-footer {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.about-page .footer-linkedin svg {
+  height: 30px;
+  width: 30px;
+}
+
+@media (max-width: 580px) {
+  .about-page .site-footer { justify-content: center; }
 }

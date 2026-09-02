@@ -832,7 +832,6 @@ export function Constellation() {
             const toIndex = projects.findIndex((project) => project.slug === connection.neighbor?.slug);
             return (
               <g key={`${connection.from}-${connection.to}-${connection.kind}`} style={{ "--relation-color": relationColor[connection.kind] } as CSSProperties}>
-                <line className="field-active-connection-rail" data-from-index={fromIndex} data-to-index={toIndex} />
                 <line className="field-active-connection-dash" data-from-index={fromIndex} data-to-index={toIndex} />
               </g>
             );
@@ -892,7 +891,7 @@ export function Constellation() {
             </div>
             <p className="map-selection-band__one-liner">{active.indexPill}</p>
           </div>
-          <a className="map-selection-band__open project-open-pill control-pill" href={`/work/${active.slug}`}><span className="control-pill__content">Open project →</span></a>
+          <a className="map-selection-band__open project-open-pill control-pill" href={`/work/${active.slug}`}><span className="control-pill__content">Open</span></a>
         </aside>
       )}
 

@@ -200,8 +200,11 @@
   font-size: var(--project-deck);
   font-weight: var(--w-regular);
   line-height: 1.32;
+  margin-bottom: 28px;
   max-width: 28ch;
 }
+
+.project-page-shell .project-hero__summary { margin-top: 0; }
 
 .project-page-shell .project-hero__summary,
 .project-page-shell .project-facts p:last-child,

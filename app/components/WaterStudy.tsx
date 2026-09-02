@@ -22,10 +22,10 @@ const initial: WaterSettings = {
 };
 
 const presets: Array<{ name: string; sky: Sky; values: WaterSettings }> = [
-  { name: "Glass calm", sky: "clear", values: { ...initial, waveHeight: 15, chop: 4, swell: 24, current: 10, skew: 0, fetch: 78, foam: 2, storm: 0, windAngle: 0, gust: 0, rain: 0, sunAngle: 28, glint: 76, sunTransmission: 62, depthTint: 18, haze: 0, tilt: 10, zoom: 56, vignette: 6, grain: 0 } },
-  { name: "Short chop", sky: "cloud", values: { ...initial, waveHeight: 43, chop: 82, swell: 18, current: 48, skew: 22, fetch: 16, foam: 46, storm: 28, windAngle: 62, gust: 34, rain: 8, sunAngle: 54, glint: 38, sunTransmission: 34, depthTint: 46, haze: 16, tilt: 25, zoom: 43, vignette: 18, grain: 7, corpusBlue: 18 } },
+  { name: "Glass Calm", sky: "clear", values: { ...initial, waveHeight: 15, chop: 4, swell: 24, current: 10, skew: 0, fetch: 78, foam: 2, storm: 0, windAngle: 0, gust: 0, rain: 0, sunAngle: 28, glint: 76, sunTransmission: 62, depthTint: 18, haze: 0, tilt: 10, zoom: 56, vignette: 6, grain: 0 } },
+  { name: "Short Chop", sky: "cloud", values: { ...initial, waveHeight: 43, chop: 82, swell: 18, current: 48, skew: 22, fetch: 16, foam: 46, storm: 28, windAngle: 62, gust: 34, rain: 8, sunAngle: 54, glint: 38, sunTransmission: 34, depthTint: 46, haze: 16, tilt: 25, zoom: 43, vignette: 18, grain: 7, corpusBlue: 18 } },
   { name: "Squall", sky: "cloud", values: { ...initial, waveHeight: 86, chop: 91, swell: 70, current: 76, skew: -32, fetch: 28, foam: 78, storm: 92, windAngle: 116, gust: 88, rain: 74, sunAngle: 78, glint: 24, sunTransmission: 18, depthTint: 90, haze: 48, tilt: 33, zoom: 37, vignette: 46, grain: 22, corpusBlue: 8 } },
-  { name: "Fog bank", sky: "fog", values: { ...initial, waveHeight: 28, chop: 18, swell: 66, current: 16, skew: 4, fetch: 72, foam: 12, storm: 22, windAngle: 145, gust: 8, rain: 2, sunAngle: 12, glint: 8, sunTransmission: 70, depthTint: 52, haze: 92, tilt: 8, zoom: 60, vignette: 28, grain: 12, corpusBlue: 12 } },
+  { name: "Fog Bank", sky: "fog", values: { ...initial, waveHeight: 28, chop: 18, swell: 66, current: 16, skew: 4, fetch: 72, foam: 12, storm: 22, windAngle: 145, gust: 8, rain: 2, sunAngle: 12, glint: 8, sunTransmission: 70, depthTint: 52, haze: 92, tilt: 8, zoom: 60, vignette: 28, grain: 12, corpusBlue: 12 } },
 ];
 
 const groups: Array<{ title: string; controls: Array<{ key: keyof WaterSettings; label: string; min: number; max: number; step?: number }> }> = [
@@ -251,13 +251,19 @@ export function WaterStudy({ embedded = false }: { embedded?: boolean }) {
     <div className={`study-tool study-tool--water${embedded ? " study-tool--embedded" : ""}`}>
       <div className={`study-canvas study-canvas--${sky}`} ref={mountRef} role="img" aria-label="An organic field of isosceles triangles deformed by live water, weather, light, and camera parameters"><div className="study-vignette" /></div>
       <aside className={`study-controls${panelOpen ? "" : " is-collapsed"}`}>
-        {panelOpen ? <button className={`study-randomize${embedded ? " control-pill" : ""}`} onClick={randomize} type="button"><span className="control-pill__content">Randomize</span></button> : null}
-        {panelOpen && <div className="study-controls__content">
-          <div className="study-presets">{presets.map((preset,index)=><button className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content"><b>{index+1}</b>{preset.name}</span></button>)}</div>
-          {visibleGroups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} style={{ "--range-progress": `${((settings[control.key]-control.min)/(control.max-control.min))*100}%` } as CSSProperties} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
-        </div>}
-        {!panelOpen && <div className="study-presets study-presets--collapsed" aria-label="Water presets">{presets.map((preset,index)=><button aria-label={preset.name} className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content">{index+1}</span></button>)}</div>}
-        <button className={`study-controls-toggle${embedded ? " control-pill" : ""}`} onClick={()=>setPanelOpen((open)=>!open)} aria-label={panelOpen?"Close controls":"Open controls"} type="button"><span className="control-pill__content">{panelOpen?<>Close <b aria-hidden="true">×</b></>:"Open"}</span></button>
+        {panelOpen ? <>
+          <div className="study-controls__header">
+            <button className={`study-randomize${embedded ? " control-pill" : ""}`} onClick={randomize} type="button"><span className="control-pill__content">Randomize</span></button>
+            <button className={`study-controls-toggle${embedded ? " control-pill" : ""}`} onClick={()=>setPanelOpen(false)} aria-label="Close controls" type="button"><span className="control-pill__content">Close <b aria-hidden="true">×</b></span></button>
+          </div>
+          <div className="study-controls__content">
+            <div className="study-presets">{presets.map((preset,index)=><button className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content"><b>{index+1}</b>{preset.name}</span></button>)}</div>
+            {visibleGroups.map((group)=><section className="study-control-section" key={group.title}><p>{group.title}</p>{group.controls.map((control)=><label key={control.key}>{control.label}<output>{settings[control.key]}</output><input aria-label={control.label} style={{ "--range-progress": `${((settings[control.key]-control.min)/(control.max-control.min))*100}%` } as CSSProperties} type="range" min={control.min} max={control.max} step={control.step ?? 1} value={settings[control.key]} onInput={(event)=>{const value=Number(event.currentTarget.value);setSettings((current)=>({...current,[control.key]:value}));}}/></label>)}</section>)}
+          </div>
+        </> : <>
+          <div className="study-presets study-presets--collapsed" aria-label="Water presets">{presets.map((preset,index)=><button aria-label={preset.name} className={embedded ? "control-pill" : undefined} key={preset.name} onClick={()=>applyPreset(index)} type="button"><span className="control-pill__content">{index+1}</span></button>)}</div>
+          <button className={`study-controls-toggle${embedded ? " control-pill" : ""}`} onClick={()=>setPanelOpen(true)} aria-label="Open controls" type="button"><span className="control-pill__content">Open</span></button>
+        </>}
       </aside>
     </div>
   );

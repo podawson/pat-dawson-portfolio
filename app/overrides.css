@@ -19,13 +19,12 @@
 .control-pill::before {
   background: var(--cream);
   border-radius: inherit;
+  clip-path: circle(0% at 50% 50%);
   content: "";
   inset: 3px;
   opacity: 0;
   position: absolute;
-  transform: scaleX(.2);
-  transform-origin: center;
-  transition: opacity .2s ease, transform .34s cubic-bezier(.2,.82,.2,1);
+  transition: clip-path .42s cubic-bezier(.2,.82,.2,1), opacity .18s ease;
   z-index: 0;
 }
 
@@ -65,8 +64,8 @@
 }
 
 .control-pill:focus-visible::before {
+  clip-path: circle(100% at 50% 50%);
   opacity: 1;
-  transform: scaleX(1);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -84,8 +83,8 @@
   }
 
   .control-pill:hover::before {
+    clip-path: circle(100% at 50% 50%);
     opacity: 1;
-    transform: scaleX(1);
   }
 }
 
@@ -940,5 +939,205 @@
   .project-page-shell .project-evidence__artifacts {
     gap: 12px;
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Unified control scale and the centered About instrument panel. */
+.experience-list time,
+.experience-list .micro {
+  font-size: var(--t-400);
+}
+
+.field-relation-filter button,
+.map-corpus-tools button {
+  font-size: var(--t-300);
+}
+
+@media (min-width: 901px) {
+  .field-filter-tooltip {
+    font-size: var(--t-200);
+  }
+}
+
+.study-tool--embedded .study-controls:not(.is-collapsed) {
+  backdrop-filter: blur(16px);
+  background: rgba(5, 8, 11, .76);
+  border: 1px solid var(--ink-600);
+  border-radius: 18px;
+  bottom: auto;
+  display: flex;
+  flex-direction: column;
+  height: min(480px, calc(100% - 24px));
+  left: 50%;
+  max-height: calc(100% - 24px);
+  right: auto;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(360px, calc(100% - 24px));
+}
+
+.study-tool--embedded .study-controls__header {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 10px 10px 0;
+}
+
+.study-tool--embedded .study-controls__header .study-randomize,
+.study-tool--embedded .study-controls__header .study-controls-toggle {
+  background: rgba(5, 8, 11, .32);
+  border: 1px solid var(--ink-600);
+  color: var(--ink-400);
+  font-size: var(--t-300);
+  height: 32px;
+  inset: auto;
+  min-height: 32px;
+  padding: 0 11px;
+  position: relative;
+  width: auto;
+}
+
+.study-tool--embedded .study-controls__header .study-controls-toggle b {
+  color: var(--ink-500);
+  font-family: var(--mono);
+  font-size: var(--t-500);
+  font-weight: var(--w-regular);
+  line-height: 1;
+}
+
+.study-tool--embedded .study-controls__header .study-controls-toggle .control-pill__content {
+  gap: 4px;
+}
+
+.study-tool--embedded .study-controls__content {
+  flex: 1 1 auto;
+  height: auto;
+  max-height: none;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px 14px 14px;
+}
+
+.study-tool--embedded .study-presets:not(.study-presets--collapsed) {
+  gap: 6px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 10px;
+}
+
+.study-tool--embedded .study-presets:not(.study-presets--collapsed) button {
+  background: rgba(5, 8, 11, .26);
+  border: 1px solid var(--ink-600);
+  color: var(--ink-400);
+  font-size: var(--t-300);
+  min-height: 32px;
+  padding: 0 10px;
+}
+
+.study-tool--embedded .study-presets:not(.study-presets--collapsed) b {
+  color: var(--ink-500);
+  font-weight: var(--w-medium);
+  margin-right: 6px;
+}
+
+.study-tool--embedded .study-control-section > p,
+.study-tool--embedded .study-control-section label,
+.study-tool--embedded .study-control-section output {
+  font-size: var(--t-300);
+}
+
+.study-tool--embedded .study-control-section input[type="range"]::-webkit-slider-thumb {
+  border-color: rgba(176, 181, 187, .82);
+}
+
+.study-tool--embedded .study-control-section input[type="range"]::-moz-range-thumb {
+  border-color: rgba(176, 181, 187, .82);
+}
+
+@media (max-width: 680px) {
+  .field-relation-filter button,
+  .map-corpus-tools button {
+    font-size: var(--t-200);
+  }
+}
+
+/* Corpus selection band: identity and relationships follow one responsive line. */
+.field-active-connection-dash {
+  filter: drop-shadow(0 0 3px var(--relation-color));
+  stroke-width: 3.25px;
+}
+
+@media (min-width: 901px) {
+  .map-selection-band {
+    gap: clamp(22px, 3vw, 48px);
+    grid-template-columns: minmax(220px, auto) minmax(0, 1fr) auto;
+  }
+
+  .map-selection-band__identity {
+    grid-column: 1;
+  }
+
+  .map-selection-band__identity-title {
+    align-items: center;
+    display: flex;
+    gap: 11px;
+  }
+
+  .map-selection-band__image {
+    flex: 0 0 42px;
+    height: 42px;
+    width: 42px;
+  }
+
+  .map-selection-band__relations {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    grid-column: 2;
+    left: auto;
+    min-width: 0;
+    overflow: hidden;
+    position: static;
+    top: auto;
+    transform: none;
+  }
+
+  .map-selection-band__relations h3 {
+    flex: 0 0 auto;
+    font-size: var(--t-700);
+    font-weight: var(--w-medium);
+  }
+
+  .map-selection-band__relation-list {
+    flex: 1 1 auto;
+    max-width: none;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .map-selection-band__open {
+    grid-column: 3;
+  }
+}
+
+@media (max-width: 900px) {
+  .map-selection-band__identity {
+    grid-column: 1 / -1;
+  }
+
+  .map-selection-band__identity-title {
+    align-items: center;
+    display: flex;
+    gap: 9px;
+  }
+
+  .map-selection-band__identity-title .map-selection-band__image {
+    flex: 0 0 38px;
+    height: 38px;
+    width: 38px;
   }
 }

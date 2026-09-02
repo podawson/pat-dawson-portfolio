@@ -872,18 +872,20 @@ export function Constellation() {
       {active && (
         <aside className="map-selection-band" aria-live="polite">
           <div className="map-selection-band__identity">
-            <h2>{active.title}</h2>
+            <div className="map-selection-band__identity-title">
+              <h2>{active.title}</h2>
+              <img
+                className="map-selection-band__image"
+                src={active.image}
+                alt=""
+                onError={(event) => {
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src = "/corpus-icon-20260825.png";
+                }}
+              />
+            </div>
             <p className="map-selection-band__one-liner">{active.indexPill}</p>
           </div>
-          <img
-            className="map-selection-band__image"
-            src={active.image}
-            alt=""
-            onError={(event) => {
-              event.currentTarget.onerror = null;
-              event.currentTarget.src = "/corpus-icon-20260825.png";
-            }}
-          />
           <div className="map-selection-band__relations" aria-label="Related projects">
             <h3>Related</h3>
             <div className="map-selection-band__relation-list">

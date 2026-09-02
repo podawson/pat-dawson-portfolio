@@ -879,7 +879,6 @@ export function Constellation() {
         <aside className="map-selection-band" aria-live="polite">
           <div className="map-selection-band__identity">
             <div className="map-selection-band__identity-title">
-              <h2>{active.title}</h2>
               <img
                 className="map-selection-band__image"
                 src={active.image}
@@ -889,6 +888,7 @@ export function Constellation() {
                   event.currentTarget.src = "/corpus-icon-20260825.png";
                 }}
               />
+              <h2>{active.title}</h2>
             </div>
             <p className="map-selection-band__one-liner">{active.indexPill}</p>
           </div>

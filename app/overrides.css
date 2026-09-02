@@ -1559,3 +1559,18 @@
 
 /* Expanded About controls share the preset grid's exact outer edges. */
 .study-tool--embedded .study-controls__header { padding-inline: 14px; }
+
+/* Corpus hover definitions sit beneath the desktop filters, clear of selected-project details. */
+@media (min-width: 901px) {
+  .field-filter-option::before { display: none; }
+
+  .field-filter-tooltip {
+    bottom: auto;
+    top: calc(100% + 6px);
+  }
+}
+
+/* The selected-project thumbnail leads its title; mobile keeps the one-liner on the right. */
+@media (max-width: 580px) {
+  .map-selection-band__identity .map-selection-band__one-liner { text-align: right; }
+}

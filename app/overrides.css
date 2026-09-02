@@ -1605,18 +1605,21 @@
 @media (min-width: 901px) {
   .field.is-constellation .map-selection-band { bottom: 70px; }
 
+  .field-filter-tooltip { color: var(--ink-400); }
+
   .map-selection-band > .map-selection-band__one-liner {
     align-self: center;
     color: var(--ink-400);
     display: block;
     font-family: var(--mono);
     font-size: 13px;
+    font-style: italic;
     grid-column: 2;
-    justify-self: center;
+    justify-self: end;
     letter-spacing: var(--track-mixed);
     line-height: var(--lh-label);
     margin: 0;
     max-width: 56ch;
-    text-align: center;
+    text-align: right;
   }
 }

@@ -1,4 +1,5 @@
 export type Category = "Place" | "Fabrication" | "Experience" | "Systems" | "Culture";
+export type ProjectTag = "Product" | "Strategy" | "Craft" | "Delivery" | "Narrative";
 
 export type Project = {
   slug: string;
@@ -20,6 +21,7 @@ export type Project = {
   artifactImage?: string;
   indexPill: string;
   categories: Category[];
+  tags: ProjectTag[];
   featured?: boolean;
   node: { x: number; y: number; size: number };
   metrics: string[];
@@ -64,6 +66,7 @@ export const projects: Project[] = [
     image: "/work/charlesgate.jpg",
     indexPill: "a park under everyone's jurisdiction",
     categories: ["Place"],
+    tags: ["Strategy", "Craft", "Narrative"],
     featured: true,
     node: { x: 25.3, y: 43.5, size: 32 },
     metrics: ["Point-cloud highway survey", "Grasshopper tree-placement system", "Phased public-realm delivery"],
@@ -92,6 +95,7 @@ export const projects: Project[] = [
     image: "/work/east-broadway.jpg",
     indexPill: "a delirious Chinatown building",
     categories: ["Place", "Culture"],
+    tags: ["Strategy", "Craft", "Delivery"],
     node: { x: 36.7, y: 75.2, size: 28 },
     metrics: ["~$5M revitalization study", "Zoning, licensing, and operating model", "Verified existing FAR"],
     artifacts: ["Historic-plan comparison", "Regulatory constraint matrix", "Filing and fundraising package", "Use / setback / FAR study", "Operating-program diagram", "Ownership and regulator presentation"],
@@ -119,6 +123,7 @@ export const projects: Project[] = [
     image: "/work/ouellette.jpg",
     indexPill: "one fabricator, zero shortcuts",
     categories: ["Fabrication", "Place", "Experience"],
+    tags: ["Craft", "Delivery"],
     node: { x: 46.2, y: 80.6, size: 26 },
     metrics: ["5 historic trusses", "100+ addressable lights", "Zero modified original components"],
     artifacts: ["Clamp family and tolerance studies", "Fabrication sheets", "Installed night sequence", "Non-invasive attachment mockups", "Custom light-housing details", "Cable-routing and installation sequence"],
@@ -146,6 +151,7 @@ export const projects: Project[] = [
     image: "/work/gallery/flower-tower/09.webp",
     indexPill: "a monument that disperses",
     categories: ["Fabrication", "Place", "Culture"],
+    tags: ["Craft", "Narrative"],
     node: { x: 21.5, y: 38, size: 26 },
     metrics: ["800+ stems and seed packets", "6-foot cardboard structure", "~$400 material budget"],
     artifacts: ["Grant and competition submission", "Perforation / assembly logic", "Time-lapse of public depletion", "Flower and seed-packet inventory", "Writable community surface", "De-installation and reuse plan"],
@@ -173,6 +179,7 @@ export const projects: Project[] = [
     image: "/work/caleta-main-v2.webp",
     indexPill: "punk rock fully permitted",
     categories: ["Place", "Fabrication", "Culture"],
+    tags: ["Craft", "Delivery"],
     featured: true,
     node: { x: 34.8, y: 56.5, size: 32 },
     metrics: ["Concept-to-opening delivery", "Rated kitchen separation", "ADA and life-safety coordination"],
@@ -201,6 +208,7 @@ export const projects: Project[] = [
     image: "/work/wework.jpg",
     indexPill: "a playbook for 900 buildings",
     categories: ["Place", "Experience", "Systems"],
+    tags: ["Product", "Strategy", "Delivery"],
     node: { x: 69, y: 69.8, size: 27 },
     metrics: ["900+ analyzed locations", "200+ initiated conversions", "2–150-person floor plates"],
     artifacts: ["Portfolio opportunity matrix", "Custom Revit analysis", "Operational conversion playbook", "Cross-department data model", "MEP and accessibility decision matrix", "Distributed-team handoff standards"],
@@ -228,6 +236,7 @@ export const projects: Project[] = [
     image: "/work/confidential-client.jpg",
     indexPill: "enterprise physical AI",
     categories: ["Experience", "Place", "Fabrication", "Systems"],
+    tags: ["Strategy", "Delivery"],
     node: { x: 54.8, y: 61.5, size: 29 },
     metrics: ["500+ generated visualizations", "4 curated design directions", "Portfolio’s first physical-AI customer space"],
     artifacts: ["Workshop-to-prompt translation", "500→4 curation funnel", "Temporary / permanent delivery timeline", "Discovery-workshop synthesis", "Image-model training framework", "Landlord / engineering / fabrication package"],
@@ -255,6 +264,7 @@ export const projects: Project[] = [
     image: "/work/vanderbilt.jpg",
     indexPill: "generative systems and a skyscraper",
     categories: ["Experience", "Systems", "Place", "Fabrication"],
+    tags: ["Strategy", "Delivery", "Narrative"],
     featured: true,
     node: { x: 58.8, y: 46, size: 34 },
     metrics: ["5 hardware zones", "15 generative modes", "150-year archive taxonomy"],
@@ -284,6 +294,7 @@ export const projects: Project[] = [
     image: "/work/gallery/gymnast-cobot/03.webp",
     indexPill: "the robot asks first",
     categories: ["Experience", "Systems", "Fabrication"],
+    tags: ["Strategy", "Craft"],
     featured: true,
     node: { x: 72.8, y: 59.5, size: 30 },
     metrics: ["NSF Award #1928654", "UR-10 live prototype", "Closed fatigue-adjustment loop"],
@@ -313,6 +324,7 @@ export const projects: Project[] = [
     artifactImage: "/work/mapping-investments.svg",
     indexPill: "a neighborhood's history, constellated",
     categories: ["Systems", "Place", "Culture"],
+    tags: ["Product", "Craft", "Narrative"],
     node: { x: 61.4, y: 55.2, size: 26 },
     metrics: ["13 sites", "3 eras", "90 years of neighborhood history"],
     artifacts: ["Prompt contracts + regression guards", "Land-over-time state diagram", "Cartographic system comparison", "Thirteen-site / three-era research dataset", "MapLibre terrain and WebGL prototype", "Event-state disclosure sequence"],
@@ -342,6 +354,7 @@ export const projects: Project[] = [
     artifactImage: "/work/release-intelligence-pipeline.svg",
     indexPill: "five honest documents",
     categories: ["Systems"],
+    tags: ["Product", "Strategy"],
     node: { x: 77.2, y: 51.2, size: 28 },
     metrics: ["Sub-5% custom bucket", "20–40-minute cycle", "12+ batches across 100+ tickets"],
     artifacts: ["Pencil architecture → functional system", "Six-stage pipeline diagram", "Batch-by-batch error table", "Deterministic classifier source", "Narrative-seed validation contract", "Proportional review queue"],
@@ -371,6 +384,7 @@ export const projects: Project[] = [
     artifactImage: "/work/gleanings.svg",
     indexPill: "conflicts before they compound",
     categories: ["Systems"],
+    tags: ["Product"],
     node: { x: 80.4, y: 66.2, size: 26 },
     metrics: ["4+ heterogeneous source classes", "Cost-and-schedule conflict ranking", "Human review gate"],
     artifacts: ["File-ingestion and reconciliation map", "Ranked discrepancy interface", "Finding-to-source evidence trail", "Schedule / drawing / budget cross-checks", "Cost-and-schedule ranking model", "PM confirmation and dismissal states"],
@@ -399,6 +413,7 @@ export const projects: Project[] = [
     image: "/work/string.jpg",
     indexPill: "profitable launches in a sea of noise",
     categories: ["Systems", "Culture"],
+    tags: ["Product", "Strategy", "Delivery"],
     featured: true,
     node: { x: 84.2, y: 41, size: 32 },
     metrics: ["5,000+ active traders", "62% reported hit rate", "~$250K revenue"],
@@ -428,6 +443,7 @@ export const projects: Project[] = [
     image: "/work/aintivirus.jpg",
     indexPill: "responsibly resurrecting a madman",
     categories: ["Systems", "Culture"],
+    tags: ["Product", "Strategy", "Narrative"],
     featured: true,
     node: { x: 54.2, y: 28.5, size: 34 },
     metrics: ["~10,000 active chatbot users", "1.2M-follower X audience", "Script-to-publication content system"],
@@ -456,6 +472,7 @@ export const projects: Project[] = [
     image: "/work/gallery/bodega/01.jpg",
     indexPill: "a corner store that toured",
     categories: ["Place", "Experience", "Culture"],
+    tags: ["Craft", "Delivery", "Narrative"],
     node: { x: 27.8, y: 53, size: 29 },
     metrics: ["ComplexCon LA, Shanghai, and Art Basel Miami", "2018–21 activation run", "Venue-specific construction packages"],
     artifacts: ["Existing-condition survey photography", "Interior / exterior axonometrics", "Finish, fixture, and detail drawing sets", "Venue circulation / occupancy / accessibility matrix", "Activation renderings", "Install-crew production packages"],
@@ -483,6 +500,7 @@ export const projects: Project[] = [
     image: "/work/gallery/hyperstructures/surfaces/surface-279.webp",
     indexPill: "shapes that don't exist yet",
     categories: ["Systems"],
+    tags: ["Narrative"],
     node: { x: 70.5, y: 23.5, size: 29 },
     metrics: ["~8,987 working files", "GPT, Midjourney, and Stable Diffusion pipeline", "2023–24 named series"],
     artifacts: ["Minimal-surface and Calabi–Yau studies", "Layered generative-AI source files", "Named-series groupings of resolved forms", "GPT language and prompt taxonomy", "Midjourney / Stable Diffusion iteration boards", "8,987-file working archive"],
@@ -510,6 +528,7 @@ export const projects: Project[] = [
     image: "/work/gallery/richardson-plaza/01.jpg",
     indexPill: "concrete made livable",
     categories: ["Place", "Fabrication"],
+    tags: ["Craft", "Delivery"],
     node: { x: 56, y: 83.5, size: 27 },
     metrics: ["Built campus public realm", "Arboretum nursery landscape", "2021 opening"],
     artifacts: ["Existing-condition and demolition documentation", "Modular seating and planter kit", "Coordinated planting and electrical drawings", "Campus circulation and utility coordination", "Planter and tree-establishment details", "Construction and as-built photography"],
@@ -537,6 +556,7 @@ export const projects: Project[] = [
     image: "/work/gallery/quaranzine/03.jpg",
     indexPill: "a zine for a scene with no venue",
     categories: ["Culture", "Experience"],
+    tags: ["Product", "Narrative"],
     node: { x: 28.8, y: 22.8, size: 30 },
     metrics: ["25 published editions", "Continuous open-call program", "Publication and live-concert series"],
     artifacts: ["Contributor submission archive", "Volume / edition organization system", "Quaranzine live concert series", "Open-call submission intake", "Contributor and commissioning correspondence", "Performance programs and recordings"],

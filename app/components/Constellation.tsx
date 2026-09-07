@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { projectConnections, projects, type ConnectionKind } from "../data";
+import { projectConnections, projects, type ConnectionKind, type ProjectTag } from "../data";
 import { MapBody3D } from "../map/MapBodyMesh3D";
 
 const relationColor: Record<ConnectionKind, string> = {
@@ -20,15 +20,23 @@ const relationLabel: Record<ConnectionKind, string> = {
   graft: "Graft",
 };
 
-const relationDescription: Record<ConnectionKind, string> = {
-  handoff: "The work evolves with its next stakeholder.",
-  cede: "The work gives its outcome to other people.",
-  uphold: "The work answers a record that predates it.",
-  quorum: "The work pursues stakeholder alignment.",
-  graft: "The work merges immediately into the system.",
+const filterColor: Record<ProjectTag, string> = {
+  Product: "#D63C49",
+  Strategy: "#B85C91",
+  Craft: "#7A3FAE",
+  Delivery: "#FFC94D",
+  Narrative: "#3A9971",
 };
 
-const relationKinds: ConnectionKind[] = ["handoff", "cede", "uphold", "quorum", "graft"];
+const filterDescription: Record<ProjectTag, string> = {
+  Product: "The work turns a recurring need into a repeatable tool, platform, or system.",
+  Strategy: "The work defines what to pursue, why it matters, and where to focus.",
+  Craft: "The work resolves how an idea is made, from form and material to interaction and code.",
+  Delivery: "The work aligns people, constraints, and decisions to make the outcome real.",
+  Narrative: "The work shapes what an experience communicates and how people come to understand it.",
+};
+
+const filterKinds: ProjectTag[] = ["Product", "Strategy", "Craft", "Delivery", "Narrative"];
 
 type AxisKey = "story" | "compute" | "atmosphere" | "architecture" | "center";
 type AxisPositions = Readonly<Record<AxisKey, { x: number; y: number; visible: boolean }>>;
@@ -568,7 +576,7 @@ export function Constellation() {
   const [showNodeNames, setShowNodeNames] = useState(false);
   const [showAxes, setShowAxes] = useState(true);
   const [showNodes, setShowNodes] = useState(true);
-  const [relationFilter, setRelationFilter] = useState<ConnectionKind | "all">("all");
+  const [projectFilter, setProjectFilter] = useState<ProjectTag | "all">("all");
   const [resetSignal, setResetSignal] = useState(0);
   const [bodyReady, setBodyReady] = useState(false);
   const [fontsReady, setFontsReady] = useState(false);
@@ -707,24 +715,30 @@ export function Constellation() {
   }, []);
   const resetMap = useCallback(() => {
     setActiveSlug(null);
-    setRelationFilter("all");
+    setProjectFilter("all");
     setResetSignal((current) => current + 1);
   }, []);
   const toggleNodes = useCallback(() => {
     setShowNodes((current) => !current);
     setShowNodeNames(false);
   }, []);
-  const selectRelationFilter = useCallback((filter: "all" | ConnectionKind) => {
+  const selectProjectFilter = useCallback((filter: "all" | ProjectTag) => {
     setActiveSlug(null);
-    setRelationFilter(filter);
+    setProjectFilter(filter);
   }, []);
   const active = useMemo(
     () => projects.find((project) => project.slug === activeSlug) ?? null,
     [activeSlug],
   );
-  const visibleConnections = useMemo(() => relationFilter === "all"
+  const filteredSlugs = useMemo(() => new Set(
+    projects
+      .filter((project) => projectFilter === "all" || project.tags.includes(projectFilter))
+      .map((project) => project.slug),
+  ), [projectFilter]);
+  const visibleConnections = useMemo(() => projectFilter === "all"
     ? projectConnections
-    : projectConnections.filter((connection) => connection.kind === relationFilter), [relationFilter]);
+    : projectConnections.filter((connection) => filteredSlugs.has(connection.from) && filteredSlugs.has(connection.to)),
+  [filteredSlugs, projectFilter]);
   const activeConnections = useMemo(() => activeSlug
     ? visibleConnections
       .filter((connection) => connection.from === activeSlug || connection.to === activeSlug)
@@ -735,15 +749,11 @@ export function Constellation() {
     : [], [activeSlug, visibleConnections]);
   const highlightedNeighbors = useMemo(() => activeConnections
     .flatMap((connection) => connection.neighbor?.slug ? [connection.neighbor.slug] : []), [activeConnections]);
-  const emphasizedSlugs = useMemo(() => relationFilter === "all" ? [] : [...new Set(
-    visibleConnections.flatMap((connection) => [connection.from, connection.to]),
-  )], [relationFilter, visibleConnections]);
-  const relationshipProjectCounts = useMemo(() => Object.fromEntries(relationKinds.map((kind) => [
+  const emphasizedSlugs = useMemo(() => projectFilter === "all" ? [] : [...filteredSlugs], [filteredSlugs, projectFilter]);
+  const projectFilterCounts = useMemo(() => Object.fromEntries(filterKinds.map((kind) => [
     kind,
-    new Set(projectConnections
-      .filter((connection) => connection.kind === kind)
-      .flatMap((connection) => [connection.from, connection.to])).size,
-  ])) as Record<ConnectionKind, number>, []);
+    projects.filter((project) => project.tags.includes(kind)).length,
+  ])) as Record<ProjectTag, number>, []);
 
   useEffect(() => {
     if (!activeSlug) return;
@@ -778,44 +788,44 @@ export function Constellation() {
         if (event.key === "Escape") setActiveSlug(null);
       }}
     >
-      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={relationFilter === "all" ? null : relationColor[relationFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onToggleAxes={() => setShowAxes((current) => !current)} onToggleNodes={toggleNodes} onToggleNodeNames={() => setShowNodeNames((current) => !current)} resetSignal={resetSignal} showAxes={showAxes} showNodes={showNodes} showNodeNames={showNodeNames} />
+      <MapBody3D activeSlug={activeSlug} emphasizedSlugs={emphasizedSlugs} filterColor={projectFilter === "all" ? null : filterColor[projectFilter]} highlightedNeighbors={highlightedNeighbors} onAxisPositionsChange={handleAxisPositions} onNodePositionsChange={handleNodePositions} onReadyChange={handleBodyReady} onToggleAxes={() => setShowAxes((current) => !current)} onToggleNodes={toggleNodes} onToggleNodeNames={() => setShowNodeNames((current) => !current)} resetSignal={resetSignal} showAxes={showAxes} showNodes={showNodes} showNodeNames={showNodeNames} />
       <div className="field-copy">
         <h1 id="field-title">It Grows</h1>
       </div>
 
-      <div className="field-relation-filter" role="group" aria-label="Filter the Corpus by relationship">
-        {relationFilter !== "all" ? (
+      <div className="field-relation-filter" role="group" aria-label="Filter projects by focus">
+        {projectFilter !== "all" ? (
           <p className="field-selected-filter-description">
-            <strong>{relationLabel[relationFilter]}:</strong> {relationDescription[relationFilter]}
+            <strong>{projectFilter}:</strong> {filterDescription[projectFilter]}
           </p>
         ) : null}
         <div>
           <button className="control-pill field-reset-control" onClick={resetMap} type="button">
             <span className="control-pill__content">Reset</span>
           </button>
-          {relationKinds.map((kind) => (
+          {filterKinds.map((kind) => (
             <span className="field-filter-option" key={kind}>
               <button
-                aria-describedby={`relation-help-${kind}`}
-                aria-pressed={relationFilter === kind}
-                className={`control-pill ${relationFilter === kind ? "is-active" : ""}`}
-                onClick={() => selectRelationFilter(kind)}
-                style={{ "--relation-color": relationColor[kind] } as CSSProperties}
+                aria-describedby={`filter-help-${kind.toLowerCase()}`}
+                aria-pressed={projectFilter === kind}
+                className={`control-pill ${projectFilter === kind ? "is-active" : ""}`}
+                onClick={() => selectProjectFilter(kind)}
+                style={{ "--relation-color": filterColor[kind] } as CSSProperties}
                 type="button"
               >
-                <span className="control-pill__content"><i />{relationLabel[kind]}</span>
+                <span className="control-pill__content"><i />{kind}</span>
               </button>
-              <span className="field-filter-tooltip" id={`relation-help-${kind}`} role="tooltip">
-                {relationDescription[kind]}
+              <span className="field-filter-tooltip" id={`filter-help-${kind.toLowerCase()}`} role="tooltip">
+                {filterDescription[kind]}
               </span>
             </span>
           ))}
         </div>
       </div>
       <p className="field-filter-announcement" aria-live="polite">
-        {relationFilter === "all"
+        {projectFilter === "all"
           ? `Showing all ${projects.length} projects.`
-          : `Emphasizing ${relationshipProjectCounts[relationFilter]} projects connected by ${relationLabel[relationFilter].toLowerCase()}.`}
+          : `Showing ${projectFilterCounts[projectFilter]} ${projectFilter.toLowerCase()} projects.`}
       </p>
 
       <div className="field-axes" ref={axisLayerRef} aria-hidden="true">
@@ -848,14 +858,14 @@ export function Constellation() {
         {projects.map((project, index) => {
           const isActive = active?.slug === project.slug;
           const isRelated = activeConnections.some((connection) => connection.neighbor?.slug === project.slug);
-          const matchesFilter = relationFilter === "all" || visibleConnections.some((connection) => connection.from === project.slug || connection.to === project.slug);
+          const matchesFilter = filteredSlugs.has(project.slug);
           const isQuiet = !isActive && ((active && !isRelated) || !matchesFilter);
           return (
             <button
-              className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${isQuiet ? "is-quiet" : ""} ${relationFilter !== "all" && !matchesFilter ? "is-filter-muted" : ""}`}
+              className={`field-node ${isActive ? "is-active" : ""} ${isRelated ? "is-related" : ""} ${isQuiet ? "is-quiet" : ""} ${projectFilter !== "all" && !matchesFilter ? "is-filter-muted" : ""}`}
               key={project.slug}
               onClick={() => {
-                if (relationFilter !== "all" && !matchesFilter) setRelationFilter("all");
+                if (projectFilter !== "all" && !matchesFilter) setProjectFilter("all");
                 if (activeSlug === project.slug) {
                   window.location.assign(`/work/${project.slug}`);
                   return;
@@ -871,7 +881,7 @@ export function Constellation() {
                 "--node-order": index,
               } as CSSProperties}
               type="button"
-              aria-label={`${isActive ? "Open" : "Select"} ${project.title}${relationFilter !== "all" && matchesFilter ? `, connected by ${relationLabel[relationFilter].toLowerCase()}` : ""}`}
+              aria-label={`${isActive ? "Open" : "Select"} ${project.title}${projectFilter !== "all" && matchesFilter ? `, tagged ${projectFilter.toLowerCase()}` : ""}`}
             >
               <strong>{project.title}</strong>
             </button>

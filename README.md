@@ -91,8 +91,16 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 
 - `npm run dev`: start local development
 - `npm run build`: verify the vinext build output
+- `npm run deploy:cloudflare`: publish the validated build to the production Cloudflare Worker
 - `npm test`: build the starter and verify its rendered loading skeleton
 - `npm run db:generate`: generate Drizzle migrations after schema changes
+
+## Publishing
+
+The GitHub `main` branch is the production source of truth. Cloudflare Workers
+Builds watches that branch, runs `npm run build`, and then runs
+`npm run deploy:cloudflare`. Approved Codex changes should be committed and
+pushed to `main`; a successful push automatically updates the Cloudflare site.
 
 ## Learn More
 

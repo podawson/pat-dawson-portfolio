@@ -800,9 +800,6 @@ export function Constellation() {
           </p>
         ) : null}
         <div>
-          <button className="control-pill field-reset-control" onClick={resetMap} type="button">
-            <span className="control-pill__content">Reset</span>
-          </button>
           {filterKinds.map((kind) => (
             <span className="field-filter-option" key={kind}>
               <button
@@ -820,6 +817,9 @@ export function Constellation() {
               </span>
             </span>
           ))}
+          <button className="control-pill field-reset-control" onClick={resetMap} type="button">
+            <span className="control-pill__content">Reset</span>
+          </button>
         </div>
       </div>
       <p className="field-filter-announcement" aria-live="polite">

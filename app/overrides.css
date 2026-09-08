@@ -466,24 +466,24 @@
     transform: translate(-50%, 0);
   }
 
-  .field-filter-option:nth-child(2) .field-filter-tooltip {
+  .field-filter-option:first-child .field-filter-tooltip {
     left: 0;
     transform: translate(0, 4px);
   }
 
-  .field-filter-option:nth-child(2):hover .field-filter-tooltip,
-  .field-filter-option:nth-child(2):focus-within .field-filter-tooltip {
+  .field-filter-option:first-child:hover .field-filter-tooltip,
+  .field-filter-option:first-child:focus-within .field-filter-tooltip {
     transform: translate(0, 0);
   }
 
-  .field-filter-option:last-child .field-filter-tooltip {
+  .field-filter-option:last-of-type .field-filter-tooltip {
     left: auto;
     right: 0;
     transform: translate(0, 4px);
   }
 
-  .field-filter-option:last-child:hover .field-filter-tooltip,
-  .field-filter-option:last-child:focus-within .field-filter-tooltip {
+  .field-filter-option:last-of-type:hover .field-filter-tooltip,
+  .field-filter-option:last-of-type:focus-within .field-filter-tooltip {
     transform: translate(0, 0);
   }
 }
@@ -1278,6 +1278,15 @@
 .field-filter-tooltip strong { color: inherit; }
 
 @media (min-width: 901px) {
+  .field-relation-filter {
+    right: 4.2vw;
+  }
+  .field-relation-filter > div {
+    width: 100%;
+  }
+  .field-reset-control {
+    margin-left: auto;
+  }
   .field.is-constellation .field-relation-filter { bottom: 28px; }
   .map-selection-band { bottom: 84px; }
 

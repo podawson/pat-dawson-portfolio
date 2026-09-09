@@ -170,7 +170,11 @@ export function ProjectGrid() {
       </ol>
 
       <div className="index-preview-wrap">
-        <article className={`index-preview${activeIsDiagram ? " index-preview--diagram" : ""}`} ref={cardRef}>
+        <article
+          className={`index-preview${activeIsDiagram ? " index-preview--diagram" : ""}`}
+          data-project={active.slug}
+          ref={cardRef}
+        >
           <div>
             <img
               key={active.slug}

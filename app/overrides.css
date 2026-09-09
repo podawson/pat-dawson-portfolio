@@ -1570,6 +1570,16 @@
 /* Expanded About controls share the preset grid's exact outer edges. */
 .study-tool--embedded .study-controls__header { padding-inline: 14px; }
 
+/* Work-index previews preserve artwork edges while masking source-image borders. */
+.index-preview[data-project="quaranzine"] img {
+  object-fit: contain;
+  object-position: center;
+}
+
+.index-preview[data-project="ouellette-bridge"] img {
+  transform: scale(1.006);
+}
+
 /* Corpus hover definitions sit beneath the desktop filters, clear of selected-project details. */
 @media (min-width: 581px) {
   .field-relation-filter > div {

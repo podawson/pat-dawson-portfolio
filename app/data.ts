@@ -553,7 +553,7 @@ export const projects: Project[] = [
     agency: "Contributors supplied each edition and performance; editorial curation shaped how that work became a shared scene.",
     role: "Editor · curator · publisher · concert organizer",
     outcome: "A 25-edition recurring publication and live concert series, built on open contributor submissions from artists isolated around the world.",
-    image: "/work/gallery/quaranzine/03.jpg",
+    image: "/work/gallery/quaranzine/02.jpg",
     indexPill: "a zine for a scene with no venue",
     categories: ["Culture", "Experience"],
     tags: ["Product", "Narrative"],

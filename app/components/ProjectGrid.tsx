@@ -14,6 +14,8 @@ function chronology(year: string) {
 }
 
 const workIndexProjects = [...projects].sort((a, b) => {
+  if (a.slug === "vanderbilt-passage") return -1;
+  if (b.slug === "vanderbilt-passage") return 1;
   const aYears = chronology(a.year);
   const bYears = chronology(b.year);
   return bYears.end - aYears.end || bYears.start - aYears.start;

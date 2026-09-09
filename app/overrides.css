@@ -1571,6 +1571,31 @@
 .study-tool--embedded .study-controls__header { padding-inline: 14px; }
 
 /* Corpus hover definitions sit beneath the desktop filters, clear of selected-project details. */
+@media (min-width: 581px) {
+  .field-relation-filter > div {
+    position: relative;
+  }
+
+  .field-relation-filter .field-filter-option {
+    position: static;
+  }
+
+  .field-relation-filter .field-filter-option .field-filter-tooltip {
+    left: 0;
+    max-width: 100%;
+    right: auto;
+    text-align: left;
+    transform: translateY(4px);
+    white-space: normal;
+    width: max-content;
+  }
+
+  .field-relation-filter .field-filter-option:hover .field-filter-tooltip,
+  .field-relation-filter .field-filter-option:focus-within .field-filter-tooltip {
+    transform: translateY(0);
+  }
+}
+
 @media (min-width: 901px) {
   .field-filter-option::before { display: none; }
 

@@ -3,6 +3,22 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { categories, projects, type Category } from "../data";
 
+function chronology(year: string) {
+  const parts = year.match(/\d{2,4}/g) ?? [];
+  const start = Number(parts[0] ?? 0);
+  const endPart = parts[1];
+  const end = endPart
+    ? Number(endPart.length === 2 ? `${String(start).slice(0, 2)}${endPart}` : endPart)
+    : start;
+  return { start, end };
+}
+
+const workIndexProjects = [...projects].sort((a, b) => {
+  const aYears = chronology(a.year);
+  const bYears = chronology(b.year);
+  return bYears.end - aYears.end || bYears.start - aYears.start;
+});
+
 export function ProjectGrid() {
   const [filter, setFilter] = useState<"All" | Category>("All");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -11,9 +27,9 @@ export function ProjectGrid() {
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const cardRef = useRef<HTMLDivElement>(null);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const active = projects[activeIndex];
+  const active = workIndexProjects[activeIndex];
   const activeIsDiagram = active.image.endsWith(".svg");
-  const isVisible = (index: number) => filter === "All" || projects[index].categories.includes(filter);
+  const isVisible = (index: number) => filter === "All" || workIndexProjects[index].categories.includes(filter);
 
   useEffect(() => {
     const readFilter = () => {
@@ -23,7 +39,7 @@ export function ProjectGrid() {
       const match = categories.find((item) => item.toLowerCase().replace(/\s+/g, "-") === value);
       const nextFilter = match ?? "All";
       setFilter(nextFilter);
-      const first = projects.findIndex((project) => nextFilter === "All" || project.categories.includes(nextFilter));
+      const first = workIndexProjects.findIndex((project) => nextFilter === "All" || project.categories.includes(nextFilter));
       if (first >= 0) setActiveIndex(first);
     };
     readFilter();
@@ -32,7 +48,7 @@ export function ProjectGrid() {
   }, []);
 
   useEffect(() => {
-    projects.forEach((project) => {
+    workIndexProjects.forEach((project) => {
       const image = new Image();
       image.src = project.image;
     });
@@ -58,7 +74,7 @@ export function ProjectGrid() {
 
   const selectFilter = (item: "All" | Category) => {
     setFilter(item);
-    const first = projects.findIndex((project) => item === "All" || project.categories.includes(item));
+    const first = workIndexProjects.findIndex((project) => item === "All" || project.categories.includes(item));
     if (first >= 0) setActiveIndex(first);
     const query = item === "All" ? "" : `?filter=${item.toLowerCase().replace(/\s+/g, "-")}`;
     window.history.replaceState({}, "", `/work${query}`);
@@ -90,8 +106,8 @@ export function ProjectGrid() {
 
   const move = (direction: number) => {
     let next = activeIndex;
-    for (let attempt = 0; attempt < projects.length; attempt += 1) {
-      next = (next + direction + projects.length) % projects.length;
+    for (let attempt = 0; attempt < workIndexProjects.length; attempt += 1) {
+      next = (next + direction + workIndexProjects.length) % workIndexProjects.length;
       if (isVisible(next)) {
         setActiveIndex(next);
         itemRefs.current[next]?.focus();
@@ -125,7 +141,7 @@ export function ProjectGrid() {
       </svg> : null}
 
       <ol className="index-list" aria-label="Project Index" onPointerLeave={cancelQueuedPreview}>
-        {projects.map((project, index) => isVisible(index) ? (
+        {workIndexProjects.map((project, index) => isVisible(index) ? (
           <li
             className={index === activeIndex ? "is-active" : ""}
             key={project.slug}

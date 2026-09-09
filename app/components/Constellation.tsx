@@ -29,11 +29,11 @@ const filterColor: Record<ProjectTag, string> = {
 };
 
 const filterDescription: Record<ProjectTag, string> = {
-  Product: "The work turns a recurring need into a repeatable tool, platform, or system.",
-  Strategy: "The work defines what to pursue, why it matters, and where to focus.",
-  Craft: "The work resolves how an idea is made, from form and material to interaction and code.",
-  Delivery: "The work aligns people, constraints, and decisions to make the outcome real.",
-  Narrative: "The work shapes what an experience communicates and how people come to understand it.",
+  Product: "Turns recurring needs into repeatable tools and systems.",
+  Strategy: "Decides what to pursue and why.",
+  Craft: "Resolves form, material, interaction, and code.",
+  Delivery: "Coordinates people and constraints to get it built.",
+  Narrative: "Shapes what people understand and remember.",
 };
 
 const filterKinds: ProjectTag[] = ["Product", "Strategy", "Craft", "Delivery", "Narrative"];

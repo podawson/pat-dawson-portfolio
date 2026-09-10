@@ -1726,18 +1726,19 @@
   border-bottom: 0;
 }
 
-/* Give the opening About statement a touch more presence without changing rank. */
-.about-hero__body p { font-size: 19px; }
+/* Keep the longer About introduction compact and comfortably readable. */
+.about-hero__body p { font-size: 18px; }
 
-/* Desktop About: the instrument meets the page centerline and reads as landscape. */
+/* Desktop About: keep the copy and instrument close, balanced, and centered. */
 @media (min-width: 901px) {
   .about-hero {
-    column-gap: 0;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(24px, 2.4vw, 46px);
+    grid-template-columns: minmax(0, 720px) minmax(340px, 620px);
+    justify-content: center;
   }
 
   .about-play-interactive {
-    max-width: none;
+    max-width: 620px;
     width: 100%;
   }
 

@@ -281,8 +281,13 @@
   text-transform: none;
 }
 
-.field.hide-axes .field-axes,
 .field.hide-nodes .field-nodes {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.field.hide-axes .field-axes svg,
+.field.hide-axes .field-axis {
   opacity: 0;
   visibility: hidden;
 }
@@ -1283,9 +1288,6 @@
   }
   .field-relation-filter > div {
     width: 100%;
-  }
-  .field-reset-control {
-    margin-left: 0;
   }
   .field.is-constellation .field-relation-filter { bottom: 28px; }
   .map-selection-band { bottom: 84px; }

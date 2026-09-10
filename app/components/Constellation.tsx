@@ -817,9 +817,6 @@ export function Constellation() {
               </span>
             </span>
           ))}
-          <button className="control-pill field-reset-control" onClick={resetMap} type="button">
-            <span className="control-pill__content">Reset</span>
-          </button>
         </div>
       </div>
       <p className="field-filter-announcement" aria-live="polite">
@@ -828,16 +825,16 @@ export function Constellation() {
           : `Showing ${projectFilterCounts[projectFilter]} ${projectFilter.toLowerCase()} projects.`}
       </p>
 
-      <div className="field-axes" ref={axisLayerRef} aria-hidden="true">
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <div className="field-axes" ref={axisLayerRef}>
+        <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none">
           <line data-axis-line="horizontal" />
           <line data-axis-line="vertical" />
         </svg>
-        <span className="field-axis field-axis--story" data-axis-label="story">Storytelling</span>
-        <span className="field-axis field-axis--compute" data-axis-label="compute">Computation</span>
-        <span className="field-axis field-axis--atmosphere" data-axis-label="atmosphere">Atmosphere</span>
-        <span className="field-axis field-axis--architecture" data-axis-label="architecture">Architecture</span>
-        <i data-axis-center />
+        <span aria-hidden="true" className="field-axis field-axis--story" data-axis-label="story">Storytelling</span>
+        <span aria-hidden="true" className="field-axis field-axis--compute" data-axis-label="compute">Computation</span>
+        <span aria-hidden="true" className="field-axis field-axis--atmosphere" data-axis-label="atmosphere">Atmosphere</span>
+        <span aria-hidden="true" className="field-axis field-axis--architecture" data-axis-label="architecture">Architecture</span>
+        <button aria-label="Reset corpus" className="field-reset-center" data-axis-center onClick={resetMap} title="Reset corpus" type="button" />
       </div>
 
       {active && (

@@ -34,10 +34,11 @@ export default function AboutPage() {
           <p className="about-hero__stay">Stay A While</p>
         </div>
         <div className="about-hero__body">
-          <p>I live where many different things fuse into one deliverable.</p>
-          <p>My background begins in physical space and extends through fabrication, cultural experiments, product management, experiential systems, AI workflows, and agentic orchestration.</p>
-          <p>People read these as unrelated. They are one method across mediums meeting various environments.</p>
-          <p>The method that builds an AI character is the method that draws the light housings for a historic bridge, cuts a music video, and delivers a generative system inside a Manhattan tower. I don&apos;t see a difference.</p>
+          <p>I make things compulsively. That hasn’t changed since I was a physics major sketching structures for other planets.</p>
+          <p>It took me longer to learn that making something and getting it finished are different skills. Good work dies in process constantly, so I became deliberate about the unglamorous documentation that lets an idea survive contact with fifteen people and a deadline. Bless the scopes of work and the trackers the same.</p>
+          <p>My body of work appears scattered but isn’t. I’ve delivered a generative media system inside a bank’s global headquarters, developed a conversion playbook spanning nine hundred buildings, and generated nine thousand geometry files with no client and no brief. NFTs paid for a new roof, lighting, and furniture for an art school in Haiti. Seemingly different outputs created with same method: find the problems hiding beneath the assigned one and build what gets the whole thing across the line.</p>
+          <p>Architecture trained me to hold an entire building in my head, from a door jamb to the way its envelope answers the urban fabric, while a dozen other specialists worked through the rest of it piece by piece. You learn to look two disciplines over, because that’s often where the thing that sinks a project is hiding. Lately, that instinct has pulled me toward tunable agent orchestration layers and toward generative design systems.</p>
+          <p>Located In Brooklyn. Currently building a Cairn.</p>
         </div>
         <div className="about-play-interactive">
           <WaterStudy embedded />

@@ -1285,7 +1285,7 @@
     width: 100%;
   }
   .field-reset-control {
-    margin-left: auto;
+    margin-left: 0;
   }
   .field.is-constellation .field-relation-filter { bottom: 28px; }
   .map-selection-band { bottom: 84px; }
@@ -1761,9 +1761,8 @@
   .map-corpus-tools,
   .field.is-constellation .map-corpus-tools {
     top: 59px;
+    transform: translateY(-28px);
   }
-  .map-corpus-tools { transform: translateY(-28px); }
-  .field.is-constellation .map-corpus-tools { transform: translateY(44px); }
 }
 
 /* Dedicated project pages stay inside the mobile viewport at every content rank. */

@@ -1737,8 +1737,18 @@
     justify-content: center;
   }
 
+  .about-hero__body {
+    justify-self: end;
+    max-width: 640px;
+  }
+
+  .about-hero__body p {
+    max-width: none;
+  }
+
   .about-play-interactive {
-    max-width: 620px;
+    justify-self: end;
+    max-width: 590px;
     width: 100%;
   }
 

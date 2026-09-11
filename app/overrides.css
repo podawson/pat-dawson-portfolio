@@ -1654,7 +1654,7 @@
     align-content: center;
     column-gap: 16px;
     bottom: 70px;
-    grid-template-columns: minmax(240px, 520px) 42px;
+    grid-template-columns: fit-content(520px) 42px;
     grid-template-rows: auto auto auto;
     justify-content: start;
     row-gap: 5px;

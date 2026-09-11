@@ -1648,26 +1648,58 @@
   }
 }
 
-/* Desktop selection details sit directly above the filters and include their one-line premise. */
+/* Desktop selection details form a compact left-aligned stack beside the thumbnail. */
 @media (min-width: 901px) {
-  .field.is-constellation .map-selection-band { bottom: 70px; }
+  .field.is-constellation .map-selection-band {
+    align-content: center;
+    column-gap: 16px;
+    bottom: 70px;
+    grid-template-columns: minmax(240px, 520px) 42px;
+    grid-template-rows: auto auto auto;
+    justify-content: start;
+    row-gap: 5px;
+  }
 
   .field-filter-tooltip { color: var(--ink-400); }
 
-  .map-selection-band > .map-selection-band__one-liner {
+  .map-selection-band__identity,
+  .map-selection-band__identity-title {
+    display: contents;
+  }
+
+  .map-selection-band__identity-title h2 {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .map-selection-band__image {
     align-self: center;
+    grid-column: 2;
+    grid-row: 1 / 4;
+  }
+
+  .map-selection-band > .map-selection-band__one-liner {
+    align-self: start;
     color: var(--ink-400);
     display: block;
     font-family: var(--mono);
     font-size: 13px;
     font-style: italic;
-    grid-column: 2;
-    justify-self: end;
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
     letter-spacing: var(--track-mixed);
     line-height: var(--lh-label);
     margin: 0;
     max-width: 56ch;
-    text-align: right;
+    text-align: left;
+  }
+
+  .map-selection-band__open {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: start;
+    margin-top: 4px;
   }
 }
 

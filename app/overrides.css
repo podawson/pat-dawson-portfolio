@@ -1738,8 +1738,8 @@
   }
 
   .about-hero__body {
-    justify-self: end;
-    max-width: 640px;
+    justify-self: start;
+    max-width: none;
   }
 
   .about-hero__body p {

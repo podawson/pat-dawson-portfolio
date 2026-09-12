@@ -1861,6 +1861,12 @@
   padding-top: 0;
 }
 
+.about-resume {
+  margin-inline: auto;
+  max-width: 1320px;
+  width: 100%;
+}
+
 .about-page .about-method__heading h2,
 .about-page .about-resume > .about-resume__heading h2 {
   font-size: clamp(30px, 2.8vw, 44px);

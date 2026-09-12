@@ -8,7 +8,7 @@ const focusAreas = [
   "Experiential & media architecture",
   "AI systems & agent workflows",
   "Fabrication, permitting & delivery",
-  "Real-time spatial systems",
+  "Architectural modeling & drawings",
   "Product strategy & operating models",
   "Research, prototyping & participatory design",
 ];

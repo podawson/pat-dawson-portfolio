@@ -1886,7 +1886,7 @@
 
 .about-method .about-grid h2 {
   font-size: clamp(27px, 2.2vw, 38px);
-  margin: clamp(46px, 4vw, 64px) 0 18px;
+  margin: clamp(26px, 2.4vw, 38px) 0 18px;
   max-width: 470px;
 }
 
@@ -1934,7 +1934,7 @@
   }
 
   .about-method .about-grid h2 {
-    margin-top: 38px;
+    margin-top: 24px;
   }
 }
 

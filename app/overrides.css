@@ -1809,7 +1809,7 @@
 @media (min-width: 901px) {
   .about-hero {
     column-gap: clamp(24px, 2.4vw, 46px);
-    grid-template-columns: minmax(0, 720px) minmax(340px, 590px);
+    grid-template-columns: minmax(0, 720px) minmax(340px, 640px);
     justify-content: space-between;
     padding-bottom: 72px;
     row-gap: clamp(30px, 3vw, 44px);
@@ -1829,7 +1829,7 @@
   .about-play-interactive {
     align-self: start;
     justify-self: end;
-    max-width: 590px;
+    max-width: 640px;
     width: 100%;
   }
 

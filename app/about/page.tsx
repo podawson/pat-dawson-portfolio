@@ -47,7 +47,7 @@ export default function AboutPage() {
 
       <section className="about-method" aria-labelledby="about-method-title">
         <div className="about-resume__heading about-method__heading">
-          <h2 id="about-method-title"><em>A reliable methodology</em></h2>
+          <h2 id="about-method-title"><em>My reliable methodology</em></h2>
         </div>
         <div className="about-grid">
           <article><h2>Work from what already exists.</h2><p>A site, archive, behavior, or half-working tool is never empty. I begin by making its existing conditions usable.</p></article>

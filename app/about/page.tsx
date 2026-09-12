@@ -45,11 +45,16 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="about-grid" aria-label="Practice principles">
-        <article><p className="micro">01 · Salvage</p><h2>Work from what already exists.</h2><p>A site, archive, behavior, or half-working tool is never empty. I begin by making its existing conditions usable.</p></article>
-        <article><p className="micro">02 · Figure</p><h2>Reason through the artifact.</h2><p>The drawing, model, deck, or diagram is where the problem gets worked out, not where the finished idea is announced.</p></article>
-        <article><p className="micro">03 · Broker</p><h2>Build a shared language.</h2><p>I construct the terms and intermediary artifacts that let separate disciplines understand one another and act together.</p></article>
-        <article><p className="micro">04 · Temper</p><h2>Design beyond the handoff.</h2><p>The work meets unanticipated conditions and untrained hands. What survives becomes more useful while its decisions remain legible.</p></article>
+      <section className="about-method" aria-labelledby="about-method-title">
+        <div className="about-resume__heading about-method__heading">
+          <h2 id="about-method-title"><em>A methodology for getting the whole thing across the line.</em></h2>
+        </div>
+        <div className="about-grid">
+          <article><p className="micro">01</p><h2>Work from what already exists.</h2><p>A site, archive, behavior, or half-working tool is never empty. I begin by making its existing conditions usable.</p></article>
+          <article><p className="micro">02</p><h2>Reason through the artifact.</h2><p>The drawing, model, deck, or diagram is where the problem gets worked out, not where the finished idea is announced.</p></article>
+          <article><p className="micro">03</p><h2>Build a shared language.</h2><p>I construct the terms and intermediary artifacts that let separate disciplines understand one another and act together.</p></article>
+          <article><p className="micro">04</p><h2>Design beyond the handoff.</h2><p>The work meets unanticipated conditions and untrained hands. What survives becomes more useful while its decisions remain legible.</p></article>
+        </div>
       </section>
 
       <section className="about-resume">

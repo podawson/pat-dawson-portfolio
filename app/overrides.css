@@ -1848,6 +1848,96 @@
   }
 }
 
+/* About methodology: quieter labels, generous section rhythm, and a compact 2x2 field. */
+.about-method {
+  padding: clamp(96px, 8vw, 138px) 7vw clamp(108px, 9vw, 154px);
+}
+
+.about-method__heading {
+  margin: 0 0 clamp(48px, 4.5vw, 72px);
+}
+
+.about-method + .about-resume {
+  padding-top: 0;
+}
+
+.about-method .about-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.about-method .about-grid article {
+  min-height: 270px;
+  padding: 30px clamp(24px, 3vw, 52px) 38px 0;
+}
+
+.about-method .about-grid article + article {
+  border-left: 0;
+}
+
+.about-method .about-grid article:nth-child(even) {
+  border-left: 1px solid var(--line);
+  padding-left: clamp(24px, 3vw, 52px);
+  padding-right: 0;
+}
+
+.about-method .about-grid article:nth-child(n + 3) {
+  border-top: 1px solid var(--line);
+}
+
+.about-method .about-grid h2 {
+  font-size: clamp(27px, 2.2vw, 38px);
+  margin: clamp(46px, 4vw, 64px) 0 18px;
+  max-width: 470px;
+}
+
+.about-method .about-grid p:last-child {
+  font-size: 16.5px;
+  max-width: 470px;
+}
+
+@media (max-width: 900px) {
+  .about-method {
+    padding: 88px 6vw 108px;
+  }
+
+  .about-method .about-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-method .about-grid article {
+    min-height: 250px;
+    padding: 28px 0 34px;
+  }
+
+  .about-method .about-grid article:nth-child(even) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .about-method .about-grid article:nth-child(n + 2) {
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 580px) {
+  .about-method {
+    padding-bottom: 88px;
+    padding-top: 72px;
+  }
+
+  .about-method__heading {
+    margin-bottom: 38px;
+  }
+
+  .about-method .about-grid article {
+    min-height: 0;
+  }
+
+  .about-method .about-grid h2 {
+    margin-top: 38px;
+  }
+}
+
 /* Mobile Corpus title and display controls share one stable centerline. */
 @media (max-width: 580px) {
   .field-copy { top: 60px; }

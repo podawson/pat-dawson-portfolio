@@ -1810,7 +1810,7 @@
   .about-hero {
     column-gap: clamp(24px, 2.4vw, 46px);
     grid-template-columns: minmax(0, 720px) minmax(340px, 590px);
-    justify-content: start;
+    justify-content: space-between;
     padding-bottom: 72px;
     row-gap: clamp(30px, 3vw, 44px);
   }

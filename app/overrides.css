@@ -1805,25 +1805,29 @@
 /* Keep the longer About introduction compact and comfortably readable. */
 .about-hero__body p { font-size: 18px; }
 
-/* Desktop About: keep the copy and instrument close, balanced, and centered. */
+/* Desktop About: share the Corpus/Work gutter and read as one compact composition. */
 @media (min-width: 901px) {
   .about-hero {
     column-gap: clamp(24px, 2.4vw, 46px);
-    grid-template-columns: minmax(0, 720px) minmax(340px, 620px);
-    justify-content: center;
+    grid-template-columns: minmax(0, 720px) minmax(340px, 590px);
+    justify-content: start;
+    padding-bottom: 72px;
+    row-gap: clamp(30px, 3vw, 44px);
   }
 
   .about-hero__body {
+    align-self: start;
     justify-self: start;
     max-width: none;
   }
 
   .about-hero__body p {
+    font-size: 16.5px;
     max-width: none;
   }
 
   .about-play-interactive {
-    align-self: end;
+    align-self: start;
     justify-self: end;
     max-width: 590px;
     width: 100%;

@@ -1854,7 +1854,8 @@
 }
 
 .about-method__heading {
-  margin: 0 0 clamp(48px, 4.5vw, 72px);
+  margin: 0 auto clamp(48px, 4.5vw, 72px);
+  width: min(100%, calc(1320px - 14vw));
 }
 
 .about-method + .about-resume {
@@ -1870,6 +1871,10 @@
 .about-page .about-method__heading h2,
 .about-page .about-resume > .about-resume__heading h2 {
   font-size: clamp(30px, 2.8vw, 44px);
+}
+
+.about-page .experience-list h3 {
+  font-size: clamp(28px, 2.5vw, 38px);
 }
 
 .about-method .about-grid {

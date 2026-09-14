@@ -314,13 +314,17 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       ? gallery.slice(0, 2)
       : project.slug === "release-intelligence"
       ? gallery.slice(0, 2)
-      : project.slug === "charlesgate-park" || project.slug === "flower-tower"
+      : project.slug === "flower-tower"
+      ? gallery.slice(1)
+      : project.slug === "charlesgate-park"
       ? gallery.slice(1, 2)
       : gallery.slice(1, 3);
   const evidenceMedia =
     project.slug === "ouellette-bridge"
       ? gallery.slice(2)
-      : project.slug === "charlesgate-park" || project.slug === "flower-tower"
+      : project.slug === "flower-tower"
+      ? []
+      : project.slug === "charlesgate-park"
       ? gallery.slice(2)
       : gallery.slice(3);
   const endImage =
@@ -400,7 +404,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <ProjectMedia
           items={narrativeMedia}
           label={`${project.title} supporting artifacts`}
-          sideBySide={project.slug === "release-intelligence"}
+          sideBySide={["release-intelligence", "flower-tower"].includes(project.slug)}
           matched={["88-east-broadway", "ouellette-bridge", "caleta", "bodega", "quaranzine", "richardson-plaza"].includes(project.slug)}
           hideCaptions={project.slug === "string"}
         />

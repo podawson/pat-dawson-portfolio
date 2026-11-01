@@ -13,15 +13,6 @@ const focusAreas = [
   "Research, prototyping & participatory design",
 ];
 
-const values = [
-  "Legibility",
-  "Thoughtful craft",
-  "Accountability",
-  "Finding the right question",
-  "Intentional originality",
-  "Scale and lasting usefulness",
-];
-
 const interests = [
   ["Triply periodic minimal surfaces", "https://en.wikipedia.org/wiki/Triply_periodic_minimal_surface"],
   ["Parking garages", "https://en.wikipedia.org/wiki/Multistorey_car_park"],
@@ -72,10 +63,6 @@ export default function AboutPage() {
           <p className="about-hero__stay">Stay A While</p>
         </div>
         <div className="about-hero__body">
-          <p>I value:</p>
-          <ul className="about-value-list">
-            {values.map((value) => <li key={value}>{value}</li>)}
-          </ul>
           <p>I make compulsively in whatever medium is closest.</p>
           <p>Trained as an architect, most recently a PM at Downstream for enterprise clients like JPMorgan Chase&apos;s 270 Park Avenue HQ. Now building <a href="https://drumlin.work/">Drumlin</a>, which gives architecture &amp; design firms an agentic tool that can create and complete projects drawing from everything they&apos;ve ever made.</p>
           <div className="about-interest-block">

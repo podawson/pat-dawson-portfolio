@@ -1806,6 +1806,54 @@
 /* Keep the longer About introduction compact and comfortably readable. */
 .about-hero__body p { font-size: 18px; }
 
+.about-value-list {
+  color: var(--ink-300);
+  line-height: var(--lh-body);
+  margin: 10px 0 24px;
+  padding-left: 1.15em;
+}
+
+.about-value-list li + li { margin-top: 3px; }
+
+.about-hero__body a {
+  color: var(--ink-100);
+  text-decoration: underline;
+  text-decoration-color: var(--ink-500);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .22em;
+}
+
+.about-hero__body a:hover,
+.about-hero__body a:focus-visible {
+  color: #bcdcff;
+  outline: none;
+  text-decoration-color: currentColor;
+}
+
+.about-interest-block { margin-top: 30px; }
+
+.about-interest-list {
+  display: grid;
+  gap: 7px 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.about-interest-list li {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.35;
+  min-width: 0;
+}
+
+.about-interest-list a { overflow-wrap: anywhere; }
+
+@media (max-width: 580px) {
+  .about-interest-list { grid-template-columns: 1fr; }
+}
+
 /* Desktop About: share the Corpus/Work gutter and read as one compact composition. */
 @media (min-width: 901px) {
   .about-hero {

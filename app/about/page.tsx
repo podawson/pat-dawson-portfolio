@@ -13,6 +13,44 @@ const focusAreas = [
   "Research, prototyping & participatory design",
 ];
 
+const values = [
+  "Legibility",
+  "Thoughtful craft",
+  "Accountability",
+  "Finding the right question",
+  "Intentional originality",
+  "Scale and lasting usefulness",
+];
+
+const interests = [
+  ["Triply periodic minimal surfaces", "https://en.wikipedia.org/wiki/Triply_periodic_minimal_surface"],
+  ["Parking garages", "https://en.wikipedia.org/wiki/Multistorey_car_park"],
+  ["Johan Huizinga", "https://en.wikipedia.org/wiki/Johan_Huizinga"],
+  ["Strange attractors", "https://en.wikipedia.org/wiki/Attractor"],
+  ["Randall’s Island", "https://en.wikipedia.org/wiki/Randalls_and_Wards_Islands"],
+  ["Cybernetics", "https://en.wikipedia.org/wiki/Cybernetics"],
+  ["Ricoh GR IIIx", "https://en.wikipedia.org/wiki/Ricoh_GR_(large_sensor_compact_camera)"],
+  ["Drumlins", "https://en.wikipedia.org/wiki/Drumlin"],
+  ["Mask of Medusa", "https://en.wikipedia.org/wiki/John_Hejduk"],
+  ["Escapement", "https://en.wikipedia.org/wiki/Escapement"],
+  ["Isamu Noguchi", "https://en.wikipedia.org/wiki/Isamu_Noguchi"],
+  ["Multi-agent systems", "https://en.wikipedia.org/wiki/Multi-agent_system"],
+  ["Biking", "https://en.wikipedia.org/wiki/Cycling"],
+  ["Exploded-view drawing", "https://en.wikipedia.org/wiki/Exploded-view_drawing"],
+  ["Wangechi Mutu", "https://en.wikipedia.org/wiki/Wangechi_Mutu"],
+  ["Mesh networking", "https://en.wikipedia.org/wiki/Mesh_networking"],
+  ["Archival maps", "https://en.wikipedia.org/wiki/History_of_cartography"],
+  ["Buckminster Fuller", "https://en.wikipedia.org/wiki/Buckminster_Fuller"],
+  ["Decentralized autonomous organizations", "https://en.wikipedia.org/wiki/Decentralized_autonomous_organization"],
+  ["Arkady Martine", "https://en.wikipedia.org/wiki/Arkady_Martine"],
+  ["UAPs", "https://en.wikipedia.org/wiki/Unidentified_flying_object"],
+  ["Public utilities", "https://en.wikipedia.org/wiki/Public_utility"],
+  ["Newtown Creek", "https://en.wikipedia.org/wiki/Newtown_Creek"],
+  ["Lighthouses", "https://en.wikipedia.org/wiki/Lighthouse"],
+  ["Light pollution", "https://en.wikipedia.org/wiki/Light_pollution"],
+  ["Quoin", "https://en.wikipedia.org/wiki/Quoin"],
+] as const;
+
 const experience = [
   { years: "2026–Present", org: "Drumlin", orgUrl: "https://drumlin.work", role: "Company Brain architect · sole builder", body: "Drumlin connects an archive to the project at hand. It surfaces relevant past work and recurring patterns, with sources attached, so teams can influence what informs new work, and decide what is carried forward. From concepts through production and installation." },
   { years: "2024–Present", org: "Tricky", role: "AI product builder · experience designer", body: "Release Intelligence, Gleanings, RFP Automation, Civic Investment Mapping, String, and AIntivirus; independent AI products and agentic infrastructure used by operating teams, 5,000+ traders, and 10,000+ chatbot users across ventures." },
@@ -34,11 +72,18 @@ export default function AboutPage() {
           <p className="about-hero__stay">Stay A While</p>
         </div>
         <div className="about-hero__body">
-          <p>I make things compulsively. That hasn&apos;t changed since I was a physics major sketching structures for other planets.</p>
-          <p>It took longer to learn that making something and finishing it are different skills. Good work dies in process constantly, so I got deliberate about the unglamorous documentation that lets an idea survive contact with fifteen people and a deadline.</p>
-          <p>My body of work appears scattered but isn&apos;t. A generative media system inside a bank&apos;s global headquarters. A conversion playbook spanning nine hundred buildings. Nine thousand geometry files with no client and no brief. A new roof, lighting, and furniture for an art school in Haiti, paid for with NFTs. Different outputs, same method: find the problem hiding underneath the assigned one, then build what gets the whole thing across the line.</p>
-          <p>Architecture trained me to hold an entire building in my head. From a door jamb to the way its envelope answers the urban fabric, while a dozen specialists worked through the rest piece by piece. You learn to look two disciplines over, because that&apos;s usually where the thing that sinks a project is hiding. Lately that instinct has pulled me toward agent orchestration layers and generative design systems.</p>
-          <p>Currently in Brooklyn. Building Drumlin.</p>
+          <p>I value:</p>
+          <ul className="about-value-list">
+            {values.map((value) => <li key={value}>{value}</li>)}
+          </ul>
+          <p>I make compulsively in whatever medium is closest.</p>
+          <p>Trained as an architect, most recently a PM at Downstream for enterprise clients like JPMorgan Chase&apos;s 270 Park Avenue HQ. Now building <a href="https://drumlin.work/">Drumlin</a>, which gives architecture &amp; design firms an agentic tool that can create and complete projects drawing from everything they&apos;ve ever made.</p>
+          <div className="about-interest-block">
+            <p><strong>Stuff I like:</strong></p>
+            <ul className="about-interest-list">
+              {interests.map(([label, href]) => <li key={label}><a href={href}>{label}</a></li>)}
+            </ul>
+          </div>
         </div>
         <div className="about-play-interactive">
           <WaterStudy embedded />

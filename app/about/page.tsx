@@ -14,7 +14,7 @@ const focusAreas = [
 ];
 
 const experience = [
-  { years: "2026–Present", org: "Cairn", role: "Company Brain architect · sole builder", body: "A local-first OS and agent-orchestration engine that turns two decades of unstructured work into a memory layer capable of taking a brief and producing the materials to answer it, informed by what the archive itself suggests." },
+  { years: "2026–Present", org: "Drumlin", orgUrl: "https://drumlin.work", role: "Company Brain architect · sole builder", body: "Drumlin connects an archive to the project at hand. It surfaces relevant past work and recurring patterns, with sources attached, so teams can influence what informs new work, and decide what is carried forward. From concepts through production and installation." },
   { years: "2024–Present", org: "Tricky", role: "AI product builder · experience designer", body: "Release Intelligence, Gleanings, RFP Automation, Civic Investment Mapping, String, and AIntivirus; independent AI products and agentic infrastructure used by operating teams, 5,000+ traders, and 10,000+ chatbot users across ventures." },
   { years: "2023–26", org: "Downstream", role: "Experiential strategy · project management · media systems", body: "Vanderbilt Passage, a confidential physical-AI client, Warner Music, Red Hat, Toronto Raptors, and other confidential enterprise programs; $6.9M in scoped budgets with $1.48M in documented savings." },
   { years: "2020–23", org: "BrineSpace", role: "Strategy · architecture · fabrication", body: "Hospitality interiors, cultural programming, fabrication, and materials research. Full-permit bar buildouts (Caleta & Bad Habit), adaptive reuse at 88 East Broadway, three cultural pop-ups, community fridge shed design, precision jewelry, school repairs for a Haitian art institution, and a third-place Nestlé BioDesign proposal for Booch Lab." },
@@ -38,7 +38,7 @@ export default function AboutPage() {
           <p>It took longer to learn that making something and finishing it are different skills. Good work dies in process constantly, so I got deliberate about the unglamorous documentation that lets an idea survive contact with fifteen people and a deadline.</p>
           <p>My body of work appears scattered but isn&apos;t. A generative media system inside a bank&apos;s global headquarters. A conversion playbook spanning nine hundred buildings. Nine thousand geometry files with no client and no brief. A new roof, lighting, and furniture for an art school in Haiti, paid for with NFTs. Different outputs, same method: find the problem hiding underneath the assigned one, then build what gets the whole thing across the line.</p>
           <p>Architecture trained me to hold an entire building in my head. From a door jamb to the way its envelope answers the urban fabric, while a dozen specialists worked through the rest piece by piece. You learn to look two disciplines over, because that&apos;s usually where the thing that sinks a project is hiding. Lately that instinct has pulled me toward agent orchestration layers and generative design systems.</p>
-          <p>Currently in Brooklyn. Building Cairn.</p>
+          <p>Currently in Brooklyn. Building Drumlin.</p>
         </div>
         <div className="about-play-interactive">
           <WaterStudy embedded />
@@ -62,7 +62,7 @@ export default function AboutPage() {
         <ol className="focus-list">{focusAreas.map((area,index)=><li key={area}><span>{String(index+1).padStart(2,"0")}</span>{area}</li>)}</ol>
 
         <div className="about-resume__heading"><h2><em>What that looks like in practice.</em></h2></div>
-        <div className="experience-list">{experience.map((item)=><article key={`${item.years}-${item.org}`}><time>{item.years}</time><div><h3>{item.org}</h3><p className="micro">{item.role}</p>{"lines" in item ? <div className="experience-lines">{item.lines?.map((line)=><p key={line}>{line}</p>)}</div> : <p>{item.body}</p>}</div></article>)}</div>
+        <div className="experience-list">{experience.map((item)=><article key={`${item.years}-${item.org}`}><time>{item.years}</time><div><h3>{"orgUrl" in item ? <a href={item.orgUrl}>{item.org}</a> : item.org}</h3><p className="micro">{item.role}</p>{"lines" in item ? <div className="experience-lines">{item.lines?.map((line)=><p key={line}>{line}</p>)}</div> : <p>{item.body}</p>}</div></article>)}</div>
 
         <div className="about-resume__heading about-resume__heading--closing"><h2><em>Hope this finds you well.</em></h2></div>
         <div className="about-closing-note">

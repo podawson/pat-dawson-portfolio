@@ -47,10 +47,10 @@ const experience = [
   { years: "2024–Present", org: "Tricky", role: "AI product builder · experience designer", body: "Release Intelligence, Gleanings, RFP Automation, Civic Investment Mapping, String, and AIntivirus; independent AI products and agentic infrastructure used by operating teams, 5,000+ traders, and 10,000+ chatbot users across ventures." },
   { years: "2023–26", org: "Downstream", role: "Experiential strategy · project management · media systems", body: "Vanderbilt Passage, a confidential physical-AI client, Warner Music, Red Hat, Toronto Raptors, and other confidential enterprise programs; $6.9M in scoped budgets with $1.48M in documented savings." },
   { years: "2020–23", org: "BrineSpace", role: "Strategy · architecture · fabrication", body: "Hospitality interiors, cultural programming, fabrication, and materials research. Full-permit bar buildouts (Caleta & Bad Habit), adaptive reuse at 88 East Broadway, three cultural pop-ups, community fridge shed design, precision jewelry, school repairs for a Haitian art institution, and a third-place Nestlé BioDesign proposal for Booch Lab." },
-  { years: "2021–22", org: "WeWork", role: "Spatial experience design · portfolio strategy", body: "Conversion logic across 900+ locations, initiating 200+ projects through a playbook distributed teams could run." },
-  { years: "2019–21", org: "XD Lab", role: "NSF-funded HRI research", body: "Gymnast CoBot, developed under NSF Award #1928654." },
-  { years: "2019–20", org: "Landing Studio", role: "Research · design · fabrication", body: "Charlesgate Park, Richardson Plaza, Ouellette Bridge, Covid Food Distribution Hubs, and Marginal Street Community–Industry Seam Improvements." },
-  { years: "2018–19", org: "Signify", role: "Experiential design research", body: "Gesture-controlled task lighting, bio-responsive systems, and waterfront experience planning across light, place, and interaction." },
+  { years: "2019–21", org: "WeWork", role: "Spatial experience design · portfolio strategy", body: "Portfolio conversion matrix, Revit-driven building analysis, and an operational conversion playbook; 200+ space conversions initiated across a 900+ location portfolio, executed by distributed teams from 2-person suites to 150-person floor plates." },
+  { years: "2019–20", org: "XD Lab", role: "NSF-funded HRI research", body: "Gymnast CoBot at MassRobotics, NSF Award #1928654; a collaborative UR-10 that read worker fatigue live, adjusted work rhythm and handover height, and projected its intent onto the shared work surface." },
+  { years: "2018–19", org: "Landing Studio", role: "Research · design · fabrication", body: "Charlesgate Park, Richardson Plaza, Ouellette Bridge, Covid Food Distribution Hubs, and Marginal Street Community–Industry Seam Improvements; public-realm work from LiDAR site modeling and community hearings to four custom furniture systems and light housings for the country’s longest lenticular truss bridge." },
+  { years: "2018–19", org: "Signify", role: "Experiential design research", body: "Gesture-controlled task lighting, bio-responsive lighting prototypes, and experiential planning for a historic waterfront development; research and UX on addressing light without touching it, with wearable usability testing alongside MIT Media Lab researchers." },
 ];
 
 export default function AboutPage() {
@@ -60,13 +60,12 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="route-intro about-hero__heading">
           <h1>More Information</h1>
-          <p className="about-hero__stay">Stay A While</p>
         </div>
         <div className="about-hero__body">
           <p>I make compulsively in whatever medium is closest.</p>
           <p>Trained as an architect, most recently a PM at Downstream for enterprise clients like JPMorgan Chase&apos;s 270 Park Avenue HQ. Now building <a href="https://drumlin.work/">Drumlin</a>, which gives architecture &amp; design firms an agentic tool that can create and complete projects drawing from everything they&apos;ve ever made.</p>
           <div className="about-interest-block">
-            <p><strong>Stuff I like:</strong></p>
+            <p>Stuff I like:</p>
             <ul className="about-interest-list">
               {interests.map(([label, href]) => <li key={label}><a href={href}>{label}</a></li>)}
             </ul>
